@@ -1,5 +1,4 @@
 <?php
-
 namespace ZfcDatagrid\DataSource;
 
 use Zend\Db\Sql;
@@ -93,14 +92,8 @@ class ZendSelect extends AbstractDataSource
 
             $colString = $col->getSelectPart1();
             if ($col->getSelectPart2() != '') {
-                $colString = new Expression(
-                    sprintf(
-                        '%s%s%s',
-                        $platform->quoteIdentifier($colString),
-                        $platform->getIdentifierSeparator(),
-                        $platform->quoteIdentifier($col->getSelectPart2())
-                    )
-                );
+                $colString = new Expression(sprintf(
+                        '%s%s%s',$platform->quoteIdentifier($colString),$platform->getIdentifierSeparator(),$platform->quoteIdentifier($col->getSelectPart2())));
             }
 
             $selectColumns[$col->getUniqueId()] = $colString;
@@ -123,7 +116,7 @@ class ZendSelect extends AbstractDataSource
             foreach ($this->getSortConditions() as $sortCondition) {
                 /** @var \ZfcDataGrid\Column\AbstractColumn $col */
                 $col = $sortCondition['column'];
-                $select->order($col->getUniqueId().' '.$sortCondition['sortDirection']);
+                $select->order($col->getUniqueId() . ' ' . $sortCondition['sortDirection']);
             }
         }
 

@@ -1,5 +1,4 @@
 <?php
-
 namespace ZfcDatagrid\Renderer\JqGrid;
 
 use Zend\Http\PhpEnvironment\Request as HttpRequest;
@@ -66,11 +65,11 @@ class Renderer extends AbstractRenderer
         $request = $this->getRequest();
 
         $optionsRenderer = $this->getOptionsRenderer();
-        $parameterNames = $optionsRenderer['parameterNames'];
+        $parameterNames  = $optionsRenderer['parameterNames'];
 
         $sortConditions = [];
 
-        $sortColumns = $request->getPost(
+        $sortColumns    = $request->getPost(
             $parameterNames['sortColumns'],
             $request->getQuery($parameterNames['sortColumns'])
         );
@@ -79,7 +78,7 @@ class Renderer extends AbstractRenderer
             $request->getQuery($parameterNames['sortDirections'])
         );
         if ($sortColumns != '') {
-            $sortColumns = explode(',', $sortColumns);
+            $sortColumns    = explode(',', $sortColumns);
             $sortDirections = explode(',', $sortDirections);
 
             if (count($sortColumns) != count($sortDirections)) {
@@ -98,7 +97,7 @@ class Renderer extends AbstractRenderer
                     if ($column->getUniqueId() == $sortColumn) {
                         $sortConditions[] = [
                             'sortDirection' => $sortDirection,
-                            'column' => $column,
+                            'column'        => $column,
                         ];
 
                         $column->setSortActive($sortDirection);
@@ -132,9 +131,9 @@ class Renderer extends AbstractRenderer
         $filters = [];
 
         $optionsRenderer = $this->getOptionsRenderer();
-        $parameterNames = $optionsRenderer['parameterNames'];
+        $parameterNames  = $optionsRenderer['parameterNames'];
 
-        $request = $this->getRequest();
+        $request  = $this->getRequest();
         $isSearch = $request->getPost($parameterNames['isSearch'], $request->getQuery($parameterNames['isSearch']));
         if ('true' == $isSearch) {
             // User filtering
@@ -166,7 +165,7 @@ class Renderer extends AbstractRenderer
     public function getCurrentPageNumber()
     {
         $optionsRenderer = $this->getOptionsRenderer();
-        $parameterNames = $optionsRenderer['parameterNames'];
+        $parameterNames  = $optionsRenderer['parameterNames'];
 
         $request = $this->getRequest();
         if ($request instanceof HttpRequest) {
@@ -197,7 +196,7 @@ class Renderer extends AbstractRenderer
             $viewModel->setVariable('data', $this->getDataJqGrid());
 
             $columnsRowClickDisabled = [];
-            $columns = $viewModel->getVariable('columns');
+            $columns                 = $viewModel->getVariable('columns');
             foreach ($columns as $column) {
                 /* @var $column \ZfcDatagrid\Column\AbstractColumn */
 
@@ -245,9 +244,9 @@ class Renderer extends AbstractRenderer
     private function getDataJqGrid()
     {
         return [
-            'rows' => $this->getData(),
-            'page' => $this->getPaginator()->getCurrentPageNumber(),
-            'total' => $this->getPaginator()->count(),
+            'rows'    => $this->getData(),
+            'page'    => $this->getPaginator()->getCurrentPageNumber(),
+            'total'   => $this->getPaginator()->count(),
             'records' => $this->getPaginator()->getTotalItemCount(),
         ];
     }

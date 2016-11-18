@@ -1,5 +1,4 @@
 <?php
-
 namespace ZfcDatagrid;
 
 use InvalidArgumentException;
@@ -98,17 +97,17 @@ class Filter
         $this->displayColumnValue = $inputFilterValue;
 
         $operator = $defaultOperator;
-        $value = $inputFilterValue;
+        $value    = $inputFilterValue;
 
         if (substr($inputFilterValue, 0, 2) == '=(') {
             $operator = self::IN;
-            $value = substr($inputFilterValue, 2);
+            $value    = substr($inputFilterValue, 2);
             if (substr($value, -1) == ')') {
                 $value = substr($value, 0, -1);
             }
         } elseif (substr($inputFilterValue, 0, 3) == '!=(') {
             $operator = self::NOT_IN;
-            $value = substr($inputFilterValue, 3);
+            $value    = substr($inputFilterValue, 3);
             if (substr($value, -1) == ')') {
                 $value = substr($value, 0, -1);
             }
@@ -116,7 +115,7 @@ class Filter
             substr($inputFilterValue, 0, 2) == '<>'
         ) {
             $operator = self::NOT_EQUAL;
-            $value = substr($inputFilterValue, 2);
+            $value    = substr($inputFilterValue, 2);
         } elseif (substr($inputFilterValue, 0, 2) == '!~' ||
             substr($inputFilterValue, 0, 1) == '!'
         ) {
@@ -140,14 +139,14 @@ class Filter
                     (substr($value, 0, 1) == '%' && substr($value, -1) == '%')
                 ) {
                     $operator = self::NOT_LIKE;
-                    $value = substr($value, 1);
-                    $value = substr($value, 0, -1);
+                    $value    = substr($value, 1);
+                    $value    = substr($value, 0, -1);
                 } elseif (substr($value, 0, 1) == '*' || substr($value, 0, 1) == '%') {
                     $operator = self::NOT_LIKE_LEFT;
-                    $value = substr($value, 1);
+                    $value    = substr($value, 1);
                 } elseif (substr($value, -1) == '*' || substr($value, -1) == '%') {
                     $operator = self::NOT_LIKE_RIGHT;
-                    $value = substr($value, 0, -1);
+                    $value    = substr($value, 0, -1);
                 } else {
                     $operator = self::NOT_LIKE;
                 }
@@ -171,38 +170,38 @@ class Filter
                 (substr($value, 0, 1) == '%' && substr($value, -1) == '%')
             ) {
                 $operator = self::LIKE;
-                $value = substr($value, 1);
-                $value = substr($value, 0, -1);
+                $value    = substr($value, 1);
+                $value    = substr($value, 0, -1);
             } elseif (substr($value, 0, 1) == '*' || substr($value, 0, 1) == '%') {
                 $operator = self::LIKE_LEFT;
-                $value = substr($value, 1);
+                $value    = substr($value, 1);
             } elseif (substr($value, -1) == '*' || substr($value, -1) == '%') {
                 $operator = self::LIKE_RIGHT;
-                $value = substr($value, 0, -1);
+                $value    = substr($value, 0, -1);
             } else {
                 $operator = self::LIKE;
             }
         } elseif (substr($inputFilterValue, 0, 2) == '==') {
             $operator = self::EQUAL;
-            $value = substr($inputFilterValue, 2);
+            $value    = substr($inputFilterValue, 2);
         } elseif (substr($inputFilterValue, 0, 1) == '=') {
             $operator = self::EQUAL;
-            $value = substr($inputFilterValue, 1);
+            $value    = substr($inputFilterValue, 1);
         } elseif (substr($inputFilterValue, 0, 2) == '>=') {
             $operator = self::GREATER_EQUAL;
-            $value = substr($inputFilterValue, 2);
+            $value    = substr($inputFilterValue, 2);
         } elseif (substr($inputFilterValue, 0, 1) == '>') {
             $operator = self::GREATER;
-            $value = substr($inputFilterValue, 1);
+            $value    = substr($inputFilterValue, 1);
         } elseif (substr($inputFilterValue, 0, 2) == '<=') {
             $operator = self::LESS_EQUAL;
-            $value = substr($inputFilterValue, 2);
+            $value    = substr($inputFilterValue, 2);
         } elseif (substr($inputFilterValue, 0, 1) == '<') {
             $operator = self::LESS;
-            $value = substr($inputFilterValue, 1);
+            $value    = substr($inputFilterValue, 1);
         } elseif (strpos($inputFilterValue, '<>') !== false) {
             $operator = self::BETWEEN;
-            $value = explode('<>', $inputFilterValue);
+            $value    = explode('<>', $inputFilterValue);
         }
         $this->operator = $operator;
 
@@ -241,7 +240,7 @@ class Filter
          */
         foreach ($value as &$val) {
             $type = $this->getColumn()->getType();
-            $val = $type->getFilterValue($val);
+            $val  = $type->getFilterValue($val);
 
             // @TODO Translation + Replace
         }
@@ -322,8 +321,8 @@ class Filter
                 break;
 
             case self::LIKE_LEFT:
-                $length = strlen($expectedValue);
-                $start = 0 - $length;
+                $length        = strlen($expectedValue);
+                $start         = 0 - $length;
                 $searchedValue = substr($currentValue, $start, $length);
                 if (stripos($searchedValue, $expectedValue) !== false) {
                     return true;
@@ -331,7 +330,7 @@ class Filter
                 break;
 
             case self::LIKE_RIGHT:
-                $length = strlen($expectedValue);
+                $length        = strlen($expectedValue);
                 $searchedValue = substr($currentValue, 0, $length);
                 if (stripos($searchedValue, $expectedValue) !== false) {
                     return true;
@@ -345,8 +344,8 @@ class Filter
                 break;
 
             case self::NOT_LIKE_LEFT:
-                $length = strlen($expectedValue);
-                $start = 0 - $length;
+                $length        = strlen($expectedValue);
+                $start         = 0 - $length;
                 $searchedValue = substr($currentValue, $start, $length);
                 if (stripos($searchedValue, $expectedValue) === false) {
                     return true;
@@ -354,7 +353,7 @@ class Filter
                 break;
 
             case self::NOT_LIKE_RIGHT:
-                $length = strlen($expectedValue);
+                $length        = strlen($expectedValue);
                 $searchedValue = substr($currentValue, 0, $length);
                 if (stripos($searchedValue, $expectedValue) === false) {
                     return true;
@@ -393,12 +392,7 @@ class Filter
                         return true;
                     }
                 } else {
-                    throw new InvalidArgumentException(
-                        sprintf(
-                            'Between needs exactly an array of two expected values. Give: "%s"',
-                            print_r($expectedValue, true)
-                        )
-                    );
+                    throw new InvalidArgumentException(sprintf('Between needs exactly an array of two expected values. Give: "%s"',print_r($expectedValue, true)));
                 }
                 break;
 
@@ -426,7 +420,7 @@ class Filter
             case self::NOT_LIKE:
             case self::NOT_LIKE_LEFT:
             case self::NOT_LIKE_RIGHT:
-                $currentValue = (string) $currentValue;
+                $currentValue  = (string) $currentValue;
                 $expectedValue = (string) $expectedValue;
                 break;
         }

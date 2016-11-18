@@ -1,5 +1,4 @@
 <?php
-
 namespace ZfcDatagrid\Column\Formatter;
 
 use ZfcDatagrid\Column\AbstractColumn;
@@ -60,8 +59,8 @@ class Image extends AbstractFormatter
 
     public function getFormattedValue(AbstractColumn $column)
     {
-        $row = $this->getRowData();
-        $value = $row[$column->getUniqueId()];
+        $row    = $this->getRowData();
+        $value  = $row[$column->getUniqueId()];
         $prefix = $this->getPrefix();
 
         if ($value == '') {
@@ -77,18 +76,18 @@ class Image extends AbstractFormatter
                 $original = $thumb;
             }
         } else {
-            $thumb = $value;
+            $thumb    = $value;
             $original = $value;
         }
 
         $linkAttributes = [];
         foreach ($this->getLinkAttributes() as $key => $value) {
-            $linkAttributes[] = $key.'="'.$value.'"';
+            $linkAttributes[] = $key . '="' . $value . '"';
         }
 
         $attributes = [];
         foreach ($this->getAttributes() as $key => $value) {
-            $attributes[] = $key.'="'.$value.'"';
+            $attributes[] = $key . '="' . $value . '"';
         }
 
         return sprintf(

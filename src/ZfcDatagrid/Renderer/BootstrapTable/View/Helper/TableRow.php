@@ -1,5 +1,4 @@
 <?php
-
 namespace ZfcDatagrid\Renderer\BootstrapTable\View\Helper;
 
 use Zend\View\Helper\AbstractHelper;
@@ -52,7 +51,7 @@ class TableRow extends AbstractHelper
             return '</tr>';
         } else {
             if (isset($row['idConcated'])) {
-                return '<tr id="'.$row['idConcated'].'">';
+                return '<tr id="' . $row['idConcated'] . '">';
             } else {
                 return '<tr>';
             }
@@ -70,13 +69,13 @@ class TableRow extends AbstractHelper
         $attr = [];
         foreach ($attributes as $name => $value) {
             if ($value != '') {
-                $attr[] = $name.'="'.$value.'"';
+                $attr[] = $name . '="' . $value . '"';
             }
         }
 
         $attr = implode(' ', $attr);
 
-        return '<td '.$attr.'>'.$dataValue.'</td>';
+        return '<td ' . $attr . '>' . $dataValue . '</td>';
     }
 
     /**
@@ -99,7 +98,7 @@ class TableRow extends AbstractHelper
         $return = $this->getTr($row);
 
         if (true === $hasMassActions) {
-            $return .= '<td><input type="checkbox" name="massActionSelected[]" value="'.$row['idConcated'].'" /></td>';
+            $return .= '<td><input type="checkbox" name="massActionSelected[]" value="' . $row['idConcated'] . '" /></td>';
         }
 
         foreach ($cols as $col) {
@@ -108,7 +107,7 @@ class TableRow extends AbstractHelper
             $value = $row[$col->getUniqueId()];
 
             $cssStyles = [];
-            $classes = [];
+            $classes   = [];
 
             if ($col->isHidden() === true) {
                 $classes[] = 'hidden';
@@ -120,7 +119,7 @@ class TableRow extends AbstractHelper
                     break;
 
                 case Column\Type\PhpArray::class:
-                    $value = '<pre>'.print_r($value, true).'</pre>';
+                    $value = '<pre>' . print_r($value, true) . '</pre>';
                     break;
             }
 
@@ -138,19 +137,19 @@ class TableRow extends AbstractHelper
                             break;
 
                         case Column\Style\Color::class:
-                            $cssStyles[] = 'color: #'.$style->getRgbHexString();
+                            $cssStyles[] = 'color: #' . $style->getRgbHexString();
                             break;
 
                         case Column\Style\BackgroundColor::class:
-                            $cssStyles[] = 'background-color: #'.$style->getRgbHexString();
+                            $cssStyles[] = 'background-color: #' . $style->getRgbHexString();
                             break;
 
                         case Column\Style\Align::class:
-                            $cssStyles[] = 'text-align: '.$style->getAlignment();
+                            $cssStyles[] = 'text-align: ' . $style->getAlignment();
                             break;
 
                         case Column\Style\Strikethrough::class:
-                            $value = '<s>'.$value.'</s>';
+                            $value = '<s>' . $value . '</s>';
                             break;
 
                         case Column\Style\CSSClass::class:
@@ -162,7 +161,7 @@ class TableRow extends AbstractHelper
                             break;
 
                         default:
-                            throw new \InvalidArgumentException('Not defined style: "'.get_class($style).'"');
+                            throw new \InvalidArgumentException('Not defined style: "' . get_class($style) . '"');
                             break;
                     }
                 }
@@ -185,12 +184,12 @@ class TableRow extends AbstractHelper
             // "rowClick" action
             if ($col instanceof Column\Select && $rowClickAction instanceof AbstractAction
                     && $col->isRowClickEnabled()) {
-                $value = '<a href="'.$rowClickAction->getLinkReplaced($row).'">'.$value.'</a>';
+                $value = '<a href="' . $rowClickAction->getLinkReplaced($row) . '">' . $value . '</a>';
             }
 
             $attributes = [
-                'class' => implode(' ', $classes),
-                'style' => implode(';', $cssStyles),
+                'class'               => implode(' ', $classes),
+                'style'               => implode(';', $cssStyles),
                 'data-columnUniqueId' => $col->getUniqueId(),
             ];
 

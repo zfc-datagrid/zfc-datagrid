@@ -1,5 +1,4 @@
 <?php
-
 namespace ZfcDatagrid\Column\Action;
 
 use ZfcDatagrid\Column\AbstractColumn;
@@ -60,6 +59,6 @@ class Button extends AbstractAction
             $label = $row[$label->getUniqueId()];
         }
 
-        return '<a '.$this->getAttributesString($row).'>'.$label.'</a>';
+        return '<a ' . $this->getAttributesString($row) . '>' . $label . '</a>';
     }
 }

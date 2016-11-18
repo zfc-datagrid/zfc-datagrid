@@ -2,7 +2,6 @@
 namespace ZfcDatagridTest\Column\Formatter;
 
 use PHPUnit\Framework\TestCase;
-use Zend\ServiceManager\ServiceManager;
 use ZfcDatagrid\Column\Formatter\GenerateLink;
 
 /**
@@ -30,10 +29,7 @@ class GenerateLinkTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $sm = new ServiceManager();
-        $sm->setService('ViewRenderer', $phpRenderer);
-
-        $generateLink = new GenerateLink($sm, 'route');
+        $generateLink = new GenerateLink($phpRenderer, 'route');
 
         $this->assertEquals('route', $generateLink->getRoute());
         $this->assertEmpty($generateLink->getRouteKey());
@@ -55,10 +51,7 @@ class GenerateLinkTest extends TestCase
             ->method('url')
             ->will($this->returnValue(''));
 
-        $serviceManager = new ServiceManager();
-        $serviceManager->setService('ViewRenderer', $phpRenderer);
-
-        $generateLink = new GenerateLink($serviceManager, 'route');
+        $generateLink = new GenerateLink($phpRenderer, 'route');
         $generateLink->setRowData([
             'foo' => 'bar',
         ]);
