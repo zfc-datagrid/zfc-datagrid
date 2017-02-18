@@ -7,10 +7,14 @@ use PHPUnit\Framework\TestCase;
 use Zend\Http\PhpEnvironment\Request;
 use Zend\I18n\Translator\Translator;
 use Zend\Mvc\MvcEvent;
+use Zend\Router\Http\HttpRouterFactory;
+use Zend\Router\Http\Segment;
+use Zend\Router\RoutePluginManagerFactory;
 use Zend\Session\Container;
 use ZfcDatagrid\Column;
 use ZfcDatagrid\Datagrid;
 use ZfcDatagrid\DataSource\PhpArray;
+use ZfcDatagridTest\Util\ServiceManagerFactory;
 
 /**
  * @group Datagrid
@@ -608,5 +612,44 @@ class DatagridTest extends TestCase
         $customView = $this->getMockBuilder(\Zend\View\Model\ViewModel::class)->getMock();
 
         $grid->setViewModel($customView);
+    }
+
+    public function getRouter()
+    {
+        $config = [
+            'router' => [
+                'routes' => [
+                    'myTestRoute' => [
+                        'type'    => Segment::class,
+                        'options' => [
+                            'route'    => '/foo[/:bar]',
+                            'defaults' => [
+                                'controller' => 'MyController',
+                                'action'     => 'index',
+                                'bar'        => 'baz',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        // Setup service manager, we need that for the route
+        ServiceManagerFactory::setConfig($config);
+        $serviceLocator = ServiceManagerFactory::getServiceManager();
+
+        $routePluginManager = new RoutePluginManagerFactory();
+        $serviceLocator->setService('RoutePluginManager', $routePluginManager->createService($serviceLocator));
+        $routerFactory = new HttpRouterFactory();
+
+        return $routerFactory->createService($serviceLocator);
+    }
+
+    public function testGetAndSetRouter()
+    {
+        $router = $this->getRouter();
+        $grid   = new Datagrid();
+        $grid->setRouter($router);
+        $this->assertSame($router, $grid->getRouter());
     }
 }
