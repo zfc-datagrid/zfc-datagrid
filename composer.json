@@ -79,5 +79,9 @@
         "psr-4": {
             "ZfcDatagridTest\\": "tests/ZfcDatagridTest"
         }
+    },
+    
+    "replace": {
+        "thadafinser/zfc-datagrid": "self.version"
     }
 }
