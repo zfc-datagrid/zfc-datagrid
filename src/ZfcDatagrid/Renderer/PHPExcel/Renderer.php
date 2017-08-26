@@ -335,7 +335,7 @@ class Renderer extends AbstractExport
         $optionsRenderer = $this->getOptionsRenderer();
 
         $phpExcel->getProperties()
-            ->setCreator('https://github.com/ThaDafinser/ZfcDatagrid')
+            ->setCreator('https://github.com/zfc-datagrid/zfc-datagrid')
             ->setTitle($this->getTitle());
 
         /*
