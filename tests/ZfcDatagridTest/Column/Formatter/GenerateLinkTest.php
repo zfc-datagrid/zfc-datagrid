@@ -1,6 +1,7 @@
 <?php
 namespace ZfcDatagridTest\Column\Formatter;
 
+use PHPUnit\Framework\TestCase;
 use Zend\ServiceManager\ServiceManager;
 use ZfcDatagrid\Column\Formatter\GenerateLink;
 
@@ -8,7 +9,7 @@ use ZfcDatagrid\Column\Formatter\GenerateLink;
  * @group Column
  * @covers \ZfcDatagrid\Column\Formatter\GenerateLink
  */
-class GenerateLinkTest extends \PHPUnit_Framework_TestCase
+class GenerateLinkTest extends TestCase
 {
     public function testConstructor()
     {

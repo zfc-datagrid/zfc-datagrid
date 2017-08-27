@@ -1,7 +1,7 @@
 <?php
 namespace ZfcDatagridTest\Renderer;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use ZfcDatagrid\Column\Style;
 
@@ -9,7 +9,7 @@ use ZfcDatagrid\Column\Style;
  * @group Renderer
  * @covers \ZfcDatagrid\Renderer\AbstractRenderer
  */
-class AbstractRendererTest extends PHPUnit_Framework_TestCase
+class AbstractRendererTest extends TestCase
 {
     /**
      *
