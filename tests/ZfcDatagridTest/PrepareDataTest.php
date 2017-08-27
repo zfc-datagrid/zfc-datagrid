@@ -1,7 +1,7 @@
 <?php
 namespace ZfcDatagridTest;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use ZfcDatagrid\Column\DataPopulation\Object;
 use ZfcDatagrid\Column\Type;
 use ZfcDatagrid\PrepareData;
@@ -9,7 +9,7 @@ use ZfcDatagrid\PrepareData;
 /**
  * @covers ZfcDatagrid\PrepareData
  */
-class PrepareDataTest extends PHPUnit_Framework_TestCase
+class PrepareDataTest extends TestCase
 {
     /**
      *
