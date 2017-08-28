@@ -1,14 +1,14 @@
 <?php
 namespace ZfcDatagridTest\Column\Style;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use ZfcDatagrid\Column\Style;
 
 /**
  * @group Column
  * @covers \ZfcDatagrid\Column\Style\Italic
  */
-class ItalicTest extends PHPUnit_Framework_TestCase
+class ItalicTest extends TestCase
 {
     public function testCanCreateInstance()
     {

@@ -1,7 +1,7 @@
 <?php
 namespace ZfcDatagridTest;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Zend\Http\PhpEnvironment\Request;
 use Zend\I18n\Translator\Translator;
 use Zend\Mvc\MvcEvent;
@@ -14,7 +14,7 @@ use ZfcDatagrid\DataSource\PhpArray;
  * @group Datagrid
  * @covers \ZfcDatagrid\Datagrid
  */
-class DatagridTest extends PHPUnit_Framework_TestCase
+class DatagridTest extends TestCase
 {
     /**
      *
