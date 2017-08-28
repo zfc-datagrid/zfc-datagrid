@@ -19,7 +19,8 @@ class Columns extends AbstractHelper
 
     const STYLE_ITALIC = 'cellvalue = \'<span style="font-style: italic;">\' + cellvalue + \'</span>\';';
 
-    const STYLE_STRIKETHROUGH = 'cellvalue = \'<span style="text-decoration: line-through;">\' + cellvalue + \'</span>\';';
+    const STYLE_STRIKETHROUGH =
+        'cellvalue = \'<span style="text-decoration: line-through;">\' + cellvalue + \'</span>\';';
 
     /**
      * @param false|null|\Zend\I18n\Translator\Translator $translator
@@ -90,7 +91,7 @@ class Columns extends AbstractHelper
                 }
             }
 
-            if (!$alignAlreadyDefined && $column->getType() instanceof Type\Number) {
+            if (! $alignAlreadyDefined && $column->getType() instanceof Type\Number) {
                 $options['align'] = Column\Style\Align::$RIGHT;
             }
 
@@ -144,7 +145,9 @@ class Columns extends AbstractHelper
                         $value = 'false';
                     }
                 } elseif ('formatter' == $key) {
-                    if (stripos($value, 'formatter') === false && stripos($value, 'function') === false) {
+                    if (stripos($value, 'formatter') === false &&
+                        stripos($value, 'function') === false
+                    ) {
                         $value = '"'.$value.'"';
                     }
                 } elseif ('cellattr' == $key) {
@@ -185,7 +188,6 @@ class Columns extends AbstractHelper
         $formatter .= implode(' ', $this->getStyles($column));
 
         switch (get_class($column->getType())) {
-
             case 'ZfcDatagrid\Column\Type\PhpArray':
                 $formatter .= 'cellvalue = \'<pre>\' + cellvalue.join(\'<br />\') + \'</pre>\';';
                 break;
@@ -228,7 +230,6 @@ class Columns extends AbstractHelper
                 $colString = $rule['column']->getUniqueId();
                 $operator = '';
                 switch ($rule['operator']) {
-
                     case Filter::EQUAL:
                         $operator = '==';
                         break;
@@ -248,7 +249,6 @@ class Columns extends AbstractHelper
 
             $styleString = '';
             switch (get_class($style)) {
-
                 case 'ZfcDatagrid\Column\Style\Bold':
                     $styleString = self::STYLE_BOLD;
                     break;
@@ -262,7 +262,10 @@ class Columns extends AbstractHelper
                     break;
 
                 case 'ZfcDatagrid\Column\Style\Color':
-                    $styleString = 'cellvalue = \'<span style="color: #'.$style->getRgbHexString().';">\' + cellvalue + \'</span>\';';
+                    $styleString = sprintf(
+                        'cellvalue = \'<span style="color: #%s;">\' + cellvalue + \'</span>\';',
+                        $style->getRgbHexString()
+                    );
                     break;
 
                 case 'ZfcDatagrid\Column\Style\CSSClass':

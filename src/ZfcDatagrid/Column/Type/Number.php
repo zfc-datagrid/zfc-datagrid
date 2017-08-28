@@ -37,8 +37,11 @@ class Number extends AbstractType
 
     protected $pattern;
 
-    public function __construct($formatStyle = NumberFormatter::DECIMAL, $formatType = NumberFormatter::TYPE_DEFAULT, $locale = null)
-    {
+    public function __construct(
+        $formatStyle = NumberFormatter::DECIMAL,
+        $formatType = NumberFormatter::TYPE_DEFAULT,
+        $locale = null
+    ) {
         $this->setFormatStyle($formatStyle);
         $this->setFormatType($formatType);
         $this->setLocale($locale);

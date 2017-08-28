@@ -12,6 +12,6 @@ class StrikethroughTest extends TestCase
 {
     public function testCanCreateInstance()
     {
-        $strikethrough = new Style\Strikethrough();
+        $this->assertInstanceOf(Style\Strikethrough::class, new Style\Strikethrough());
     }
 }

@@ -41,8 +41,10 @@ class Renderer extends AbstractRenderer
     public function getRequest()
     {
         $request = parent::getRequest();
-        if (!$request instanceof HttpRequest) {
-            throw new \Exception('Request must be an instance of Zend\Http\PhpEnvironment\Request for HTML rendering');
+        if (! $request instanceof HttpRequest) {
+            throw new \Exception(
+                'Request must be an instance of Zend\Http\PhpEnvironment\Request for HTML rendering'
+            );
         }
 
         return $request;
@@ -68,8 +70,14 @@ class Renderer extends AbstractRenderer
 
         $sortConditions = [];
 
-        $sortColumns = $request->getPost($parameterNames['sortColumns'], $request->getQuery($parameterNames['sortColumns']));
-        $sortDirections = $request->getPost($parameterNames['sortDirections'], $request->getQuery($parameterNames['sortDirections']));
+        $sortColumns = $request->getPost(
+            $parameterNames['sortColumns'],
+            $request->getQuery($parameterNames['sortColumns'])
+        );
+        $sortDirections = $request->getPost(
+            $parameterNames['sortDirections'],
+            $request->getQuery($parameterNames['sortDirections'])
+        );
         if ($sortColumns != '') {
             $sortColumns = explode(',', $sortColumns);
             $sortDirections = explode(',', $sortDirections);
@@ -99,7 +107,7 @@ class Renderer extends AbstractRenderer
             }
         }
 
-        if (!empty($sortConditions)) {
+        if (! empty($sortConditions)) {
             $this->sortConditions = $sortConditions;
         } else {
             // No user sorting -> get default sorting
@@ -162,7 +170,10 @@ class Renderer extends AbstractRenderer
 
         $request = $this->getRequest();
         if ($request instanceof HttpRequest) {
-            $currentPage = $request->getPost($parameterNames['currentPage'], $request->getQuery($parameterNames['currentPage']));
+            $currentPage = $request->getPost(
+                $parameterNames['currentPage'],
+                $request->getQuery($parameterNames['currentPage'])
+            );
             if ($currentPage != '') {
                 $this->currentPageNumber = (int) $currentPage;
             }
@@ -174,7 +185,9 @@ class Renderer extends AbstractRenderer
     public function execute()
     {
         $request = $this->getRequest();
-        if ($request->isXmlHttpRequest() === true && $request->getPost('nd', $request->getQuery('nd')) != '') {
+        if ($request->isXmlHttpRequest() === true &&
+            $request->getPost('nd', $request->getQuery('nd')) != ''
+        ) {
             // AJAX Request...load only data...
             $viewModel = new JsonModel();
             $viewModel->setVariable('data', $this->getDataJqGrid());

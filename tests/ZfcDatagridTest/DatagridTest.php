@@ -1,6 +1,8 @@
 <?php
 namespace ZfcDatagridTest;
 
+use Exception;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Zend\Http\PhpEnvironment\Request;
 use Zend\I18n\Translator\Translator;
@@ -191,12 +193,12 @@ class DatagridTest extends TestCase
         $this->assertInstanceOf(\ZfcDatagrid\DataSource\Doctrine2::class, $grid->getDataSource());
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage If providing a Collection, also the Doctrine\ORM\EntityManager is needed as a second parameter
-     */
     public function testDataSourceDoctrineCollection()
     {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage(
+            'If providing a Collection, also the Doctrine\ORM\EntityManager is needed as a second parameter'
+        );
         $grid = new Datagrid();
 
         $this->assertFalse($grid->hasDataSource());
@@ -294,12 +296,12 @@ class DatagridTest extends TestCase
         $this->assertEquals(null, $this->grid->getColumnByUniqueId('notAvailable'));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage createColumn() supports only a config array or instanceof Column\AbstractColumn as a parameter
-     */
     public function testAddColumnInvalidArgumentException()
     {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage(
+            'createColumn() supports only a config array or instanceof Column\AbstractColumn as a parameter'
+        );
         $grid = new Datagrid();
 
         $grid->addColumn(null);
@@ -594,12 +596,12 @@ class DatagridTest extends TestCase
         $this->assertSame($customView, $grid->getViewModel());
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage A viewModel is already set. Did you already called $grid->render() or $grid->getViewModel() before?
-     */
     public function testSetViewModelException()
     {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage(
+            'A viewModel is already set. Did you already called $grid->render() or $grid->getViewModel() before?'
+        );
         $grid = new Datagrid();
         $grid->getViewModel();
 

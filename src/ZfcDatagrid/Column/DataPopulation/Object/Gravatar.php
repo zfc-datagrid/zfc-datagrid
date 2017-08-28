@@ -18,7 +18,6 @@ class Gravatar implements ObjectAwareInterface
     private function setParameter($name, $value)
     {
         switch ($name) {
-
             case 'email':
                 $this->email = (string) $value;
                 break;

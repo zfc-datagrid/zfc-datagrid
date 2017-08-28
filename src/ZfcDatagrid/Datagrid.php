@@ -371,8 +371,13 @@ class Datagrid
      */
     public function setTranslator($translator = null)
     {
-        if (!$translator instanceof Translator && !$translator instanceof \Zend\I18n\Translator\TranslatorInterface) {
-            throw new \InvalidArgumentException('Translator must be an instanceof "Zend\I18n\Translator\Translator" or "Zend\I18n\Translator\TranslatorInterface"');
+        if (! $translator instanceof Translator &&
+            ! $translator instanceof \Zend\I18n\Translator\TranslatorInterface
+        ) {
+            throw new \InvalidArgumentException(
+                'Translator must be an instanceof "Zend\I18n\Translator\Translator" ' .
+                'or "Zend\I18n\Translator\TranslatorInterface"'
+            );
         }
 
         $this->translator = $translator;
@@ -415,20 +420,28 @@ class Datagrid
             $this->dataSource = new DataSource\Doctrine2($data);
         } elseif ($data instanceof ZendSelect) {
             $args = func_get_args();
-            if (count($args) === 1 || (!$args[1] instanceof \Zend\Db\Adapter\Adapter && !$args[1] instanceof \Zend\Db\Sql\Sql)) {
-                throw new \InvalidArgumentException('For "Zend\Db\Sql\Select" also a "Zend\Db\Adapter\Sql" or "Zend\Db\Sql\Sql" is needed.');
+            if (count($args) === 1 ||
+                (! $args[1] instanceof \Zend\Db\Adapter\Adapter && ! $args[1] instanceof \Zend\Db\Sql\Sql)
+            ) {
+                throw new \InvalidArgumentException(
+                    'For "Zend\Db\Sql\Select" also a "Zend\Db\Adapter\Sql" or "Zend\Db\Sql\Sql" is needed.'
+                );
             }
             $this->dataSource = new DataSource\ZendSelect($data);
             $this->dataSource->setAdapter($args[1]);
         } elseif ($data instanceof Collection) {
             $args = func_get_args();
-            if (count($args) === 1 || !$args[1] instanceof \Doctrine\ORM\EntityManager) {
-                throw new \InvalidArgumentException('If providing a Collection, also the Doctrine\ORM\EntityManager is needed as a second parameter');
+            if (count($args) === 1 || ! $args[1] instanceof \Doctrine\ORM\EntityManager) {
+                throw new \InvalidArgumentException(
+                    'If providing a Collection, also the Doctrine\ORM\EntityManager is needed as a second parameter'
+                );
             }
             $this->dataSource = new DataSource\Doctrine2Collection($data);
             $this->dataSource->setEntityManager($args[1]);
         } else {
-            throw new \InvalidArgumentException('$data must implement the interface ZfcDatagrid\DataSource\DataSourceInterface');
+            throw new \InvalidArgumentException(
+                '$data must implement the interface ZfcDatagrid\DataSource\DataSourceInterface'
+            );
         }
     }
 
@@ -585,8 +598,10 @@ class Datagrid
             return $config;
         }
 
-        if (!is_array($config) && !$config instanceof Column\AbstractColumn) {
-            throw new \InvalidArgumentException('createColumn() supports only a config array or instanceof Column\AbstractColumn as a parameter');
+        if (! is_array($config) && ! $config instanceof Column\AbstractColumn) {
+            throw new \InvalidArgumentException(
+                'createColumn() supports only a config array or instanceof Column\AbstractColumn as a parameter'
+            );
         }
 
         $colType = isset($config['colType']) ? $config['colType'] : 'Select';
@@ -599,8 +614,10 @@ class Datagrid
         }
 
         if ('ZfcDatagrid\\Column\\Select' == $class) {
-            if (!isset($config['select']['column'])) {
-                throw new \InvalidArgumentException('For "ZfcDatagrid\Column\Select" the option select[column] must be defined!');
+            if (! isset($config['select']['column'])) {
+                throw new \InvalidArgumentException(
+                    'For "ZfcDatagrid\Column\Select" the option select[column] must be defined!'
+                );
             }
             $table = isset($config['select']['table']) ? $config['select']['table'] : null;
 
@@ -613,7 +630,7 @@ class Datagrid
             $method = 'set'.ucfirst($key);
             if (method_exists($instance, $method)) {
                 if (in_array($key, $this->specialMethods)) {
-                    if (!is_array($value)) {
+                    if (! is_array($value)) {
                         $value = [
                             $value,
                         ];
@@ -715,7 +732,7 @@ class Datagrid
      */
     public function setUserFilterDisabled($mode = true)
     {
-        $this->isUserFilterEnabled = (bool) !$mode;
+        $this->isUserFilterEnabled = (bool) ! $mode;
     }
 
     /**
@@ -833,8 +850,10 @@ class Datagrid
         if (null === $this->renderer) {
             if (isset($this->rendererService)) {
                 $renderer = $this->rendererService;
-                if (!$renderer instanceof Renderer\AbstractRenderer) {
-                    throw new \Exception('Renderer service must implement "ZfcDatagrid\Renderer\AbstractRenderer"');
+                if (! $renderer instanceof Renderer\AbstractRenderer) {
+                    throw new \Exception(
+                        'Renderer service must implement "ZfcDatagrid\Renderer\AbstractRenderer"'
+                    );
                 }
                 $renderer->setOptions($this->getOptions());
                 $renderer->setMvcEvent($this->getMvcEvent());
@@ -854,7 +873,12 @@ class Datagrid
 
                 $this->renderer = $renderer;
             } else {
-                throw new \Exception(sprintf('Renderer service was not found, please register it: "zfcDatagrid.renderer.%s"', $this->getRendererName()));
+                throw new \Exception(
+                    sprintf(
+                        'Renderer service was not found, please register it: "zfcDatagrid.renderer.%s"',
+                        $this->getRendererName()
+                    )
+                );
             }
         }
 
@@ -905,16 +929,16 @@ class Datagrid
             /*
              * Step 1.2) Sorting
              */
-            foreach ($renderer->getSortConditions() as $condition) {
-                $this->getDataSource()->addSortCondition($condition['column'], $condition['sortDirection']);
-            }
+        foreach ($renderer->getSortConditions() as $condition) {
+            $this->getDataSource()->addSortCondition($condition['column'], $condition['sortDirection']);
+        }
 
             /*
              * Step 1.3) Filtering
              */
-            foreach ($renderer->getFilters() as $filter) {
-                $this->getDataSource()->addFilter($filter);
-            }
+        foreach ($renderer->getFilters() as $filter) {
+            $this->getDataSource()->addFilter($filter);
+        }
         }
 
         /*
@@ -932,22 +956,26 @@ class Datagrid
 
             /* @var $currentItems \ArrayIterator */
             $data = $this->paginator->getCurrentItems();
-            if (!is_array($data)) {
-                if ($data instanceof \Zend\Db\ResultSet\ResultSet) {
-                    $data = $data->toArray();
-                } elseif ($data instanceof ArrayIterator) {
-                    $data = $data->getArrayCopy();
+        if (! is_array($data)) {
+            if ($data instanceof \Zend\Db\ResultSet\ResultSet) {
+                $data = $data->toArray();
+            } elseif ($data instanceof ArrayIterator) {
+                $data = $data->getArrayCopy();
+            } else {
+                if (is_object($data)) {
+                    $add = get_class($data);
                 } else {
-                    if (is_object($data)) {
-                        $add = get_class($data);
-                    } else {
-                        $add = '[no object]';
-                    }
-                    throw new \Exception(
-                        sprintf('The paginator returned an unknown result: %s (allowed: \ArrayIterator or a plain php array)', $add)
-                    );
+                    $add = '[no object]';
                 }
+                throw new \Exception(
+                    sprintf(
+                        'The paginator returned an unknown result: %s ' .
+                        '(allowed: \ArrayIterator or a plain php array)',
+                        $add
+                    )
+                );
             }
+        }
         }
 
         /*
@@ -966,7 +994,8 @@ class Datagrid
                 $options = $this->getCache()->getOptions();
                 throw new \Exception(
                     sprintf(
-                        'Could not save the datagrid cache. Does the directory "%s" exists and is writeable? CacheId: %s',
+                        'Could not save the datagrid cache. Does the directory "%s" ' .
+                        'exists and is writeable? CacheId: %s',
                         $options->getCacheDir(),
                         $this->getCacheId()
                     )
@@ -1095,7 +1124,10 @@ class Datagrid
     public function setViewModel(ViewModel $viewModel)
     {
         if ($this->viewModel !== null) {
-            throw new \Exception('A viewModel is already set. Did you already called $grid->render() or $grid->getViewModel() before?');
+            throw new \Exception(
+                'A viewModel is already set. Did you already called ' .
+                '$grid->render() or $grid->getViewModel() before?'
+            );
         }
 
         $this->viewModel = $viewModel;
@@ -1118,7 +1150,7 @@ class Datagrid
      */
     public function getResponse()
     {
-        if (!$this->isRendered()) {
+        if (! $this->isRendered()) {
             $this->render();
         }
 
@@ -1134,7 +1166,7 @@ class Datagrid
      */
     public function isHtmlInitReponse()
     {
-        if (!$this->getResponse() instanceof JsonModel && !$this->getResponse() instanceof ResponseInterface) {
+        if (! $this->getResponse() instanceof JsonModel && ! $this->getResponse() instanceof ResponseInterface) {
             return true;
         }
 

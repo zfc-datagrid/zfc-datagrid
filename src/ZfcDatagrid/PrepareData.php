@@ -101,8 +101,11 @@ class PrepareData
      */
     public function setTranslator($translator)
     {
-        if (!$translator instanceof Translator && !$translator instanceof \Zend\I18n\Translator\TranslatorInterface) {
-            throw new \InvalidArgumentException('Translator must be an instanceof "Zend\I18n\Translator\Translator" or "Zend\I18n\Translator\TranslatorInterface"');
+        if (! $translator instanceof Translator && ! $translator instanceof \Zend\I18n\Translator\TranslatorInterface) {
+            throw new \InvalidArgumentException(
+                'Translator must be an instanceof ' .
+                '"Zend\I18n\Translator\Translator" or "Zend\I18n\Translator\TranslatorInterface"'
+            );
         }
 
         $this->translator = $translator;
@@ -152,12 +155,15 @@ class PrepareData
                     $dataPopulation = $col->getDataPopulation();
 
                     foreach ($dataPopulation->getObjectParametersColumn() as $parameter) {
-                        $dataPopulation->setObjectParameter($parameter['objectParameterName'], $row[$parameter['column']->getUniqueId()]);
+                        $dataPopulation->setObjectParameter(
+                            $parameter['objectParameterName'],
+                            $row[$parameter['column']->getUniqueId()]
+                        );
                     }
                     $row[$col->getUniqueId()] = $dataPopulation->toString();
                 }
 
-                if (!isset($row[$col->getUniqueId()])) {
+                if (! isset($row[$col->getUniqueId()])) {
                     $row[$col->getUniqueId()] = '';
                 }
 
@@ -212,11 +218,11 @@ class PrepareData
                  */
                 if (is_array($row[$col->getUniqueId()])) {
                     array_walk_recursive($row[$col->getUniqueId()], function (&$value) {
-                        if (!is_object($value)) {
+                        if (! is_object($value)) {
                             $value = trim($value);
                         }
                     });
-                } elseif (!is_object($row[$col->getUniqueId()])) {
+                } elseif (! is_object($row[$col->getUniqueId()])) {
                     $row[$col->getUniqueId()] = trim($row[$col->getUniqueId()]);
                 }
 

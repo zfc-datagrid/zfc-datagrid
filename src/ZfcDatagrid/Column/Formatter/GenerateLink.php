@@ -35,7 +35,7 @@ class GenerateLink extends AbstractFormatter
          * old fallback that should be removed in 2.0
          * TODO remove in 2.0
          */
-        if (!$viewRenderer instanceof RendererInterface) {
+        if (! $viewRenderer instanceof RendererInterface) {
             $viewRenderer = $viewRenderer->get('ViewRenderer');
         }
 
@@ -55,7 +55,7 @@ class GenerateLink extends AbstractFormatter
         $row = $this->getRowData();
         $value = $row[$column->getUniqueId()];
 
-        $routeKey = !is_null($this->getRouteKey()) ?
+        $routeKey = ! is_null($this->getRouteKey()) ?
             $this->getRouteKey()
             :
             $column->getUniqueId();

@@ -53,7 +53,7 @@ class Doctrine2 extends AbstractDataSource
          */
         $selectColumns = [];
         foreach ($this->getColumns() as $col) {
-            if (!$col instanceof Column\Select) {
+            if (! $col instanceof Column\Select) {
                 continue;
             }
 
@@ -71,7 +71,7 @@ class Doctrine2 extends AbstractDataSource
         /*
          * Step 2) Apply sorting
          */
-        if (!empty($this->getSortConditions())) {
+        if (! empty($this->getSortConditions())) {
             // Minimum one sort condition given -> so reset the default orderBy
             $qb->resetDQLPart('orderBy');
 
@@ -79,7 +79,7 @@ class Doctrine2 extends AbstractDataSource
                 /* @var $col \ZfcDatagrid\Column\AbstractColumn */
                 $col = $sortCondition['column'];
 
-                if (!$col instanceof Column\Select) {
+                if (! $col instanceof Column\Select) {
                     throw new \Exception('This column cannot be sorted: '.$col->getUniqueId());
                 }
 

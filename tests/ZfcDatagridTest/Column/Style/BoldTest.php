@@ -12,6 +12,6 @@ class BoldTest extends TestCase
 {
     public function testCanCreateInstance()
     {
-        $bold = new Style\Bold();
+        $this->assertInstanceOf(Style\Bold::class, new Style\Bold());
     }
 }

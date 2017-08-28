@@ -32,6 +32,11 @@ class Checkbox extends AbstractAction
         $this->removeAttribute('name');
         $this->removeAttribute('value');
 
-        return '<input type="checkbox" name="'.$this->name.'" value="'.$row['idConcated'].'" '.$this->getAttributesString($row).' />';
+        return sprintf(
+            '<input type="checkbox" name="%s" value="%s" %s />',
+            $this->name,
+            $row['idConcated'],
+            $this->getAttributesString($row)
+        );
     }
 }

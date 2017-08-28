@@ -53,7 +53,7 @@ class PhpArray extends AbstractType
      */
     public function getUserValue($value)
     {
-        if (!is_array($value)) {
+        if (! is_array($value)) {
             if ('' == $value) {
                 $value = [];
             } else {

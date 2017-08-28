@@ -30,6 +30,9 @@ class EmailTest extends TestCase
             'myCol' => 'name@example.com',
         ]);
 
-        $this->assertEquals('<a href="mailto:name@example.com">name@example.com</a>', $formatter->getFormattedValue($col));
+        $this->assertEquals(
+            '<a href="mailto:name@example.com">name@example.com</a>',
+            $formatter->getFormattedValue($col)
+        );
     }
 }

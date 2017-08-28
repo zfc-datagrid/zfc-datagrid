@@ -294,23 +294,22 @@ class PrepareDataTest extends TestCase
         $translator->expects($this->any())
             ->method('translate')
             ->will($this->returnCallback(function ($name) {
-            switch ($name) {
-
-                case 'yes':
-                    return 'ja';
+                switch ($name) {
+                    case 'yes':
+                        return 'ja';
                     break;
 
-                case 'no':
-                    return 'nein';
+                    case 'no':
+                        return 'nein';
                     break;
 
-                case '':
-                    return '';
+                    case '':
+                        return '';
                     break;
-            }
+                }
 
-            return $name;
-        }));
+                return $name;
+            }));
 
         $prepare->setTranslator($translator);
 
@@ -346,15 +345,14 @@ class PrepareDataTest extends TestCase
         $translator->expects($this->any())
             ->method('translate')
             ->will($this->returnCallback(function ($name) {
-            switch ($name) {
-
-                case 'tag2':
-                    return 'Tag 2';
+                switch ($name) {
+                    case 'tag2':
+                        return 'Tag 2';
                     break;
-            }
+                }
 
-            return $name;
-        }));
+                return $name;
+            }));
 
         $prepare->setTranslator($translator);
 

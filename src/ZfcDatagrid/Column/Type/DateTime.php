@@ -50,8 +50,14 @@ class DateTime extends AbstractType
      * @param string $sourceTimezone
      * @param string $outputTimezone
      */
-    public function __construct($sourceDateTimeFormat = 'Y-m-d H:i:s', $outputDateType = IntlDateFormatter::MEDIUM, $outputTimeType = IntlDateFormatter::NONE, $locale = null, $sourceTimezone = 'UTC', $outputTimezone = null)
-    {
+    public function __construct(
+        $sourceDateTimeFormat = 'Y-m-d H:i:s',
+        $outputDateType = IntlDateFormatter::MEDIUM,
+        $outputTimeType = IntlDateFormatter::NONE,
+        $locale = null,
+        $sourceTimezone = 'UTC',
+        $outputTimezone = null
+    ) {
         $this->setSourceDateTimeFormat($sourceDateTimeFormat);
         $this->setOutputDateType($outputDateType);
         $this->setOutputTimeType($outputTimeType);
@@ -181,7 +187,14 @@ class DateTime extends AbstractType
      */
     public function getFilterValue($val)
     {
-        $formatter = new IntlDateFormatter($this->getLocale(), $this->getOutputDateType(), $this->getOutputTimeType(), $this->getOutputTimezone(), IntlDateFormatter::GREGORIAN, $this->getOutputPattern());
+        $formatter = new IntlDateFormatter(
+            $this->getLocale(),
+            $this->getOutputDateType(),
+            $this->getOutputTimeType(),
+            $this->getOutputTimezone(),
+            IntlDateFormatter::GREGORIAN,
+            $this->getOutputPattern()
+        );
         $timestamp = $formatter->parse($val);
 
         $date = new PhpDateTime();
@@ -209,13 +222,24 @@ class DateTime extends AbstractType
             $date->setTimezone(new DateTimeZone($this->getSourceTimezone()));
             $date->setTimezone(new DateTimeZone($this->getOutputTimezone()));
         } else {
-            $date = PhpDateTime::createFromFormat($this->getSourceDateTimeFormat(), $val, new DateTimeZone($this->getSourceTimezone()));
+            $date = PhpDateTime::createFromFormat(
+                $this->getSourceDateTimeFormat(),
+                $val,
+                new DateTimeZone($this->getSourceTimezone())
+            );
             if (false === $date) {
                 return '';
             }
             $date->setTimezone(new DateTimeZone($this->getOutputTimezone()));
         }
-        $formatter = new IntlDateFormatter($this->getLocale(), $this->getOutputDateType(), $this->getOutputTimeType(), $this->getOutputTimezone(), IntlDateFormatter::GREGORIAN, $this->getOutputPattern());
+        $formatter = new IntlDateFormatter(
+            $this->getLocale(),
+            $this->getOutputDateType(),
+            $this->getOutputTimeType(),
+            $this->getOutputTimezone(),
+            IntlDateFormatter::GREGORIAN,
+            $this->getOutputPattern()
+        );
 
         return $formatter->format($date->getTimestamp());
     }

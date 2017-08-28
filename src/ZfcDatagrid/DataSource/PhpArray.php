@@ -70,7 +70,7 @@ class PhpArray extends AbstractDataSource
          */
         $selectedColumns = [];
         foreach ($this->getColumns() as $col) {
-            if (!$col instanceof Column\Select) {
+            if (! $col instanceof Column\Select) {
                 continue;
             }
 
@@ -84,7 +84,7 @@ class PhpArray extends AbstractDataSource
 
         foreach ($data as &$row) {
             foreach ($row as $keyRowCol => $rowCol) {
-                if (!in_array($keyRowCol, $selectedColumns)) {
+                if (! in_array($keyRowCol, $selectedColumns)) {
                     unset($row[$keyRowCol]);
                 }
             }
@@ -116,17 +116,16 @@ class PhpArray extends AbstractDataSource
         }
 
         switch (get_class($sortCondition['column']->getType())) {
-
             case Column\Type\Number::class:
                 $numeric = SORT_NUMERIC;
                 $sortArray[] = $numeric;
                 break;
-                
+
             case Column\Type\PhpString::class:
                 $string = SORT_NATURAL | SORT_FLAG_CASE;
                 $sortArray[] = $string;
                 break;
-                
+
             default:
                 $regular = SORT_REGULAR;
                 $sortArray[] = $regular;
@@ -154,7 +153,7 @@ class PhpArray extends AbstractDataSource
 
             $dataCol = [];
             foreach ($data as $key => $row) {
-                if (!isset($row[$column])) {
+                if (! isset($row[$column])) {
                     $value = '';
                 } else {
                     $value = $row[$column];
@@ -188,7 +187,9 @@ class PhpArray extends AbstractDataSource
         foreach ($sortArguments as $values) {
             $remain = count($values) % 3;
             if ($remain != 0) {
-                throw new \InvalidArgumentException('The parameter count for each sortArgument has to be three. Given count of: '.count($values));
+                throw new \InvalidArgumentException(
+                    'The parameter count for each sortArgument has to be three. Given count of: ' . count($values)
+                );
             }
             $args[] = $values[0]; // column value
             $args[] = $values[1]; // sort direction

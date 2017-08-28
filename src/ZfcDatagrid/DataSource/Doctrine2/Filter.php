@@ -41,7 +41,7 @@ class Filter
         $expr = new Expr();
 
         $col = $filter->getColumn();
-        if (!$col instanceof Column\Select) {
+        if (! $col instanceof Column\Select) {
             throw new \Exception('This column cannot be filtered: '.$col->getUniqueId());
         }
 
@@ -59,7 +59,6 @@ class Filter
             $valueParameterName = ':'.str_replace('.', '', $col->getUniqueId().$key);
 
             switch ($filter->getOperator()) {
-
                 case DatagridFilter::LIKE:
                     $wheres[] = $expr->like($colString, $valueParameterName);
                     $qb->setParameter($valueParameterName, '%'.$value.'%');
@@ -131,12 +130,15 @@ class Filter
                     break 2;
 
                 default:
-                    throw new \InvalidArgumentException('This operator is currently not supported: '.$filter->getOperator());
+                    throw new \InvalidArgumentException(
+                        'This operator is currently not supported: ' .
+                        $filter->getOperator()
+                    );
                     break;
             }
         }
 
-        if (!empty($wheres)) {
+        if (! empty($wheres)) {
             $orWhere = $qb->expr()->orX();
             $orWhere->addMultiple($wheres);
 

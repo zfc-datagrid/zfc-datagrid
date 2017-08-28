@@ -34,7 +34,8 @@ return [
 
                 // mode can be:
                 // direct = PHP handles header + file reading
-                // @TODO iframe = PHP generates the file and a hidden <iframe> sends the document (ATTENTION: your webserver must enable "force-download" for excel/pdf/...)
+                // @TODO iframe = PHP generates the file and a hidden <iframe> sends the document
+                // (ATTENTION: your webserver must enable "force-download" for excel/pdf/...)
                 'mode' => 'direct',
             ],
         ],
@@ -251,8 +252,10 @@ return [
             'jqgridColumns'     => Renderer\JqGrid\View\Helper\Columns::class,
         ],
         'factories' => [
-            Renderer\BootstrapTable\View\Helper\TableRow::class => Renderer\BootstrapTable\View\Helper\TableRowFactory::class,
-            Renderer\JqGrid\View\Helper\Columns::class => Renderer\JqGrid\View\Helper\ColumnsFactory::class,
+            Renderer\BootstrapTable\View\Helper\TableRow::class =>
+                Renderer\BootstrapTable\View\Helper\TableRowFactory::class,
+            Renderer\JqGrid\View\Helper\Columns::class =>
+                Renderer\JqGrid\View\Helper\ColumnsFactory::class,
         ],
     ],
 
@@ -263,10 +266,14 @@ return [
         ],
 
         'template_map' => [
-            'zfc-datagrid/renderer/bootstrapTable/layout' => __DIR__ . '/../view/zfc-datagrid/renderer/bootstrapTable/layout.phtml',
-            'zfc-datagrid/renderer/printHtml/layout'      => __DIR__ . '/../view/zfc-datagrid/renderer/printHtml/layout.phtml',
-            'zfc-datagrid/renderer/printHtml/table'       => __DIR__ . '/../view/zfc-datagrid/renderer/printHtml/table.phtml',
-            'zfc-datagrid/renderer/jqGrid/layout'         => __DIR__ . '/../view/zfc-datagrid/renderer/jqGrid/layout.phtml',
+            'zfc-datagrid/renderer/bootstrapTable/layout' =>
+                __DIR__ . '/../view/zfc-datagrid/renderer/bootstrapTable/layout.phtml',
+            'zfc-datagrid/renderer/printHtml/layout'      =>
+                __DIR__ . '/../view/zfc-datagrid/renderer/printHtml/layout.phtml',
+            'zfc-datagrid/renderer/printHtml/table'       =>
+                __DIR__ . '/../view/zfc-datagrid/renderer/printHtml/table.phtml',
+            'zfc-datagrid/renderer/jqGrid/layout'         =>
+                __DIR__ . '/../view/zfc-datagrid/renderer/jqGrid/layout.phtml',
         ],
 
         'template_path_stack' => [

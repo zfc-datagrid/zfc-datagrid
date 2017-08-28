@@ -34,7 +34,7 @@ class Select extends AbstractColumn
      */
     public function __construct($columnOrIndexOrObject, $tableOrAliasOrUniqueId = null)
     {
-        if ($tableOrAliasOrUniqueId !== null && !is_string($tableOrAliasOrUniqueId)) {
+        if ($tableOrAliasOrUniqueId !== null && ! is_string($tableOrAliasOrUniqueId)) {
             throw new \Exception('Variable $tableOrAliasOrUniqueId must be null or a string');
         }
 
@@ -46,7 +46,10 @@ class Select extends AbstractColumn
             // $column = new Column('title')
             $this->setUniqueId($columnOrIndexOrObject);
             $this->setSelect($columnOrIndexOrObject);
-        } elseif (is_object($columnOrIndexOrObject) && $tableOrAliasOrUniqueId !== null && is_string($tableOrAliasOrUniqueId)) {
+        } elseif (is_object($columnOrIndexOrObject) &&
+            null !== $tableOrAliasOrUniqueId &&
+            is_string($tableOrAliasOrUniqueId)
+        ) {
             // $column = new Column('(SELECT GROUP_CONCAT....)', 'someAlias')
             $this->setUniqueId($tableOrAliasOrUniqueId);
             $this->setSelect($columnOrIndexOrObject);
@@ -102,7 +105,7 @@ class Select extends AbstractColumn
      */
     public function hasFilterSelectExpression()
     {
-        if ($this->filterSelectExpression !== null) {
+        if (null !== $this->filterSelectExpression) {
             return true;
         }
 

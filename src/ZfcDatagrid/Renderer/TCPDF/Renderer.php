@@ -91,7 +91,7 @@ class Renderer extends AbstractExport
             if ($usedHeight > $pageHeight) {
                 // Height is more than the pageHeight -> create a new page
                 if ($rowHeight < $pageHeight) {
-                    // If the row height is more than the page height, than we would have a problem, if we add a new page
+                    // If the row height > page height, than we would have a problem, if we add a new page
                     // because it will overflow anyway...
                     $pdf->AddPage();
 
@@ -225,7 +225,6 @@ class Renderer extends AbstractExport
             /* @var $col \ZfcDatagrid\Column\AbstractColumn */
 
             switch (get_class($col->getType())) {
-
                 case Type\Image::class:
                     // "min" height for such a column
                     $height = $col->getType()->getResizeHeight() + $contentPadding;
@@ -278,7 +277,9 @@ class Renderer extends AbstractExport
             $label = $this->translate($col->getLabel());
 
             // Do not wrap header labels, it will look very ugly, that's why max height is set to 7!
+            // @codingStandardsIgnoreStart
             $pdf->MultiCell($col->getWidth(), $height, $label, 1, $this->getTextAlignment(), true, 2, $x, $y, true, 0, false, true, 7);
+            // @codingStandardsIgnoreEnd
         }
     }
 
@@ -295,7 +296,6 @@ class Renderer extends AbstractExport
             $x = $this->columnsPositionX[$col->getUniqueId()];
 
             switch (get_class($col->getType())) {
-
                 case 'ZfcDatagrid\Column\Type\Image':
                     $text = '';
 
@@ -314,12 +314,20 @@ class Renderer extends AbstractExport
                             // resizing properly to width + height (and keeping the ratio)
                             $file = file_get_contents($link);
                             if ($file !== false) {
-                                list($width, $height) = $this->calcImageSize($file, $col->getWidth() - 2, $rowHeight - 2);
+                                list($width, $height) = $this->calcImageSize(
+                                    $file,
+                                    $col->getWidth() - 2,
+                                    $rowHeight - 2
+                                );
 
+                                // @codingStandardsIgnoreStart
                                 $pdf->Image('@' . $file, $x + 1, $y + 1, $width, $height, '', '', 'L', true);
+                                // @codingStandardsIgnoreEnd
                             }
                         } else {
+                            // @codingStandardsIgnoreStart
                             $pdf->Image($link, $x + 1, $y + 1, 0, $resizeHeight, '', '', 'L', true);
+                            // @codingStandardsIgnoreEnd
                         }
                     } catch (\Exception $e) {
                         // if tcpdf couldnt find a image, continue and log it
@@ -349,7 +357,6 @@ class Renderer extends AbstractExport
                 /* @var $style Style\AbstractStyle */
                 if ($style->isApply($row) === true) {
                     switch (get_class($style)) {
-
                         case Style\Bold::class:
                             $this->setBold();
                             break;
@@ -403,8 +410,10 @@ class Renderer extends AbstractExport
                 }
             }
 
+            // @codingStandardsIgnoreStart
             // MultiCell($w, $h, $txt, $border=0, $align='J', $fill=false, $ln=1, $x='', $y='', $reseth=true, $stretch=0, $ishtml=false, $autopadding=true, $maxh=0, $valign='T', $fitcell=false)
             $pdf->MultiCell($col->getWidth(), $rowHeight, $text, 1, $this->getTextAlignment(), $backgroundColor, 1, $x, $y, true, 0, $isHtml);
+            // @codingStandardsIgnoreEnd
         }
     }
 

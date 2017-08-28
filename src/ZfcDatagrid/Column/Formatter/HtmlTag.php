@@ -156,7 +156,13 @@ class HtmlTag extends AbstractFormatter
     {
         $row = $this->getRowData();
 
-        return sprintf('<%s %s>%s</%s>', $this->getName(), $this->getAttributesString($col), $row[$col->getUniqueId()], $this->getName());
+        return sprintf(
+            '<%s %s>%s</%s>',
+            $this->getName(),
+            $this->getAttributesString($col),
+            $row[$col->getUniqueId()],
+            $this->getName()
+        );
     }
 
     /**
