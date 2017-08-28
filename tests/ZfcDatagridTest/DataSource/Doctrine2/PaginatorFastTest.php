@@ -17,5 +17,4 @@ class PaginatorFastTest extends AbstractDoctrine2Test
 
         $this->assertSame($qb, $paginator->getQueryBuilder());
     }
-
 }

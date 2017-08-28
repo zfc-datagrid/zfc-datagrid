@@ -40,7 +40,10 @@ abstract class AbstractExport extends AbstractRenderer
         foreach ($this->getColumns() as $column) {
             /* @var $column \ZfcDatagrid\Column\AbstractColumn */
 
-            if (!$column instanceof Column\Action && $column->isHidden() === false && in_array(get_class($column->getType()), $this->allowedColumnTypes)) {
+            if (! $column instanceof Column\Action &&
+                $column->isHidden() === false &&
+                in_array(get_class($column->getType()), $this->allowedColumnTypes)
+            ) {
                 $columnsToExport[] = $column;
             }
         }

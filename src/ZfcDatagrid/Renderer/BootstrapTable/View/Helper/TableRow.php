@@ -89,8 +89,13 @@ class TableRow extends AbstractHelper
      *
      * @return string
      */
-    public function __invoke($row, array $cols, AbstractAction $rowClickAction = null, array $rowStyles = [], $hasMassActions = false)
-    {
+    public function __invoke(
+        $row,
+        array $cols,
+        AbstractAction $rowClickAction = null,
+        array $rowStyles = [],
+        $hasMassActions = false
+    ) {
         $return = $this->getTr($row);
 
         if (true === $hasMassActions) {
@@ -110,7 +115,6 @@ class TableRow extends AbstractHelper
             }
 
             switch (get_class($col->getType())) {
-
                 case Column\Type\Number::class:
                     $cssStyles[] = 'text-align: right';
                     break;
@@ -125,7 +129,6 @@ class TableRow extends AbstractHelper
                 /* @var $style Column\Style\AbstractStyle */
                 if ($style->isApply($row) === true) {
                     switch (get_class($style)) {
-
                         case Column\Style\Bold::class:
                             $cssStyles[] = 'font-weight: bold';
                             break;

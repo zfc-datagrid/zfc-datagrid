@@ -80,7 +80,7 @@ class PaginatorFast implements AdapterInterface
             ->resetDQLParts([
             'orderBy',
             'select',
-        ]);
+            ]);
 
         if (count($groupParts) > 1) {
             /*

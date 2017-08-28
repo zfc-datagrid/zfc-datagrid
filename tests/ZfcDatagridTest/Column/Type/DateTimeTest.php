@@ -155,8 +155,16 @@ class DateTimeTest extends TestCase
         $type = clone $this->datetimeAT;
         $this->assertEquals('', $type->getUserValue(''));
 
-        $this->assertEquals('10.01.2013', $type->getUserValue(new \DateTime('2013-01-10 12:00:00')), 'Compare DateTime');
-        $this->assertEquals('10.01.2013', $type->getUserValue('2013-01-10 00:00:00'), 'Compare string');
+        $this->assertEquals(
+            '10.01.2013',
+            $type->getUserValue(new \DateTime('2013-01-10 12:00:00')),
+            'Compare DateTime'
+        );
+        $this->assertEquals(
+            '10.01.2013',
+            $type->getUserValue('2013-01-10 00:00:00'),
+            'Compare string'
+        );
 
         $type->setOutputTimeType(IntlDateFormatter::SHORT);
         $this->assertEquals('10.01.2013 10:00', $type->getUserValue('2013-01-10 10:00:00'));

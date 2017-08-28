@@ -67,7 +67,7 @@ class Image extends AbstractFormatter
         if ($value == '') {
             return '';
         }
-        
+
         if (is_array($value)) {
             $thumb = $value[0];
 
@@ -91,6 +91,14 @@ class Image extends AbstractFormatter
             $attributes[] = $key.'="'.$value.'"';
         }
 
-        return '<a href="'.$prefix.$original.'" '.implode(' ', $linkAttributes).'><img src="'.$prefix.$thumb.'" '.implode(' ', $attributes).' /></a>';
+        return sprintf(
+            '<a href="%s%s" %s><img src="%s%s" %s/></a>',
+            $prefix,
+            $original,
+            implode(' ', $linkAttributes),
+            $prefix,
+            $thumb,
+            implode(' ', $attributes)
+        );
     }
 }

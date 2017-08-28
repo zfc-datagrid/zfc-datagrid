@@ -40,8 +40,10 @@ class Renderer extends AbstractRenderer
     public function getRequest()
     {
         $request = parent::getRequest();
-        if (!$request instanceof HttpRequest) {
-            throw new \Exception('Request must be an instance of Zend\Http\PhpEnvironment\Request for HTML rendering');
+        if (! $request instanceof HttpRequest) {
+            throw new \Exception(
+                'Request must be an instance of Zend\Http\PhpEnvironment\Request for HTML rendering'
+            );
         }
 
         return $request;
@@ -67,8 +69,14 @@ class Renderer extends AbstractRenderer
         $parameterNames = $optionsRenderer['parameterNames'];
 
         $sortConditions = [];
-        $sortColumns = $request->getPost($parameterNames['sortColumns'], $request->getQuery($parameterNames['sortColumns']));
-        $sortDirections = $request->getPost($parameterNames['sortDirections'], $request->getQuery($parameterNames['sortDirections']));
+        $sortColumns = $request->getPost(
+            $parameterNames['sortColumns'],
+            $request->getQuery($parameterNames['sortColumns'])
+        );
+        $sortDirections = $request->getPost(
+            $parameterNames['sortDirections'],
+            $request->getQuery($parameterNames['sortDirections'])
+        );
         if ($sortColumns != '') {
             $sortColumns = explode(',', $sortColumns);
             $sortDirections = explode(',', $sortDirections);
@@ -98,7 +106,7 @@ class Renderer extends AbstractRenderer
             }
         }
 
-        if (!empty($sortConditions)) {
+        if (! empty($sortConditions)) {
             $this->sortConditions = $sortConditions;
         } else {
             // No user sorting -> get default sorting
@@ -120,10 +128,12 @@ class Renderer extends AbstractRenderer
         }
 
         $request = $this->getRequest();
-
+        $toolbarFilters = $request->getPost('toolbarFilters', $request->getQuery('toolbarFilters'));
         $filters = [];
-        if (($request->isPost() === true || $request->isGet() === true) && $request->getPost('toolbarFilters', $request->getQuery('toolbarFilters')) !== null) {
-            foreach ($request->getPost('toolbarFilters', $request->getQuery('toolbarFilters')) as $uniqueId => $value) {
+        if (($request->isPost() === true || $request->isGet() === true) &&
+            null !== $toolbarFilters
+        ) {
+            foreach ($toolbarFilters as $uniqueId => $value) {
                 if ($value != '') {
                     foreach ($this->getColumns() as $column) {
                         /* @var $column \ZfcDatagrid\Column\AbstractColumn */
@@ -140,7 +150,7 @@ class Renderer extends AbstractRenderer
             }
         }
 
-        if (!empty($filters)) {
+        if (! empty($filters)) {
             $this->filters = $filters;
         } else {
             // No user sorting -> get default sorting
@@ -162,7 +172,10 @@ class Renderer extends AbstractRenderer
 
         $request = $this->getRequest();
         if ($request instanceof HttpRequest) {
-            $this->currentPageNumber = (int) $request->getPost($parameterNames['currentPage'], $request->getQuery($parameterNames['currentPage'], 1));
+            $this->currentPageNumber = (int) $request->getPost(
+                $parameterNames['currentPage'],
+                $request->getQuery($parameterNames['currentPage'], 1)
+            );
         }
 
         return (int) $this->currentPageNumber;

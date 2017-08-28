@@ -17,14 +17,14 @@ abstract class AbstractDoctrine2Test extends DataSourceTestCase
      *
      * @var \Doctrine\Common\Cache\Cache null
      */
-    private static $_metadataCacheImpl = null;
+    private static $metadataCacheImpl = null;
 
     /**
      * The query cache that is shared between all ORM tests (except functional tests).
      *
      * @var \Doctrine\Common\Cache\Cache null
      */
-    private static $_queryCacheImpl = null;
+    private static $queryCacheImpl = null;
 
     /**
      *
@@ -42,7 +42,10 @@ abstract class AbstractDoctrine2Test extends DataSourceTestCase
     protected function createAnnotationDriver($paths = [], $alias = null)
     {
         if (version_compare(\Doctrine\Common\Version::VERSION, '3.0.0', '>=')) {
-            $reader = new \Doctrine\Common\Annotations\CachedReader(new \Doctrine\Common\Annotations\AnnotationReader(), new ArrayCache());
+            $reader = new \Doctrine\Common\Annotations\CachedReader(
+                new \Doctrine\Common\Annotations\AnnotationReader(),
+                new ArrayCache()
+            );
         } elseif (version_compare(\Doctrine\Common\Version::VERSION, '2.2.0-DEV', '>=')) {
             // Register the ORM Annotations in the AnnotationRegistry
                 $reader = new \Doctrine\Common\Annotations\SimpleAnnotationReader();
@@ -57,7 +60,10 @@ abstract class AbstractDoctrine2Test extends DataSourceTestCase
             } else {
                 $reader->setDefaultAnnotationNamespace('Doctrine\ORM\Mapping\\');
             }
-            $reader = new \Doctrine\Common\Annotations\CachedReader(new \Doctrine\Common\Annotations\IndexedReader($reader), new ArrayCache());
+            $reader = new \Doctrine\Common\Annotations\CachedReader(
+                new \Doctrine\Common\Annotations\IndexedReader($reader),
+                new ArrayCache()
+            );
         } else {
             $reader = new \Doctrine\Common\Annotations\AnnotationReader();
             if ($alias) {
@@ -66,7 +72,9 @@ abstract class AbstractDoctrine2Test extends DataSourceTestCase
                 $reader->setDefaultAnnotationNamespace('Doctrine\ORM\Mapping\\');
             }
         }
-        \Doctrine\Common\Annotations\AnnotationRegistry::registerFile(__DIR__ . "/../../../lib/Doctrine/ORM/Mapping/Driver/DoctrineAnnotations.php");
+        \Doctrine\Common\Annotations\AnnotationRegistry::registerFile(
+            __DIR__ . "/../../../lib/Doctrine/ORM/Mapping/Driver/DoctrineAnnotations.php"
+        );
 
         return new \Doctrine\ORM\Mapping\Driver\AnnotationDriver($reader, (array) $paths);
     }
@@ -86,9 +94,14 @@ abstract class AbstractDoctrine2Test extends DataSourceTestCase
      *
      * @return \Doctrine\ORM\EntityManager
      */
-    protected function _getTestEntityManager($conn = null, $conf = null, $eventManager = null, $withSharedMetadata = true)
-    {
-        $metadataCache = $withSharedMetadata ? self::getSharedMetadataCacheImpl() : new \Doctrine\Common\Cache\ArrayCache();
+    protected function getTestEntityManager(
+        $conn = null,
+        $conf = null,
+        $eventManager = null,
+        $withSharedMetadata = true
+    ) {
+        $metadataCache = $withSharedMetadata ?
+            self::getSharedMetadataCacheImpl() : new \Doctrine\Common\Cache\ArrayCache();
 
         $config = new \Doctrine\ORM\Configuration();
 
@@ -125,11 +138,11 @@ abstract class AbstractDoctrine2Test extends DataSourceTestCase
      */
     private static function getSharedMetadataCacheImpl()
     {
-        if (null === self::$_metadataCacheImpl) {
-            self::$_metadataCacheImpl = new \Doctrine\Common\Cache\ArrayCache();
+        if (null === self::$metadataCacheImpl) {
+            self::$metadataCacheImpl = new \Doctrine\Common\Cache\ArrayCache();
         }
 
-        return self::$_metadataCacheImpl;
+        return self::$metadataCacheImpl;
     }
 
     /**
@@ -138,16 +151,16 @@ abstract class AbstractDoctrine2Test extends DataSourceTestCase
      */
     private static function getSharedQueryCacheImpl()
     {
-        if (null === self::$_queryCacheImpl) {
-            self::$_queryCacheImpl = new \Doctrine\Common\Cache\ArrayCache();
+        if (null === self::$queryCacheImpl) {
+            self::$queryCacheImpl = new \Doctrine\Common\Cache\ArrayCache();
         }
 
-        return self::$_queryCacheImpl;
+        return self::$queryCacheImpl;
     }
 
     public function setUp()
     {
-        $this->em = $this->_getTestEntityManager();
+        $this->em = $this->getTestEntityManager();
 
         parent::setUp();
     }

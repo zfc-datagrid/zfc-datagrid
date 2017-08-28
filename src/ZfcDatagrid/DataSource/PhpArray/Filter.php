@@ -61,7 +61,6 @@ class Filter
             }
 
             switch ($filter->getOperator()) {
-
                 case DatagridFilter::NOT_LIKE:
                 case DatagridFilter::NOT_LIKE_LEFT:
                 case DatagridFilter::NOT_LIKE_RIGHT:

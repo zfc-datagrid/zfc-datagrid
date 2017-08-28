@@ -345,7 +345,7 @@ abstract class AbstractRenderer implements RendererInterface
     private function getCacheSortConditions()
     {
         $cacheData = $this->getCacheData();
-        if (!isset($cacheData['sortConditions'])) {
+        if (! isset($cacheData['sortConditions'])) {
             return false;
         }
 
@@ -360,7 +360,7 @@ abstract class AbstractRenderer implements RendererInterface
     private function getCacheFilters()
     {
         $cacheData = $this->getCacheData();
-        if (!isset($cacheData['filters'])) {
+        if (! isset($cacheData['filters'])) {
             return false;
         }
 
@@ -402,8 +402,11 @@ abstract class AbstractRenderer implements RendererInterface
      */
     public function setTranslator($translator)
     {
-        if (!$translator instanceof Translator && !$translator instanceof \Zend\I18n\Translator\TranslatorInterface) {
-            throw new \InvalidArgumentException('Translator must be an instanceof "Zend\I18n\Translator\Translator" or "Zend\I18n\Translator\TranslatorInterface"');
+        if (! $translator instanceof Translator && ! $translator instanceof \Zend\I18n\Translator\TranslatorInterface) {
+            throw new \InvalidArgumentException(
+                'Translator must be an instanceof ' .
+                '"Zend\I18n\Translator\Translator" or "Zend\I18n\Translator\TranslatorInterface"'
+            );
         }
 
         $this->translator = $translator;
@@ -486,11 +489,11 @@ abstract class AbstractRenderer implements RendererInterface
     public function setSortConditions(array $sortConditions)
     {
         foreach ($sortConditions as $sortCondition) {
-            if (!is_array($sortCondition)) {
+            if (! is_array($sortCondition)) {
                 throw new InvalidArgumentException('Sort condition have to be an array');
             }
 
-            if (!array_key_exists('column', $sortCondition)) {
+            if (! array_key_exists('column', $sortCondition)) {
                 throw new InvalidArgumentException('Sort condition missing array key column');
             }
         }
@@ -555,7 +558,7 @@ abstract class AbstractRenderer implements RendererInterface
     public function setFilters(array $filters)
     {
         foreach ($filters as $filter) {
-            if (!$filter instanceof Filter) {
+            if (! $filter instanceof Filter) {
                 throw new InvalidArgumentException('Filter have to be an instanceof ZfcDatagrid\Filter');
             }
         }
@@ -639,7 +642,7 @@ abstract class AbstractRenderer implements RendererInterface
     public function getItemsPerPage($defaultItems = 25)
     {
         if ($this->isExport() === true) {
-            return (int) -1;
+            return (int) - 1;
         }
 
         return $defaultItems;
@@ -698,10 +701,10 @@ abstract class AbstractRenderer implements RendererInterface
             {
                 $sortColumns = [];
                 $sortDirections = [];
-                foreach ($this->getSortConditions() as $sortCondition) {
-                    $sortColumns[] = $sortCondition['column']->getUniqueId();
-                    $sortDirections[] = $sortCondition['sortDirection'];
-                }
+            foreach ($this->getSortConditions() as $sortCondition) {
+                $sortColumns[] = $sortCondition['column']->getUniqueId();
+                $sortDirections[] = $sortCondition['sortDirection'];
+            }
 
                 $activeParameters[$parameterNames['sortColumns']] = implode(',', $sortColumns);
                 $activeParameters[$parameterNames['sortDirections']] = implode(',', $sortDirections);

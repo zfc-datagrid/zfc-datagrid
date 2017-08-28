@@ -72,7 +72,7 @@ class ZendSelect extends AbstractDataSource
      */
     public function execute()
     {
-        if ($this->getAdapter() === null || !$this->getAdapter() instanceof \Zend\Db\Sql\Sql) {
+        if ($this->getAdapter() === null || ! $this->getAdapter() instanceof \Zend\Db\Sql\Sql) {
             throw new \Exception('Object "Zend\Db\Sql\Sql" is missing, please call setAdapter() first!');
         }
 
@@ -87,13 +87,20 @@ class ZendSelect extends AbstractDataSource
          */
         $selectColumns = [];
         foreach ($this->getColumns() as $col) {
-            if (!$col instanceof Column\Select) {
+            if (! $col instanceof Column\Select) {
                 continue;
             }
 
             $colString = $col->getSelectPart1();
             if ($col->getSelectPart2() != '') {
-                $colString = new Expression($platform->quoteIdentifier($colString).$platform->getIdentifierSeparator().$platform->quoteIdentifier($col->getSelectPart2()));
+                $colString = new Expression(
+                    sprintf(
+                        '%s%s%s',
+                        $platform->quoteIdentifier($colString),
+                        $platform->getIdentifierSeparator(),
+                        $platform->quoteIdentifier($col->getSelectPart2())
+                    )
+                );
             }
 
             $selectColumns[$col->getUniqueId()] = $colString;
@@ -109,7 +116,7 @@ class ZendSelect extends AbstractDataSource
         /*
          * Step 2) Apply sorting
          */
-        if (!empty($this->getSortConditions())) {
+        if (! empty($this->getSortConditions())) {
             // Minimum one sort condition given -> so reset the default orderBy
             $select->reset(Sql\Select::ORDER);
 

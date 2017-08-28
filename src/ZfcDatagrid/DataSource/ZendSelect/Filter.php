@@ -58,7 +58,7 @@ class Filter
         };
 
         $col = $filter->getColumn();
-        if (!$col instanceof Column\Select) {
+        if (! $col instanceof Column\Select) {
             throw new \Exception('This column cannot be filtered: '.$col->getUniqueId());
         }
 
@@ -76,7 +76,6 @@ class Filter
             $where = new Where();
 
             switch ($filter->getOperator()) {
-
                 case DatagridFilter::LIKE:
                     $wheres[] = $where->like($colString, '%'.$value.'%');
                     break;
@@ -136,12 +135,14 @@ class Filter
                     break 2;
 
                 default:
-                    throw new \InvalidArgumentException('This operator is currently not supported: '.$filter->getOperator());
+                    throw new \InvalidArgumentException(
+                        'This operator is currently not supported: ' . $filter->getOperator()
+                    );
                     break;
             }
         }
 
-        if (!empty($wheres)) {
+        if (! empty($wheres)) {
             $set = new PredicateSet($wheres, PredicateSet::OP_OR);
             $select->where->andPredicate($set);
         }

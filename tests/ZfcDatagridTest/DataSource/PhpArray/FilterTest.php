@@ -431,7 +431,7 @@ class FilterTest extends TestCase
             ->method('getValues')
             ->will($this->returnValue([
             1,
-        ]));
+            ]));
         $filter->expects($this->any())
             ->method('getOperator')
             ->will($this->returnValue(' () '));

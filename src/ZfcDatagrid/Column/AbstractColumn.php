@@ -235,7 +235,7 @@ abstract class AbstractColumn
      */
     public function setUserSortDisabled($mode = true)
     {
-        $this->userSortEnabled = (bool) !$mode;
+        $this->userSortEnabled = (bool) ! $mode;
     }
 
     /**
@@ -322,7 +322,7 @@ abstract class AbstractColumn
      */
     public function setUserFilterDisabled($mode = true)
     {
-        $this->userFilterEnabled = (bool) !$mode;
+        $this->userFilterEnabled = (bool) ! $mode;
     }
 
     /**
@@ -528,7 +528,7 @@ abstract class AbstractColumn
      */
     public function setRendererParameter($name, $value, $rendererType = 'jqGrid')
     {
-        if (!isset($this->rendererParameter[$rendererType])) {
+        if (! isset($this->rendererParameter[$rendererType])) {
             $this->rendererParameter[$rendererType] = [];
         }
 
@@ -545,7 +545,7 @@ abstract class AbstractColumn
      */
     public function getRendererParameters($rendererName = 'jqGrid')
     {
-        if (!isset($this->rendererParameter[$rendererName])) {
+        if (! isset($this->rendererParameter[$rendererName])) {
             $this->rendererParameter[$rendererName] = [];
         }
 
@@ -634,7 +634,7 @@ abstract class AbstractColumn
      */
     public function setRowClickDisabled($mode = true)
     {
-        $this->rowClickEnabled = (bool) !$mode;
+        $this->rowClickEnabled = (bool) ! $mode;
     }
 
     /**

@@ -50,7 +50,9 @@ class Button extends AbstractAction
     public function toHtml(array $row)
     {
         if ($this->getLabel() == '') {
-            throw new \InvalidArgumentException('A label is required for this action type, please call $action->setLabel()!');
+            throw new \InvalidArgumentException(
+                'A label is required for this action type, please call $action->setLabel()!'
+            );
         }
 
         $label = $this->getLabel();

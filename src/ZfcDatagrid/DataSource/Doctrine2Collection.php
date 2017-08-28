@@ -73,7 +73,7 @@ class Doctrine2Collection extends AbstractDataSource
             $rowExtracted = [];
             foreach ($this->getColumns() as $col) {
                 /* @var $col \ZfcDatagrid\Column\Select */
-                if (!$col instanceof Column\Select) {
+                if (! $col instanceof Column\Select) {
                     continue;
                 }
 

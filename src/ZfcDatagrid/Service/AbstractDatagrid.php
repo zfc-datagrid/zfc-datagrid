@@ -22,7 +22,7 @@ abstract class AbstractDatagrid extends Datagrid implements FactoryInterface
         $this->setServiceLocator($container);
         $config = $container->get('config');
 
-        if (!isset($config['ZfcDatagrid'])) {
+        if (! isset($config['ZfcDatagrid'])) {
             throw new InvalidArgumentException('Config key "ZfcDatagrid" is missing');
         }
 

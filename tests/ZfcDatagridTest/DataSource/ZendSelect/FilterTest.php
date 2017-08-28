@@ -3,10 +3,10 @@ namespace ZfcDatagridTest\DataSource\ZendSelect;
 
 use PHPUnit\Framework\TestCase;
 use Zend\Db\Adapter\Adapter;
-use Zend\Db\Sql\Predicate\Like;
 use Zend\Db\Sql\Predicate\Operator;
 use Zend\Db\Sql\Select;
 use Zend\Db\Sql\Sql;
+use ZfcDatagrid\Column;
 use ZfcDatagrid\DataSource\ZendSelect\Filter as FilterSelect;
 
 /**
@@ -17,13 +17,13 @@ class FilterTest extends TestCase
 {
     /**
      *
-     * @var \ZfcDatagrid\Column\AbstractColumn
+     * @var Column\AbstractColumn
      */
     private $column;
 
     /**
      *
-     * @var \ZfcDatagrid\Column\AbstractColumn
+     * @var Column\AbstractColumn
      */
     private $column2;
 
@@ -35,20 +35,20 @@ class FilterTest extends TestCase
 
     public function setUp()
     {
-        $this->column = $this->getMockBuilder(\ZfcDatagrid\Column\Select::class)->disableOriginalConstructor()->getMock();
+        $this->column = $this->getMockBuilder(Column\Select::class)->disableOriginalConstructor()->getMock();
         $this->column->method('getSelectPart1')
         ->willReturn('myCol');
         $this->column->method('getType')
-        ->willReturn(new \ZfcDatagrid\Column\Type\PhpString());
+        ->willReturn(new Column\Type\PhpString());
 
         $this->column->setUniqueId('myCol');
         $this->column->setSelect('myCol');
 
-        $this->column2 = $this->getMockBuilder(\ZfcDatagrid\Column\Select::class)->disableOriginalConstructor()->getMock();
+        $this->column2 = $this->getMockBuilder(Column\Select::class)->disableOriginalConstructor()->getMock();
         $this->column2->method('getSelectPart1')
         ->willReturn('myCol2');
         $this->column2->method('getType')
-        ->willReturn(new \ZfcDatagrid\Column\Type\PhpString());
+        ->willReturn(new Column\Type\PhpString());
 
         $this->column2->setUniqueId('myCol2');
         $this->column2->setSelect('myCol2');
@@ -427,7 +427,7 @@ class FilterTest extends TestCase
             ->method('getValues')
             ->will($this->returnValue([
             1,
-        ]));
+            ]));
         $filter->expects($this->any())
             ->method('getOperator')
             ->will($this->returnValue(' () '));

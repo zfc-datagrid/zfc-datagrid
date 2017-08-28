@@ -58,7 +58,7 @@ class Renderer extends AbstractRenderer
     public function getRequest()
     {
         $request = parent::getRequest();
-        if (!$request instanceof ConsoleRequest) {
+        if (! $request instanceof ConsoleRequest) {
             throw new \Exception('Request must be an instance of Zend\Console\Request for console rendering');
         }
 
@@ -134,7 +134,7 @@ class Renderer extends AbstractRenderer
             }
         }
 
-        if (!empty($sortConditions)) {
+        if (! empty($sortConditions)) {
             $this->sortConditions = $sortConditions;
         } else {
             // No user sorting -> get default sorting
@@ -328,7 +328,7 @@ class Renderer extends AbstractRenderer
         foreach ($this->getColumns() as $column) {
             /* @var $column \ZfcDatagrid\Column\AbstractColumn */
 
-            if (!$column instanceof Column\Action && $column->isHidden() === false) {
+            if (! $column instanceof Column\Action && $column->isHidden() === false) {
                 $columnsToDisplay[] = $column;
             }
         }
