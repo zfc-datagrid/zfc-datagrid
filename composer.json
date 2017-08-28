@@ -93,5 +93,5 @@
         "cs-check": "php-cs-fixer fix src --level=psr2 --dry-run -vv",
         "test": "phpunit",
         "test-coverage": "phpunit --coverage-clover ./clover.xml"
-    },
+    }
 }
