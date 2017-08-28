@@ -12,6 +12,6 @@ class ItalicTest extends TestCase
 {
     public function testCanCreateInstance()
     {
-        $bold = new Style\Italic();
+        $this->assertInstanceOf(Style\Italic::class, new Style\Italic());
     }
 }

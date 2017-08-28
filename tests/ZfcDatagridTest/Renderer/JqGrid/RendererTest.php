@@ -88,6 +88,6 @@ class RendererTest extends TestCase
 
     public function testGetSortConditions()
     {
-        $renderer = new JqGrid\Renderer();
+        $this->assertInstanceOf(JqGrid\Renderer::class, new JqGrid\Renderer());
     }
 }

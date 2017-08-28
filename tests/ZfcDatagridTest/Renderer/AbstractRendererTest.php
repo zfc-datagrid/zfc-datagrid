@@ -378,7 +378,7 @@ class AbstractRendererTest extends TestCase
 
         $filters = $renderer->getFiltersDefault();
         $this->assertCount(1, $filters);
-        $this->assertInstanceOf('ZfcDatagrid\Filter', $filters[0]);
+        $this->assertInstanceOf(\ZfcDatagrid\Filter::class, $filters[0]);
 
         // getFilters are the same like getFiltersDefault in this case
         $this->assertEquals($filters, $renderer->getFilters());
@@ -398,6 +398,13 @@ class AbstractRendererTest extends TestCase
         $renderer->setColumns([
             $col1,
         ]);
+        $filters = $renderer->getFiltersDefault();
+
+        // getFilters are the same like getFiltersDefault in this case
+        $this->assertEquals($filters, $renderer->getFilters());
+
+        // 2nd call from array cache
+        $this->assertEquals($filters, $renderer->getFilters());
     }
 
     public function testCurrentPageNumber()

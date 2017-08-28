@@ -156,25 +156,6 @@ class ZendSelectTest extends DataSourceTestCase
             $col2,
         ]);
         $source->execute();
-
-//         var_dump($source->getData()->getSqlString());
-//         exit();
     }
 
-    public function testFilter()
-    {
-        $source = clone $this->source;
-
-        /*
-         * LIKE
-         */
-        $filter = new Filter();
-        $filter->setFromColumn($this->colVolumne, '~7');
-
-        $source->addFilter($filter);
-        $source->execute();
-
-        // $this->assertEquals(2, $source->getPaginatorAdapter()
-        // ->count());
-    }
 }
