@@ -27,7 +27,7 @@
         "php": "^7.0",
         
         "zendframework/zend-mvc": "^3.0",
-        "zendframework/zend-session": "^2.5",
+        "zendframework/zend-session": "^2.7.4",
         "zendframework/zend-view": "^2.5",
         "zendframework/zend-http": "^2.5",
         "zendframework/zend-paginator": "^2.5",
