@@ -110,23 +110,23 @@ class Columns extends AbstractHelper
              */
             $searchoptions                = [];
             $searchoptions['clearSearch'] = false;
-            if ($column->hasFilterSelectOptions() === true) {
+            if ($column->hasFilterSelectOptions()) {
                 $options['stype']       = 'select';
                 $searchoptions['value'] = $column->getFilterSelectOptions();
 
-                if ($column->hasFilterDefaultValue() === true) {
+                if ($column->hasFilterDefaultValue()) {
                     $searchoptions['defaultValue'] = $column->getFilterDefaultValue();
                 } else {
                     $searchoptions['defaultValue'] = '';
                 }
-            } elseif ($column->hasFilterDefaultValue() === true) {
+            } elseif ($column->hasFilterDefaultValue()) {
                 $filter = new Filter();
                 $filter->setFromColumn($column, $column->getFilterDefaultValue());
 
                 $searchoptions['defaultValue'] = $filter->getDisplayColumnValue();
             }
 
-            if (count($searchoptions) > 0) {
+            if ($searchoptions) {
                 $options['searchoptions'] = $searchoptions;
             }
 
@@ -227,7 +227,6 @@ class Columns extends AbstractHelper
             /* @var $style Column\Style\AbstractStyle */
             foreach ($style->getByValues() as $rule) {
                 $colString = $rule['column']->getUniqueId();
-                $operator  = '';
                 switch ($rule['operator']) {
                     case Filter::EQUAL:
                         $operator = '==';
@@ -239,7 +238,6 @@ class Columns extends AbstractHelper
 
                     default:
                         throw new \Exception('Currently not supported filter operation: "' . $rule['operator'] . '"');
-                        break;
                 }
 
                 $prepend = 'if (rowObject.' . $colString . ' ' . $operator . ' \'' . $rule['value'] . '\') {';
