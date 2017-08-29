@@ -19,7 +19,6 @@ matrix:
     - php: 7.1
       env:
         - DEPS=locked
-        - DEPS=locked
         - CHECK_CS=true
         - TEST_COVERAGE=true
     - php: 7.1
