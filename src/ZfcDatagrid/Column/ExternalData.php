@@ -23,8 +23,8 @@ class ExternalData extends AbstractColumn
      */
     public function setDataPopulation(DataPopulation\DataPopulationInterface $dataPopulation)
     {
-        if ($dataPopulation instanceof DataPopulation\Object && $dataPopulation->getObject() === null) {
-            throw new \Exception('object is missing in DataPopulation\Object!');
+        if ($dataPopulation instanceof DataPopulation\DataObject && $dataPopulation->getObject() === null) {
+            throw new \Exception('object is missing in DataPopulation\DataObject!');
         }
 
         $this->dataPopulation = $dataPopulation;
@@ -49,10 +49,6 @@ class ExternalData extends AbstractColumn
      */
     public function hasDataPopulation()
     {
-        if ($this->dataPopulation !== null) {
-            return true;
-        }
-
-        return false;
+        return null !== $this->dataPopulation;
     }
 }

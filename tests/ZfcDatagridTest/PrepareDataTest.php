@@ -5,7 +5,7 @@ use PHPUnit\Framework\TestCase;
 use Zend\Router\Http\HttpRouterFactory;
 use Zend\Router\Http\Segment;
 use Zend\Router\RoutePluginManagerFactory;
-use ZfcDatagrid\Column\DataPopulation\Object;
+use ZfcDatagrid\Column\DataPopulation\DataObject;
 use ZfcDatagrid\Column\Type;
 use ZfcDatagrid\PrepareData;
 use ZfcDatagridTest\Util\ServiceManagerFactory;
@@ -394,7 +394,7 @@ class PrepareDataTest extends TestCase
             ->method('toString')
             ->will($this->returnValue('myReturn'));
 
-        $object = new Object();
+        $object = new DataObject();
         $object->setObject($mock);
         $object->addObjectParameterColumn('email', $this->col1);
 
