@@ -98,7 +98,10 @@ class TableRow extends AbstractHelper
         $return = $this->getTr($row);
 
         if (true === $hasMassActions) {
-            $return .= '<td><input type="checkbox" name="massActionSelected[]" value="' . $row['idConcated'] . '" /></td>';
+            $return .= sprintf(
+                '<td><input type="checkbox" name="massActionSelected[]" value="%s" /></td>',
+                $row['idConcated']
+            );
         }
 
         foreach ($cols as $col) {

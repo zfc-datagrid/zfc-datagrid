@@ -238,7 +238,9 @@ class Columns extends AbstractHelper
                         break;
 
                     default:
-                        throw new \Exception('Currently not supported filter operation: "' . $rule['operator'] . '"');
+                        throw new \Exception(
+                            'Currently not supported filter operation: "' . $rule['operator'] . '"'
+                        );
                         break;
                 }
 
@@ -268,7 +270,8 @@ class Columns extends AbstractHelper
                     break;
 
                 case 'ZfcDatagrid\Column\Style\CSSClass':
-                    $styleString = 'cellvalue = \'<span class="' . $style->getClass() . '">\' + cellvalue + \'</span>\';';
+                    $styleString =
+                        'cellvalue = \'<span class="' . $style->getClass() . '">\' + cellvalue + \'</span>\';';
                     break;
 
                 case 'ZfcDatagrid\Column\Style\BackgroundColor':

@@ -129,7 +129,9 @@ class Filter
                     break 2;
 
                 default:
-                    throw new \InvalidArgumentException('This operator is currently not supported: '.$filter->getOperator());
+                    throw new \InvalidArgumentException(
+                        'This operator is currently not supported: ' . $filter->getOperator()
+                    );
                     break;
             }
         }

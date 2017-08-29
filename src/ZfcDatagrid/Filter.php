@@ -392,7 +392,12 @@ class Filter
                         return true;
                     }
                 } else {
-                    throw new InvalidArgumentException(sprintf('Between needs exactly an array of two expected values. Give: "%s"',print_r($expectedValue, true)));
+                    throw new InvalidArgumentException(
+                        sprintf(
+                            'Between needs exactly an array of two expected values. Give: "%s"',
+                            print_r($expectedValue, true)
+                        )
+                    );
                 }
                 break;
 
