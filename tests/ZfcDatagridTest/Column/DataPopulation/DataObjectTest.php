@@ -2,13 +2,13 @@
 namespace ZfcDatagridTest\Column\DataPopulation;
 
 use PHPUnit\Framework\TestCase;
-use ZfcDatagrid\Column\DataPopulation\Object;
+use ZfcDatagrid\Column\DataPopulation\DataObject;
 
 /**
  * @group Column
- * @covers \ZfcDatagrid\Column\DataPopulation\Object
+ * @covers \ZfcDatagrid\Column\DataPopulation\DataObject
  */
-class ObjectTest extends TestCase
+class DataObjectTest extends TestCase
 {
     public function testObject()
     {
@@ -17,7 +17,7 @@ class ObjectTest extends TestCase
             ->method('toString')
             ->will($this->returnValue('myReturn'));
 
-        $object = new Object();
+        $object = new DataObject();
 
         $object->setObject($mock);
         $this->assertSame($mock, $object->getObject());
@@ -33,7 +33,7 @@ class ObjectTest extends TestCase
         ->method('toString')
         ->will($this->returnValue('myReturn'));
 
-        $object = new Object();
+        $object = new DataObject();
         $object->setObject($mock);
 
         $this->assertCount(0, $object->getObjectParametersColumn());

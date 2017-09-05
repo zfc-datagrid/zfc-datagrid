@@ -388,7 +388,7 @@ class Filter
                 break;
 
             case self::BETWEEN:
-                if (count($expectedValue) >= 2) {
+                if (is_array($expectedValue) && count($expectedValue) >= 2) {
                     if ($currentValue >= $expectedValue[0] && $currentValue <= $expectedValue[1]) {
                         return true;
                     }

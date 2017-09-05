@@ -35,14 +35,14 @@ class ExternalDataTest extends TestCase
     {
         $col = new Column\ExternalData('myData');
 
-        $object = new DataPopulation\Object();
+        $object = new DataPopulation\DataObject();
         $object->setObject(new DataPopulation\Object\Gravatar());
         $this->assertEquals(false, $col->hasDataPopulation());
 
         $col->setDataPopulation($object);
 
         $this->assertEquals(true, $col->hasDataPopulation());
-        $this->assertInstanceOf(\ZfcDatagrid\Column\DataPopulation\Object::class, $col->getDataPopulation());
+        $this->assertInstanceOf(\ZfcDatagrid\Column\DataPopulation\DataObject::class, $col->getDataPopulation());
     }
 
     /**
@@ -52,7 +52,7 @@ class ExternalDataTest extends TestCase
     {
         $col = new Column\ExternalData('myData');
 
-        $object = new DataPopulation\Object();
+        $object = new DataPopulation\DataObject();
         $col->setDataPopulation($object);
     }
 }

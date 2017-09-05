@@ -7,7 +7,7 @@ use ZfcDatagrid\Column;
 /**
  * Get the data from an external object.
  */
-class Object implements DataPopulationInterface
+class DataObject implements DataPopulationInterface
 {
     /**
      * @var ObjectAwareInterface
