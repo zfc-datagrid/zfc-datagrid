@@ -58,7 +58,7 @@ class Columns extends AbstractHelper
         $return = [];
 
         foreach ($columns as $column) {
-            /* @var $column \ZfcDatagrid\Column\AbstractColumn */
+            /* @var $column Column\AbstractColumn */
 
             $options = [
                 'name' => (string) $column->getUniqueId(),
@@ -82,8 +82,8 @@ class Columns extends AbstractHelper
             $alignAlreadyDefined = false;
             if ($column->hasStyles()) {
                 foreach ($column->getStyles() as $style) {
-                    /** @var \ZfcDatagrid\Column\Style\Align $style */
-                    if (get_class($style) == 'ZfcDatagrid\Column\Style\Align') {
+                    /** @var Column\Style\Align $style */
+                    if (get_class($style) == Column\Style\Align::class) {
                         $options['align'] = $style->getAlignment();
                         $alignAlreadyDefined = true;
                         break;
@@ -111,23 +111,23 @@ class Columns extends AbstractHelper
              */
             $searchoptions = [];
             $searchoptions['clearSearch'] = false;
-            if ($column->hasFilterSelectOptions() === true) {
+            if ($column->hasFilterSelectOptions()) {
                 $options['stype'] = 'select';
                 $searchoptions['value'] = $column->getFilterSelectOptions();
 
-                if ($column->hasFilterDefaultValue() === true) {
+                if ($column->hasFilterDefaultValue()) {
                     $searchoptions['defaultValue'] = $column->getFilterDefaultValue();
                 } else {
                     $searchoptions['defaultValue'] = '';
                 }
-            } elseif ($column->hasFilterDefaultValue() === true) {
-                $filter = new \ZfcDatagrid\Filter();
+            } elseif ($column->hasFilterDefaultValue()) {
+                $filter = new Filter();
                 $filter->setFromColumn($column, $column->getFilterDefaultValue());
 
                 $searchoptions['defaultValue'] = $filter->getDisplayColumnValue();
             }
 
-            if (count($searchoptions) > 0) {
+            if ($searchoptions) {
                 $options['searchoptions'] = $searchoptions;
             }
 
@@ -148,21 +148,21 @@ class Columns extends AbstractHelper
                     if (stripos($value, 'formatter') === false &&
                         stripos($value, 'function') === false
                     ) {
-                        $value = '"'.$value.'"';
+                        $value = '"' . $value . '"';
                     }
                 } elseif ('cellattr' == $key) {
                     // SKIP THIS
                 } else {
-                    $value = '"'.$value.'"';
+                    $value = '"' . $value . '"';
                 }
 
-                $colModel[] = (string) $key.': '.$value;
+                $colModel[] = (string) $key . ': ' . $value;
             }
 
-            $return[] = '{'.implode(',', $colModel).'}';
+            $return[] = '{' . implode(',', $colModel) . '}';
         }
 
-        return '['.implode(',', $return).']';
+        return '[' . implode(',', $return) . ']';
     }
 
     /**
@@ -188,7 +188,7 @@ class Columns extends AbstractHelper
         $formatter .= implode(' ', $this->getStyles($column));
 
         switch (get_class($column->getType())) {
-            case 'ZfcDatagrid\Column\Type\PhpArray':
+            case Type\PhpArray::class:
                 $formatter .= 'cellvalue = \'<pre>\' + cellvalue.join(\'<br />\') + \'</pre>\';';
                 break;
         }
@@ -201,7 +201,7 @@ class Columns extends AbstractHelper
             $prefix = 'function (cellvalue, options, rowObject) {';
             $suffix = ' return cellvalue; }';
 
-            $formatter = $prefix.$formatter.$suffix;
+            $formatter = $prefix . $formatter . $suffix;
         }
 
         return $formatter;
@@ -225,10 +225,9 @@ class Columns extends AbstractHelper
             $prepend = '';
             $append = '';
 
-            /* @var $style \ZfcDatagrid\Column\Style\AbstractStyle */
+            /* @var $style Column\Style\AbstractStyle */
             foreach ($style->getByValues() as $rule) {
                 $colString = $rule['column']->getUniqueId();
-                $operator = '';
                 switch ($rule['operator']) {
                     case Filter::EQUAL:
                         $operator = '==';
@@ -240,7 +239,6 @@ class Columns extends AbstractHelper
 
                     default:
                         throw new \Exception('Currently not supported filter operation: "'.$rule['operator'].'"');
-                        break;
                 }
 
                 $prepend = 'if (rowObject.'.$colString.' '.$operator.' \''.$rule['value'].'\') {';
@@ -249,39 +247,39 @@ class Columns extends AbstractHelper
 
             $styleString = '';
             switch (get_class($style)) {
-                case 'ZfcDatagrid\Column\Style\Bold':
+                case Column\Style\Bold::class:
                     $styleString = self::STYLE_BOLD;
                     break;
 
-                case 'ZfcDatagrid\Column\Style\Italic':
+                case Column\Style\Italic::class:
                     $styleString = self::STYLE_ITALIC;
                     break;
 
-                case 'ZfcDatagrid\Column\Style\Strikethrough':
+                case Column\Style\Strikethrough::class:
                     $styleString = self::STYLE_STRIKETHROUGH;
                     break;
 
-                case 'ZfcDatagrid\Column\Style\Color':
+                case Column\Style\Color::class:
                     $styleString = sprintf(
                         'cellvalue = \'<span style="color: #%s;">\' + cellvalue + \'</span>\';',
                         $style->getRgbHexString()
                     );
                     break;
 
-                case 'ZfcDatagrid\Column\Style\CSSClass':
+                case Column\Style\CSSClass::class:
                     $styleString = 'cellvalue = \'<span class="'.$style->getClass().'">\' + cellvalue + \'</span>\';';
                     break;
 
-                case 'ZfcDatagrid\Column\Style\BackgroundColor':
+                case Column\Style\BackgroundColor::class:
                     // do NOTHING! this is done by loadComplete event...
                     // At this stage jqgrid haven't created the columns...
                     break;
 
-                case 'ZfcDatagrid\Column\Style\Html':
+                case Column\Style\Html::class:
                     // do NOTHING! just pass the HTML!
                     break;
 
-                case 'ZfcDatagrid\Column\Style\Align':
+                case Column\Style\Align::class:
                     // do NOTHING! we have to add the align style in the gridcell and not in a span!
                     break;
 
