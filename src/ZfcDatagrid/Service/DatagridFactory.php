@@ -32,8 +32,6 @@ class DatagridFactory implements FactoryInterface
 
         /** @var RequestHelper $requestHelper */
         $requestHelper = $container->get(RequestHelper::class);
-        //$request = \Zend\Psr7Bridge\Psr7ServerRequest::toZend($requestHelper->currentRequest());
-
 
         $grid = new Datagrid();
         $grid->setServiceLocator($container);

@@ -10,9 +10,6 @@ declare(strict_types=1);
 namespace ZfcDatagrid\Middleware;
 
 use Psr\Http\Message\ServerRequestInterface;
-use InvalidArgumentException;
-use Zend\Expressive\Router\RouteResult;
-use Zend\Expressive\Router\RouterInterface;
 use Zend\Psr7Bridge\Psr7ServerRequest;
 
 class RequestHelper

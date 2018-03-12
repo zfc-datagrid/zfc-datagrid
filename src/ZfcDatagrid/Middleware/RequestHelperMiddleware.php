@@ -16,7 +16,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 use Zend\Expressive\Router\RouteResult;
 
 /**
- * Pipeline middleware for injecting a UrlHelper with a RouteResult.
+ * Pipeline middleware for injecting a RequestHelper with a RouteResult.
  */
 class RequestHelperMiddleware implements MiddlewareInterface
 {
