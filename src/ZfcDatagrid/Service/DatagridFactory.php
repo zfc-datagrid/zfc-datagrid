@@ -4,9 +4,11 @@ namespace ZfcDatagrid\Service;
 
 use Doctrine\Common\Proxy\Exception\InvalidArgumentException;
 use Interop\Container\ContainerInterface;
+use Popov\ZfcCurrent\CurrentHelper;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use ZfcDatagrid\Datagrid;
+use ZfcDatagrid\Middleware\RequestHelper;
 
 class DatagridFactory implements FactoryInterface
 {
@@ -26,12 +28,18 @@ class DatagridFactory implements FactoryInterface
         }
 
         /* @var $application \Zend\Mvc\Application */
-        $application = $container->get('application');
+        //$application = $container->get('application');
+
+        /** @var RequestHelper $requestHelper */
+        $requestHelper = $container->get(RequestHelper::class);
+        //$request = \Zend\Psr7Bridge\Psr7ServerRequest::toZend($requestHelper->currentRequest());
+
 
         $grid = new Datagrid();
         $grid->setServiceLocator($container);
         $grid->setOptions($config['ZfcDatagrid']);
-        $grid->setMvcEvent($application->getMvcEvent());
+        //$grid->setMvcEvent($application->getMvcEvent());
+        $grid->setRequest($requestHelper->getRequest());
 
         if ($container->has('translator') === true) {
             $grid->setTranslator($container->get('translator'));

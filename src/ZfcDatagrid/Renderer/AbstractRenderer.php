@@ -8,6 +8,7 @@ use Zend\I18n\Translator\Translator;
 use Zend\Mvc\MvcEvent;
 use Zend\Paginator\Paginator;
 use Zend\View\Model\ViewModel;
+use Zend\Stdlib\RequestInterface;
 use ZfcDatagrid\Datagrid;
 use ZfcDatagrid\Filter;
 
@@ -97,6 +98,11 @@ abstract class AbstractRenderer implements RendererInterface
      * @var Translator
      */
     protected $translator;
+
+    /**
+     * @var RequestInterface
+     */
+    protected $request;
 
     public function setOptions(array $options)
     {
@@ -371,6 +377,7 @@ abstract class AbstractRenderer implements RendererInterface
      * Not used ATM...
      *
      * @see \ZfcDatagrid\Renderer\RendererInterface::setMvcEvent()
+     * @deprecated
      */
     public function setMvcEvent(MvcEvent $mvcEvent)
     {
@@ -381,6 +388,7 @@ abstract class AbstractRenderer implements RendererInterface
      * Not used ATM...
      *
      * @return MvcEvent
+     * @deprecated
      */
     public function getMvcEvent()
     {
@@ -388,11 +396,18 @@ abstract class AbstractRenderer implements RendererInterface
     }
 
     /**
-     * @return \Zend\Stdlib\RequestInterface
+     * @return RequestInterface
      */
     public function getRequest()
     {
-        return $this->getMvcEvent()->getRequest();
+        return $this->request;
+    }
+
+    public function setRequest($request)
+    {
+        $this->request = $request;
+
+        return $this;
     }
 
     /**

@@ -10,6 +10,7 @@ use Zend\Cache;
 use Zend\Console\Request as ConsoleRequest;
 use Zend\Db\Sql\Select as ZendSelect;
 use Zend\Http\PhpEnvironment\Request as HttpRequest;
+use Zend\Stdlib\RequestInterface;
 use Zend\I18n\Translator\Translator;
 use Zend\Mvc\MvcEvent;
 use Zend\Paginator\Paginator;
@@ -58,7 +59,7 @@ class Datagrid
     protected $url;
 
     /**
-     * @var HttpRequest
+     * @var RequestInterface
      */
     protected $request;
 
@@ -339,6 +340,7 @@ class Datagrid
 
     /**
      * @param MvcEvent $mvcEvent
+     * @deprecated
      */
     public function setMvcEvent(MvcEvent $mvcEvent)
     {
@@ -348,6 +350,7 @@ class Datagrid
 
     /**
      * @return MvcEvent
+     * @deprecated
      */
     public function getMvcEvent()
     {
@@ -355,11 +358,18 @@ class Datagrid
     }
 
     /**
-     * @return HttpRequest
+     * @return RequestInterface
      */
     public function getRequest()
     {
         return $this->request;
+    }
+
+    public function setRequest($request)
+    {
+        $this->request = $request;
+
+        return $this;
     }
 
     /**
@@ -856,7 +866,8 @@ class Datagrid
                     );
                 }
                 $renderer->setOptions($this->getOptions());
-                $renderer->setMvcEvent($this->getMvcEvent());
+                #$renderer->setMvcEvent($this->getMvcEvent());
+                $renderer->setRequest($this->getRequest());
                 if ($this->getToolbarTemplate() !== null) {
                     $renderer->setToolbarTemplate($this->getToolbarTemplate());
                 }
