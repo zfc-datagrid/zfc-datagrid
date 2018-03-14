@@ -223,16 +223,17 @@ class Renderer extends AbstractRenderer
                 } elseif ($column instanceof Column\Action) {
                     /* @var $column \ZfcDatagrid\Column\Action */
 
-                    $actions = [];
-                    foreach ($column->getActions() as $action) {
-                        /* @var $action \ZfcDatagrid\Column\Action\AbstractAction */
-                        if ($action->isDisplayed($row) === true) {
-                            $action->setTitle($this->translate($action->getTitle()));
-                            $actions[] = $action->toHtml($row);
+                    if ($columnActions = $column->getActions()) {
+                        $actions = [];
+                        foreach ($column->getActions() as $action) {
+                            /* @var $action \ZfcDatagrid\Column\Action\AbstractAction */
+                            if ($action->isDisplayed($row) === true) {
+                                $action->setTitle($this->translate($action->getTitle()));
+                                $actions[] = $action->toHtml($row);
+                            }
                         }
+                        $row[$column->getUniqueId()] = implode(' ', $actions);
                     }
-
-                    $row[$column->getUniqueId()] = implode(' ', $actions);
                 } elseif ($column instanceof Column\Action\Icon) {
                     $row[$column->getUniqueId()] = $column->getIconClass();
                 }
