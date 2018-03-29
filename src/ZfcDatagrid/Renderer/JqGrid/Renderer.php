@@ -223,7 +223,7 @@ class Renderer extends AbstractRenderer
                 } elseif ($column instanceof Column\Action) {
                     /* @var $column \ZfcDatagrid\Column\Action */
 
-                    if ($columnActions = $column->getActions()) {
+                    if ($column->getActions()) {
                         $actions = [];
                         foreach ($column->getActions() as $action) {
                             /* @var $action \ZfcDatagrid\Column\Action\AbstractAction */
