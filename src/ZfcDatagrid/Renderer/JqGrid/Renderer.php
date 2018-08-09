@@ -170,6 +170,11 @@ class Renderer extends AbstractRenderer
 
     public function prepareFilter($rawFilters) {
         static $fields = [];
+
+        if (!$rawFilters) {
+            return [];
+        }
+
         foreach ($rawFilters as $key => $values) {
             if ($values && $key === 'rules') {
                 foreach ($values as $rule) {
