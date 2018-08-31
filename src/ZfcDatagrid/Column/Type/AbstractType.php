@@ -36,9 +36,9 @@ abstract class AbstractType implements TypeInterface
     /**
      * Convert the value from the source to the value, which the user will see.
      *
-     * @param string $val
+     * @param mixed $val
      *
-     * @return string
+     * @return mixed
      */
     public function getUserValue($val)
     {
