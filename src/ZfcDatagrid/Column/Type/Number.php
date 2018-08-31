@@ -121,7 +121,7 @@ class Number extends AbstractType
 
     /**
      * @param null $locale
-     *                    
+     *
      * @return $this
      */
     public function setLocale($locale = null)

@@ -336,7 +336,7 @@ class Datagrid
      * Set the cache id.
      *
      * @param string $id
-     *                  
+     *
      * @return $this
      */
     public function setCacheId($id)

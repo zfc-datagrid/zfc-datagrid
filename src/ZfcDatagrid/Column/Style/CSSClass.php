@@ -44,7 +44,7 @@ class CSSClass extends AbstractStyle
     public function setClass($class)
     {
         $this->class = $class;
-        
+
         return $this;
     }
 }

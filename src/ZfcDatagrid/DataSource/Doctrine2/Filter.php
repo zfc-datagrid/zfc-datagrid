@@ -142,7 +142,6 @@ class Filter
                     );
                     break;
             }
-
         }
 
         if (! empty($wheres)) {
