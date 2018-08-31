@@ -134,7 +134,7 @@ class Datagrid
     protected $preparedData = [];
 
     /**
-     * @var array
+     * @var bool
      */
     protected $isUserFilterEnabled = true;
 
@@ -807,7 +807,7 @@ class Datagrid
      */
     public function setUserFilterDisabled($mode = true)
     {
-        $this->isUserFilterEnabled = (bool) ! $mode;
+        $this->isUserFilterEnabled = ! (bool) $mode;
 
         return $this;
     }
@@ -992,7 +992,7 @@ class Datagrid
     public function loadData()
     {
         if (true === $this->isDataLoaded) {
-            return true;
+            return $this;
         }
 
         if ($this->isInit() !== true) {
