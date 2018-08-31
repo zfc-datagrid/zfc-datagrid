@@ -62,13 +62,13 @@ class DateTime extends AbstractType
     protected $outputPattern;
 
     /**
-     * @param string $sourceDateTimeFormat
+     * @param string      $sourceDateTimeFormat
      *                                     PHP DateTime format
-     * @param int    $outputDateType
-     * @param int    $outputTimeType
-     * @param string $locale
-     * @param string $sourceTimezone
-     * @param string $outputTimezone
+     * @param int         $outputDateType
+     * @param int         $outputTimeType
+     * @param string|null $locale
+     * @param string      $sourceTimezone
+     * @param string|null $outputTimezone
      */
     public function __construct(
         $sourceDateTimeFormat = 'Y-m-d H:i:s',
@@ -177,7 +177,7 @@ class DateTime extends AbstractType
     }
 
     /**
-     * @param null $locale
+     * @param string|null $locale
      *
      * @return $this
      */
@@ -221,7 +221,7 @@ class DateTime extends AbstractType
     }
 
     /**
-     * @param null $timezone
+     * @param string|null $timezone
      *
      * @return $this
      */
