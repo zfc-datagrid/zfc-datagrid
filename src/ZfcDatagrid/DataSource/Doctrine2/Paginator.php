@@ -30,7 +30,7 @@ class Paginator implements AdapterInterface
     protected $rowCount = null;
 
     /**
-     * @var \Doctrine\ORM\Tools\Pagination\Paginator
+     * @var AdapterInterface
      */
     private $paginator;
 
@@ -70,7 +70,7 @@ class Paginator implements AdapterInterface
     }
 
     /**
-     * @return Doctrine2Paginator|ZfcDatagridPaginator
+     * @return AdapterInterface
      */
     private function getPaginator()
     {
