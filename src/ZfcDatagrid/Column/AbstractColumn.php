@@ -58,19 +58,19 @@ abstract class AbstractColumn
     protected $sortDefault = [];
 
     /**
-     * @var null
+     * @var string|null
      */
-    protected $sortActive = null;
+    protected $sortActive;
 
     /**
-     * @var null
+     * @var string|null
      */
-    protected $filterDefaultValue = null;
+    protected $filterDefaultValue;
 
     /**
-     * @var null
+     * @var string|null
      */
-    protected $filterDefaultOperation = null;
+    protected $filterDefaultOperation;
 
     /**
      * @var null array
@@ -78,9 +78,9 @@ abstract class AbstractColumn
     protected $filterSelectOptions;
 
     /**
-     * @var null
+     * @var bool|null
      */
-    protected $filterActive = null;
+    protected $filterActive;
 
     /**
      * @var string
