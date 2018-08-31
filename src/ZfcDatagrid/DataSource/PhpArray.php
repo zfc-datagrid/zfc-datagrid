@@ -183,7 +183,10 @@ class PhpArray extends AbstractDataSource
             ];
         }
 
-        return $this->applyMultiSort($data, $sortArguments);
+        $result = $this->applyMultiSort($data, $sortArguments);
+
+        // Return original data if sorting fails to return an array.
+        return is_array($result) ? $result : $data;
     }
 
     /**
