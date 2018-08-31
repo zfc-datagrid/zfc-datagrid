@@ -2,6 +2,11 @@
 
 namespace ZfcDatagrid\Column\Type;
 
+/**
+ * Interface TypeInterface
+ *
+ * @package ZfcDatagrid\Column\Type
+ */
 interface TypeInterface
 {
     /**

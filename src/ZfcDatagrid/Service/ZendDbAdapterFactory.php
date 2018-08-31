@@ -7,6 +7,11 @@ use Zend\Db\Adapter\Adapter;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
+/**
+ * Class ZendDbAdapterFactory
+ *
+ * @package ZfcDatagrid\Service
+ */
 class ZendDbAdapterFactory implements FactoryInterface
 {
     /**

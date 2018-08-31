@@ -9,6 +9,11 @@ use Zend\Db\Sql\Where;
 use ZfcDatagrid\Column;
 use ZfcDatagrid\Filter as DatagridFilter;
 
+/**
+ * Class Filter
+ *
+ * @package ZfcDatagrid\DataSource\ZendSelect
+ */
 class Filter
 {
     /**
@@ -21,6 +26,12 @@ class Filter
      */
     private $select;
 
+    /**
+     * Filter constructor.
+     *
+     * @param \Zend\Db\Sql\Sql    $sql
+     * @param \Zend\Db\Sql\Select $select
+     */
     public function __construct(Sql $sql, Select $select)
     {
         $this->sql = $sql;
@@ -47,6 +58,8 @@ class Filter
      * @param DatagridFilter $filter
      *
      * @throws \Exception
+     *
+     * @return $this
      */
     public function applyFilter(DatagridFilter $filter)
     {
@@ -146,5 +159,7 @@ class Filter
             $set = new PredicateSet($wheres, PredicateSet::OP_OR);
             $select->where->andPredicate($set);
         }
+
+        return $this;
     }
 }

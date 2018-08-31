@@ -2,6 +2,11 @@
 
 namespace ZfcDatagrid\Column;
 
+/**
+ * Class ExternalData
+ *
+ * @package ZfcDatagrid\Column
+ */
 class ExternalData extends AbstractColumn
 {
     /**
@@ -9,6 +14,11 @@ class ExternalData extends AbstractColumn
      */
     protected $dataPopulation;
 
+    /**
+     * ExternalData constructor.
+     *
+     * @param string $uniqueId
+     */
     public function __construct($uniqueId = 'external')
     {
         $this->setUniqueId($uniqueId);
@@ -21,6 +31,8 @@ class ExternalData extends AbstractColumn
      * @param DataPopulation\DataPopulationInterface $dataPopulation
      *
      * @throws \Exception
+     *
+     * @return $this
      */
     public function setDataPopulation(DataPopulation\DataPopulationInterface $dataPopulation)
     {
@@ -29,6 +41,8 @@ class ExternalData extends AbstractColumn
         }
 
         $this->dataPopulation = $dataPopulation;
+
+        return $this;
     }
 
     /**

@@ -6,9 +6,17 @@ use Zend\Form\FormElementManager;
 use Zend\Mvc\Service\AbstractPluginManagerFactory;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
+/**
+ * Class DatagridManagerFactory
+ *
+ * @package ZfcDatagrid\Service
+ */
 class DatagridManagerFactory extends AbstractPluginManagerFactory
 {
-    const PLUGIN_MANAGER_CLASS = 'ZfcDatagrid\Service\DatagridManager';
+    /**
+     * Classname of the plugin manager.
+     */
+    const PLUGIN_MANAGER_CLASS = DatagridManager::class;
 
     /**
      * Create and return the MVC controller plugin manager.

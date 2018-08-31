@@ -6,6 +6,11 @@ namespace ZfcDatagrid\Renderer;
 
 use ZfcDatagrid\Column;
 
+/**
+ * Class AbstractExport
+ *
+ * @package ZfcDatagrid\Renderer
+ */
 abstract class AbstractExport extends AbstractRenderer
 {
     /**

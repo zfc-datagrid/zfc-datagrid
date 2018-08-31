@@ -4,35 +4,74 @@ namespace ZfcDatagrid\Column\Formatter;
 
 use ZfcDatagrid\Column\AbstractColumn;
 
+/**
+ * Class Image
+ *
+ * @package ZfcDatagrid\Column\Formatter
+ */
 class Image extends AbstractFormatter
 {
+    /**
+     * @var array
+     */
     protected $validRenderers = [
         'jqGrid',
         'bootstrapTable',
         'printHtml',
     ];
 
+    /**
+     * @var array
+     */
     protected $attributes = [];
 
+    /**
+     * @var
+     */
     protected $prefix;
 
+    /**
+     * @var array
+     */
     protected $linkAttributes = [];
 
+    /**
+     * @param $name
+     * @param $value
+     *
+     * @return $this
+     */
     public function setAttribute($name, $value)
     {
         $this->attributes[$name] = $value;
+
+        return $this;
     }
 
+    /**
+     * @return array
+     */
     public function getAttributes()
     {
         return $this->attributes;
     }
 
+    /**
+     * @param $name
+     * @param $value
+     *
+     * @return $this
+     */
     public function setLinkAttribute($name, $value)
     {
         $this->linkAttributes[$name] = $value;
+
+        return $this;
     }
 
+    /**
+     * @return array
+     */
     public function getLinkAttributes()
     {
         return $this->linkAttributes;
@@ -52,12 +91,21 @@ class Image extends AbstractFormatter
      * Set the prefix of the image path and the prefix of the link.
      *
      * @param string $prefix
+     *
+     * @return $this
      */
     public function setPrefix($prefix)
     {
         $this->prefix = $prefix;
+
+        return $this;
     }
 
+    /**
+     * @param \ZfcDatagrid\Column\AbstractColumn $column
+     *
+     * @return string
+     */
     public function getFormattedValue(AbstractColumn $column)
     {
         $row = $this->getRowData();

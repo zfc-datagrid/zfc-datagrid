@@ -2,6 +2,11 @@
 
 namespace ZfcDatagrid\Column\DataPopulation;
 
+/**
+ * Interface ObjectAwareInterface
+ *
+ * @package ZfcDatagrid\Column\DataPopulation
+ */
 interface ObjectAwareInterface
 {
     /**
@@ -9,6 +14,8 @@ interface ObjectAwareInterface
      *
      * @param string $name
      * @param mixed  $value
+     *
+     * @return $this
      */
     public function setParameterFromColumn($name, $value);
 

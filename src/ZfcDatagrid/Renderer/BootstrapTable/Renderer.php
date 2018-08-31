@@ -6,6 +6,11 @@ use Zend\Http\PhpEnvironment\Request as HttpRequest;
 use ZfcDatagrid\Datagrid;
 use ZfcDatagrid\Renderer\AbstractRenderer;
 
+/**
+ * Class Renderer
+ *
+ * @package ZfcDatagrid\Renderer\BootstrapTable
+ */
 class Renderer extends AbstractRenderer
 {
     /**
@@ -183,6 +188,8 @@ class Renderer extends AbstractRenderer
 
     /**
      * @param Datagrid $grid
+     *
+     * @return $this
      */
     public function prepareViewModel(Datagrid $grid)
     {
@@ -201,6 +208,8 @@ class Renderer extends AbstractRenderer
         } else {
             $viewModel->setVariable('daterangeEnabled', false);
         }
+
+        return $this;
     }
 
     /**

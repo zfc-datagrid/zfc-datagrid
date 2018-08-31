@@ -12,8 +12,16 @@ use ZfcDatagrid\Column\Type;
 use ZfcDatagrid\Library\ImageResize;
 use ZfcDatagrid\Renderer\AbstractExport;
 
+/**
+ * Class Renderer
+ *
+ * @package ZfcDatagrid\Renderer\TCPDF
+ */
 class Renderer extends AbstractExport
 {
+    /**
+     * @var array
+     */
     protected $allowedColumnTypes = [
         Type\DateTime::class,
         Type\Image::class,
@@ -32,23 +40,39 @@ class Renderer extends AbstractExport
      */
     protected $alignment = 'L';
 
+    /**
+     * @var array
+     */
     private $columnsPositionX = [];
 
+    /**
+     * @return string
+     */
     public function getName()
     {
         return 'TCPDF';
     }
 
+    /**
+     * @return bool
+     */
     public function isExport()
     {
         return true;
     }
 
+    /**
+     * @return bool
+     */
     public function isHtml()
     {
         return false;
     }
 
+    /**
+     * @return \Zend\Http\Response\Stream|\Zend\View\Model\ViewModel
+     * @throws \Exception
+     */
     public function execute()
     {
         $pdf = $this->getPdf();
@@ -67,6 +91,10 @@ class Renderer extends AbstractExport
         return $this->saveAndSend();
     }
 
+    /**
+     * @return $this
+     * @throws \Exception
+     */
     protected function printGrid()
     {
         $pdf = $this->getPdf();
@@ -101,8 +129,13 @@ class Renderer extends AbstractExport
 
             $this->printTableRow($row, $rowHeight);
         }
+
+        return $this;
     }
 
+    /**
+     * @return \Zend\Http\Response\Stream
+     */
     protected function saveAndSend()
     {
         $pdf = $this->getPdf();
@@ -136,6 +169,9 @@ class Renderer extends AbstractExport
         return $response;
     }
 
+    /**
+     * @return $this
+     */
     protected function initPdf()
     {
         $optionsRenderer = $this->getOptionsRenderer();
@@ -166,6 +202,8 @@ class Renderer extends AbstractExport
         $pdf->setHeaderData($header['logo'], $header['logoWidth'], $this->getTitle());
 
         $this->pdf = $pdf;
+
+        return $this;
     }
 
     /**
@@ -184,6 +222,9 @@ class Renderer extends AbstractExport
      * Calculates the column width, based on the papersize and orientation.
      *
      * @param array $cols
+     *
+     * @return $this
+     * @throws \Exception
      */
     protected function calculateColumnWidth(array $cols)
     {
@@ -201,12 +242,15 @@ class Renderer extends AbstractExport
             /* @var $col \ZfcDatagrid\Column\AbstractColumn */
             $col->setWidth($col->getWidth() * $factor);
         }
+
+        return $this;
     }
 
     /**
      * @param array $row
      *
      * @return number
+     * @throws \Exception
      */
     protected function getRowHeight(array $row)
     {
@@ -258,6 +302,10 @@ class Renderer extends AbstractExport
         return $rowHeight;
     }
 
+    /**
+     * @return $this
+     * @throws \Exception
+     */
     protected function printTableHeader()
     {
         $optionsRenderer = $this->getOptionsRenderer();
@@ -281,8 +329,17 @@ class Renderer extends AbstractExport
             $pdf->MultiCell($col->getWidth(), $height, $label, 1, $this->getTextAlignment(), true, 2, $x, $y, true, 0, false, true, 7);
             // @codingStandardsIgnoreEnd
         }
+
+        return $this;
     }
 
+    /**
+     * @param array $row
+     * @@param int $rowHeight
+     *
+     * @return $this
+     * @throws \Exception
+     */
     protected function printTableRow(array $row, $rowHeight)
     {
         $pdf = $this->getPdf();
@@ -410,11 +467,23 @@ class Renderer extends AbstractExport
                 }
             }
 
-            // @codingStandardsIgnoreStart
-            // MultiCell($w, $h, $txt, $border=0, $align='J', $fill=false, $ln=1, $x='', $y='', $reseth=true, $stretch=0, $ishtml=false, $autopadding=true, $maxh=0, $valign='T', $fitcell=false)
-            $pdf->MultiCell($col->getWidth(), $rowHeight, $text, 1, $this->getTextAlignment(), $backgroundColor, 1, $x, $y, true, 0, $isHtml);
-            // @codingStandardsIgnoreEnd
+            $pdf->MultiCell(
+                $col->getWidth(),
+                $rowHeight,
+                $text,
+                1,
+                $this->getTextAlignment(),
+                $backgroundColor,
+                1,
+                $x,
+                $y,
+                true,
+                0,
+                $isHtml
+            );
         }
+
+        return $this;
     }
 
     /**
@@ -440,6 +509,9 @@ class Renderer extends AbstractExport
         ];
     }
 
+    /**
+     * @return $this
+     */
     protected function setFontHeader()
     {
         $optionsRenderer = $this->getOptionsRenderer();
@@ -456,8 +528,13 @@ class Renderer extends AbstractExport
         $pdf->SetFillColor($background[0], $background[1], $background[2]);
         // "BOLD" fake
         $pdf->setTextRenderingMode(0.15, true, false);
+
+        return $this;
     }
 
+    /**
+     * @return $this
+     */
     protected function setFontData()
     {
         $optionsRenderer = $this->getOptionsRenderer();
@@ -473,14 +550,24 @@ class Renderer extends AbstractExport
         $pdf->SetTextColor($color[0], $color[1], $color[2]);
         $pdf->SetFillColor($background[0], $background[1], $background[2]);
         $pdf->setTextRenderingMode();
+
+        return $this;
     }
 
+    /**
+     * @return $this
+     */
     protected function setBold()
     {
         $pdf = $this->getPdf();
         $pdf->setTextRenderingMode(0.15, true, false);
+
+        return $this;
     }
 
+    /**
+     * @return $this
+     */
     protected function setItalic()
     {
         $optionsRenderer = $this->getOptionsRenderer();
@@ -490,32 +577,46 @@ class Renderer extends AbstractExport
 
         $pdf = $this->getPdf();
         $pdf->SetFont($font.'I', '', $size);
+
+        return $this;
     }
 
     /**
      * @param array $rgb
+     *
+     * @return $this
      */
     protected function setColor(array $rgb)
     {
         $pdf = $this->getPdf();
         $pdf->SetTextColor($rgb['red'], $rgb['green'], $rgb['blue']);
+
+        return $this;
     }
 
     /**
      * @param array $rgb
+     *
+     * @return $this
      */
     protected function setBackgroundColor(array $rgb)
     {
         $pdf = $this->getPdf();
         $pdf->SetFillColor($rgb['red'], $rgb['green'], $rgb['blue']);
+
+        return $this;
     }
 
     /**
      * @param string $alignment
+     *
+     * @return $this
      */
     public function setTextAlignment($alignment)
     {
         $this->alignment = $alignment;
+
+        return $this;
     }
 
     /**

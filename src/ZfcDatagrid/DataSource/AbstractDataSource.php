@@ -6,6 +6,11 @@ use Zend\Paginator\Adapter\AdapterInterface as PaginatorAdapterInterface;
 use ZfcDatagrid\Column;
 use ZfcDatagrid\Filter;
 
+/**
+ * Class AbstractDataSource
+ *
+ * @package ZfcDatagrid\DataSource
+ */
 abstract class AbstractDataSource implements DataSourceInterface
 {
     /**
@@ -51,10 +56,14 @@ abstract class AbstractDataSource implements DataSourceInterface
      * Set the columns.
      *
      * @param array $columns
+     *
+     * @return $this
      */
     public function setColumns(array $columns)
     {
         $this->columns = $columns;
+
+        return $this;
     }
 
     /**
@@ -70,6 +79,8 @@ abstract class AbstractDataSource implements DataSourceInterface
      *
      * @param Column\AbstractColumn $column
      * @param string                $sortDirection
+     *
+     * @return $this
      */
     public function addSortCondition(Column\AbstractColumn $column, $sortDirection = 'ASC')
     {
@@ -77,14 +88,20 @@ abstract class AbstractDataSource implements DataSourceInterface
             'column' => $column,
             'sortDirection' => $sortDirection,
         ];
+
+        return $this;
     }
 
     /**
      * @param array $sortConditions
+     *
+     * @return $this
      */
     public function setSortConditions(array $sortConditions)
     {
         $this->sortConditions = $sortConditions;
+
+        return $this;
     }
 
     /**
@@ -99,18 +116,28 @@ abstract class AbstractDataSource implements DataSourceInterface
      * Add a filter rule.
      *
      * @param Filter $filter
+     *
+     * @return $this
      */
     public function addFilter(Filter $filter)
     {
         $this->filters[] = $filter;
+
+        return $this;
     }
 
     /**
+     * Overwrite the current set of filter rules.
+     *
      * @param array $filters
+     *
+     * @return $this
      */
     public function setFilters(array $filters)
     {
         $this->filters = $filters;
+
+        return $this;
     }
 
     /**
@@ -123,10 +150,14 @@ abstract class AbstractDataSource implements DataSourceInterface
 
     /**
      * @param PaginatorAdapterInterface $paginator
+     *
+     * @return $this
      */
     public function setPaginatorAdapter(PaginatorAdapterInterface $paginator)
     {
         $this->paginatorAdapter = $paginator;
+
+        return $this;
     }
 
     /**

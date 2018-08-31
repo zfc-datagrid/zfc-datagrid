@@ -12,7 +12,11 @@ use ZfcDataGrid\Column\Type;
 use ZfcDatagrid\Renderer\AbstractRenderer;
 
 /**
+ * Class Renderer
+ *
  * For CLI.
+ *
+ * @package ZfcDatagrid\Renderer\ZendTable
  */
 class Renderer extends AbstractRenderer
 {
@@ -67,10 +71,14 @@ class Renderer extends AbstractRenderer
 
     /**
      * @param ConsoleAdapter $adapter
+     *
+     * @return $this
      */
     public function setConsoleAdapter(ConsoleAdapter $adapter)
     {
         $this->consoleAdapter = $adapter;
+
+        return $this;
     }
 
     /**
@@ -89,6 +97,7 @@ class Renderer extends AbstractRenderer
      * @todo enable parameters from console
      *
      * @return array
+     * @throws \Exception
      */
     public function getSortConditions()
     {
@@ -158,6 +167,7 @@ class Renderer extends AbstractRenderer
      * Should be implemented for each renderer itself (just default).
      *
      * @return int
+     * @throws \Exception
      */
     public function getCurrentPageNumber()
     {
@@ -207,6 +217,7 @@ class Renderer extends AbstractRenderer
 
     /**
      * @return TextTable
+     * @throws \Exception
      */
     private function getTable()
     {
@@ -343,6 +354,7 @@ class Renderer extends AbstractRenderer
 
     /**
      * @return array
+     * @throws \Exception
      */
     private function getColumnWidths()
     {

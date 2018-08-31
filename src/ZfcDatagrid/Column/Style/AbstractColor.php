@@ -3,7 +3,11 @@
 namespace ZfcDatagrid\Column\Style;
 
 /**
+ * Class AbstractColor
+ *
  * Abstract color class for font and backgroundColor.
+ *
+ * @package ZfcDatagrid\Column\Style
  */
 class AbstractColor extends AbstractStyle
 {
@@ -36,21 +40,27 @@ class AbstractColor extends AbstractStyle
         255,
     ];
 
+    /**
+     * @var int
+     */
     protected $red;
 
+    /**
+     * @var int
+     */
     protected $green;
 
+    /**
+     * @var int
+     */
     protected $blue;
 
     /**
      * Set red green blue.
      *
-     * @param mixed $redOrStaticOrArray
-     *                                  0-255
-     * @param int   $green
-     *                                  0-255
-     * @param int   $blue
-     *                                  0-255
+     * @param mixed $redOrStaticOrArray 0-255
+     * @param int   $green              0-255
+     * @param int   $blue               0-255
      */
     public function __construct($redOrStaticOrArray, $green = null, $blue = null)
     {
@@ -68,26 +78,31 @@ class AbstractColor extends AbstractStyle
     /**
      * Set the RGB.
      *
-     * @param int $red
-     *                   integer 0-255
-     * @param int $green
-     *                   0-255
-     * @param int $blue
-     *                   0-255
+     * @param int $red   0-255
+     * @param int $green 0-255
+     * @param int $blue  0-255
+     *
+     * @return $this
      */
     public function setRgb($red, $green, $blue)
     {
         $this->red = (int) $red;
         $this->green = (int) $green;
         $this->blue = (int) $blue;
+
+        return $this;
     }
 
     /**
      * @param int $red
+     *
+     * @return $this
      */
     public function setRed($red)
     {
         $this->red = (int) $red;
+
+        return $this;
     }
 
     /**
@@ -100,10 +115,14 @@ class AbstractColor extends AbstractStyle
 
     /**
      * @param int $green
+     *
+     * @return $this
      */
     public function setGreen($green)
     {
         $this->green = (int) $green;
+
+        return $this;
     }
 
     /**
@@ -116,10 +135,14 @@ class AbstractColor extends AbstractStyle
 
     /**
      * @param int $blue
+     *
+     * @return $this
      */
     public function setBlue($blue)
     {
         $this->blue = (int) $blue;
+
+        return $this;
     }
 
     /**

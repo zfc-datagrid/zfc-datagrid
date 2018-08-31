@@ -2,6 +2,11 @@
 
 namespace ZfcDatagrid\Column\Style;
 
+/**
+ * Class Align
+ *
+ * @package ZfcDatagrid\Column\Style
+ */
 class Align extends AbstractStyle
 {
     /**
@@ -43,10 +48,14 @@ class Align extends AbstractStyle
 
     /**
      * @param string $alignment
+     *
+     * @return $this
      */
     public function setAlignment($alignment)
     {
         $this->alignment = $alignment;
+
+        return $this;
     }
 
     /**

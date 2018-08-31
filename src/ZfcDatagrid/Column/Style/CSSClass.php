@@ -3,10 +3,17 @@
 namespace ZfcDatagrid\Column\Style;
 
 /**
+ * Class CSSClass
+ *
  * Css class for the row/cell.
+ *
+ * @package ZfcDatagrid\Column\Style
  */
 class CSSClass extends AbstractStyle
 {
+    /**
+     * @var array|string
+     */
     private $class;
 
     /**
@@ -31,9 +38,13 @@ class CSSClass extends AbstractStyle
 
     /**
      * @param string|array $class
+     *
+     * @return $this
      */
     public function setClass($class)
     {
         $this->class = $class;
+        
+        return $this;
     }
 }

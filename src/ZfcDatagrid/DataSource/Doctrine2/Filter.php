@@ -7,6 +7,11 @@ use Doctrine\ORM\QueryBuilder;
 use ZfcDatagrid\Column;
 use ZfcDatagrid\Filter as DatagridFilter;
 
+/**
+ * Class Filter
+ *
+ * @package ZfcDatagrid\DataSource\Doctrine2
+ */
 class Filter
 {
     /**
@@ -33,6 +38,7 @@ class Filter
     /**
      * @param DatagridFilter $filter
      *
+     * @return $this
      * @throws \Exception
      */
     public function applyFilter(DatagridFilter $filter)
@@ -136,6 +142,7 @@ class Filter
                     );
                     break;
             }
+
         }
 
         if (! empty($wheres)) {
@@ -144,5 +151,7 @@ class Filter
 
             $qb->andWhere($orWhere);
         }
+
+        return $this;
     }
 }

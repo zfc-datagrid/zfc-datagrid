@@ -11,6 +11,11 @@ use Zend\View\Model\ViewModel;
 use ZfcDatagrid\Datagrid;
 use ZfcDatagrid\Filter;
 
+/**
+ * Class AbstractRenderer
+ *
+ * @package ZfcDatagrid\Renderer
+ */
 abstract class AbstractRenderer implements RendererInterface
 {
     /**
@@ -98,9 +103,16 @@ abstract class AbstractRenderer implements RendererInterface
      */
     protected $translator;
 
+    /**
+     * @param array $options
+     *
+     * @return $this
+     */
     public function setOptions(array $options)
     {
         $this->options = $options;
+
+        return $this;
     }
 
     /**
@@ -126,10 +138,14 @@ abstract class AbstractRenderer implements RendererInterface
 
     /**
      * @param ViewModel $viewModel
+     *
+     * @return $this
      */
     public function setViewModel(ViewModel $viewModel)
     {
         $this->viewModel = $viewModel;
+
+        return $this;
     }
 
     /**
@@ -144,16 +160,21 @@ abstract class AbstractRenderer implements RendererInterface
      * Set the view template.
      *
      * @param string $name
+     *
+     * @return $this
      */
     public function setTemplate($name)
     {
         $this->template = (string) $name;
+
+        return $this;
     }
 
     /**
      * Get the view template name.
      *
      * @return string
+     * @throws \Exception
      */
     public function getTemplate()
     {
@@ -193,10 +214,14 @@ abstract class AbstractRenderer implements RendererInterface
      * Set the toolbar view template name.
      *
      * @param string $name
+     *
+     * @return $this
      */
     public function setToolbarTemplate($name)
     {
         $this->templateToolbar = (string) $name;
+
+        return $this;
     }
 
     /**
@@ -217,10 +242,14 @@ abstract class AbstractRenderer implements RendererInterface
      * Set the toolbar view template variables.
      *
      * @param array $variables
+     *
+     * @return $this
      */
     public function setToolbarTemplateVariables(array $variables)
     {
         $this->toolbarTemplateVariables = $variables;
+
+        return $this;
     }
 
     /**
@@ -234,14 +263,17 @@ abstract class AbstractRenderer implements RendererInterface
     }
 
     /**
-     * Paginator is here to retreive the totalItemCount, count pages, current page
-     * NOT FOR THE ACTUAL DATA!!!!
+     * Paginator is here to retrieve the totalItemCount, count pages, current page, not for the actual data.
      *
      * @param \Zend\Paginator\Paginator $paginator
+     *
+     * @return $this
      */
     public function setPaginator(Paginator $paginator)
     {
         $this->paginator = $paginator;
+
+        return $this;
     }
 
     /**
@@ -256,10 +288,14 @@ abstract class AbstractRenderer implements RendererInterface
      * Set the columns.
      *
      * @param array $columns
+     *
+     * @return $this
      */
     public function setColumns(array $columns)
     {
         $this->columns = $columns;
+
+        return $this;
     }
 
     /**
@@ -274,10 +310,14 @@ abstract class AbstractRenderer implements RendererInterface
 
     /**
      * @param \ZfcDataGrid\Column\Style\AbstractStyle[] $rowStyles
+     *
+     * @return $this
      */
     public function setRowStyles($rowStyles = [])
     {
         $this->rowStyles = $rowStyles;
+
+        return $this;
     }
 
     /**
@@ -292,6 +332,8 @@ abstract class AbstractRenderer implements RendererInterface
      * Calculate the sum of the displayed column width to 100%.
      *
      * @param array $columns
+     *
+     * @return $this
      */
     protected function calculateColumnWidthPercent(array $columns)
     {
@@ -309,16 +351,22 @@ abstract class AbstractRenderer implements RendererInterface
             $widthSum += (($column->getWidth() / $relativeOnePercent));
             $column->setWidth(($column->getWidth() / $relativeOnePercent));
         }
+
+        return $this;
     }
 
     /**
      * The prepared data.
      *
      * @param array $data
+     *
+     * @return $this
      */
     public function setData(array $data)
     {
         $this->data = $data;
+
+        return $this;
     }
 
     /**
@@ -371,10 +419,14 @@ abstract class AbstractRenderer implements RendererInterface
      * Not used ATM...
      *
      * @see \ZfcDatagrid\Renderer\RendererInterface::setMvcEvent()
+     *
+     * @return $this
      */
     public function setMvcEvent(MvcEvent $mvcEvent)
     {
         $this->mvcEvent = $mvcEvent;
+
+        return $this;
     }
 
     /**
@@ -398,6 +450,7 @@ abstract class AbstractRenderer implements RendererInterface
     /**
      * @param Translator $translator
      *
+     * @return $this
      * @throws \InvalidArgumentException
      */
     public function setTranslator($translator)
@@ -410,6 +463,8 @@ abstract class AbstractRenderer implements RendererInterface
         }
 
         $this->translator = $translator;
+
+        return $this;
     }
 
     /**
@@ -434,10 +489,14 @@ abstract class AbstractRenderer implements RendererInterface
      * Set the title.
      *
      * @param string $title
+     *
+     * @return $this
      */
     public function setTitle($title)
     {
         $this->title = $title;
+
+        return $this;
     }
 
     /**
@@ -450,10 +509,14 @@ abstract class AbstractRenderer implements RendererInterface
 
     /**
      * @param Cache\Storage\StorageInterface $cache
+     *
+     * @return $this
      */
     public function setCache(Cache\Storage\StorageInterface $cache)
     {
         $this->cache = $cache;
+
+        return $this;
     }
 
     /**
@@ -466,10 +529,14 @@ abstract class AbstractRenderer implements RendererInterface
 
     /**
      * @param string $cacheId
+     *
+     * @return $this
      */
     public function setCacheId($cacheId)
     {
         $this->cacheId = $cacheId;
+
+        return $this;
     }
 
     /**
@@ -485,6 +552,8 @@ abstract class AbstractRenderer implements RendererInterface
      * from a custom form).
      *
      * @param array $sortConditions
+     *
+     * @return $this
      */
     public function setSortConditions(array $sortConditions)
     {
@@ -499,10 +568,13 @@ abstract class AbstractRenderer implements RendererInterface
         }
 
         $this->sortConditions = $sortConditions;
+
+        return $this;
     }
 
     /**
      * @return array
+     * @throws \Exception
      */
     public function getSortConditions()
     {
@@ -550,10 +622,11 @@ abstract class AbstractRenderer implements RendererInterface
     }
 
     /**
-     * Set filters explicit (e.g.
-     * from a custom form).
+     * Set filters explicit (e.g. from a custom form).
      *
      * @param array $filters
+     *
+     * @return $this
      */
     public function setFilters(array $filters)
     {
@@ -564,10 +637,13 @@ abstract class AbstractRenderer implements RendererInterface
         }
 
         $this->filters = $filters;
+
+        return $this;
     }
 
     /**
      * @return Filter[]
+     * @throws \Exception
      */
     public function getFilters()
     {
@@ -614,10 +690,14 @@ abstract class AbstractRenderer implements RendererInterface
      * Set the current page number.
      *
      * @param int $page
+     *
+     * @return $this
      */
     public function setCurrentPageNumber($page)
     {
         $this->currentPageNumber = (int) $page;
+
+        return $this;
     }
 
     /**
@@ -650,10 +730,14 @@ abstract class AbstractRenderer implements RendererInterface
 
     /**
      * VERY UGLY DEPENDECY...
-     *
      * @todo Refactor :-)
      *
-     * @see \ZfcDatagrid\Renderer\RendererInterface::prepareViewModel()
+     * @see  \ZfcDatagrid\Renderer\RendererInterface::prepareViewModel()
+     *
+     * @param \ZfcDatagrid\Datagrid $grid
+     *
+     * @return $this
+     * @throws \Exception
      */
     public function prepareViewModel(Datagrid $grid)
     {
@@ -713,6 +797,8 @@ abstract class AbstractRenderer implements RendererInterface
         }
 
         $viewModel->setVariable('exportRenderers', $grid->getExportRenderers());
+
+        return $this;
     }
 
     /**

@@ -2,6 +2,11 @@
 
 namespace ZfcDatagrid\Library;
 
+/**
+ * Class ImageResize
+ *
+ * @package ZfcDatagrid\Library
+ */
 class ImageResize
 {
     /**

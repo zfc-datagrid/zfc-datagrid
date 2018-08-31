@@ -4,6 +4,11 @@ namespace ZfcDatagrid;
 
 use Zend\I18n\Translator\Translator;
 
+/**
+ * Class PrepareData
+ *
+ * @package ZfcDatagrid
+ */
 class PrepareData
 {
     /**
@@ -21,6 +26,9 @@ class PrepareData
      */
     private $dataPrepared;
 
+    /**
+     * @var
+     */
     private $rendererName;
 
     /**
@@ -40,10 +48,14 @@ class PrepareData
 
     /**
      * @param array $columns
+     *
+     * @return $this
      */
     public function setColumns(array $columns)
     {
         $this->columns = $columns;
+
+        return $this;
     }
 
     /**
@@ -56,16 +68,21 @@ class PrepareData
 
     /**
      * @param array $data
+     *
+     * @return $this
      */
     public function setData(array $data)
     {
         $this->data = $data;
+
+        return $this;
     }
 
     /**
      * @param bool $raw
      *
      * @return array
+     * @throws \Exception
      */
     public function getData($raw = false)
     {
@@ -80,10 +97,14 @@ class PrepareData
 
     /**
      * @param string $name
+     *
+     * @return $this
      */
     public function setRendererName($name = null)
     {
         $this->rendererName = $name;
+
+        return $this;
     }
 
     /**
@@ -97,6 +118,7 @@ class PrepareData
     /**
      * @param Translator $translator
      *
+     * @return $this
      * @throws \InvalidArgumentException
      */
     public function setTranslator($translator)
@@ -109,6 +131,8 @@ class PrepareData
         }
 
         $this->translator = $translator;
+
+        return $this;
     }
 
     /**
@@ -122,9 +146,8 @@ class PrepareData
     /**
      * Return true if preparing executed, false if already done!
      *
-     * @throws \Exception
-     *
      * @return bool
+     * @throws \Exception
      */
     public function prepare()
     {

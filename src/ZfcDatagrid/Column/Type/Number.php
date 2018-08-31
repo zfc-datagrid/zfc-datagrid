@@ -6,6 +6,11 @@ use Locale;
 use NumberFormatter;
 use ZfcDatagrid\Filter;
 
+/**
+ * Class Number
+ *
+ * @package ZfcDatagrid\Column\Type
+ */
 class Number extends AbstractType
 {
     /**
@@ -29,14 +34,33 @@ class Number extends AbstractType
      */
     protected $formatType;
 
+    /**
+     * @var array
+     */
     protected $attributes = [];
 
+    /**
+     * @var string
+     */
     protected $prefix = '';
 
+    /**
+     * @var string
+     */
     protected $suffix = '';
 
+    /**
+     * @var
+     */
     protected $pattern;
 
+    /**
+     * Number constructor.
+     *
+     * @param int  $formatStyle
+     * @param int  $formatType
+     * @param null $locale
+     */
     public function __construct(
         $formatStyle = NumberFormatter::DECIMAL,
         $formatType = NumberFormatter::TYPE_DEFAULT,
@@ -47,36 +71,69 @@ class Number extends AbstractType
         $this->setLocale($locale);
     }
 
+    /**
+     * @return string
+     */
     public function getTypeName()
     {
         return 'number';
     }
 
+    /**
+     * @param int $style
+     *
+     * @return $this
+     */
     public function setFormatStyle($style = NumberFormatter::DECIMAL)
     {
         $this->formatStyle = $style;
+
+        return $this;
     }
 
+    /**
+     * @return int
+     */
     public function getFormatStyle()
     {
         return $this->formatStyle;
     }
 
+    /**
+     * @param int $type
+     *
+     * @return $this
+     */
     public function setFormatType($type = NumberFormatter::TYPE_DEFAULT)
     {
         $this->formatType = $type;
+
+        return $this;
     }
 
+    /**
+     * @return int
+     */
     public function getFormatType()
     {
         return $this->formatType;
     }
 
+    /**
+     * @param null $locale
+     *                    
+     * @return $this
+     */
     public function setLocale($locale = null)
     {
         $this->locale = $locale;
+
+        return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getLocale()
     {
         if (null === $this->locale) {
@@ -91,15 +148,10 @@ class Number extends AbstractType
      *
      * @link http://www.php.net/manual/en/numberformatter.setattribute.php
      *
-     * @param
-     *            attr int <p>
-     *            Attribute specifier - one of the
-     *            numeric attribute constants.
-     *            </p>
-     * @param
-     *            value int <p>
-     *            The attribute value.
-     *            </p>
+     * @param $attr  int  Attribute specifier - one of the numeric attribute constants.
+     * @param $value int The attribute value.
+     *
+     * @return $this
      */
     public function addAttribute($attr, $value)
     {
@@ -107,43 +159,81 @@ class Number extends AbstractType
             'attribute' => $attr,
             'value' => $value,
         ];
+
+        return $this;
     }
 
+    /**
+     * @return array
+     */
     public function getAttributes()
     {
         return $this->attributes;
     }
 
+    /**
+     * @param string $string
+     *
+     * @return $this
+     */
     public function setSuffix($string = '')
     {
         $this->suffix = (string) $string;
+
+        return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getSuffix()
     {
         return $this->suffix;
     }
 
+    /**
+     * @param string $string
+     *
+     * @return $this
+     */
     public function setPrefix($string = '')
     {
         $this->prefix = (string) $string;
+
+        return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getPrefix()
     {
         return $this->prefix;
     }
 
+    /**
+     * @param $pattern
+     *
+     * @return $this
+     */
     public function setPattern($pattern)
     {
         $this->pattern = $pattern;
+
+        return $this;
     }
 
+    /**
+     * @return mixed
+     */
     public function getPattern()
     {
         return $this->pattern;
     }
 
+    /**
+     * @return string
+     */
     public function getFilterDefaultOperation()
     {
         return Filter::EQUAL;

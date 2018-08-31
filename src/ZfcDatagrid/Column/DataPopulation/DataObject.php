@@ -42,6 +42,8 @@ class DataObject implements DataPopulationInterface
      *
      * @param string                $objectParameterName
      * @param Column\AbstractColumn $column
+     *
+     * @return $this
      */
     public function addObjectParameterColumn($objectParameterName, Column\AbstractColumn $column)
     {
@@ -49,6 +51,8 @@ class DataObject implements DataPopulationInterface
             'objectParameterName' => $objectParameterName,
             'column' => $column,
         ];
+
+        return $this;
     }
 
     /**
@@ -64,10 +68,14 @@ class DataObject implements DataPopulationInterface
      *
      * @param string $name
      * @param mixed  $value
+     *
+     * @return string
      */
     public function setObjectParameter($name, $value)
     {
         $this->getObject()->setParameterFromColumn($name, $value);
+
+        return $this;
     }
 
     /**

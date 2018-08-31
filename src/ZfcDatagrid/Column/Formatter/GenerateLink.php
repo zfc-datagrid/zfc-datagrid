@@ -6,6 +6,11 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\View\Renderer\RendererInterface;
 use ZfcDatagrid\Column\AbstractColumn;
 
+/**
+ * Class GenerateLink
+ *
+ * @package ZfcDatagrid\Column\Formatter
+ */
 class GenerateLink extends AbstractFormatter
 {
     /** @var array */
@@ -79,7 +84,7 @@ class GenerateLink extends AbstractFormatter
     /**
      * @param \Zend\View\Renderer\PhpRenderer $viewRenderer
      *
-     * @return self
+     * @return $this
      */
     public function setViewRenderer($viewRenderer)
     {
@@ -98,10 +103,14 @@ class GenerateLink extends AbstractFormatter
 
     /**
      * @param string $route
+     *
+     * @return $this
      */
     public function setRoute($route)
     {
         $this->route = $route;
+
+        return $this;
     }
 
     /**
@@ -114,10 +123,14 @@ class GenerateLink extends AbstractFormatter
 
     /**
      * @param array $routeParams
+     *
+     * @return $this
      */
     public function setRouteParams($routeParams)
     {
         $this->routeParams = $routeParams;
+
+        return $this;
     }
 
     /**
@@ -130,9 +143,13 @@ class GenerateLink extends AbstractFormatter
 
     /**
      * @param null|string $routeKey
+     *
+     * @return $this
      */
     public function setRouteKey($routeKey)
     {
         $this->routeKey = $routeKey;
+
+        return $this;
     }
 }

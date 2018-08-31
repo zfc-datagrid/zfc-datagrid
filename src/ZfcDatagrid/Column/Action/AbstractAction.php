@@ -6,8 +6,16 @@ use ZfcDatagrid\Column;
 use ZfcDatagrid\Column\AbstractColumn;
 use ZfcDatagrid\Filter;
 
+/**
+ * Class AbstractAction
+ *
+ * @package ZfcDatagrid\Column\Action
+ */
 abstract class AbstractAction
 {
+    /**
+     * Row ID placeholder.
+     */
     const ROW_ID_PLACEHOLDER = ':rowId:';
 
     /**
@@ -30,6 +38,9 @@ abstract class AbstractAction
      */
     protected $showOnValues = [];
 
+    /**
+     * AbstractAction constructor.
+     */
     public function __construct()
     {
         $this->setLink('#');
@@ -39,10 +50,14 @@ abstract class AbstractAction
      * Set the link.
      *
      * @param string $href
+     *
+     * @return $this
      */
     public function setLink($href)
     {
         $this->setAttribute('href', $href);
+
+        return $this;
     }
 
     /**
@@ -82,7 +97,9 @@ abstract class AbstractAction
 
     /**
      * Get the column row value placeholder
-     * $action->setLink('/myLink/something/id/'.$action->getRowIdPlaceholder().'/something/'.$action->getColumnRowPlaceholder($myCol));.
+     * $action->setLink(
+     *     '/myLink/something/id/'.$action->getRowIdPlaceholder().'/something/'.$action->getColumnRowPlaceholder($myCol)
+     * );.
      *
      * @param AbstractColumn $col
      *
@@ -120,10 +137,14 @@ abstract class AbstractAction
      *
      * @param string $name
      * @param string $value
+     *
+     * @return $this
      */
     public function setAttribute($name, $value)
     {
         $this->htmlAttributes[$name] = (string) $value;
+
+        return $this;
     }
 
     /**
@@ -146,12 +167,16 @@ abstract class AbstractAction
      * Removes an HTML attribute.
      *
      * @param string $name
+     *
+     * @return $this
      */
     public function removeAttribute($name)
     {
         if (isset($this->htmlAttributes[$name])) {
             unset($this->htmlAttributes[$name]);
         }
+
+        return $this;
     }
 
     /**
@@ -188,10 +213,14 @@ abstract class AbstractAction
      * Set the title attribute.
      *
      * @param string $name
+     *
+     * @return $this
      */
     public function setTitle($name)
     {
         $this->setAttribute('title', $name);
+
+        return $this;
     }
 
     /**
@@ -208,6 +237,8 @@ abstract class AbstractAction
      * Add a css class.
      *
      * @param string $className
+     *
+     * @return $this
      */
     public function addClass($className)
     {
@@ -218,12 +249,16 @@ abstract class AbstractAction
         $attr .= (string) $className;
 
         $this->setAttribute('class', $attr);
+
+        return $this;
     }
 
     /**
      * Display the values with AND or OR (if multiple showOnValues are defined).
      *
      * @param string $operator
+     *
+     * @return $this
      */
     public function setShowOnValueOperator($operator = 'OR')
     {
@@ -232,6 +267,8 @@ abstract class AbstractAction
         }
 
         $this->showOnValueOperator = (string) $operator;
+
+        return $this;
     }
 
     /**
@@ -251,6 +288,8 @@ abstract class AbstractAction
      * @param Column\AbstractColumn $col
      * @param string                $value
      * @param string                $comparison
+     *
+     * @return $this
      */
     public function addShowOnValue(Column\AbstractColumn $col, $value = null, $comparison = Filter::EQUAL)
     {
@@ -259,6 +298,8 @@ abstract class AbstractAction
             'value' => $value,
             'comparison' => $comparison,
         ];
+
+        return $this;
     }
 
     /**
@@ -274,11 +315,7 @@ abstract class AbstractAction
      */
     public function hasShowOnValues()
     {
-        if (count($this->showOnValues) > 0) {
-            return true;
-        }
-
-        return false;
+        return count($this->showOnValues) > 0;
     }
 
     /**

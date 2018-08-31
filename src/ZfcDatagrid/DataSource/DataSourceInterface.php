@@ -5,6 +5,11 @@ namespace ZfcDatagrid\DataSource;
 use ZfcDatagrid\Column;
 use ZfcDatagrid\Filter;
 
+/**
+ * Interface DataSourceInterface
+ *
+ * @package ZfcDatagrid\DataSource
+ */
 interface DataSourceInterface
 {
     /**
@@ -29,6 +34,8 @@ interface DataSourceInterface
      * Execute the query and set the paginator
      * - with sort statements
      * - with filters statements.
+     *
+     * @return $this
      */
     public function execute();
 
@@ -36,6 +43,8 @@ interface DataSourceInterface
      * Set the columns.
      *
      * @param array $columns
+     *
+     * @return $this
      */
     public function setColumns(array $columns);
 
@@ -48,7 +57,9 @@ interface DataSourceInterface
     public function addSortCondition(Column\AbstractColumn $column, $sortDirection = 'ASC');
 
     /**
-     * @param Filter $filters
+     * @param Filter $filter
+     *
+     * @return $this
      */
     public function addFilter(Filter $filter);
 

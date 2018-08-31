@@ -2,12 +2,21 @@
 
 namespace ZfcDatagrid\Column;
 
+/**
+ * Class Select
+ *
+ * @package ZfcDatagrid\Column
+ */
 class Select extends AbstractColumn
 {
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $selectPart1;
 
-    /** @var string|object|null */
+    /**
+     * @var string|object|null
+     */
     protected $selectPart2 = null;
 
     /**
@@ -59,13 +68,17 @@ class Select extends AbstractColumn
     }
 
     /**
-     * @params string $part1
-     * @params string|object|null $part2
+     * @param string $part1
+     * @param string|object|null $part2
+     *
+     * @return $this
      */
     public function setSelect($part1, $part2 = null)
     {
         $this->selectPart1 = $part1;
         $this->selectPart2 = $part2;
+
+        return $this;
     }
 
     /**
@@ -86,10 +99,14 @@ class Select extends AbstractColumn
 
     /**
      * @param string $filterSelectExpression
+     *
+     * @return $this
      */
     public function setFilterSelectExpression($filterSelectExpression)
     {
         $this->filterSelectExpression = $filterSelectExpression;
+
+        return $this;
     }
 
     /**

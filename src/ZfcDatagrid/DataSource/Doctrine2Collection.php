@@ -8,6 +8,11 @@ use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use ZfcDatagrid\Column;
 use ZfcDatagrid\DataSource\PhpArray as SourceArray;
 
+/**
+ * Class Doctrine2Collection
+ *
+ * @package ZfcDatagrid\DataSource
+ */
 class Doctrine2Collection extends AbstractDataSource
 {
     /**
@@ -48,10 +53,14 @@ class Doctrine2Collection extends AbstractDataSource
 
     /**
      * @param EntityManager $em
+     *
+     * @return $this
      */
     public function setEntityManager(EntityManager $em)
     {
         $this->em = $em;
+
+        return $this;
     }
 
     /**
@@ -62,6 +71,9 @@ class Doctrine2Collection extends AbstractDataSource
         return $this->em;
     }
 
+    /**
+     * @return $this
+     */
     public function execute()
     {
         $hydrator = new DoctrineHydrator($this->getEntityManager());
@@ -105,5 +117,7 @@ class Doctrine2Collection extends AbstractDataSource
         $source->execute();
 
         $this->setPaginatorAdapter($source->getPaginatorAdapter());
+
+        return $this;
     }
 }

@@ -4,23 +4,38 @@ namespace ZfcDatagrid\Column\Formatter;
 
 use ZfcDatagrid\Column\AbstractColumn;
 
+/**
+ * Class AbstractFormatter
+ *
+ * @package ZfcDatagrid\Column\Formatter
+ */
 abstract class AbstractFormatter
 {
-    /** @var array */
+    /**
+     * @var array
+     */
     private $data = [];
 
-    /** @var string */
+    /**
+     * @var string
+     */
     private $rendererName;
 
-    /** @var array */
+    /**
+     * @var array
+     */
     protected $validRenderers = [];
 
     /**
      * @param array $data
+     *
+     * @return $this
      */
     public function setRowData(array $data)
     {
         $this->data = $data;
+
+        return $this;
     }
 
     /**
@@ -33,10 +48,14 @@ abstract class AbstractFormatter
 
     /**
      * @param string $name
+     *
+     * @return $this
      */
     public function setRendererName($name = null)
     {
         $this->rendererName = $name;
+
+        return $this;
     }
 
     /**
@@ -49,10 +68,14 @@ abstract class AbstractFormatter
 
     /**
      * @param array $validRendrerers
+     *
+     * @return $this
      */
     public function setValidRendererNames(array $validRendrerers)
     {
         $this->validRenderers = $validRendrerers;
+
+        return $this;
     }
 
     /**

@@ -2,6 +2,11 @@
 
 namespace ZfcDatagrid;
 
+/**
+ * Class Module
+ *
+ * @package ZfcDatagrid
+ */
 class Module
 {
     /**

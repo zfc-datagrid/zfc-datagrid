@@ -2,10 +2,21 @@
 
 namespace ZfcDatagrid\Column\Action;
 
+/**
+ * Class Icon
+ *
+ * @package ZfcDatagrid\Column\Action
+ */
 class Icon extends AbstractAction
 {
+    /**
+     * @var string
+     */
     protected $iconClass;
 
+    /**
+     * @var string
+     */
     protected $iconLink;
 
     /**
@@ -13,10 +24,14 @@ class Icon extends AbstractAction
      * - used for HTML if provided, overwise the iconLink is used.
      *
      * @param string $name
+     *
+     * @return $this
      */
     public function setIconClass($name)
     {
         $this->iconClass = (string) $name;
+
+        return $this;
     }
 
     /**
@@ -43,10 +58,14 @@ class Icon extends AbstractAction
      * Set the icon link (is used, if no icon class is provided).
      *
      * @param string $httpLink
+     *
+     * @return $this
      */
     public function setIconLink($httpLink)
     {
         $this->iconLink = (string) $httpLink;
+
+        return $this;
     }
 
     /**

@@ -5,6 +5,11 @@ namespace ZfcDatagrid\DataSource\Doctrine2;
 use Doctrine\ORM\QueryBuilder;
 use Zend\Paginator\Adapter\AdapterInterface;
 
+/**
+ * Class PaginatorFast
+ *
+ * @package ZfcDatagrid\DataSource\Doctrine2
+ */
 class PaginatorFast implements AdapterInterface
 {
     /**

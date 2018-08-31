@@ -4,6 +4,11 @@ namespace ZfcDatagrid;
 
 use InvalidArgumentException;
 
+/**
+ * Class Filter
+ *
+ * @package ZfcDatagrid
+ */
 class Filter
 {
     /**
@@ -14,45 +19,74 @@ class Filter
      */
     const LIKE = '~ *%s*';
 
-    // OK
+    /**
+     * OK
+     */
     const LIKE_LEFT = '~ *%s';
 
-    // OK
+    /**
+     * OK
+     */
     const LIKE_RIGHT = '~ %s*';
 
-    // OK
+    /**
+     * OK
+     */
     const NOT_LIKE = '!~ *%s*';
 
-    // OK
+    /**
+     * OK
+     */
     const NOT_LIKE_LEFT = '!~ *%s';
 
-    // OK
+    /**
+     * OK
+     */
     const NOT_LIKE_RIGHT = '!~ %s*';
 
-    // OK
+    /**
+     * OK
+     */
     const EQUAL = '= %s';
 
-    // OK
+    /**
+     * OK
+     */
     const NOT_EQUAL = '!= %s';
 
-    // OK
+    /**
+     * OK
+     */
     const GREATER_EQUAL = '>= %s';
 
-    // OK
+    /**
+     * OK
+     */
     const GREATER = '> %s';
 
-    // OK
+    /**
+     * OK
+     */
     const LESS_EQUAL = '<= %s';
 
-    // OK
+    /**
+     * OK
+     */
     const LESS = '< %s';
 
-    // OK
+    /**
+     * OK
+     */
     const IN = '=(%s)';
 
-    // OK
+    /**
+     * OK
+     */
     const NOT_IN = '!=(%s)';
 
+    /**
+     * OK
+     */
     const BETWEEN = '%s <> %s';
 
     /**
@@ -60,10 +94,19 @@ class Filter
      */
     private $column;
 
+    /**
+     * @var string
+     */
     private $operator = self::LIKE;
 
+    /**
+     * @var
+     */
     private $value;
 
+    /**
+     * @var
+     */
     private $displayColumnValue;
 
     /**
@@ -71,11 +114,15 @@ class Filter
      *
      * @param Column\AbstractColumn $column
      * @param string                $inputFilterValue
+     *
+     * @return $this
      */
     public function setFromColumn(Column\AbstractColumn $column, $inputFilterValue)
     {
         $this->column = $column;
         $this->setColumnOperator($inputFilterValue, $column->getFilterDefaultOperation());
+
+        return $this;
     }
 
     /**

@@ -4,10 +4,21 @@ namespace ZfcDatagrid\Column\Action;
 
 use ZfcDatagrid\Column\AbstractColumn;
 
+/**
+ * Class Button
+ *
+ * @package ZfcDatagrid\Column\Action
+ */
 class Button extends AbstractAction
 {
+    /**
+     * @var string
+     */
     protected $label = '';
 
+    /**
+     * Button constructor.
+     */
     public function __construct()
     {
         parent::__construct();
@@ -18,10 +29,14 @@ class Button extends AbstractAction
 
     /**
      * @param string|AbstractColumn $name
+     *
+     * @return $this
      */
     public function setLabel($name)
     {
         $this->label = $name;
+
+        return $this;
     }
 
     /**

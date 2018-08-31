@@ -42,6 +42,7 @@ class Doctrine2 extends AbstractDataSource
     }
 
     /**
+     * @return $this
      * @throws \Exception
      */
     public function execute()
@@ -113,5 +114,7 @@ class Doctrine2 extends AbstractDataSource
          * Step 4) Pagination
          */
         $this->setPaginatorAdapter(new PaginatorAdapter($qb));
+
+        return $this;
     }
 }

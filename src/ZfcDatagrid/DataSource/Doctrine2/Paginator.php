@@ -10,6 +10,11 @@ use Doctrine\ORM\Tools\Pagination\Paginator as Doctrine2Paginator;
 use Zend\Paginator\Adapter\AdapterInterface;
 use ZfcDatagrid\DataSource\Doctrine2\PaginatorFast as ZfcDatagridPaginator;
 
+/**
+ * Class Paginator
+ *
+ * @package ZfcDatagrid\DataSource\Doctrine2
+ */
 class Paginator implements AdapterInterface
 {
     /**

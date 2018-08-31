@@ -4,6 +4,11 @@ namespace ZfcDatagrid\Column\Type;
 
 use ZfcDatagrid\Filter;
 
+/**
+ * Class AbstractType
+ *
+ * @package ZfcDatagrid\Column\Type
+ */
 abstract class AbstractType implements TypeInterface
 {
     /**

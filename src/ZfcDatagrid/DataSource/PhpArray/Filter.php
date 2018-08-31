@@ -4,6 +4,11 @@ namespace ZfcDatagrid\DataSource\PhpArray;
 
 use ZfcDatagrid\Filter as DatagridFilter;
 
+/**
+ * Class Filter
+ *
+ * @package ZfcDatagrid\DataSource\PhpArray
+ */
 class Filter
 {
     /**

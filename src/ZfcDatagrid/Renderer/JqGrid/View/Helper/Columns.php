@@ -12,20 +12,31 @@ use ZfcDatagrid\Filter;
  */
 class Columns extends AbstractHelper
 {
-    /** @var \Zend\I18n\Translator\Translator|null|false */
+    /**
+     * @var \Zend\I18n\Translator\Translator|null|false
+     */
     private $translator;
 
+    /**
+     * Bold style template.
+     */
     const STYLE_BOLD = 'cellvalue = \'<span style="font-weight: bold;">\' + cellvalue + \'</span>\';';
 
+    /**
+     * Italic style template.
+     */
     const STYLE_ITALIC = 'cellvalue = \'<span style="font-style: italic;">\' + cellvalue + \'</span>\';';
 
+    /**
+     * Strikethrough style template.
+     */
     const STYLE_STRIKETHROUGH =
         'cellvalue = \'<span style="text-decoration: line-through;">\' + cellvalue + \'</span>\';';
 
     /**
      * @param false|null|\Zend\I18n\Translator\Translator $translator
      *
-     * @return self
+     * @return $this
      */
     public function setTranslator($translator)
     {

@@ -5,8 +5,16 @@ namespace ZfcDatagrid\Column\Style;
 use ZfcDatagrid\Column\AbstractColumn;
 use ZfcDatagrid\Filter;
 
+/**
+ * Class AbstractStyle
+ *
+ * @package ZfcDatagrid\Column\Style
+ */
 abstract class AbstractStyle
 {
+    /**
+     * @var string
+     */
     protected $byValueOperator = 'OR';
 
     /**
@@ -18,6 +26,8 @@ abstract class AbstractStyle
      * Display the values with AND or OR (if multiple showOnValues are defined).
      *
      * @param string $operator
+     *
+     * @return $this
      */
     public function setByValueOperator($operator = 'OR')
     {
@@ -26,6 +36,8 @@ abstract class AbstractStyle
         }
 
         $this->byValueOperator = (string) $operator;
+
+        return $this;
     }
 
     /**
@@ -45,6 +57,8 @@ abstract class AbstractStyle
      * @param AbstractColumn $column
      * @param mixed          $value
      * @param string         $operator
+     *
+     * @return $this
      */
     public function addByValue(AbstractColumn $column, $value, $operator = Filter::EQUAL)
     {
@@ -53,6 +67,8 @@ abstract class AbstractStyle
             'value' => $value,
             'operator' => $operator,
         ];
+
+        return $this;
     }
 
     /**

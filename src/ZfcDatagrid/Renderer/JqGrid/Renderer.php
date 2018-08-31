@@ -7,6 +7,11 @@ use Zend\View\Model\JsonModel;
 use ZfcDatagrid\Column;
 use ZfcDatagrid\Renderer\AbstractRenderer;
 
+/**
+ * Class Renderer
+ *
+ * @package ZfcDatagrid\Renderer\JqGrid
+ */
 class Renderer extends AbstractRenderer
 {
     /**
@@ -163,6 +168,10 @@ class Renderer extends AbstractRenderer
         return $this->filters;
     }
 
+    /**
+     * @return int
+     * @throws \Exception
+     */
     public function getCurrentPageNumber()
     {
         $optionsRenderer = $this->getOptionsRenderer();
@@ -182,6 +191,10 @@ class Renderer extends AbstractRenderer
         return (int) $this->currentPageNumber;
     }
 
+    /**
+     * @return \Zend\View\Model\JsonModel|\Zend\View\Model\ViewModel
+     * @throws \Exception
+     */
     public function execute()
     {
         $request = $this->getRequest();
@@ -212,6 +225,9 @@ class Renderer extends AbstractRenderer
         return $viewModel;
     }
 
+    /**
+     * @return array
+     */
     public function getData()
     {
         $data = parent::getData();
@@ -243,6 +259,9 @@ class Renderer extends AbstractRenderer
         return $data;
     }
 
+    /**
+     * @return array
+     */
     private function getDataJqGrid()
     {
         return [

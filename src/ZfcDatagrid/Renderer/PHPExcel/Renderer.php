@@ -18,23 +18,41 @@ use Zend\Http\Response\Stream as ResponseStream;
 use ZfcDatagrid\Column;
 use ZfcDatagrid\Renderer\AbstractExport;
 
+/**
+ * Class Renderer
+ *
+ * @package ZfcDatagrid\Renderer\PHPExcel
+ */
 class Renderer extends AbstractExport
 {
+    /**
+     * @return string
+     */
     public function getName()
     {
         return 'PHPExcel';
     }
 
+    /**
+     * @return bool
+     */
     public function isExport()
     {
         return true;
     }
 
+    /**
+     * @return bool
+     */
     public function isHtml()
     {
         return false;
     }
 
+    /**
+     * @return \Zend\Http\Response\Stream|\Zend\View\Model\ViewModel
+     * @throws \Exception
+     */
     public function execute()
     {
         $options       = $this->getOptions();
@@ -314,6 +332,9 @@ class Renderer extends AbstractExport
      *
      * @param \PHPExcel_Worksheet $sheet
      * @param array               $columns
+     *
+     * @return $this
+     * @throws \Exception
      */
     protected function calculateColumnWidth(\PHPExcel_Worksheet $sheet, array $columns)
     {
@@ -334,12 +355,16 @@ class Renderer extends AbstractExport
             /* @var $column Column\AbstractColumn */
             $column->setWidth($column->getWidth() * $factor);
         }
+
+        return $this;
     }
 
     /**
      * Set the printing options.
      *
      * @param PHPExcel $phpExcel
+     *
+     * @return $this
      */
     protected function setPrinting(PHPExcel $phpExcel)
     {
@@ -390,10 +415,14 @@ class Renderer extends AbstractExport
         }
 
         $phpExcel->setActiveSheetIndex(0);
+
+        return $this;
     }
 
     /**
      * @param \PHPExcel_Worksheet $sheet
+     *
+     * @return $this
      */
     protected function setHeaderFooter(\PHPExcel_Worksheet $sheet)
     {
@@ -401,5 +430,7 @@ class Renderer extends AbstractExport
 
         $sheet->getHeaderFooter()->setOddHeader('&L&16&G ' . $this->translate($this->getTitle()));
         $sheet->getHeaderFooter()->setOddFooter('&R' . $textRight);
+
+        return $this;
     }
 }

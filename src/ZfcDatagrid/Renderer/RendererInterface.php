@@ -4,6 +4,11 @@ namespace ZfcDatagrid\Renderer;
 
 use Zend\View\Model\ViewModel;
 
+/**
+ * Interface RendererInterface
+ *
+ * @package ZfcDatagrid\Renderer
+ */
 interface RendererInterface
 {
     /**

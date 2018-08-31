@@ -2,9 +2,16 @@
 
 namespace ZfcDatagrid\Column\DataPopulation;
 
+/**
+ * Class StaticValue
+ *
+ * @package ZfcDatagrid\Column\DataPopulation
+ */
 class StaticValue implements DataPopulationInterface
 {
-    /** @var mixed */
+    /**
+     * @var mixed
+     */
     private $value;
 
     /**
@@ -16,11 +23,15 @@ class StaticValue implements DataPopulationInterface
     }
 
     /**
-     * @param $value
+     * @param mixed $value
+     *
+     * @return $this
      */
     public function setValue($value)
     {
         $this->value = $value;
+
+        return $this;
     }
 
     /**

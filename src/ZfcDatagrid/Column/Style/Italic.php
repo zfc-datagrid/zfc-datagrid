@@ -2,6 +2,11 @@
 
 namespace ZfcDatagrid\Column\Style;
 
+/**
+ * Class Italic
+ *
+ * @package ZfcDatagrid\Column\Style
+ */
 class Italic extends AbstractStyle
 {
     // no methods (just needed to check for instanceof)

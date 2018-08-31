@@ -7,6 +7,11 @@ use Zend\Db\Sql\Expression;
 use Zend\Paginator\Adapter\DbSelect as PaginatorAdapter;
 use ZfcDatagrid\Column;
 
+/**
+ * Class ZendSelect
+ *
+ * @package ZfcDatagrid\DataSource
+ */
 class ZendSelect extends AbstractDataSource
 {
     /**
@@ -46,6 +51,7 @@ class ZendSelect extends AbstractDataSource
     /**
      * @param $adapterOrSqlObject
      *
+     * @return $this
      * @throws \InvalidArgumentException
      */
     public function setAdapter($adapterOrSqlObject)
@@ -57,6 +63,8 @@ class ZendSelect extends AbstractDataSource
         } else {
             throw new \InvalidArgumentException('Object of "Zend\Db\Sql\Sql" or "Zend\Db\Adapter\Adapter" needed.');
         }
+
+        return $this;
     }
 
     /**
@@ -68,6 +76,7 @@ class ZendSelect extends AbstractDataSource
     }
 
     /**
+     * @return $this
      * @throws \Exception
      */
     public function execute()
@@ -142,5 +151,7 @@ class ZendSelect extends AbstractDataSource
          * Step 4) Pagination
          */
         $this->setPaginatorAdapter(new PaginatorAdapter($select, $this->getAdapter()));
+
+        return $this;
     }
 }

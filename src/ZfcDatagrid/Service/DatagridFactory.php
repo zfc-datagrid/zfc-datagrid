@@ -8,6 +8,11 @@ use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use ZfcDatagrid\Datagrid;
 
+/**
+ * Class DatagridFactory
+ *
+ * @package ZfcDatagrid\Service
+ */
 class DatagridFactory implements FactoryInterface
 {
     /**

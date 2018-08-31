@@ -7,6 +7,11 @@ use Zend\ServiceManager\AbstractPluginManager;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
+/**
+ * Class TableRowFactory
+ *
+ * @package ZfcDatagrid\Renderer\BootstrapTable\View\Helper
+ */
 class TableRowFactory implements FactoryInterface
 {
     /**

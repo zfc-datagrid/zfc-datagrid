@@ -6,6 +6,11 @@ namespace ZfcDatagrid\Column\Type;
 
 use InvalidArgumentException;
 
+/**
+ * Class Image
+ *
+ * @package ZfcDatagrid\Column\Type
+ */
 class Image extends AbstractType
 {
     /**
@@ -32,6 +37,8 @@ class Image extends AbstractType
      * @param string $type
      *
      * @throws InvalidArgumentException
+     *
+     * @return $this
      */
     public function setResizeType($type)
     {
@@ -40,6 +47,8 @@ class Image extends AbstractType
         }
 
         $this->resizeType = $type;
+
+        return $this;
     }
 
     /**
@@ -52,10 +61,14 @@ class Image extends AbstractType
 
     /**
      * @param float $height
+     *
+     * @return $this
      */
     public function setResizeHeight($height)
     {
         $this->resizeHeight = $height;
+
+        return $this;
     }
 
     /**

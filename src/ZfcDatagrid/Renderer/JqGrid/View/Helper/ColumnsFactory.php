@@ -7,6 +7,11 @@ use Zend\ServiceManager\AbstractPluginManager;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
+/**
+ * Class ColumnsFactory
+ *
+ * @package ZfcDatagrid\Renderer\JqGrid\View\Helper
+ */
 class ColumnsFactory implements FactoryInterface
 {
     /**

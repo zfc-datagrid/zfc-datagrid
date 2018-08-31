@@ -5,8 +5,16 @@ namespace ZfcDatagrid\DataSource;
 use Zend\Paginator\Adapter\ArrayAdapter as PaginatorAdapter;
 use ZfcDatagrid\Column;
 
+/**
+ * Class PhpArray
+ *
+ * @package ZfcDatagrid\DataSource
+ */
 class PhpArray extends AbstractDataSource
 {
+    /**
+     * @var array
+     */
     private $data = [];
 
     /**
@@ -35,6 +43,8 @@ class PhpArray extends AbstractDataSource
      * Execute the query and set the paginator
      * - with sort statements
      * - with filters statements.
+     *
+     * @return $this
      */
     public function execute()
     {
@@ -94,6 +104,8 @@ class PhpArray extends AbstractDataSource
          * Step 4) Pagination
          */
         $this->setPaginatorAdapter(new PaginatorAdapter($data));
+
+        return $this;
     }
 
     /**
@@ -136,9 +148,12 @@ class PhpArray extends AbstractDataSource
     }
 
     /**
-     * @see http://php.net/manual/de/function.array-multisort.php Example in comments: array_orderby()
+     * @see    http://php.net/manual/de/function.array-multisort.php Example in comments: array_orderby()
      *
      * @author jimpoz at jimpoz dot com
+     *
+     * @param array $data
+     * @param       $sortConditions
      *
      * @return array
      */

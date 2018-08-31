@@ -2,6 +2,11 @@
 
 namespace ZfcDatagrid\Column\Type;
 
+/**
+ * Class PhpArray
+ *
+ * @package ZfcDatagrid\Column\Type
+ */
 class PhpArray extends AbstractType
 {
     /**
@@ -23,13 +28,17 @@ class PhpArray extends AbstractType
      * Set separator of the string to be used to explode the array.
      *
      * @param string $separator
+     *
+     * @return $this
      */
     public function setSeparator($separator)
     {
         $this->separator = $separator;
+
+        return $this;
     }
 
-    /*
+    /**
      * Get the string separator
      *
      * @return string
@@ -39,6 +48,9 @@ class PhpArray extends AbstractType
         return $this->separator;
     }
 
+    /**
+     * @return string
+     */
     public function getTypeName()
     {
         return 'array';

@@ -4,9 +4,16 @@ namespace ZfcDatagrid\Column\Formatter;
 
 use ZfcDatagrid\Column\AbstractColumn;
 
+/**
+ * Class Email
+ *
+ * @package ZfcDatagrid\Column\Formatter
+ */
 class Email extends AbstractFormatter
 {
-    /** @var array */
+    /**
+     * @var array
+     */
     protected $validRenderers = [
         'jqGrid',
         'bootstrapTable',

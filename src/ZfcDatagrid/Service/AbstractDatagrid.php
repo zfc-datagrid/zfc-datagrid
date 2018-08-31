@@ -8,6 +8,11 @@ use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use ZfcDatagrid\Datagrid;
 
+/**
+ * Class AbstractDatagrid
+ *
+ * @package ZfcDatagrid\Service
+ */
 abstract class AbstractDatagrid extends Datagrid implements FactoryInterface
 {
     /**
@@ -62,5 +67,8 @@ abstract class AbstractDatagrid extends Datagrid implements FactoryInterface
         parent::render();
     }
 
+    /**
+     * @return mixed
+     */
     abstract public function initGrid();
 }

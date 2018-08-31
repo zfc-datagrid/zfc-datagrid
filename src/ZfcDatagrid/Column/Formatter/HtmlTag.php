@@ -4,8 +4,16 @@ namespace ZfcDatagrid\Column\Formatter;
 
 use ZfcDatagrid\Column\AbstractColumn;
 
+/**
+ * Class HtmlTag
+ *
+ * @package ZfcDatagrid\Column\Formatter
+ */
 class HtmlTag extends AbstractFormatter
 {
+    /**
+     * Row ID placeholder.
+     */
     const ROW_ID_PLACEHOLDER = ':rowId:';
 
     /**
@@ -33,10 +41,14 @@ class HtmlTag extends AbstractFormatter
 
     /**
      * @param $name
+     *
+     * @return $This
      */
     public function setName($name)
     {
         $this->name = $name;
+
+        return $this;
     }
 
     /**
@@ -52,10 +64,14 @@ class HtmlTag extends AbstractFormatter
      *
      * @param string $name
      * @param string $value
+     *
+     * @return $this
      */
     public function setAttribute($name, $value)
     {
         $this->attributes[$name] = (string) $value;
+
+        return $this;
     }
 
     /**
@@ -78,12 +94,16 @@ class HtmlTag extends AbstractFormatter
      * Removes an HTML attribute.
      *
      * @param string $name
+     *
+     * @return $this
      */
     public function removeAttribute($name)
     {
         if (isset($this->attributes[$name])) {
             unset($this->attributes[$name]);
         }
+
+        return $this;
     }
 
     /**
@@ -100,10 +120,14 @@ class HtmlTag extends AbstractFormatter
      * Set the link.
      *
      * @param string $href
+     *
+     * @return $this
      */
     public function setLink($href)
     {
         $this->setAttribute('href', $href);
+
+        return $this;
     }
 
     /**

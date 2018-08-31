@@ -9,18 +9,32 @@ use Zend\Http\Response\Stream as ResponseStream;
 use ZfcDatagrid\Column\Type;
 use ZfcDatagrid\Renderer\AbstractExport;
 
+/**
+ * Class Renderer
+ *
+ * @package ZfcDatagrid\Renderer\Csv
+ */
 class Renderer extends AbstractExport
 {
+    /**
+     * @return string
+     */
     public function getName()
     {
         return 'csv';
     }
 
+    /**
+     * @return bool
+     */
     public function isExport()
     {
         return true;
     }
 
+    /**
+     * @return bool
+     */
     public function isHtml()
     {
         return false;
@@ -28,6 +42,7 @@ class Renderer extends AbstractExport
 
     /**
      * @return \Zend\View\Model\ViewModel
+     * @throws \Exception
      */
     public function execute()
     {

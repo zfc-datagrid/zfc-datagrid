@@ -4,6 +4,11 @@ namespace ZfcDatagrid\Column\Formatter;
 
 use ZfcDatagrid\Column\AbstractColumn;
 
+/**
+ * Class FileSize
+ *
+ * @package ZfcDatagrid\Column\Formatter
+ */
 class FileSize extends AbstractFormatter
 {
     /**
@@ -13,7 +18,9 @@ class FileSize extends AbstractFormatter
      */
     protected $validRenderers = [];
 
-    /** @var array */
+    /**
+     * @var array
+     */
     protected static $prefixes = [
         '',
         'K',
@@ -38,6 +45,10 @@ class FileSize extends AbstractFormatter
      * The value should be in bytes.
      *
      * @see \ZfcDatagrid\Column\Formatter\AbstractFormatter::getFormattedValue()
+     *
+     * @param \ZfcDatagrid\Column\AbstractColumn $column
+     *
+     * @return float|int|string
      */
     public function getFormattedValue(AbstractColumn $column)
     {

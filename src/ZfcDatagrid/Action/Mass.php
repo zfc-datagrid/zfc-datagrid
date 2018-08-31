@@ -2,6 +2,11 @@
 
 namespace ZfcDatagrid\Action;
 
+/**
+ * Class Mass
+ *
+ * @package ZfcDatagrid\Action
+ */
 class Mass
 {
     /**
@@ -33,10 +38,14 @@ class Mass
 
     /**
      * @param string $title
+     *
+     * @return $this
      */
     public function setTitle($title)
     {
         $this->title = $title;
+
+        return $this;
     }
 
     /**
@@ -49,10 +58,14 @@ class Mass
 
     /**
      * @param string $link
+     *
+     * @return $this
      */
     public function setLink($link)
     {
         $this->link = $link;
+
+        return $this;
     }
 
     /**
@@ -65,10 +78,14 @@ class Mass
 
     /**
      * @param bool $mode
+     *
+     * @return $this
      */
     public function setConfirm($mode = true)
     {
-        $this->confirm = (bool) $mode;
+        $this->confirm = (bool)$mode;
+
+        return $this;
     }
 
     /**

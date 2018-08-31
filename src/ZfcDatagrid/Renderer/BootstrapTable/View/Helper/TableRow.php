@@ -17,7 +17,7 @@ class TableRow extends AbstractHelper
     /**
      * @param false|null|\Zend\I18n\Translator\Translator $translator
      *
-     * @return self
+     * @return $this
      */
     public function setTranslator($translator)
     {
