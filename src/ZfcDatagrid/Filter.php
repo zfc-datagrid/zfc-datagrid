@@ -100,12 +100,12 @@ class Filter
     private $operator = self::LIKE;
 
     /**
-     * @var
+     * @var mixed
      */
     private $value;
 
     /**
-     * @var
+     * @var string|null
      */
     private $displayColumnValue;
 

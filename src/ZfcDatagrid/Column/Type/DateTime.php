@@ -21,43 +21,43 @@ class DateTime extends AbstractType
     protected $daterangePickerEnabled = false;
 
     /**
-     * @var mixed
+     * @var string|null
      */
     protected $sourceDateTimeFormat;
 
     /**
-     * @var mixed
+     * @var int|null
      */
     protected $outputDateType;
 
     /**
-     * @var mixed
+     * @var int|null
      */
     protected $outputTimeType;
 
     /**
      * Locale to use instead of the default.
      *
-     * @var string
+     * @var string|null
      */
     protected $locale;
 
     /**
      * Timezone to use.
      *
-     * @var string
+     * @var string|null
      */
     protected $sourceTimezone;
 
     /**
      * Timezone to use.
      *
-     * @var string
+     * @var string|null
      */
     protected $outputTimezone;
 
     /**
-     * @var
+     * @var string|null
      */
     protected $outputPattern;
 
@@ -129,7 +129,7 @@ class DateTime extends AbstractType
     }
 
     /**
-     * @return mixed
+     * @return string|null
      */
     public function getSourceDateTimeFormat()
     {
@@ -149,7 +149,7 @@ class DateTime extends AbstractType
     }
 
     /**
-     * @return mixed
+     * @return int|null
      */
     public function getOutputDateType()
     {
@@ -169,7 +169,7 @@ class DateTime extends AbstractType
     }
 
     /**
-     * @return mixed
+     * @return int|null
      */
     public function getOutputTimeType()
     {
@@ -247,7 +247,7 @@ class DateTime extends AbstractType
     /**
      * ATTENTION: IntlDateTimeFormatter FORMAT!
      *
-     * @param string $pattern
+     * @param string|null $pattern
      *
      * @return $this
      */
@@ -259,7 +259,7 @@ class DateTime extends AbstractType
     }
 
     /**
-     * @return mixed
+     * @return string|null
      */
     public function getOutputPattern()
     {

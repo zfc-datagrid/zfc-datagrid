@@ -552,7 +552,7 @@ abstract class AbstractColumn
     /**
      * @param mixed $value
      *
-     * @return \ZfcDatagrid\Column\AbstractColumn
+     * @return $this
      */
     public function setFilterActive($value = '')
     {
@@ -727,7 +727,7 @@ abstract class AbstractColumn
      *
      * @param AbstractFormatter $formatter
      *
-     * @return \ZfcDatagrid\Column\AbstractColumn
+     * @return $this
      */
     public function addFormatter(AbstractFormatter $formatter)
     {

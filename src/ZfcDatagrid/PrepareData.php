@@ -27,7 +27,7 @@ class PrepareData
     private $dataPrepared;
 
     /**
-     * @var
+     * @var string|null
      */
     private $rendererName;
 
