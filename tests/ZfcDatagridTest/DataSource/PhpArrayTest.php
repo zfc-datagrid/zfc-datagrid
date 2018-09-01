@@ -89,4 +89,26 @@ class PhpArrayTest extends DataSourceTestCase
         $this->assertEquals(6, $data[3]['edition']);
         $this->assertEquals(1, $data[4]['edition']);
     }
+
+    /**
+     * @throws \ReflectionException
+     */
+    public function testSortArrayMultiple()
+    {
+        $source = clone $this->source;
+
+        $reflectionMethod = new \ReflectionMethod($source, 'sortArrayMultiple');
+        $reflectionMethod->setAccessible(true);
+
+        // Run the method without sort conditions.
+        $result = $reflectionMethod->invoke($source, $source->getData(), []);
+        $this->assertNotEmpty($result);
+        $this->assertTrue(is_array($result));
+
+        // Run the method with empty dataset.
+        $source->addSortCondition($this->colVolumne);
+        $result = $reflectionMethod->invoke($source, [], []);
+        $this->assertEmpty($result);
+        $this->assertTrue(is_array($result));
+    }
 }
