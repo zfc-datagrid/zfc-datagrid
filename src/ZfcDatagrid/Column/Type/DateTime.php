@@ -10,6 +10,11 @@ use ZfcDatagrid\Filter;
 
 class DateTime extends AbstractType
 {
+    /**
+     * @var string
+     */
+    protected $filterDefaultOperation = Filter::GREATER_EQUAL;
+
     protected $daterangePickerEnabled = false;
 
     protected $sourceDateTimeFormat;
@@ -173,11 +178,6 @@ class DateTime extends AbstractType
     public function getOutputPattern()
     {
         return $this->outputPattern;
-    }
-
-    public function getFilterDefaultOperation()
-    {
-        return Filter::GREATER_EQUAL;
     }
 
     /**
