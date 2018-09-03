@@ -10,4 +10,19 @@ interface TypeInterface
      * @return string
      */
     public function getTypeName();
+
+    /**
+     * the default filter operation.
+     *
+     * @return string
+     */
+    public function getFilterDefaultOperation();
+
+    /**
+     * @param string $operator
+     *
+     * @return $this
+     * @throws \Exception
+     */
+    public function setFilterDefaultOperation($operator);
 }

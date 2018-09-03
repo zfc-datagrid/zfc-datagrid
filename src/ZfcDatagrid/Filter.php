@@ -56,6 +56,29 @@ class Filter
     const BETWEEN = '%s <> %s';
 
     /**
+     * List of all available operations
+     *
+     * @var array
+     */
+    const AVAILABLE_OPERATORS = [
+        self::LIKE,
+        self::LIKE_LEFT,
+        self::LIKE_RIGHT,
+        self::NOT_LIKE,
+        self::NOT_LIKE_LEFT,
+        self::NOT_LIKE_RIGHT,
+        self::EQUAL,
+        self::NOT_EQUAL,
+        self::GREATER_EQUAL,
+        self::GREATER,
+        self::LESS_EQUAL,
+        self::LESS,
+        self::IN,
+        self::NOT_IN,
+        self::BETWEEN,
+    ];
+
+    /**
      * @var Column\AbstractColumn
      */
     private $column;
