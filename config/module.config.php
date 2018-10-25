@@ -3,8 +3,8 @@
 use ZfcDatagrid\Datagrid;
 use ZfcDatagrid\Renderer;
 use ZfcDatagrid\Service;
-use ZfcDatagrid\Middleware;
-use Zend\ServiceManager\Factory\InvokableFactory;
+use Zend\Cache\Storage;
+use ZfcDatagrid\Middleware;use Zend\ServiceManager\Factory\InvokableFactory;
 
 return [
     'ZfcDatagrid' => [
@@ -45,11 +45,7 @@ return [
         'cache' => [
 
             'adapter' => [
-                'name'    => 'Filesystem',
-                'options' => [
-                    'ttl'       => 720000, // cache with 200 hours,
-                    'cache_dir' => 'data/ZfcDatagrid',
-                ],
+                'name'    => Storage\Adapter\Filesystem::class,
             ],
             'plugins' => [
                 'exception_handler' => [

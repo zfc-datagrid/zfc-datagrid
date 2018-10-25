@@ -11,6 +11,8 @@ abstract class AbstractColumn
 
     protected $uniqueId;
 
+    protected $position;
+
     /**
      * @var Type\AbstractType
      */
@@ -92,6 +94,25 @@ abstract class AbstractColumn
     public function getUniqueId()
     {
         return $this->uniqueId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPosition()
+    {
+        return $this->position;
+    }
+
+    /**
+     * @param mixed $position
+     * @return AbstractColumn
+     */
+    public function setPosition($position)
+    {
+        $this->position = $position;
+
+        return $this;
     }
 
     /**
