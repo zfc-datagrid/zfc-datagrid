@@ -655,7 +655,6 @@ class Datagrid
      * Set multiple columns by array (willoverwrite all existing).
      *
      * @param array $columns
-     */
     public function setColumns(array $columns)
     {
         $useColumns = [];
@@ -676,7 +675,46 @@ class Datagrid
     public function addColumn($col)
     {
         $col = $this->createColumn($col);
+
+        if (!$col->getPosition()) {
+            $col->setPosition(1000);
+        }
+
         $this->columns[$col->getUniqueId()] = $col;
+
+        $first = false;
+        foreach ($this->columns as $column) {
+            if ($first != true)
+            {
+                $first = true;
+                continue;
+            }
+
+            if ($col->getPosition() < $column->getPosition() && $col->getUniqueId() != $column->getUniqueId()) {
+                $this->columns = $this->swapColumns($col, $column, $this->columns);
+                return;
+            }
+        }
+    }
+
+    public function swapColumns($column1, $column2, $array) {
+        $newArray = array ();
+        foreach ($array as $key => $value) {
+            if ($key == $column1->getUniqueId() && !isset($newArray[$column1->getUniqueId()])) {
+                $newArray[$column2->getUniqueId()] = $array[$column2->getUniqueId()];
+                $newArray[$column1->getUniqueId()] = $array[$column1->getUniqueId()];
+            } elseif ($key == $column2->getUniqueId() && !isset($newArray[$column2->getUniqueId()])) {
+                $newArray[$column1->getUniqueId()] = $array[$column1->getUniqueId()];
+                $newArray[$column2->getUniqueId()] = $array[$column2->getUniqueId()];
+            } else {
+                if (count($newArray) < count($array)) {
+                    $newArray[$key] = $value;
+                } else {
+                    return $newArray;
+                }
+            }
+        }
+        return $newArray;
     }
 
     /**
