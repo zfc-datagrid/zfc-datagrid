@@ -107,6 +107,11 @@ class Datagrid
     protected $columns = [];
 
     /**
+     * @var array
+     */
+    protected $positions = [];
+
+    /**
      * @var Style\AbstractStyle[]
      */
     protected $rowStyles = [];
@@ -682,39 +687,19 @@ class Datagrid
 
         $this->columns[$col->getUniqueId()] = $col;
 
-        $first = false;
-        foreach ($this->columns as $column) {
-            if ($first != true)
-            {
-                $first = true;
-                continue;
-            }
-
-            if ($col->getPosition() < $column->getPosition() && $col->getUniqueId() != $column->getUniqueId()) {
-                $this->columns = $this->swapColumns($col, $column, $this->columns);
-                return;
-            }
-        }
+        $this->positions[$col->getPosition()][] = $col;
     }
 
-    public function swapColumns($column1, $column2, $array) {
-        $newArray = array ();
-        foreach ($array as $key => $value) {
-            if ($key == $column1->getUniqueId() && !isset($newArray[$column1->getUniqueId()])) {
-                $newArray[$column2->getUniqueId()] = $array[$column2->getUniqueId()];
-                $newArray[$column1->getUniqueId()] = $array[$column1->getUniqueId()];
-            } elseif ($key == $column2->getUniqueId() && !isset($newArray[$column2->getUniqueId()])) {
-                $newArray[$column1->getUniqueId()] = $array[$column1->getUniqueId()];
-                $newArray[$column2->getUniqueId()] = $array[$column2->getUniqueId()];
-            } else {
-                if (count($newArray) < count($array)) {
-                    $newArray[$key] = $value;
-                } else {
-                    return $newArray;
-                }
-            }
+    public function sortColumns()
+    {
+        ksort($this->positions);
+
+        $columns = [];
+        foreach ($this->positions as $position => $column) {
+            $columns[$column[0]->getUniqueId()] = $column[0];
         }
-        return $newArray;
+
+        $this->columns = $columns;
     }
 
     /**
@@ -947,6 +932,9 @@ class Datagrid
         if ($this->hasDataSource() === false) {
             throw new \Exception('No datasource defined! Please call "setDataSource()" first"');
         }
+
+        // @todo Посортувати колонки і переприсвоїти $this->columns
+        $this->sortColumns();
 
         /**
          * Apply cache.
