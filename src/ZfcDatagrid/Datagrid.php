@@ -687,7 +687,7 @@ class Datagrid
 
         $this->columns[$col->getUniqueId()] = $col;
 
-        $this->positions[$col->getPosition()][] = $col;
+        $this->positions[$col->getPosition()][$col->getUniqueId()] = $col;
     }
 
     public function sortColumns()
@@ -696,7 +696,7 @@ class Datagrid
 
         $columns = [];
         foreach ($this->positions as $position => $column) {
-            $columns[$column[0]->getUniqueId()] = $column[0];
+            $columns += $column;
         }
 
         $this->columns = $columns;
@@ -933,7 +933,6 @@ class Datagrid
             throw new \Exception('No datasource defined! Please call "setDataSource()" first"');
         }
 
-        // @todo Посортувати колонки і переприсвоїти $this->columns
         $this->sortColumns();
 
         /**
