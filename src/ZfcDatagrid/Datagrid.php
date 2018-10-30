@@ -660,6 +660,7 @@ class Datagrid
      * Set multiple columns by array (willoverwrite all existing).
      *
      * @param array $columns
+     */
     public function setColumns(array $columns)
     {
         $useColumns = [];
