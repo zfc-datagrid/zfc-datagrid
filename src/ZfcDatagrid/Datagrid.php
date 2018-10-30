@@ -686,10 +686,12 @@ class Datagrid
         }
 
         $this->columns[$col->getUniqueId()] = $col;
-
         $this->positions[$col->getPosition()][$col->getUniqueId()] = $col;
     }
 
+    /**
+     * @return \ZfcDatagrid\Column\AbstractColumn[]
+     */
     public function sortColumns()
     {
         ksort($this->positions);
@@ -699,7 +701,7 @@ class Datagrid
             $columns += $column;
         }
 
-        $this->columns = $columns;
+        return $this->columns = $columns;
     }
 
     /**
