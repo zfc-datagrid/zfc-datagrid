@@ -22,6 +22,8 @@ use ZfcDatagrid\Column\Style;
 
 class Datagrid
 {
+    const DEFAULT_POSITION = 1;
+    
     /**
      * @var array
      */
@@ -105,6 +107,11 @@ class Datagrid
      * @var array
      */
     protected $columns = [];
+
+    /**
+     * @var array
+     */
+    protected $positions = [];
 
     /**
      * @var Style\AbstractStyle[]
@@ -676,7 +683,28 @@ class Datagrid
     public function addColumn($col)
     {
         $col = $this->createColumn($col);
+
+        if (null === $col->getPosition()) {
+            $col->setPosition(self::DEFAULT_POSITION);
+        }
+
         $this->columns[$col->getUniqueId()] = $col;
+        $this->positions[$col->getPosition()][$col->getUniqueId()] = $col;
+    }
+
+    /**
+     * @return \ZfcDatagrid\Column\AbstractColumn[]
+     */
+    public function sortColumns()
+    {
+        ksort($this->positions);
+
+        $columns = [];
+        foreach ($this->positions as $position => $column) {
+            $columns += $column;
+        }
+
+        return $this->columns = $columns;
     }
 
     /**
@@ -909,6 +937,8 @@ class Datagrid
         if ($this->hasDataSource() === false) {
             throw new \Exception('No datasource defined! Please call "setDataSource()" first"');
         }
+
+        $this->sortColumns();
 
         /**
          * Apply cache.
