@@ -684,7 +684,7 @@ class Datagrid
     {
         $col = $this->createColumn($col);
 
-        if (!$col->getPosition()) {
+        if (null === $col->getPosition()) {
             $col->setPosition(self::DEFAULT_POSITION);
         }
 
