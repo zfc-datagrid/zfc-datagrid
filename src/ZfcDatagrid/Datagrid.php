@@ -22,6 +22,8 @@ use ZfcDatagrid\Column\Style;
 
 class Datagrid
 {
+    const DEFAULT_POSITION = 1;
+    
     /**
      * @var array
      */
@@ -683,7 +685,7 @@ class Datagrid
         $col = $this->createColumn($col);
 
         if (!$col->getPosition()) {
-            $col->setPosition(1000);
+            $col->setPosition(self::DEFAULT_POSITION);
         }
 
         $this->columns[$col->getUniqueId()] = $col;
