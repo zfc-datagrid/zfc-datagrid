@@ -4,9 +4,9 @@ Welcome to the official ZfcDatagrid documentation. This documentation will help 
 
 If you are looking for some information that is not listed in the documentation, please open an issue!
 
-1. [Introduction](/docs/01. Introduction.md)
-   1. [What is ZfcDatagrid?](01. Introduction.md#what-is-zfcdatagrid)
-   2. [Features of ZfcDatagrid](01. Introduction.md#Features-of-zfcdatagrid)
+1. [Introduction](../docs/01. Introduction.md)
+   1. [What is ZfcDatagrid?](/01. Introduction.md#what-is-zfcdatagrid)
+   2. [Features of ZfcDatagrid](./01. Introduction.md#Features-of-zfcdatagrid)
 
 2. [Quick Start](/docs/02. Quick Start.md)
    1. [Requirements](/docs/02. Quick Start.md#requirements)
