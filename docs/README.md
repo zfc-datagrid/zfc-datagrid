@@ -4,19 +4,19 @@ Welcome to the official ZfcDatagrid documentation. This documentation will help 
 
 If you are looking for some information that is not listed in the documentation, please open an issue!
 
-1. [Introduction](../docs/01.%20Introduction.md)
-   1. [What is ZfcDatagrid?](/01.%20Introduction.md#what-is-zfcdatagrid)
-   2. [Features of ZfcDatagrid](./01.%20Introduction.md#Features-of-zfcdatagrid)
+1. [Introduction](/docs/01.%20Introduction.md)
+   1. [What is ZfcDatagrid?](/docs/01.%20Introduction.md#what-is-zfcdatagrid)
+   2. [Features of ZfcDatagrid](/docs/01.%20Introduction.md#Features-of-zfcdatagrid)
 
-2. [Quick Start](02.%20Quick%20Start.md)
-   1. [Requirements](/docs/02. Quick Start.md#requirements)
-   2. [Installation](/docs/02. Quick Start.md#installation)
-   3. [Configuration](/docs/02. Quick Start.md#configuration)
-   4. [Basic Example](/docs/02. Quick Start.md#basic-example)
+2. [Quick Start](/docs/02.%20Quick%20Start.md)
+   1. [Requirements](/docs/02.%20Quick%20Start.md#requirements)
+   2. [Installation](/docs/02.%20Quick%20Start.md#installation)
+   3. [Configuration](/docs/02.%20Quick%20Start.md#configuration)
+   4. [Basic Example](/docs/02.%20Quick%20Start.md#basic-example)
 
-3. [Columns](/docs/03. Columns.md)
-  1. [Columns Introduction](/docs/03. Columns.md#columns-introduction)
-  2. [Column Types](/docs/03. Columns.md#column-types)
+3. [Columns](/docs/03.%20Columns.md)
+  1. [Columns Introduction](/docs/03.%20Columns.md#columns-introduction)
+  2. [Column Types](/docs/03.%20Columns.md#column-types)
     * Select
     * Action
         * Button
@@ -25,13 +25,13 @@ If you are looking for some information that is not listed in the documentation,
         * Actions Options
     * ExternalData
     * Columns Options
-  3. [Column Data Types](/docs/03. Columns.md#column-data-types)
+  3. [Column Data Types](/docs/03.%20Columns.md#column-data-types)
     * PhpString
     * DateTime
     * Image
     * Number
     * PhpArray
-  4. [Column Data Styles](/docs/03. Columns.md#column-data-styles)
+  4. [Column Data Styles](/docs/03.%20Columns.md#column-data-styles)
     * Background color
     * Bold
     * Color
@@ -39,21 +39,21 @@ If you are looking for some information that is not listed in the documentation,
     * Align
     * Strikethrough
     * Applying Style
-  5. [Column Data Formatters](/docs/03. Columns.md#column-data-formatters)
+  5. [Column Data Formatters](/docs/03.%20Columns.md#column-data-formatters)
     * Email
     * File Size
     * Image Formatter
     * Link
 
-4. [Filtering](/docs/04. Filtering.md)
+4. [Filtering](/docs/04.%20Filtering.md)
 
-5. [Toolbar and Custom Filtering](/docs/05. Toolbar and Custom Filtering.md)
-   1. [Introduction](/docs/05. Toolbar and Custom Filtering.md#introduction)
-   2. [Use Custome Toolbar](/docs/05. Toolbar and Custom Filtering.md#use-custome-toolbar)
-   3. [Toolbar Variables](/docs/05. Toolbar and Custom Filtering.md#toolbar-variables)
-   4. [Custome Toolbar Example](/docs/05. Toolbar and Custom Filtering.md#custome-toolbar-example)
-   5. [Custome Filtering](/docs/05. Toolbar and Custom Filtering.md#custome-filtering)
+5. [Toolbar and Custom Filtering](/docs/05.%20Toolbar%20and%20Custom%20Filtering.md)
+   1. [Introduction](/docs/05.%20Toolbar%20and%20Custom%20Filtering.md#introduction)
+   2. [Use Custome Toolbar](/docs/05.%20Toolbar%20and%20Custom%20Filtering.md#use-custome-toolbar)
+   3. [Toolbar Variables](/docs/05.%20Toolbar%20and%20Custom%20Filtering.md#toolbar-variables)
+   4. [Custome Toolbar Example](/docs/05.%20Toolbar%20and%20Custom%20Filtering.md#custome-toolbar-example)
+   5. [Custome Filtering](/docs/05.%20Toolbar%20and%20Custom%20Filtering.md#custome-filtering)
 
-6. [Exporting](/docs/06. Exporting.md)
+6. [Exporting](/docs/06.%20Exporting.md)
 
-7. [Other Usage](/docs/07. Other Usage.md)
+7. [Other Usage](/docs/07.%20Other%20Usage.md)
