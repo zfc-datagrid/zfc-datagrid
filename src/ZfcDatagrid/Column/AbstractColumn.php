@@ -38,7 +38,7 @@ abstract class AbstractColumn
     protected $filterDefaultOperation = null;
 
     /**
-     * @var null array
+     * @var null|array
      */
     protected $filterSelectOptions;
 

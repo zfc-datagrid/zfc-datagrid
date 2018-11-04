@@ -2,7 +2,7 @@
 
 namespace ZfcDatagrid\Renderer;
 
-use Doctrine\Common\Proxy\Exception\InvalidArgumentException;
+use InvalidArgumentException;
 use Zend\Cache;
 use Zend\I18n\Translator\Translator;
 use Zend\Mvc\MvcEvent;
@@ -49,17 +49,17 @@ abstract class AbstractRenderer implements RendererInterface
     protected $rowStyles = [];
 
     /**
-     * @var array
+     * @var array|null
      */
     protected $sortConditions = null;
 
     /**
-     * @var Filter[]
+     * @var Filter[]|null
      */
     protected $filters = null;
 
     /**
-     * @var int
+     * @var int|null
      */
     protected $currentPageNumber = null;
 
@@ -402,7 +402,7 @@ abstract class AbstractRenderer implements RendererInterface
      */
     public function setTranslator($translator)
     {
-        if (! $translator instanceof Translator && ! $translator instanceof \Zend\I18n\Translator\TranslatorInterface) {
+        if (! $translator instanceof \Zend\I18n\Translator\TranslatorInterface) {
             throw new \InvalidArgumentException(
                 'Translator must be an instanceof ' .
                 '"Zend\I18n\Translator\Translator" or "Zend\I18n\Translator\TranslatorInterface"'

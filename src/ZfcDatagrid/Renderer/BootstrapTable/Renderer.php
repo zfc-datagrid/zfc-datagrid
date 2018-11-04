@@ -81,7 +81,7 @@ class Renderer extends AbstractRenderer
             $sortColumns = explode(',', $sortColumns);
             $sortDirections = explode(',', $sortDirections);
 
-            if (count($sortColumns) != count($sortDirections)) {
+            if (count($sortColumns) !== count($sortDirections)) {
                 throw new \Exception('Count missmatch order columns/direction');
             }
 
