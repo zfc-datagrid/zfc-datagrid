@@ -2,7 +2,7 @@
 
 namespace ZfcDatagrid;
 
-use Zend\I18n\Translator\Translator;
+use Zend\I18n\Translator\TranslatorInterface;
 
 class PrepareData
 {
@@ -24,7 +24,7 @@ class PrepareData
     private $rendererName;
 
     /**
-     * @var Translator
+     * @var TranslatorInterface|null
      */
     private $translator;
 
@@ -95,18 +95,12 @@ class PrepareData
     }
 
     /**
-     * @param Translator $translator
+     * @param TranslatorInterface $translator
      *
      * @throws \InvalidArgumentException
      */
-    public function setTranslator($translator)
+    public function setTranslator(TranslatorInterface $translator)
     {
-        if (! $translator instanceof \Zend\I18n\Translator\TranslatorInterface) {
-            throw new \InvalidArgumentException(
-                'Translator must be an instanceof "Zend\I18n\Translator\TranslatorInterface"'
-            );
-        }
-
         $this->translator = $translator;
     }
 

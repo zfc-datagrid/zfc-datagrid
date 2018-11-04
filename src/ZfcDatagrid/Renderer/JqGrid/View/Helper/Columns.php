@@ -12,7 +12,7 @@ use ZfcDatagrid\Filter;
  */
 class Columns extends AbstractHelper
 {
-    /** @var \Zend\I18n\Translator\Translator|null|false */
+    /** @var \Zend\I18n\Translator\TranslatorInterface|null */
     private $translator;
 
     const STYLE_BOLD = 'cellvalue = \'<span style="font-weight: bold;">\' + cellvalue + \'</span>\';';
@@ -23,7 +23,7 @@ class Columns extends AbstractHelper
         'cellvalue = \'<span style="text-decoration: line-through;">\' + cellvalue + \'</span>\';';
 
     /**
-     * @param false|null|\Zend\I18n\Translator\Translator $translator
+     * @param null|\Zend\I18n\Translator\TranslatorInterface $translator
      *
      * @return self
      */
