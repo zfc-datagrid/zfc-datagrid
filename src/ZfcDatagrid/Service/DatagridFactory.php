@@ -1,7 +1,7 @@
 <?php
 namespace ZfcDatagrid\Service;
 
-use Doctrine\Common\Proxy\Exception\InvalidArgumentException;
+use InvalidArgumentException;
 use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\Factory\FactoryInterface;
 use ZfcDatagrid\Datagrid;

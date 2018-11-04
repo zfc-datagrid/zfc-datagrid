@@ -10,11 +10,11 @@ use ZfcDatagrid\Column\Action\AbstractAction;
  */
 class TableRow extends AbstractHelper
 {
-    /** @var \Zend\I18n\Translator\Translator|null|false */
+    /** @var \Zend\I18n\Translator\TranslatorInterface|null */
     private $translator;
 
     /**
-     * @param false|null|\Zend\I18n\Translator\Translator $translator
+     * @param null|\Zend\I18n\Translator\TranslatorInterface $translator
      *
      * @return self
      */

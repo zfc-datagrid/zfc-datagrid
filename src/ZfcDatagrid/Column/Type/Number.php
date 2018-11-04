@@ -8,6 +8,11 @@ use ZfcDatagrid\Filter;
 class Number extends AbstractType
 {
     /**
+     * @var string
+     */
+    protected $filterDefaultOperation = Filter::EQUAL;
+
+    /**
      * Locale to use instead of the default.
      *
      * @var string
@@ -141,11 +146,6 @@ class Number extends AbstractType
     public function getPattern()
     {
         return $this->pattern;
-    }
-
-    public function getFilterDefaultOperation()
-    {
-        return Filter::EQUAL;
     }
 
     /**

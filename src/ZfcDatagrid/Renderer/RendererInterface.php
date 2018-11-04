@@ -1,6 +1,7 @@
 <?php
 namespace ZfcDatagrid\Renderer;
 
+use Zend\Http\Response;
 use Zend\View\Model\ViewModel;
 
 interface RendererInterface
@@ -41,7 +42,7 @@ interface RendererInterface
     /**
      * Execute all...
      *
-     * @return ViewModel Response\Stream
+     * @return ViewModel|Response\Stream
      */
     public function execute();
 }

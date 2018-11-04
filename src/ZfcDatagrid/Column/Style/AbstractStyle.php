@@ -67,11 +67,7 @@ abstract class AbstractStyle
      */
     public function hasByValues()
     {
-        if (count($this->byValues) > 0) {
-            return true;
-        }
-
-        return false;
+        return !empty($this->byValues);
     }
 
     /**
@@ -81,7 +77,7 @@ abstract class AbstractStyle
      */
     public function isApply(array $row)
     {
-        if ($this->hasByValues() === false) {
+        if (false === $this->hasByValues()) {
             return true;
         }
 

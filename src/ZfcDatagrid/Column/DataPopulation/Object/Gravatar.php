@@ -23,7 +23,6 @@ class Gravatar implements ObjectAwareInterface
 
             default:
                 throw new \InvalidArgumentException('Not allowed parameter: ' . $name);
-                break;
         }
     }
 

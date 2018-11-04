@@ -190,9 +190,7 @@ abstract class AbstractAction
      */
     public function removeAttribute($name)
     {
-        if (isset($this->htmlAttributes[$name])) {
-            unset($this->htmlAttributes[$name]);
-        }
+        unset($this->htmlAttributes[$name]);
     }
 
     /**
@@ -315,11 +313,7 @@ abstract class AbstractAction
      */
     public function hasShowOnValues()
     {
-        if (count($this->showOnValues) > 0) {
-            return true;
-        }
-
-        return false;
+        return !empty($this->showOnValues);
     }
 
     /**

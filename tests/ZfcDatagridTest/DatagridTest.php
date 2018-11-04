@@ -4,6 +4,7 @@ namespace ZfcDatagridTest;
 use Exception;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use Throwable;
 use Zend\Http\PhpEnvironment\Request;
 use Zend\I18n\Translator\Translator;
 use Zend\Mvc\MvcEvent;
@@ -300,11 +301,14 @@ class DatagridTest extends TestCase
         $this->assertEquals(null, $this->grid->getColumnByUniqueId('notAvailable'));
     }
 
+    /**
+     * @requires PHP 7.0
+     */
     public function testAddColumnInvalidArgumentException()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(Throwable::class);
         $this->expectExceptionMessage(
-            'createColumn() supports only a config array or instanceof Column\AbstractColumn as a parameter'
+            'Argument 1 passed to ZfcDatagrid\Datagrid::createColumn() must be of the type array'
         );
         $grid = new Datagrid();
 
@@ -651,5 +655,52 @@ class DatagridTest extends TestCase
         $grid   = new Datagrid();
         $grid->setRouter($router);
         $this->assertSame($router, $grid->getRouter());
+    }
+
+    public function testColumnsPositions()
+    {
+        $grid = new Datagrid();
+
+        $grid->addColumn([
+            'select' => [
+                'column' => 'myCol1',
+                'table'  => 'myTable',
+            ],
+        ]);
+        $grid->addColumn([
+            'select' => [
+                'column' => 'myCol2',
+                'table'  => 'myTable',
+            ],
+            'position' => 5,
+        ]);
+        $grid->addColumn([
+            'select' => [
+                'column' => 'myCol3',
+                'table'  => 'myTable',
+            ],
+        ]);
+        $grid->addColumn([
+            'select' => [
+                'column' => 'myCol4',
+                'table'  => 'myTable',
+            ],
+            'position' => 2,
+        ]);
+        $grid->addColumn([
+            'select' => [
+                'column' => 'myCol5',
+                'table'  => 'myTable',
+            ],
+            'position' => 10,
+        ]);
+
+        $gridColumns = $grid->sortColumns();
+
+        $this->assertEquals(array_search('myTable_myCol1', array_keys($gridColumns)), 0);
+        $this->assertEquals(array_search('myTable_myCol3', array_keys($gridColumns)), 1);
+        $this->assertEquals(array_search('myTable_myCol4', array_keys($gridColumns)), 2);
+        $this->assertEquals(array_search('myTable_myCol2', array_keys($gridColumns)), 3);
+        $this->assertEquals(array_search('myTable_myCol5', array_keys($gridColumns)), 4);
     }
 }

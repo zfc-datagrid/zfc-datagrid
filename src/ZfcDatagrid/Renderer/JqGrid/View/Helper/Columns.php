@@ -11,7 +11,7 @@ use ZfcDatagrid\Filter;
  */
 class Columns extends AbstractHelper
 {
-    /** @var \Zend\I18n\Translator\Translator|null|false */
+    /** @var \Zend\I18n\Translator\TranslatorInterface|null */
     private $translator;
 
     const STYLE_BOLD = 'cellvalue = \'<span style="font-weight: bold;">\' + cellvalue + \'</span>\';';
@@ -22,7 +22,7 @@ class Columns extends AbstractHelper
         'cellvalue = \'<span style="text-decoration: line-through;">\' + cellvalue + \'</span>\';';
 
     /**
-     * @param false|null|\Zend\I18n\Translator\Translator $translator
+     * @param null|\Zend\I18n\Translator\TranslatorInterface $translator
      *
      * @return self
      */
@@ -111,7 +111,7 @@ class Columns extends AbstractHelper
             $searchoptions                = [];
             $searchoptions['clearSearch'] = false;
             if ($column->hasFilterSelectOptions()) {
-                $options['stype']       = 'select';
+                $options['stype'] = 'select';
                 $searchoptions['value'] = $column->getFilterSelectOptions();
 
                 if ($column->hasFilterDefaultValue()) {
@@ -126,7 +126,7 @@ class Columns extends AbstractHelper
                 $searchoptions['defaultValue'] = $filter->getDisplayColumnValue();
             }
 
-            if ($searchoptions) {
+            if (!empty($searchoptions)) {
                 $options['searchoptions'] = $searchoptions;
             }
 
