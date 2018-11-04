@@ -77,7 +77,7 @@ class Datagrid
     private $renderer;
 
     /**
-     * @var Translator
+     * @var Translator|null
      */
     protected $translator;
 
@@ -378,12 +378,9 @@ class Datagrid
      */
     public function setTranslator($translator = null)
     {
-        if (! $translator instanceof Translator &&
-            ! $translator instanceof \Zend\I18n\Translator\TranslatorInterface
-        ) {
+        if (! $translator instanceof \Zend\I18n\Translator\TranslatorInterface) {
             throw new \InvalidArgumentException(
-                'Translator must be an instanceof "Zend\I18n\Translator\Translator" ' .
-                'or "Zend\I18n\Translator\TranslatorInterface"'
+                'Translator must be an instanceof "Zend\I18n\Translator\TranslatorInterface"'
             );
         }
 
@@ -391,7 +388,7 @@ class Datagrid
     }
 
     /**
-     * @return Translator
+     * @return Translator|null
      */
     public function getTranslator()
     {
@@ -403,11 +400,7 @@ class Datagrid
      */
     public function hasTranslator()
     {
-        if ($this->translator !== null) {
-            return true;
-        }
-
-        return false;
+        return null !== $this->translator;
     }
 
     /**
@@ -467,11 +460,7 @@ class Datagrid
      */
     public function hasDataSource()
     {
-        if ($this->dataSource !== null) {
-            return true;
-        }
-
-        return false;
+        return null !== $this->dataSource;
     }
 
     /**
@@ -601,9 +590,9 @@ class Datagrid
      */
     private function createColumn($config)
     {
-        if (! is_array($config) && ! $config instanceof Column\AbstractColumn) {
+        if (! is_array($config)) {
             throw new \InvalidArgumentException(
-                'createColumn() supports only a config array or instanceof Column\AbstractColumn as a parameter'
+                'createColumn() supports only a config array'
             );
         }
 
