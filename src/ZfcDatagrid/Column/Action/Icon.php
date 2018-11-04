@@ -31,11 +31,7 @@ class Icon extends AbstractAction
      */
     public function hasIconClass()
     {
-        if ($this->getIconClass() != '') {
-            return true;
-        }
-
-        return false;
+        return $this->getIconClass() != '';
     }
 
     /**
@@ -63,11 +59,7 @@ class Icon extends AbstractAction
      */
     public function hasIconLink()
     {
-        if ($this->getIconLink() != '') {
-            return true;
-        }
-
-        return false;
+        return $this->getIconLink() != '';
     }
 
     /**

@@ -7,6 +7,7 @@
 [![Latest Unstable Version](https://poser.pugx.org/zfc-datagrid/zfc-datagrid/v/unstable.png)](https://packagist.org/packages/zfc-datagrid/zfc-datagrid)
 [![License](https://poser.pugx.org/zfc-datagrid/zfc-datagrid/license.png)](https://packagist.org/packages/zfc-datagrid/zfc-datagrid)
 
+[![Join the chat at https://gitter.im/zfc-datagrid/Lobby](https://badges.gitter.im/zfc-datagrid/Lobby.svg)](https://gitter.im/zfc-datagrid/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Total Downloads](https://poser.pugx.org/zfc-datagrid/zfc-datagrid/downloads.png)](https://packagist.org/packages/zfc-datagrid/zfc-datagrid)
 [![Monthly Downloads](https://poser.pugx.org/zfc-datagrid/zfc-datagrid/d/monthly)](https://packagist.org/packages/zfc-datagrid/zfc-datagrid)
 
@@ -52,7 +53,7 @@ Add `ZfcDatagrid` to your `config/application.config.php`
 
 Finally create the folder: `data/ZfcDatagrid`
 
-You can cotinue 
+You can continue 
 
 ### Test if it works
 

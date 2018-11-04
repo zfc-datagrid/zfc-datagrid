@@ -29,7 +29,7 @@ class Renderer extends AbstractExport
     protected $pdf;
 
     /**
-     * @var Alignment
+     * @var string
      */
     protected $alignment = 'L';
 
@@ -406,7 +406,6 @@ class Renderer extends AbstractExport
 
                         default:
                             throw new \Exception('Not defined yet: "' . get_class($style) . '"');
-                            break;
                     }
                 }
             }

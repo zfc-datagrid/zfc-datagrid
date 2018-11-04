@@ -55,7 +55,30 @@ class Filter
     const BETWEEN = '%s <> %s';
 
     /**
-     * @var Column\AbstractColumn
+     * List of all available operations
+     *
+     * @var array
+     */
+    const AVAILABLE_OPERATORS = [
+        self::LIKE,
+        self::LIKE_LEFT,
+        self::LIKE_RIGHT,
+        self::NOT_LIKE,
+        self::NOT_LIKE_LEFT,
+        self::NOT_LIKE_RIGHT,
+        self::EQUAL,
+        self::NOT_EQUAL,
+        self::GREATER_EQUAL,
+        self::GREATER,
+        self::LESS_EQUAL,
+        self::LESS,
+        self::IN,
+        self::NOT_IN,
+        self::BETWEEN,
+    ];
+
+    /**
+     * @var Column\AbstractColumn|null
      */
     private $column;
 
@@ -255,17 +278,13 @@ class Filter
      */
     public function isColumnFilter()
     {
-        if ($this->getColumn() instanceof Column\AbstractColumn) {
-            return true;
-        } else {
-            return false;
-        }
+        return $this->getColumn() instanceof Column\AbstractColumn;
     }
 
     /**
      * Only needed for column filter.
      *
-     * @return Column\AbstractColumn
+     * @return Column\AbstractColumn|null
      */
     public function getColumn()
     {
@@ -363,28 +382,22 @@ class Filter
             case self::EQUAL:
             case self::IN:
                 return $currentValue == $expectedValue;
-                break;
 
             case self::NOT_EQUAL:
             case self::NOT_IN:
                 return $currentValue != $expectedValue;
-                break;
 
             case self::GREATER_EQUAL:
                 return $currentValue >= $expectedValue;
-                break;
 
             case self::GREATER:
                 return $currentValue > $expectedValue;
-                break;
 
             case self::LESS_EQUAL:
                 return $currentValue <= $expectedValue;
-                break;
 
             case self::LESS:
                 return $currentValue < $expectedValue;
-                break;
 
             case self::BETWEEN:
                 if (is_array($expectedValue) && count($expectedValue) >= 2) {
@@ -398,15 +411,14 @@ class Filter
 
             default:
                 throw new InvalidArgumentException('currently not implemented filter type: "' . $operator . '"');
-                break;
         }
 
         return false;
     }
 
     /**
-     * @param string $currentValue
-     * @param string $expectedValue
+     * @param mixed $currentValue
+     * @param mixed $expectedValue
      * @param string $operator
      *
      * @return string[]

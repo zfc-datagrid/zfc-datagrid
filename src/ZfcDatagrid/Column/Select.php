@@ -27,7 +27,7 @@ class Select extends AbstractColumn
      * Use the subselect -> UNIQUE will be the second parameter.
      *
      * @param string|object $columnOrIndexOrObject
-     * @param string        $tableOrAliasOrUniqueId
+     * @param string|null   $tableOrAliasOrUniqueId
      *
      * @throws \Exception
      */
@@ -38,18 +38,15 @@ class Select extends AbstractColumn
         }
 
         if (is_string($columnOrIndexOrObject) && $tableOrAliasOrUniqueId !== null) {
-            // $column = new Column('id', 'user')
             $this->setUniqueId($tableOrAliasOrUniqueId . '_' . $columnOrIndexOrObject);
             $this->setSelect($tableOrAliasOrUniqueId, $columnOrIndexOrObject);
         } elseif (is_string($columnOrIndexOrObject)) {
-            // $column = new Column('title')
             $this->setUniqueId($columnOrIndexOrObject);
             $this->setSelect($columnOrIndexOrObject);
         } elseif (is_object($columnOrIndexOrObject) &&
             null !== $tableOrAliasOrUniqueId &&
             is_string($tableOrAliasOrUniqueId)
         ) {
-            // $column = new Column('(SELECT GROUP_CONCAT....)', 'someAlias')
             $this->setUniqueId($tableOrAliasOrUniqueId);
             $this->setSelect($columnOrIndexOrObject);
         } else {
@@ -104,10 +101,6 @@ class Select extends AbstractColumn
      */
     public function hasFilterSelectExpression()
     {
-        if (null !== $this->filterSelectExpression) {
-            return true;
-        }
-
-        return false;
+        return null !== $this->filterSelectExpression;
     }
 }

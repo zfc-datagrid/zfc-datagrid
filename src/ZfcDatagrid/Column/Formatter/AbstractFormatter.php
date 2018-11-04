@@ -67,11 +67,7 @@ abstract class AbstractFormatter
      */
     public function isApply()
     {
-        if (in_array($this->getRendererName(), $this->validRenderers)) {
-            return true;
-        }
-
-        return false;
+        return in_array($this->getRendererName(), $this->validRenderers);
     }
 
     /**
