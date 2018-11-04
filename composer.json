@@ -1,9 +1,10 @@
 {
     "name":        "zfc-datagrid/zfc-datagrid",
-    "description": "Zend Framework 2 Module that provides a datagrid for different datasources and output formats",
+    "description": "Zend Framework 2/3 Module that provides a datagrid for different datasources and output formats",
     "type":        "library",
     "license":     "MIT",
     "keywords": [
+        "datagrid",
         "zfc-datagrid",
         "ZfcDatagrid",
         "Datagrid",
