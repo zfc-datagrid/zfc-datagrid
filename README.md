@@ -53,7 +53,7 @@ Add `ZfcDatagrid` to your `config/application.config.php`
 
 Finally create the folder: `data/ZfcDatagrid`
 
-You can cotinue 
+You can continue 
 
 ### Test if it works
 
