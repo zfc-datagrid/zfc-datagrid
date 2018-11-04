@@ -16,17 +16,17 @@ class Paginator implements AdapterInterface
     /**
      * @var QueryBuilder
      */
-    protected $qb = null;
+    protected $qb;
 
     /**
      * Total item count.
      *
-     * @var int
+     * @var int|null
      */
-    protected $rowCount = null;
+    protected $rowCount;
 
     /**
-     * @var \Doctrine\ORM\Tools\Pagination\Paginator
+     * @var ZfcDatagridPaginator|Doctrine2Paginator|null
      */
     private $paginator;
 
@@ -39,9 +39,9 @@ class Paginator implements AdapterInterface
     }
 
     /**
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
-    public function getQueryBuilder()
+    public function getQueryBuilder(): QueryBuilder
     {
         return $this->qb;
     }
@@ -51,12 +51,12 @@ class Paginator implements AdapterInterface
      *
      * @return bool
      */
-    private function useCustomPaginator()
+    private function useCustomPaginator(): bool
     {
         $qb    = $this->getQueryBuilder();
         $parts = $qb->getDQLParts();
 
-        if ($parts['having'] !== null || true === $parts['distinct']) {
+        if (null !== $parts['having'] || true === $parts['distinct']) {
             // never tried having in such queries...
             return false;
         }
@@ -70,7 +70,7 @@ class Paginator implements AdapterInterface
      */
     private function getPaginator()
     {
-        if ($this->paginator !== null) {
+        if (null !== $this->paginator) {
             return $this->paginator;
         }
 
@@ -92,7 +92,7 @@ class Paginator implements AdapterInterface
      *
      * @return array
      */
-    public function getItems($offset, $itemCountPerPage)
+    public function getItems($offset, $itemCountPerPage): array
     {
         $paginator = $this->getPaginator();
         if ($paginator instanceof Doctrine2Paginator) {
@@ -101,9 +101,9 @@ class Paginator implements AdapterInterface
                 ->setMaxResults($itemCountPerPage);
 
             return $paginator->getIterator()->getArrayCopy();
-        } else {
-            return $paginator->getItems($offset, $itemCountPerPage);
         }
+
+        return $paginator->getItems($offset, $itemCountPerPage);
     }
 
     /**
@@ -111,7 +111,7 @@ class Paginator implements AdapterInterface
      *
      * @return int
      */
-    public function count()
+    public function count(): int
     {
         return $this->getPaginator()->count();
     }

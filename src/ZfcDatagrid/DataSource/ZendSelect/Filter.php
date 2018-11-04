@@ -20,6 +20,11 @@ class Filter
      */
     private $select;
 
+    /**
+     * Filter constructor.
+     * @param Sql $sql
+     * @param Select $select
+     */
     public function __construct(Sql $sql, Select $select)
     {
         $this->sql    = $sql;
@@ -27,17 +32,17 @@ class Filter
     }
 
     /**
-     * @return \Zend\Db\Sql\Sql
+     * @return Sql
      */
-    public function getSql()
+    public function getSql(): Sql
     {
         return $this->sql;
     }
 
     /**
-     * @return \Zend\Db\Sql\Select
+     * @return Select
      */
-    public function getSelect()
+    public function getSelect(): Select
     {
         return $this->select;
     }

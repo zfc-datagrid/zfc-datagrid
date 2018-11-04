@@ -3,7 +3,7 @@ namespace ZfcDatagrid\Column;
 
 class Select extends AbstractColumn
 {
-    /** @var string */
+    /** @var string|object|null */
     protected $selectPart1 = '';
 
     /** @var string|object|null */
@@ -13,7 +13,7 @@ class Select extends AbstractColumn
      * Specific column function filter e.g.
      * WHERE MONTH(%s).
      *
-     * @var string
+     * @var string|null
      */
     private $filterSelectExpression;
 
@@ -55,19 +55,19 @@ class Select extends AbstractColumn
     }
 
     /**
-     * @params string $part1
+     * @params string|object|null $part1
      * @params string|object|null $part2
      */
-    public function setSelect(string $part1, $part2 = null)
+    public function setSelect($part1, $part2 = null)
     {
         $this->selectPart1 = $part1;
         $this->selectPart2 = $part2;
     }
 
     /**
-     * @return string
+     * @return string|object|null
      */
-    public function getSelectPart1(): string
+    public function getSelectPart1()
     {
         return $this->selectPart1;
     }
@@ -81,17 +81,17 @@ class Select extends AbstractColumn
     }
 
     /**
-     * @param string $filterSelectExpression
+     * @param string|null $filterSelectExpression
      */
-    public function setFilterSelectExpression(string $filterSelectExpression)
+    public function setFilterSelectExpression(?string $filterSelectExpression)
     {
         $this->filterSelectExpression = $filterSelectExpression;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getFilterSelectExpression(): string
+    public function getFilterSelectExpression(): ?string
     {
         return $this->filterSelectExpression;
     }
