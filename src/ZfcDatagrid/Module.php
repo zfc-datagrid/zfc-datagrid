@@ -4,7 +4,7 @@ namespace ZfcDatagrid;
 class Module
 {
     /**
-     * @return array|mixed
+     * @return array
      */
     public function getConfig()
     {

@@ -58,7 +58,7 @@ class Renderer extends AbstractRenderer
      */
     public function getSortConditions()
     {
-        if (is_array($this->sortConditions)) {
+        if (!empty($this->sortConditions)) {
             return $this->sortConditions;
         }
 
@@ -81,7 +81,7 @@ class Renderer extends AbstractRenderer
             $sortColumns    = explode(',', $sortColumns);
             $sortDirections = explode(',', $sortDirections);
 
-            if (count($sortColumns) != count($sortDirections)) {
+            if (count($sortColumns) !== count($sortDirections)) {
                 throw new \Exception('Count missmatch order columns/direction');
             }
 
@@ -123,7 +123,7 @@ class Renderer extends AbstractRenderer
      */
     public function getFilters()
     {
-        if (is_array($this->filters)) {
+        if (!empty($this->filters)) {
             // set from cache! (for export)
             return $this->filters;
         }

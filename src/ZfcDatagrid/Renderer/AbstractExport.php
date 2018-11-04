@@ -20,9 +20,9 @@ abstract class AbstractExport extends AbstractRenderer
     ];
 
     /**
-     * @var Column\AbstractColumn[]|null
+     * @var Column\AbstractColumn[]
      */
-    protected $columnsToExport;
+    protected $columnsToExport = [];
 
     /**
      * Decide which columns we want to display.
@@ -33,7 +33,7 @@ abstract class AbstractExport extends AbstractRenderer
      */
     protected function getColumnsToExport()
     {
-        if (is_array($this->columnsToExport)) {
+        if (!empty($this->columnsToExport)) {
             return $this->columnsToExport;
         }
 
@@ -89,11 +89,7 @@ abstract class AbstractExport extends AbstractRenderer
             $currentY = $tempY;
         }
 
-        if ('landscape' == $orientation) {
-            return $currentY;
-        } else {
-            return $currentX;
-        }
+        return 'landscape' === $orientation ? $currentY : $currentX;
     }
 
     /**

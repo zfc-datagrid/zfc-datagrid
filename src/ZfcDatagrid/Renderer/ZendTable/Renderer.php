@@ -23,7 +23,7 @@ class Renderer extends AbstractRenderer
     /**
      * @var Column\AbstractColumn[]
      */
-    private $columnsToDisplay;
+    private $columnsToDisplay = [];
 
     /**
      * @return string
@@ -89,9 +89,9 @@ class Renderer extends AbstractRenderer
      *
      * @return array
      */
-    public function getSortConditions()
+    public function getSortConditions(): array
     {
-        if (is_array($this->sortConditions)) {
+        if (!empty($this->sortConditions)) {
             return $this->sortConditions;
         }
 
@@ -319,7 +319,7 @@ class Renderer extends AbstractRenderer
      */
     private function getColumnsToDisplay()
     {
-        if (is_array($this->columnsToDisplay)) {
+        if (!empty($this->columnsToDisplay)) {
             return $this->columnsToDisplay;
         }
 

@@ -129,7 +129,7 @@ class AbstractColumnTest extends TestCase
         $this->assertEquals('', $col->getFilterDefaultValue());
 
         $this->assertEquals(false, $col->hasFilterSelectOptions());
-        $this->assertEquals(null, $col->getFilterSelectOptions());
+        $this->assertEquals([], $col->getFilterSelectOptions());
 
         $this->assertEquals(false, $col->isFilterActive());
         $this->assertEquals('', $col->getFilterActiveValue());
@@ -160,8 +160,8 @@ class AbstractColumnTest extends TestCase
         $this->assertEquals(2, count($col->getFilterSelectOptions()));
         $this->assertEquals(true, $col->hasFilterSelectOptions());
 
-        $col->unsetFilterSelectOptions();
-        $this->assertEquals(null, $col->getFilterSelectOptions());
+        $col->setFilterSelectOptions([], false);
+        $this->assertEquals([], $col->getFilterSelectOptions());
         $this->assertEquals(false, $col->hasFilterSelectOptions());
 
         $col->setFilterActive('asdf');

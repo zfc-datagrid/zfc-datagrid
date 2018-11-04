@@ -1060,7 +1060,7 @@ class Datagrid
      */
     public function render()
     {
-        if ($this->isDataLoaded() === false) {
+        if (false === $this->isDataLoaded()) {
             $this->loadData();
         }
 
@@ -1161,7 +1161,7 @@ class Datagrid
      */
     public function setViewModel(ViewModel $viewModel)
     {
-        if ($this->viewModel !== null) {
+        if (null !== $this->viewModel) {
             throw new \Exception(
                 'A viewModel is already set. Did you already called ' .
                 '$grid->render() or $grid->getViewModel() before?'
@@ -1204,11 +1204,7 @@ class Datagrid
      */
     public function isHtmlInitReponse()
     {
-        if (! $this->getResponse() instanceof JsonModel && ! $this->getResponse() instanceof ResponseInterface) {
-            return true;
-        }
-
-        return false;
+        return ! $this->getResponse() instanceof JsonModel && ! $this->getResponse() instanceof ResponseInterface;
     }
 
     /**

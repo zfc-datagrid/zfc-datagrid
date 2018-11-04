@@ -48,14 +48,14 @@ abstract class AbstractRenderer implements RendererInterface
     protected $rowStyles = [];
 
     /**
-     * @var array|null
+     * @var array
      */
-    protected $sortConditions = null;
+    protected $sortConditions = [];
 
     /**
-     * @var Filter[]|null
+     * @var Filter[]
      */
-    protected $filters = null;
+    protected $filters = [];
 
     /**
      * @var int|null
@@ -116,11 +116,8 @@ abstract class AbstractRenderer implements RendererInterface
     public function getOptionsRenderer()
     {
         $options = $this->getOptions();
-        if (isset($options['renderer'][$this->getName()])) {
-            return $options['renderer'][$this->getName()];
-        } else {
-            return [];
-        }
+
+        return $options['renderer'][$this->getName()] ?? [];
     }
 
     /**
@@ -344,11 +341,8 @@ abstract class AbstractRenderer implements RendererInterface
     private function getCacheSortConditions()
     {
         $cacheData = $this->getCacheData();
-        if (! isset($cacheData['sortConditions'])) {
-            return false;
-        }
 
-        return $cacheData['sortConditions'];
+        return $cacheData['sortConditions'] ?? false;
     }
 
     /**
@@ -359,11 +353,8 @@ abstract class AbstractRenderer implements RendererInterface
     private function getCacheFilters()
     {
         $cacheData = $this->getCacheData();
-        if (! isset($cacheData['filters'])) {
-            return false;
-        }
 
-        return $cacheData['filters'];
+        return $cacheData['filters'] ?? false;
     }
 
     /**
@@ -496,7 +487,7 @@ abstract class AbstractRenderer implements RendererInterface
      */
     public function getSortConditions()
     {
-        if (is_array($this->sortConditions)) {
+        if (!empty($this->sortConditions)) {
             return $this->sortConditions;
         }
 
@@ -543,7 +534,7 @@ abstract class AbstractRenderer implements RendererInterface
      * Set filters explicit (e.g.
      * from a custom form).
      *
-     * @param array $filters
+     * @param Filter[] $filters
      */
     public function setFilters(array $filters)
     {
@@ -561,7 +552,7 @@ abstract class AbstractRenderer implements RendererInterface
      */
     public function getFilters()
     {
-        if (is_array($this->filters)) {
+        if (!empty($this->filters)) {
             return $this->filters;
         }
 

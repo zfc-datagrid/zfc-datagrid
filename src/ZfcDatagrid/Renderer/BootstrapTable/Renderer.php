@@ -57,7 +57,7 @@ class Renderer extends AbstractRenderer
      */
     public function getSortConditions()
     {
-        if (is_array($this->sortConditions)) {
+        if (!empty($this->sortConditions)) {
             // set from cache! (for export)
             return $this->sortConditions;
         }
@@ -122,7 +122,7 @@ class Renderer extends AbstractRenderer
      */
     public function getFilters()
     {
-        if (is_array($this->filters)) {
+        if (!empty($this->filters)) {
             return $this->filters;
         }
 
