@@ -564,20 +564,6 @@ abstract class AbstractColumn
     }
 
     /**
-     * Set a template formatter and overwrite other formatter.
-     *
-     * @param AbstractFormatter $formatter
-     *
-     * @deprecated please use setFormatters
-     */
-    public function setFormatter(AbstractFormatter $formatter)
-    {
-        trigger_error('Please use setFormatters()', E_USER_DEPRECATED);
-
-        $this->setFormatters([$formatter]);
-    }
-
-    /**
      * add a template formatter in the list.
      *
      * @param AbstractFormatter $formatter
@@ -598,32 +584,11 @@ abstract class AbstractColumn
     }
 
     /**
-     * return a list of different formatter.
-     *
-     * @return AbstractFormatter[]
-     *
-     * @deprecated please use getFormatters
-     */
-    public function getFormatter()
-    {
-        trigger_error('Please use getFormatters()', E_USER_DEPRECATED);
-
-        return $this->getFormatters();
-    }
-
-    /**
      * @return bool
      */
     public function hasFormatters()
     {
         return !empty($this->formatters);
-    }
-
-    public function hasFormatter()
-    {
-        trigger_error('Please use hasFormatters()', E_USER_DEPRECATED);
-
-        return $this->hasFormatters();
     }
 
     /**
