@@ -4,7 +4,7 @@ namespace ZfcDatagrid\Renderer;
 
 use InvalidArgumentException;
 use Zend\Cache;
-use Zend\I18n\Translator\Translator;
+use Zend\I18n\Translator\TranslatorInterface;
 use Zend\Mvc\MvcEvent;
 use Zend\Paginator\Paginator;
 use Zend\View\Model\ViewModel;
@@ -94,7 +94,7 @@ abstract class AbstractRenderer implements RendererInterface
     protected $toolbarTemplateVariables = [];
 
     /**
-     * @var Translator
+     * @var TranslatorInterface|null
      */
     protected $translator;
 
@@ -396,24 +396,15 @@ abstract class AbstractRenderer implements RendererInterface
     }
 
     /**
-     * @param Translator $translator
-     *
-     * @throws \InvalidArgumentException
+     * @param TranslatorInterface $translator
      */
-    public function setTranslator($translator)
+    public function setTranslator(TranslatorInterface $translator)
     {
-        if (! $translator instanceof \Zend\I18n\Translator\TranslatorInterface) {
-            throw new \InvalidArgumentException(
-                'Translator must be an instanceof ' .
-                '"Zend\I18n\Translator\Translator" or "Zend\I18n\Translator\TranslatorInterface"'
-            );
-        }
-
         $this->translator = $translator;
     }
 
     /**
-     * @return \Zend\I18n\Translator\Translator
+     * @return TranslatorInterface|null
      */
     public function getTranslator()
     {

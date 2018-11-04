@@ -10,7 +10,7 @@ use Zend\Cache;
 use Zend\Console\Request as ConsoleRequest;
 use Zend\Db\Sql\Select as ZendSelect;
 use Zend\Http\PhpEnvironment\Request as HttpRequest;
-use Zend\I18n\Translator\Translator;
+use Zend\I18n\Translator\TranslatorInterface;
 use Zend\Mvc\MvcEvent;
 use Zend\Paginator\Paginator;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -77,7 +77,7 @@ class Datagrid
     private $renderer;
 
     /**
-     * @var Translator|null
+     * @var TranslatorInterface|null
      */
     protected $translator;
 
@@ -372,23 +372,15 @@ class Datagrid
     /**
      * Set the translator.
      *
-     * @param Translator $translator
-     *
-     * @throws \InvalidArgumentException
+     * @param TranslatorInterface $translator
      */
-    public function setTranslator($translator = null)
+    public function setTranslator(TranslatorInterface $translator)
     {
-        if (! $translator instanceof \Zend\I18n\Translator\TranslatorInterface) {
-            throw new \InvalidArgumentException(
-                'Translator must be an instanceof "Zend\I18n\Translator\TranslatorInterface"'
-            );
-        }
-
         $this->translator = $translator;
     }
 
     /**
-     * @return Translator|null
+     * @return TranslatorInterface|null
      */
     public function getTranslator()
     {
