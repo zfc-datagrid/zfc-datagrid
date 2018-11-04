@@ -2,6 +2,7 @@
 namespace ZfcDatagridTest\Column\Formatter;
 
 use PHPUnit\Framework\TestCase;
+use ReflectionProperty;
 use ZfcDatagrid\Column\Formatter\GenerateLink;
 
 /**
@@ -19,21 +20,9 @@ class GenerateLinkTest extends TestCase
 
         $generateLink = new GenerateLink($phpRenderer, 'route');
 
-        $this->assertEquals('route', $generateLink->getRoute());
-        $this->assertEmpty($generateLink->getRouteKey());
-        $this->assertEmpty($generateLink->getRouteParams());
-    }
-    public function testConstructorFallBackVersion()
-    {
-        $phpRenderer = $this->getMockBuilder(\Zend\View\Renderer\PhpRenderer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $generateLink = new GenerateLink($phpRenderer, 'route');
-
-        $this->assertEquals('route', $generateLink->getRoute());
-        $this->assertEmpty($generateLink->getRouteKey());
-        $this->assertEmpty($generateLink->getRouteParams());
+        $this->assertEquals('route', $this->getProperty($generateLink, 'route'));
+        $this->assertEmpty($this->getProperty($generateLink, 'routeKey'));
+        $this->assertEmpty($this->getProperty($generateLink, 'routeParams'));
     }
 
     public function testGetFormattedValue()
@@ -57,5 +46,18 @@ class GenerateLinkTest extends TestCase
         ]);
 
         $this->assertEquals('<a href="">bar</a>', $generateLink->getFormattedValue($col));
+    }
+
+    /**
+     * @param $class
+     * @param $name
+     * @return mixed
+     * @throws \ReflectionException
+     */
+    protected function getProperty($class, $name)
+    {
+        $class = new ReflectionProperty($class, $name);
+        $class->setAccessible(true);
+        return $class->getValue($class);
     }
 }

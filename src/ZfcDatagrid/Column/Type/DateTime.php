@@ -9,23 +9,25 @@ use ZfcDatagrid\Filter;
 
 class DateTime extends AbstractType
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $filterDefaultOperation = Filter::GREATER_EQUAL;
 
+    /** @var bool */
     protected $daterangePickerEnabled = false;
 
-    protected $sourceDateTimeFormat;
+    /** @var string */
+    protected $sourceDateTimeFormat = 'Y-m-d H:i:s';
 
-    protected $outputDateType;
+    /** @var int */
+    protected $outputDateType = IntlDateFormatter::MEDIUM;
 
-    protected $outputTimeType;
+    /** @var int */
+    protected $outputTimeType = IntlDateFormatter::NONE;
 
     /**
      * Locale to use instead of the default.
      *
-     * @var string
+     * @var string|null
      */
     protected $locale;
 
@@ -34,15 +36,18 @@ class DateTime extends AbstractType
      *
      * @var string
      */
-    protected $sourceTimezone;
+    protected $sourceTimezone = 'UTC';
 
     /**
      * Timezone to use.
      *
-     * @var string
+     * @var string|null
      */
     protected $outputTimezone;
 
+    /**
+     * @var string|null
+     */
     protected $outputPattern;
 
     /**
@@ -73,7 +78,7 @@ class DateTime extends AbstractType
     /**
      * @return string
      */
-    public function getTypeName()
+    public function getTypeName(): string
     {
         return 'dateTime';
     }
@@ -83,7 +88,7 @@ class DateTime extends AbstractType
      *
      * @param bool $val
      */
-    public function setDaterangePickerEnabled($val = true)
+    public function setDaterangePickerEnabled(bool $val = true)
     {
         $this->daterangePickerEnabled = $val;
     }
@@ -91,47 +96,71 @@ class DateTime extends AbstractType
     /**
      * Check if the Daterange Filter is enabled.
      */
-    public function isDaterangePickerEnabled()
+    public function isDaterangePickerEnabled(): bool
     {
         return $this->daterangePickerEnabled;
     }
 
-    public function setSourceDateTimeFormat($format = 'Y-m-d H:i:s')
+    /**
+     * @param string $format
+     */
+    public function setSourceDateTimeFormat(string $format = 'Y-m-d H:i:s')
     {
         $this->sourceDateTimeFormat = $format;
     }
 
-    public function getSourceDateTimeFormat()
+    /**
+     * @return string
+     */
+    public function getSourceDateTimeFormat(): string
     {
         return $this->sourceDateTimeFormat;
     }
 
-    public function setOutputDateType($dateType = IntlDateFormatter::MEDIUM)
+    /**
+     * @param int $dateType
+     */
+    public function setOutputDateType(int $dateType = IntlDateFormatter::MEDIUM)
     {
         $this->outputDateType = $dateType;
     }
 
-    public function getOutputDateType()
+    /**
+     * @return int
+     */
+    public function getOutputDateType(): int
     {
         return $this->outputDateType;
     }
 
-    public function setOutputTimeType($timeType = IntlDateFormatter::NONE)
+    /**
+     * @param int $timeType
+     */
+    public function setOutputTimeType(int $timeType = IntlDateFormatter::NONE)
     {
         $this->outputTimeType = $timeType;
     }
 
-    public function getOutputTimeType()
+    /**
+     * @return int
+     */
+    public function getOutputTimeType(): int
     {
         return $this->outputTimeType;
     }
 
-    public function setLocale($locale = null)
+    /**
+     * @param null|string $locale
+     */
+    public function setLocale(?string $locale = null)
     {
         $this->locale = $locale;
     }
 
-    public function getLocale()
+    /**
+     * @return string
+     */
+    public function getLocale(): string
     {
         if (null === $this->locale) {
             $this->locale = Locale::getDefault();
@@ -140,22 +169,34 @@ class DateTime extends AbstractType
         return $this->locale;
     }
 
-    public function setSourceTimezone($timezone = 'UTC')
+    /**
+     * @param string $timezone
+     */
+    public function setSourceTimezone(string $timezone = 'UTC')
     {
         $this->sourceTimezone = $timezone;
     }
 
-    public function getSourceTimezone()
+    /**
+     * @return string
+     */
+    public function getSourceTimezone(): string
     {
         return $this->sourceTimezone;
     }
 
-    public function setOutputTimezone($timezone = null)
+    /**
+     * @param null|string $timezone
+     */
+    public function setOutputTimezone(?string $timezone = null)
     {
         $this->outputTimezone = $timezone;
     }
 
-    public function getOutputTimezone()
+    /**
+     * @return string
+     */
+    public function getOutputTimezone(): string
     {
         if (null === $this->outputTimezone) {
             $this->outputTimezone = date_default_timezone_get();
@@ -169,12 +210,15 @@ class DateTime extends AbstractType
      *
      * @param string $pattern
      */
-    public function setOutputPattern($pattern = null)
+    public function setOutputPattern(?string $pattern = null)
     {
         $this->outputPattern = $pattern;
     }
 
-    public function getOutputPattern()
+    /**
+     * @return null|string
+     */
+    public function getOutputPattern(): ?string
     {
         return $this->outputPattern;
     }
@@ -184,7 +228,7 @@ class DateTime extends AbstractType
      *
      * @return string
      */
-    public function getFilterValue($val)
+    public function getFilterValue(string $val): string
     {
         $formatter = new IntlDateFormatter(
             $this->getLocale(),
@@ -208,7 +252,7 @@ class DateTime extends AbstractType
      *
      * @param mixed $val
      *
-     * @return string
+     * @return mixed
      */
     public function getUserValue($val)
     {

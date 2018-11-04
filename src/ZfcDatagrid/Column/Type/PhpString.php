@@ -3,7 +3,10 @@ namespace ZfcDatagrid\Column\Type;
 
 class PhpString extends AbstractType
 {
-    public function getTypeName()
+    /**
+     * @return string
+     */
+    public function getTypeName(): string
     {
         return 'string';
     }

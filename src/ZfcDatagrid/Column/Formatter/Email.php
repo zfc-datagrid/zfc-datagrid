@@ -16,7 +16,7 @@ class Email extends AbstractFormatter
      *
      * @return string
      */
-    public function getFormattedValue(AbstractColumn $column)
+    public function getFormattedValue(AbstractColumn $column): string
     {
         $row = $this->getRowData();
 

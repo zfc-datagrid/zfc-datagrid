@@ -8,12 +8,12 @@ class PhpArray extends AbstractType
      *
      * @var string
      */
-    protected $separator;
+    protected $separator = '';
 
     /**
      * @param string $separator
      */
-    public function __construct($separator = ',')
+    public function __construct(string $separator = ',')
     {
         $this->setSeparator($separator);
     }
@@ -23,7 +23,7 @@ class PhpArray extends AbstractType
      *
      * @param string $separator
      */
-    public function setSeparator($separator)
+    public function setSeparator(string $separator)
     {
         $this->separator = $separator;
     }
@@ -33,12 +33,15 @@ class PhpArray extends AbstractType
      *
      * @return string
      */
-    public function getSeparator()
+    public function getSeparator(): string
     {
         return $this->separator;
     }
 
-    public function getTypeName()
+    /**
+     * @return string
+     */
+    public function getTypeName(): string
     {
         return 'array';
     }
@@ -48,7 +51,7 @@ class PhpArray extends AbstractType
      *
      * @param mixed $value
      *
-     * @return array
+     * @return mixed
      */
     public function getUserValue($value)
     {

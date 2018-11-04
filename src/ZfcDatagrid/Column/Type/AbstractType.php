@@ -15,7 +15,7 @@ abstract class AbstractType implements TypeInterface
      *
      * @return string
      */
-    public function getFilterDefaultOperation()
+    public function getFilterDefaultOperation(): string
     {
         return $this->filterDefaultOperation;
     }
@@ -26,7 +26,7 @@ abstract class AbstractType implements TypeInterface
      * @return $this
      * @throws \Exception
      */
-    public function setFilterDefaultOperation($operator)
+    public function setFilterDefaultOperation(string $operator): TypeInterface
     {
         if (! in_array($operator, Filter::AVAILABLE_OPERATORS)) {
             throw new \InvalidArgumentException(sprintf('Invalid filter operator \'%s\'', strval($operator)));
@@ -44,7 +44,7 @@ abstract class AbstractType implements TypeInterface
      *
      * @return string
      */
-    public function getFilterValue($val)
+    public function getFilterValue(string $val): string
     {
         return $val;
     }
@@ -52,9 +52,9 @@ abstract class AbstractType implements TypeInterface
     /**
      * Convert the value from the source to the value, which the user will see.
      *
-     * @param string $val
+     * @param mixed $val
      *
-     * @return string
+     * @return mixed
      */
     public function getUserValue($val)
     {
@@ -66,5 +66,5 @@ abstract class AbstractType implements TypeInterface
      *
      * @return string
      */
-    abstract public function getTypeName();
+    abstract public function getTypeName(): string;
 }

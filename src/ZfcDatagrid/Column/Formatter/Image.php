@@ -5,34 +5,52 @@ use ZfcDatagrid\Column\AbstractColumn;
 
 class Image extends AbstractFormatter
 {
+    /** @var string[] */
     protected $validRenderers = [
         'jqGrid',
         'bootstrapTable',
         'printHtml',
     ];
 
+    /** @var array */
     protected $attributes = [];
 
-    protected $prefix;
+    /** @var string */
+    protected $prefix = '';
 
+    /** @var array */
     protected $linkAttributes = [];
 
-    public function setAttribute($name, $value)
+    /**
+     * @param string $name
+     * @param string $value
+     */
+    public function setAttribute(string $name, string $value)
     {
         $this->attributes[$name] = $value;
     }
 
-    public function getAttributes()
+    /**
+     * @return array
+     */
+    public function getAttributes(): array
     {
         return $this->attributes;
     }
 
-    public function setLinkAttribute($name, $value)
+    /**
+     * @param string $name
+     * @param string $value
+     */
+    public function setLinkAttribute(string $name, string $value)
     {
         $this->linkAttributes[$name] = $value;
     }
 
-    public function getLinkAttributes()
+    /**
+     * @return array
+     */
+    public function getLinkAttributes(): array
     {
         return $this->linkAttributes;
     }
@@ -42,7 +60,7 @@ class Image extends AbstractFormatter
      *
      * @return string
      */
-    public function getPrefix()
+    public function getPrefix(): string
     {
         return $this->prefix;
     }
@@ -52,12 +70,16 @@ class Image extends AbstractFormatter
      *
      * @param string $prefix
      */
-    public function setPrefix($prefix)
+    public function setPrefix(string $prefix)
     {
         $this->prefix = $prefix;
     }
 
-    public function getFormattedValue(AbstractColumn $column)
+    /**
+     * @param AbstractColumn $column
+     * @return string
+     */
+    public function getFormattedValue(AbstractColumn $column): string
     {
         $row    = $this->getRowData();
         $value  = $row[$column->getUniqueId()];

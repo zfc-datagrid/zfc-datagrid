@@ -6,28 +6,31 @@ use ZfcDatagrid\Column\AbstractColumn;
 
 class GenerateLink extends AbstractFormatter
 {
-    /** @var array */
+    /** @var string[] */
     protected $validRenderers = [
         'jqGrid',
         'bootstrapTable',
     ];
 
     /** @var string */
-    protected $route;
+    protected $route = '';
+
     /** @var array */
-    protected $routeParams;
+    protected $routeParams = [];
+
     /** @var string|null */
     protected $routeKey;
-    /** @var \Zend\View\Renderer\PhpRenderer */
+
+    /** @var RendererInterface */
     protected $viewRenderer;
 
     /**
      * @param RendererInterface $viewRenderer
-     * @param                   $route
-     * @param null              $key
+     * @param string            $route
+     * @param null|string       $key
      * @param array             $params
      */
-    public function __construct($viewRenderer, $route, $key = null, $params = [])
+    public function __construct(RendererInterface $viewRenderer, string $route, ?string $key = null, array $params = [])
     {
         $this->setViewRenderer($viewRenderer);
         $this->setRoute($route);
@@ -40,30 +43,16 @@ class GenerateLink extends AbstractFormatter
      *
      * @return string
      */
-    public function getFormattedValue(AbstractColumn $column)
+    public function getFormattedValue(AbstractColumn $column): string
     {
-        $row   = $this->getRowData();
+        $row = $this->getRowData();
         $value = $row[$column->getUniqueId()];
+        $params = $this->routeParams;
+        $params[$this->routeKey ?? $column->getUniqueId()] = $value;
 
-        $routeKey = ! is_null($this->getRouteKey()) ?
-            $this->getRouteKey()
-            :
-            $column->getUniqueId();
-
-        $params            = $this->getRouteParams();
-        $params[$routeKey] = $value;
-
-        $url = (string) $this->getViewRenderer()->url($this->getRoute(), $params);
+        $url = (string) $this->viewRenderer->url($this->route, $params);
 
         return sprintf('<a href="%s">%s</a>', $url, $value);
-    }
-
-    /**
-     * @return RendererInterface
-     */
-    public function getViewRenderer()
-    {
-        return $this->viewRenderer;
     }
 
     /**
@@ -71,7 +60,7 @@ class GenerateLink extends AbstractFormatter
      *
      * @return self
      */
-    public function setViewRenderer($viewRenderer)
+    public function setViewRenderer(RendererInterface $viewRenderer)
     {
         $this->viewRenderer = $viewRenderer;
 
@@ -79,49 +68,25 @@ class GenerateLink extends AbstractFormatter
     }
 
     /**
-     * @return string
-     */
-    public function getRoute()
-    {
-        return $this->route;
-    }
-
-    /**
      * @param string $route
      */
-    public function setRoute($route)
+    public function setRoute(string $route)
     {
         $this->route = $route;
     }
 
     /**
-     * @return array
-     */
-    public function getRouteParams()
-    {
-        return $this->routeParams;
-    }
-
-    /**
      * @param array $routeParams
      */
-    public function setRouteParams($routeParams)
+    public function setRouteParams(array $routeParams)
     {
         $this->routeParams = $routeParams;
     }
 
     /**
-     * @return null|string
-     */
-    public function getRouteKey()
-    {
-        return $this->routeKey;
-    }
-
-    /**
      * @param null|string $routeKey
      */
-    public function setRouteKey($routeKey)
+    public function setRouteKey(?string $routeKey)
     {
         $this->routeKey = $routeKey;
     }
