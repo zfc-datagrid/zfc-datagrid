@@ -11,6 +11,7 @@ abstract class AbstractColumn
 
     protected $uniqueId;
 
+    /** @var int|null */
     protected $position;
 
     /**
@@ -37,7 +38,7 @@ abstract class AbstractColumn
     protected $filterDefaultOperation = null;
 
     /**
-     * @var null array
+     * @var null|array
      */
     protected $filterSelectOptions;
 
@@ -97,7 +98,7 @@ abstract class AbstractColumn
     }
 
     /**
-     * @return mixed
+     * @return int|null
      */
     public function getPosition()
     {
@@ -105,7 +106,7 @@ abstract class AbstractColumn
     }
 
     /**
-     * @param mixed $position
+     * @param int|null $position
      * @return AbstractColumn
      */
     public function setPosition($position)
@@ -242,11 +243,7 @@ abstract class AbstractColumn
      */
     public function hasStyles()
     {
-        if (count($this->styles) > 0) {
-            return true;
-        }
-
-        return false;
+        return !empty($this->styles);
     }
 
     /**
@@ -301,11 +298,7 @@ abstract class AbstractColumn
      */
     public function hasSortDefault()
     {
-        if (count($this->sortDefault) > 0) {
-            return true;
-        }
-
-        return false;
+        return !empty($this->sortDefault);
     }
 
     /**
@@ -323,11 +316,7 @@ abstract class AbstractColumn
      */
     public function isSortActive()
     {
-        if ($this->sortActive !== null) {
-            return true;
-        }
-
-        return false;
+        return null !== $this->sortActive;
     }
 
     /**
@@ -376,11 +365,7 @@ abstract class AbstractColumn
      */
     public function hasFilterDefaultValue()
     {
-        if ($this->filterDefaultValue != '') {
-            return true;
-        } else {
-            return false;
-        }
+        return $this->filterDefaultValue != '';
     }
 
     /**
@@ -441,11 +426,7 @@ abstract class AbstractColumn
      */
     public function hasFilterSelectOptions()
     {
-        if (is_array($this->filterSelectOptions)) {
-            return true;
-        }
-
-        return false;
+        return is_array($this->filterSelectOptions);
     }
 
     /**
@@ -636,11 +617,7 @@ abstract class AbstractColumn
      */
     public function hasFormatters()
     {
-        if (count($this->formatters) > 0) {
-            return true;
-        }
-
-        return false;
+        return !empty($this->formatters);
     }
 
     public function hasFormatter()

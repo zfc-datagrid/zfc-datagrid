@@ -62,7 +62,7 @@ class Action extends AbstractColumn
             return $this->actions[$key];
         }
 
-        return;
+        return null;
     }
 
     /**

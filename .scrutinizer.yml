@@ -9,3 +9,10 @@ filter:
 tools:
     external_code_coverage:
         timeout: 600    # Timeout in seconds.
+
+build:
+    nodes:
+        analysis:
+            tests:
+                override:
+                - php-scrutinizer-run

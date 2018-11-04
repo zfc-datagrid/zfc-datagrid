@@ -46,7 +46,7 @@ class PhpArray extends AbstractDataSource
          * @see http://php.net/manual/de/function.array-multisort.php
          * @see example number 3
          */
-        if (count($this->getSortConditions()) > 0) {
+        if (!empty($this->getSortConditions())) {
             $data = $this->sortArrayMultiple($data, $this->getSortConditions());
         }
 
@@ -168,7 +168,12 @@ class PhpArray extends AbstractDataSource
             ];
         }
 
-        return $this->applyMultiSort($data, $sortArguments);
+        $data = $this->applyMultiSort($data, $sortArguments);
+        if (false === $data) {
+            $data = [];
+        }
+
+        return $data;
     }
 
     /**
@@ -179,7 +184,7 @@ class PhpArray extends AbstractDataSource
      *
      * @throws \InvalidArgumentException
      *
-     * @return array
+     * @return array|false
      */
     private function applyMultiSort(array $data, array $sortArguments)
     {
