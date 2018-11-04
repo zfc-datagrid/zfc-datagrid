@@ -28,7 +28,7 @@ class Select extends AbstractColumn
      * Use the subselect -> UNIQUE will be the second parameter.
      *
      * @param string|object $columnOrIndexOrObject
-     * @param string        $tableOrAliasOrUniqueId
+     * @param string|null   $tableOrAliasOrUniqueId
      *
      * @throws \Exception
      */

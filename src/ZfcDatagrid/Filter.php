@@ -423,8 +423,8 @@ class Filter
     }
 
     /**
-     * @param string $currentValue
-     * @param string $expectedValue
+     * @param mixed $currentValue
+     * @param mixed $expectedValue
      * @param string $operator
      *
      * @return string[]

@@ -588,14 +588,8 @@ class Datagrid
      *
      * @return Column\AbstractColumn
      */
-    private function createColumn($config)
+    private function createColumn(array $config)
     {
-        if (! is_array($config)) {
-            throw new \InvalidArgumentException(
-                'createColumn() supports only a config array'
-            );
-        }
-
         $colType = isset($config['colType']) ? $config['colType'] : 'Select';
         if (class_exists($colType, true)) {
             $class = $colType;
