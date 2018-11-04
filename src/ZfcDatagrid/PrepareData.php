@@ -17,7 +17,7 @@ class PrepareData
     private $data = [];
 
     /**
-     * @var array null
+     * @var array|null
      */
     private $dataPrepared;
 
@@ -101,10 +101,9 @@ class PrepareData
      */
     public function setTranslator($translator)
     {
-        if (! $translator instanceof Translator && ! $translator instanceof \Zend\I18n\Translator\TranslatorInterface) {
+        if (! $translator instanceof \Zend\I18n\Translator\TranslatorInterface) {
             throw new \InvalidArgumentException(
-                'Translator must be an instanceof ' .
-                '"Zend\I18n\Translator\Translator" or "Zend\I18n\Translator\TranslatorInterface"'
+                'Translator must be an instanceof "Zend\I18n\Translator\TranslatorInterface"'
             );
         }
 

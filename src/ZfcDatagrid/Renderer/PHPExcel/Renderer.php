@@ -375,7 +375,7 @@ class Renderer extends AbstractExport
                     break;
 
                 case 'A2':
-                    $sheet->getPageSetup()->setPaperSize(PHPExcel_Worksheet_PageSetup::PAPERSIZE_A2);
+                    $sheet->getPageSetup()->setPaperSize(PHPExcel_Worksheet_PageSetup::PAPERSIZE_A2_PAPER);
                     break;
             }
 

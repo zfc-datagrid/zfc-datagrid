@@ -601,10 +601,6 @@ class Datagrid
      */
     private function createColumn($config)
     {
-        if ($config instanceof Column\AbstractColumn) {
-            return $config;
-        }
-
         if (! is_array($config) && ! $config instanceof Column\AbstractColumn) {
             throw new \InvalidArgumentException(
                 'createColumn() supports only a config array or instanceof Column\AbstractColumn as a parameter'

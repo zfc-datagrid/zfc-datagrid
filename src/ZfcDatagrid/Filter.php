@@ -79,7 +79,7 @@ class Filter
     ];
 
     /**
-     * @var Column\AbstractColumn
+     * @var Column\AbstractColumn|null
      */
     private $column;
 
@@ -279,17 +279,13 @@ class Filter
      */
     public function isColumnFilter()
     {
-        if ($this->getColumn() instanceof Column\AbstractColumn) {
-            return true;
-        } else {
-            return false;
-        }
+        return $this->getColumn() instanceof Column\AbstractColumn;
     }
 
     /**
      * Only needed for column filter.
      *
-     * @return Column\AbstractColumn
+     * @return Column\AbstractColumn|null
      */
     public function getColumn()
     {
@@ -387,28 +383,22 @@ class Filter
             case self::EQUAL:
             case self::IN:
                 return $currentValue == $expectedValue;
-                break;
 
             case self::NOT_EQUAL:
             case self::NOT_IN:
                 return $currentValue != $expectedValue;
-                break;
 
             case self::GREATER_EQUAL:
                 return $currentValue >= $expectedValue;
-                break;
 
             case self::GREATER:
                 return $currentValue > $expectedValue;
-                break;
 
             case self::LESS_EQUAL:
                 return $currentValue <= $expectedValue;
-                break;
 
             case self::LESS:
                 return $currentValue < $expectedValue;
-                break;
 
             case self::BETWEEN:
                 if (is_array($expectedValue) && count($expectedValue) >= 2) {
