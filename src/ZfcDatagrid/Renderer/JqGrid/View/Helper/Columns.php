@@ -127,7 +127,7 @@ class Columns extends AbstractHelper
                 $searchoptions['defaultValue'] = $filter->getDisplayColumnValue();
             }
 
-            if ($searchoptions) {
+            if (!empty($searchoptions)) {
                 $options['searchoptions'] = $searchoptions;
             }
 

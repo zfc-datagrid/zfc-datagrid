@@ -124,7 +124,7 @@ class Datagrid
     protected $rowClickAction;
 
     /**
-     * @var Action\Mass
+     * @var Action\Mass[]
      */
     protected $massActions = [];
 
@@ -136,7 +136,7 @@ class Datagrid
     protected $preparedData = [];
 
     /**
-     * @var array
+     * @var bool
      */
     protected $isUserFilterEnabled = true;
 
@@ -668,7 +668,9 @@ class Datagrid
         $useColumns = [];
 
         foreach ($columns as $col) {
-            $col = $this->createColumn($col);
+            if (!$col instanceof Column\AbstractColumn) {
+                $col = $this->createColumn($col);
+            }
             $useColumns[$col->getUniqueId()] = $col;
         }
 
@@ -682,7 +684,9 @@ class Datagrid
      */
     public function addColumn($col)
     {
-        $col = $this->createColumn($col);
+        if (!$col instanceof Column\AbstractColumn) {
+            $col = $this->createColumn($col);
+        }
 
         if (null === $col->getPosition()) {
             $col->setPosition(self::DEFAULT_POSITION);

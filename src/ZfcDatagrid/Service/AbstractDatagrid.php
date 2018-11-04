@@ -29,15 +29,15 @@ abstract class AbstractDatagrid extends Datagrid implements FactoryInterface
         /* @var $application \Zend\Mvc\Application */
         $application = $container->get('application');
 
-        parent::setOptions($config['ZfcDatagrid']);
-        parent::setMvcEvent($application->getMvcEvent());
+        $this->setOptions($config['ZfcDatagrid']);
+        $this->setMvcEvent($application->getMvcEvent());
 
         if ($container->has('translator') === true) {
-            parent::setTranslator($container->get('translator'));
+            $this->setTranslator($container->get('translator'));
         }
 
-        parent::setRendererService($container->get('zfcDatagrid.renderer.'.parent::getRendererName()));
-        parent::init();
+        $this->setRendererService($container->get('zfcDatagrid.renderer.' . $this->getRendererName()));
+        $this->init();
 
         return $this;
     }

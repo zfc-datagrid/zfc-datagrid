@@ -211,7 +211,6 @@ class Renderer extends AbstractExport
 
                             default:
                                 throw new \Exception('Not defined yet: "' . get_class($style) . '"');
-                                break;
                         }
                     }
                 }

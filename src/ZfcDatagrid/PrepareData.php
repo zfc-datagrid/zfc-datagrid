@@ -240,7 +240,7 @@ class PrepareData
             }
 
             // Concat all identity columns
-            if ($ids) {
+            if (!empty($ids)) {
                 $data[$key]['idConcated'] = implode('~', $ids);
             }
         }

@@ -427,7 +427,6 @@ class Filter
 
             default:
                 throw new InvalidArgumentException('currently not implemented filter type: "' . $operator . '"');
-                break;
         }
 
         return false;
