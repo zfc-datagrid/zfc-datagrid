@@ -30,8 +30,9 @@ class DatagridFactory implements FactoryInterface
         $grid->setServiceLocator($container);
         $grid->setOptions($config['ZfcDatagrid']);
         $grid->setMvcEvent($application->getMvcEvent());
+        $grid->setRouter($container->get('Router'));
 
-        if ($container->has('translator') === true) {
+        if (true === $container->has('translator')) {
             $grid->setTranslator($container->get('translator'));
         }
 
