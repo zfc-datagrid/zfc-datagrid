@@ -13,7 +13,7 @@ class ColumnsFactory implements FactoryInterface
      *
      * @return Columns
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Columns
     {
         $tableRow = new Columns();
         if ($container->has('translator')) {

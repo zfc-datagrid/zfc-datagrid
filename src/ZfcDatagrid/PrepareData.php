@@ -6,31 +6,22 @@ use Zend\Router\RouteStackInterface;
 
 class PrepareData
 {
-    /**
-     * @var array
-     */
+    /** @var array */
     private $columns = [];
 
-    /**
-     * @var array
-     */
+    /** @var array */
     private $data = [];
 
-    /**
-     * @var array|null
-     */
-    private $dataPrepared;
+    /** @var array */
+    private $dataPrepared = [];
 
+    /** @var null|string */
     private $rendererName;
 
-    /**
-     * @var TranslatorInterface|null
-     */
+    /** @var TranslatorInterface|null */
     private $translator;
 
-    /**
-     * @var \Zend\Router\RouteStackInterface
-     */
+    /** @var \Zend\Router\RouteStackInterface */
     private $router;
 
     /**
@@ -54,7 +45,7 @@ class PrepareData
     /**
      * @return array
      */
-    public function getColumns()
+    public function getColumns(): array
     {
         return $this->columns;
     }
@@ -72,7 +63,7 @@ class PrepareData
      *
      * @return array
      */
-    public function getData($raw = false)
+    public function getData(bool $raw = false): array
     {
         if (true === $raw) {
             return $this->data;
@@ -86,7 +77,7 @@ class PrepareData
     /**
      * @param string $name
      */
-    public function setRendererName($name = null)
+    public function setRendererName(?string $name = null)
     {
         $this->rendererName = $name;
     }
@@ -94,7 +85,7 @@ class PrepareData
     /**
      * @return string
      */
-    public function getRendererName()
+    public function getRendererName(): ?string
     {
         return $this->rendererName;
     }
@@ -110,13 +101,13 @@ class PrepareData
     /**
      * @return TranslatorInterface
      */
-    public function getTranslator()
+    public function getTranslator(): ?TranslatorInterface
     {
         return $this->translator;
     }
 
     /**
-     * @param \Zend\Router\RouteStackInterface $router
+     * @param RouteStackInterface $router
      */
     public function setRouter(RouteStackInterface $router)
     {
@@ -124,9 +115,9 @@ class PrepareData
     }
 
     /**
-     * @return \Zend\Router\RouteStackInterface
+     * @return RouteStackInterface
      */
-    public function getRouter()
+    public function getRouter(): RouteStackInterface
     {
         return $this->router;
     }
@@ -138,9 +129,9 @@ class PrepareData
      *
      * @return bool
      */
-    public function prepare()
+    public function prepare(): bool
     {
-        if (is_array($this->dataPrepared)) {
+        if (!empty($this->dataPrepared)) {
             return false;
         }
 

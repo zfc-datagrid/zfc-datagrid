@@ -13,19 +13,15 @@ class PhpArray extends AbstractDataSource
      *
      * @param array $data
      */
-    public function __construct($data)
+    public function __construct(array $data)
     {
-        if (is_array($data)) {
-            $this->data = $data;
-        } else {
-            throw new \InvalidArgumentException('Unsupported data input, please provide an array');
-        }
+        $this->data = $data;
     }
 
     /**
      * @return array
      */
-    public function getData()
+    public function getData(): array
     {
         return $this->data;
     }

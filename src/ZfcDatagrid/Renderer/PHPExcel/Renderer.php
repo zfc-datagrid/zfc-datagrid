@@ -20,17 +20,26 @@ use ZfcDatagrid\Renderer\AbstractExport;
 
 class Renderer extends AbstractExport
 {
-    public function getName()
+    /**
+     * @return string
+     */
+    public function getName(): string
     {
         return 'PHPExcel';
     }
 
-    public function isExport()
+    /**
+     * @return bool
+     */
+    public function isExport(): bool
     {
         return true;
     }
 
-    public function isHtml()
+    /**
+     * @return bool
+     */
+    public function isHtml(): bool
     {
         return false;
     }

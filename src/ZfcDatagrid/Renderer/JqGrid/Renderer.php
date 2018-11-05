@@ -11,7 +11,7 @@ class Renderer extends AbstractRenderer
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return 'jqGrid';
     }
@@ -19,7 +19,7 @@ class Renderer extends AbstractRenderer
     /**
      * @return bool
      */
-    public function isHtml()
+    public function isHtml(): bool
     {
         return true;
     }
@@ -27,7 +27,7 @@ class Renderer extends AbstractRenderer
     /**
      * @return bool
      */
-    public function isExport()
+    public function isExport(): bool
     {
         return false;
     }
@@ -37,7 +37,7 @@ class Renderer extends AbstractRenderer
      *
      * @throws \Exception
      */
-    public function getRequest()
+    public function getRequest(): HttpRequest
     {
         $request = parent::getRequest();
         if (! $request instanceof HttpRequest) {
@@ -56,7 +56,7 @@ class Renderer extends AbstractRenderer
      *
      * @throws \Exception
      */
-    public function getSortConditions()
+    public function getSortConditions(): array
     {
         if (!empty($this->sortConditions)) {
             return $this->sortConditions;
@@ -121,7 +121,7 @@ class Renderer extends AbstractRenderer
      *
      * @throws \Exception
      */
-    public function getFilters()
+    public function getFilters(): array
     {
         if (!empty($this->filters)) {
             // set from cache! (for export)
@@ -162,7 +162,11 @@ class Renderer extends AbstractRenderer
         return $this->filters;
     }
 
-    public function getCurrentPageNumber()
+    /**
+     * @return int
+     * @throws \Exception
+     */
+    public function getCurrentPageNumber(): int
     {
         $optionsRenderer = $this->getOptionsRenderer();
         $parameterNames  = $optionsRenderer['parameterNames'];
@@ -211,7 +215,10 @@ class Renderer extends AbstractRenderer
         return $viewModel;
     }
 
-    public function getData()
+    /**
+     * @return array
+     */
+    public function getData(): array
     {
         $data = parent::getData();
 
@@ -242,7 +249,10 @@ class Renderer extends AbstractRenderer
         return $data;
     }
 
-    private function getDataJqGrid()
+    /**
+     * @return array
+     */
+    private function getDataJqGrid(): array
     {
         return [
             'rows'    => $this->getData(),

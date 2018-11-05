@@ -1,9 +1,8 @@
 <?php
 namespace ZfcDatagrid\Service;
 
-use Zend\Form\FormElementManager;
+use Interop\Container\ContainerInterface;
 use Zend\Mvc\Service\AbstractPluginManagerFactory;
-use Zend\ServiceManager\ServiceLocatorInterface;
 
 class DatagridManagerFactory extends AbstractPluginManagerFactory
 {
@@ -12,16 +11,18 @@ class DatagridManagerFactory extends AbstractPluginManagerFactory
     /**
      * Create and return the MVC controller plugin manager.
      *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return FormElementManager
+     * @param ContainerInterface $container
+     * @param $name
+     * @param array|null $options
+     * @return \Zend\ServiceManager\AbstractPluginManager
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function __invoke(ContainerInterface $container, $name, array $options = null)
     {
-        $plugins = parent::createService($serviceLocator);
-        $plugins->addPeeringServiceManager($serviceLocator);
+        $plugins = parent::__invoke($container, $name, $options);
+        $plugins->addPeeringServiceManager($container);
         $plugins->setRetrieveFromPeeringManagerFirst(true);
 
         return $plugins;
     }
+
 }

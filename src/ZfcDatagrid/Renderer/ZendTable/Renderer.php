@@ -15,20 +15,16 @@ use ZfcDatagrid\Renderer\AbstractRenderer;
  */
 class Renderer extends AbstractRenderer
 {
-    /**
-     * @var ConsoleAdapter
-     */
+    /** @var ConsoleAdapter */
     private $consoleAdapter;
 
-    /**
-     * @var Column\AbstractColumn[]
-     */
+    /** @var Column\AbstractColumn[] */
     private $columnsToDisplay = [];
 
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return 'zendTable';
     }
@@ -36,7 +32,7 @@ class Renderer extends AbstractRenderer
     /**
      * @return bool
      */
-    public function isExport()
+    public function isExport(): bool
     {
         return false;
     }
@@ -44,7 +40,7 @@ class Renderer extends AbstractRenderer
     /**
      * @return bool
      */
-    public function isHtml()
+    public function isHtml(): bool
     {
         return false;
     }
@@ -54,7 +50,7 @@ class Renderer extends AbstractRenderer
      *
      * @throws \Exception
      */
-    public function getRequest()
+    public function getRequest(): ConsoleRequest
     {
         $request = parent::getRequest();
         if (! $request instanceof ConsoleRequest) {
@@ -75,7 +71,7 @@ class Renderer extends AbstractRenderer
     /**
      * @return ConsoleAdapter
      */
-    public function getConsoleAdapter()
+    public function getConsoleAdapter(): ConsoleAdapter
     {
         if (null === $this->consoleAdapter) {
             $this->consoleAdapter = Console::getInstance();
@@ -148,7 +144,7 @@ class Renderer extends AbstractRenderer
      *
      * @return array
      */
-    public function getFilters()
+    public function getFilters(): array
     {
         return [];
     }
@@ -158,7 +154,7 @@ class Renderer extends AbstractRenderer
      *
      * @return int
      */
-    public function getCurrentPageNumber()
+    public function getCurrentPageNumber(): int
     {
         $request = $this->getRequest();
 
@@ -178,7 +174,7 @@ class Renderer extends AbstractRenderer
      *
      * @throws \Exception
      */
-    public function getItemsPerPage($defaultItems = 25)
+    public function getItemsPerPage($defaultItems = 25): int
     {
         $request = $this->getRequest();
 
@@ -207,7 +203,7 @@ class Renderer extends AbstractRenderer
     /**
      * @return TextTable
      */
-    private function getTable()
+    private function getTable(): TextTable
     {
         $paginator = $this->getPaginator();
 
@@ -317,7 +313,7 @@ class Renderer extends AbstractRenderer
      *
      * @throws \Exception
      */
-    private function getColumnsToDisplay()
+    private function getColumnsToDisplay(): array
     {
         if (!empty($this->columnsToDisplay)) {
             return $this->columnsToDisplay;
@@ -343,7 +339,7 @@ class Renderer extends AbstractRenderer
     /**
      * @return array
      */
-    private function getColumnWidths()
+    private function getColumnWidths(): array
     {
         $cols = $this->getColumnsToDisplay();
 

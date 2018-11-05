@@ -13,7 +13,7 @@ class ImageResize
      *
      * @return array
      */
-    public static function getCalculatedSize($width, $height, $maxWidth, $maxHeight)
+    public static function getCalculatedSize(float $width, float $height, float $maxWidth, float $maxHeight): array
     {
         $widthDiffRatio  = $maxWidth / $width;
         $heightDiffRatio = $maxHeight / $height;

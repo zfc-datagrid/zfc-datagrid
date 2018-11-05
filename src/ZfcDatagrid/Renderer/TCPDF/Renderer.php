@@ -15,6 +15,9 @@ use ZfcDatagrid\Renderer\AbstractExport;
 
 class Renderer extends AbstractExport
 {
+    /**
+     * @var string[]
+     */
     protected $allowedColumnTypes = [
         Type\DateTime::class,
         Type\Image::class,
@@ -23,29 +26,35 @@ class Renderer extends AbstractExport
         Type\PhpString::class,
     ];
 
-    /**
-     * @var TCPDF
-     */
+    /** @var TCPDF|null */
     protected $pdf;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $alignment = 'L';
 
+    /** @var array */
     private $columnsPositionX = [];
 
-    public function getName()
+    /**
+     * @return string
+     */
+    public function getName(): string
     {
         return 'TCPDF';
     }
 
-    public function isExport()
+    /**
+     * @return bool
+     */
+    public function isExport(): bool
     {
         return true;
     }
 
-    public function isHtml()
+    /**
+     * @return bool
+     */
+    public function isHtml(): bool
     {
         return false;
     }
@@ -172,7 +181,7 @@ class Renderer extends AbstractExport
     /**
      * @return TCPDF
      */
-    public function getPdf()
+    public function getPdf(): TCPDF
     {
         if (null === $this->pdf) {
             $this->initPdf();
@@ -284,7 +293,12 @@ class Renderer extends AbstractExport
         }
     }
 
-    protected function printTableRow(array $row, $rowHeight)
+    /**
+     * @param array $row
+     * @param float $rowHeight
+     * @throws \Exception
+     */
+    protected function printTableRow(array $row, float $rowHeight)
     {
         $pdf = $this->getPdf();
 
@@ -424,7 +438,7 @@ class Renderer extends AbstractExport
      *
      * @return array
      */
-    protected function calcImageSize($imageData, $maxWidth, $maxHeight)
+    protected function calcImageSize(string $imageData, float $maxWidth, float $maxHeight): array
     {
         $pdf = $this->getPdf();
 
@@ -513,7 +527,7 @@ class Renderer extends AbstractExport
     /**
      * @param string $alignment
      */
-    public function setTextAlignment($alignment)
+    public function setTextAlignment(string $alignment)
     {
         $this->alignment = $alignment;
     }
@@ -521,7 +535,7 @@ class Renderer extends AbstractExport
     /**
      * @return string
      */
-    public function getTextAlignment()
+    public function getTextAlignment(): string
     {
         return $this->alignment;
     }

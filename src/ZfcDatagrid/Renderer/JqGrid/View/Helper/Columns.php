@@ -1,6 +1,7 @@
 <?php
 namespace ZfcDatagrid\Renderer\JqGrid\View\Helper;
 
+use Zend\I18n\Translator\TranslatorInterface;
 use Zend\View\Helper\AbstractHelper;
 use ZfcDatagrid\Column;
 use ZfcDatagrid\Column\Type;
@@ -11,7 +12,7 @@ use ZfcDatagrid\Filter;
  */
 class Columns extends AbstractHelper
 {
-    /** @var \Zend\I18n\Translator\TranslatorInterface|null */
+    /** @var TranslatorInterface|null */
     private $translator;
 
     const STYLE_BOLD = 'cellvalue = \'<span style="font-weight: bold;">\' + cellvalue + \'</span>\';';
@@ -22,11 +23,11 @@ class Columns extends AbstractHelper
         'cellvalue = \'<span style="text-decoration: line-through;">\' + cellvalue + \'</span>\';';
 
     /**
-     * @param null|\Zend\I18n\Translator\TranslatorInterface $translator
+     * @param null|TranslatorInterface $translator
      *
      * @return self
      */
-    public function setTranslator($translator)
+    public function setTranslator(?TranslatorInterface $translator)
     {
         $this->translator = $translator;
 
@@ -38,7 +39,7 @@ class Columns extends AbstractHelper
      *
      * @return string
      */
-    private function translate($message)
+    private function translate(string $message): string
     {
         if (null === $this->translator) {
             return $message;
@@ -52,7 +53,7 @@ class Columns extends AbstractHelper
      *
      * @return string
      */
-    public function __invoke(array $columns)
+    public function __invoke(array $columns): string
     {
         $return = [];
 
@@ -169,7 +170,7 @@ class Columns extends AbstractHelper
      *
      * @return string
      */
-    private function getFormatter(Column\AbstractColumn $column)
+    private function getFormatter(Column\AbstractColumn $column): string
     {
         /*
          * User defined formatter
@@ -213,7 +214,7 @@ class Columns extends AbstractHelper
      *
      * @return array
      */
-    private function getStyles(Column\AbstractColumn $col)
+    private function getStyles(Column\AbstractColumn $col): array
     {
         $styleFormatter = [];
 

@@ -30,23 +30,6 @@ abstract class AbstractDataSource implements DataSourceInterface
     protected $paginatorAdapter;
 
     /**
-     * Set the data source
-     * - array
-     * - ZF2: Zend\Db\Sql\Select
-     * - Doctrine2: Doctrine\ORM\QueryBuilder
-     * - ...
-     *
-     * @param mixed $data
-     *
-     * @throws \Exception
-     */
-    public function __construct($data)
-    {
-        // we need this exception, because a abstract __construct, create a exception in php-unit for mocking
-        throw new \Exception(sprintf('Missing __construct in %s', get_class($this)));
-    }
-
-    /**
      * Set the columns.
      *
      * @param Column\AbstractColumn[] $columns
@@ -70,7 +53,7 @@ abstract class AbstractDataSource implements DataSourceInterface
      * @param Column\AbstractColumn $column
      * @param string                $sortDirection
      */
-    public function addSortCondition(Column\AbstractColumn $column, $sortDirection = 'ASC')
+    public function addSortCondition(Column\AbstractColumn $column, string $sortDirection = 'ASC')
     {
         $this->sortConditions[] = [
             'column'        => $column,

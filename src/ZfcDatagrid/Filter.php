@@ -57,7 +57,7 @@ class Filter
     /**
      * List of all available operations
      *
-     * @var array
+     * @var string[]
      */
     const AVAILABLE_OPERATORS = [
         self::LIKE,
@@ -77,16 +77,17 @@ class Filter
         self::BETWEEN,
     ];
 
-    /**
-     * @var Column\AbstractColumn|null
-     */
+    /** @var Column\AbstractColumn|null */
     private $column;
 
+    /** @var string */
     private $operator = self::LIKE;
 
-    private $value;
+    /** @var array */
+    private $value = [];
 
-    private $displayColumnValue;
+    /** @var string */
+    private $displayColumnValue = '';
 
     /**
      * Apply a filter based on a column.
@@ -94,7 +95,7 @@ class Filter
      * @param Column\AbstractColumn $column
      * @param string                $inputFilterValue
      */
-    public function setFromColumn(Column\AbstractColumn $column, $inputFilterValue)
+    public function setFromColumn(Column\AbstractColumn $column, string $inputFilterValue)
     {
         $this->column = $column;
         $this->setColumnOperator($inputFilterValue, $column->getFilterDefaultOperation());
@@ -112,7 +113,7 @@ class Filter
      *
      * @return array
      */
-    private function setColumnOperator($inputFilterValue, $defaultOperator = self::LIKE)
+    private function setColumnOperator(string $inputFilterValue, $defaultOperator = self::LIKE)
     {
         $inputFilterValue = (string) $inputFilterValue;
         $inputFilterValue = trim($inputFilterValue);
@@ -276,7 +277,7 @@ class Filter
      *
      * @return bool
      */
-    public function isColumnFilter()
+    public function isColumnFilter(): bool
     {
         return $this->getColumn() instanceof Column\AbstractColumn;
     }
@@ -286,7 +287,7 @@ class Filter
      *
      * @return Column\AbstractColumn|null
      */
-    public function getColumn()
+    public function getColumn(): ?Column\AbstractColumn
     {
         return $this->column;
     }
@@ -294,7 +295,7 @@ class Filter
     /**
      * @return array
      */
-    public function getValues()
+    public function getValues(): array
     {
         return $this->value;
     }
@@ -302,7 +303,7 @@ class Filter
     /**
      * @return string
      */
-    public function getOperator()
+    public function getOperator(): string
     {
         return $this->operator;
     }
@@ -312,7 +313,7 @@ class Filter
      *
      * @return string
      */
-    public function getDisplayColumnValue()
+    public function getDisplayColumnValue(): string
     {
         return $this->displayColumnValue;
     }
@@ -328,7 +329,7 @@ class Filter
      *
      * @return bool
      */
-    public static function isApply($currentValue, $expectedValue, $operator = self::EQUAL)
+    public static function isApply($currentValue, $expectedValue, string $operator = self::EQUAL): bool
     {
         list($currentValue, $expectedValue) = self::convertValues($currentValue, $expectedValue, $operator);
 
@@ -423,7 +424,7 @@ class Filter
      *
      * @return string[]
      */
-    private static function convertValues($currentValue, $expectedValue, $operator = self::EQUAL)
+    private static function convertValues($currentValue, $expectedValue, string $operator = self::EQUAL): array
     {
         switch ($operator) {
             case self::LIKE:
