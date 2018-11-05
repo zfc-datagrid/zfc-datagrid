@@ -42,9 +42,9 @@ class Doctrine2Collection extends AbstractDataSource
     }
 
     /**
-     * @return EntityManagerInterface
+     * @return EntityManagerInterface|null
      */
-    public function getEntityManager(): EntityManagerInterface
+    public function getEntityManager(): ?EntityManagerInterface
     {
         return $this->em;
     }

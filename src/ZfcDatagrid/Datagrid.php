@@ -42,8 +42,8 @@ class Datagrid
     /** @var array */
     protected $parameters = [];
 
-    /** @var mixed */
-    protected $url;
+    /** @var string */
+    protected $url = '';
 
     /** @var HttpRequest */
     protected $request;
