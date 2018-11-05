@@ -43,9 +43,9 @@ class HtmlTag extends AbstractFormatter implements RouterInterface
     }
 
     /**
-     * @return RouteStackInterface
+     * @return null|RouteStackInterface
      */
-    public function getRouter(): RouteStackInterface
+    public function getRouter(): ?RouteStackInterface
     {
         return $this->router;
     }

@@ -8,30 +8,26 @@ use ZfcDatagrid\Column;
  */
 class DataObject implements DataPopulationInterface
 {
-    /**
-     * @var ObjectAwareInterface
-     */
+    /** @var null|ObjectAwareInterface */
     private $object;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     private $objectParameters = [];
 
     /**
-     * @param ObjectAwareInterface $object
+     * @param null|ObjectAwareInterface $object
      *
      * @throws \Exception
      */
-    public function setObject(ObjectAwareInterface $object)
+    public function setObject(?ObjectAwareInterface $object)
     {
         $this->object = $object;
     }
 
     /**
-     * @return ObjectAwareInterface
+     * @return null|ObjectAwareInterface
      */
-    public function getObject()
+    public function getObject(): ?ObjectAwareInterface
     {
         return $this->object;
     }
@@ -42,7 +38,7 @@ class DataObject implements DataPopulationInterface
      * @param string                $objectParameterName
      * @param Column\AbstractColumn $column
      */
-    public function addObjectParameterColumn($objectParameterName, Column\AbstractColumn $column)
+    public function addObjectParameterColumn(string $objectParameterName, Column\AbstractColumn $column)
     {
         $this->objectParameters[] = [
             'objectParameterName' => $objectParameterName,
@@ -53,7 +49,7 @@ class DataObject implements DataPopulationInterface
     /**
      * @return array
      */
-    public function getObjectParametersColumn()
+    public function getObjectParametersColumn(): array
     {
         return $this->objectParameters;
     }
@@ -64,16 +60,23 @@ class DataObject implements DataPopulationInterface
      * @param string $name
      * @param mixed  $value
      */
-    public function setObjectParameter($name, $value)
+    public function setObjectParameter(string $name, $value)
     {
-        $this->getObject()->setParameterFromColumn($name, $value);
+        if ($this->getObject()) {
+            $this->getObject()->setParameterFromColumn($name, $value);   
+        }
     }
 
     /**
      * @return string
      */
-    public function toString()
+    public function toString(): string
     {
-        return $this->getObject()->toString();
+        $return = '';
+        if ($this->getObject()) {
+            $return = $this->getObject()->toString();
+        }
+
+        return $return;
     }
 }

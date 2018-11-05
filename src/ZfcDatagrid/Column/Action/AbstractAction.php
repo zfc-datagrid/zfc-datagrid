@@ -2,43 +2,33 @@
 namespace ZfcDatagrid\Column\Action;
 
 use ZfcDatagrid\Column;
-use ZfcDatagrid\Column\AbstractColumn;
 use ZfcDatagrid\Filter;
 
 abstract class AbstractAction
 {
     const ROW_ID_PLACEHOLDER = ':rowId:';
 
-    /**
-     * @var \ZfcDatagrid\Column\AbstractColumn[]
-     */
+    /** @var Column\AbstractColumn[] */
     protected $linkColumnPlaceholders = [];
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $htmlAttributes = [];
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $showOnValueOperator = 'OR';
 
-    /**
-     * @var string
-     */
-    protected $route;
+    /** @var string */
+    protected $route = '';
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $routeParams = [];
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $showOnValues = [];
 
+    /**
+     * AbstractAction constructor.
+     */
     public function __construct()
     {
         $this->setLink('#');
@@ -49,7 +39,7 @@ abstract class AbstractAction
      *
      * @param string $href
      */
-    public function setLink($href)
+    public function setLink(string $href)
     {
         $this->setAttribute('href', $href);
     }
@@ -57,7 +47,7 @@ abstract class AbstractAction
     /**
      * @return string
      */
-    public function getLink()
+    public function getLink(): string
     {
         return $this->getAttribute('href');
     }
@@ -65,7 +55,7 @@ abstract class AbstractAction
     /**
      * @param string $route
      */
-    public function setRoute($route)
+    public function setRoute(string $route)
     {
         $this->route = $route;
     }
@@ -73,7 +63,7 @@ abstract class AbstractAction
     /**
      * @return string
      */
-    public function getRoute()
+    public function getRoute(): string
     {
         return $this->route;
     }
@@ -89,7 +79,7 @@ abstract class AbstractAction
     /**
      * @return array
      */
-    public function getRouteParams()
+    public function getRouteParams(): array
     {
         return $this->routeParams;
     }
@@ -101,7 +91,7 @@ abstract class AbstractAction
      *
      * @return string
      */
-    public function getLinkReplaced(array $row)
+    public function getLinkReplaced(array $row): string
     {
         $link = $this->getLink();
 
@@ -125,11 +115,11 @@ abstract class AbstractAction
      * Get the column row value placeholder
      * $action->setLink('/myLink/something/id/'.$action->getRowIdPlaceholder().'/something/'.$action->getColumnRowPlaceholder($myCol));.
      *
-     * @param AbstractColumn $col
+     * @param Column\AbstractColumn $col
      *
      * @return string
      */
-    public function getColumnValuePlaceholder(AbstractColumn $col)
+    public function getColumnValuePlaceholder(Column\AbstractColumn $col): string
     {
         $this->linkColumnPlaceholders[] = $col;
 
@@ -137,9 +127,9 @@ abstract class AbstractAction
     }
 
     /**
-     * @return \ZfcDatagrid\Column\AbstractColumn[]
+     * @return Column\AbstractColumn[]
      */
-    public function getLinkColumnPlaceholders()
+    public function getLinkColumnPlaceholders(): array
     {
         return $this->linkColumnPlaceholders;
     }
@@ -151,7 +141,7 @@ abstract class AbstractAction
      *
      * @return string
      */
-    public function getRowIdPlaceholder()
+    public function getRowIdPlaceholder(): string
     {
         return self::ROW_ID_PLACEHOLDER;
     }
@@ -162,9 +152,9 @@ abstract class AbstractAction
      * @param string $name
      * @param string $value
      */
-    public function setAttribute($name, $value)
+    public function setAttribute(string $name, string $value)
     {
-        $this->htmlAttributes[$name] = (string) $value;
+        $this->htmlAttributes[$name] = $value;
     }
 
     /**
@@ -174,13 +164,9 @@ abstract class AbstractAction
      *
      * @return string
      */
-    public function getAttribute($name)
+    public function getAttribute(string $name)
     {
-        if (isset($this->htmlAttributes[$name])) {
-            return $this->htmlAttributes[$name];
-        }
-
-        return '';
+        return $this->htmlAttributes[$name] ?? '';
     }
 
     /**
@@ -188,7 +174,7 @@ abstract class AbstractAction
      *
      * @param string $name
      */
-    public function removeAttribute($name)
+    public function removeAttribute(string $name)
     {
         unset($this->htmlAttributes[$name]);
     }
@@ -198,7 +184,7 @@ abstract class AbstractAction
      *
      * @return array
      */
-    public function getAttributes()
+    public function getAttributes(): array
     {
         return $this->htmlAttributes;
     }
@@ -210,7 +196,7 @@ abstract class AbstractAction
      *
      * @return string
      */
-    protected function getAttributesString(array $row)
+    protected function getAttributesString(array $row): string
     {
         $attributes = [];
         foreach ($this->getAttributes() as $attrKey => $attrValue) {
@@ -228,7 +214,7 @@ abstract class AbstractAction
      *
      * @param string $name
      */
-    public function setTitle($name)
+    public function setTitle(string $name)
     {
         $this->setAttribute('title', $name);
     }
@@ -238,7 +224,7 @@ abstract class AbstractAction
      *
      * @return string
      */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->getAttribute('title');
     }
@@ -248,7 +234,7 @@ abstract class AbstractAction
      *
      * @param string $className
      */
-    public function addClass($className)
+    public function addClass(string $className)
     {
         $attr = $this->getAttribute('class');
         if ($attr != '') {
@@ -264,7 +250,7 @@ abstract class AbstractAction
      *
      * @param string $operator
      */
-    public function setShowOnValueOperator($operator = 'OR')
+    public function setShowOnValueOperator(string $operator = 'OR')
     {
         if ($operator != 'AND' && $operator != 'OR') {
             throw new \InvalidArgumentException('not allowed operator: "' . $operator . '" (AND / OR is allowed)');
@@ -279,7 +265,7 @@ abstract class AbstractAction
      *
      * @return string
      */
-    public function getShowOnValueOperator()
+    public function getShowOnValueOperator(): string
     {
         return $this->showOnValueOperator;
     }
@@ -287,11 +273,11 @@ abstract class AbstractAction
     /**
      * Show this action only on the values defined.
      *
-     * @param Column\AbstractColumn $col
-     * @param string                $value
-     * @param string                $comparison
+     * @param Column\AbstractColumn        $col
+     * @param Column\AbstractColumn|string $value
+     * @param string                       $comparison
      */
-    public function addShowOnValue(Column\AbstractColumn $col, $value = null, $comparison = Filter::EQUAL)
+    public function addShowOnValue(Column\AbstractColumn $col, $value = null, string $comparison = Filter::EQUAL)
     {
         $this->showOnValues[] = [
             'column'     => $col,
@@ -303,7 +289,7 @@ abstract class AbstractAction
     /**
      * @return array
      */
-    public function getShowOnValues()
+    public function getShowOnValues(): array
     {
         return $this->showOnValues;
     }
@@ -311,7 +297,7 @@ abstract class AbstractAction
     /**
      * @return bool
      */
-    public function hasShowOnValues()
+    public function hasShowOnValues(): bool
     {
         return !empty($this->showOnValues);
     }
@@ -323,25 +309,18 @@ abstract class AbstractAction
      *
      * @return bool
      */
-    public function isDisplayed(array $row)
+    public function isDisplayed(array $row): bool
     {
-        if ($this->hasShowOnValues() === false) {
+        if (false === $this->hasShowOnValues()) {
             return true;
         }
 
         $isDisplayed = false;
         foreach ($this->getShowOnValues() as $rule) {
-            $value = '';
-            if (isset($row[$rule['column']->getUniqueId()])) {
-                $value = $row[$rule['column']->getUniqueId()];
-            }
+            $value = $row[$rule['column']->getUniqueId()] ?? '';
 
-            if ($rule['value'] instanceof AbstractColumn) {
-                if (isset($row[$rule['value']->getUniqueId()])) {
-                    $ruleValue = $row[$rule['value']->getUniqueId()];
-                } else {
-                    $ruleValue = '';
-                }
+            if ($rule['value'] instanceof Column\AbstractColumn) {
+                $ruleValue = $row[$rule['value']->getUniqueId()] ?? '';
             } else {
                 $ruleValue = $rule['value'];
             }
@@ -365,14 +344,14 @@ abstract class AbstractAction
      *
      * @return string
      */
-    abstract protected function getHtmlType();
+    abstract protected function getHtmlType(): string;
 
     /**
      * @param array $row
      *
      * @return string
      */
-    public function toHtml(array $row)
+    public function toHtml(array $row): string
     {
         return '<a ' . $this->getAttributesString($row) . '>' . $this->getHtmlType() . '</a>';
     }

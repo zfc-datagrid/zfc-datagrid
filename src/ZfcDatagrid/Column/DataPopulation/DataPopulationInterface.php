@@ -8,7 +8,7 @@ interface DataPopulationInterface
      *
      * @return string
      */
-    public function toString();
+    public function toString(): string;
 
     /**
      * Directy set a parameter for the object.
@@ -16,10 +16,10 @@ interface DataPopulationInterface
      * @param string $name
      * @param mixed  $value
      */
-    public function setObjectParameter($name, $value);
+    public function setObjectParameter(string $name, $value);
 
     /**
      * @return array
      */
-    public function getObjectParametersColumn();
+    public function getObjectParametersColumn(): array;
 }

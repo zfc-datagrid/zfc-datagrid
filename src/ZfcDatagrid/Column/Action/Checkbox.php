@@ -6,9 +6,15 @@ namespace ZfcDatagrid\Column\Action;
  */
 class Checkbox extends AbstractAction
 {
-    private $name;
+    /** @var string */
+    private $name = 'rowSelections';
 
-    public function __construct($name = 'rowSelections')
+    /**
+     * Checkbox constructor.
+     *
+     * @param string $name
+     */
+    public function __construct(string $name = 'rowSelections')
     {
         parent::__construct();
 
@@ -18,7 +24,7 @@ class Checkbox extends AbstractAction
     /**
      * @return string
      */
-    protected function getHtmlType()
+    protected function getHtmlType(): string
     {
         return '';
     }
@@ -26,7 +32,7 @@ class Checkbox extends AbstractAction
     /**
      * @see \ZfcDatagrid\Column\Action\AbstractAction::toHtml()
      */
-    public function toHtml(array $row)
+    public function toHtml(array $row): string
     {
         $this->removeAttribute('name');
         $this->removeAttribute('value');

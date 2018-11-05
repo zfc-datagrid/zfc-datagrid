@@ -5,8 +5,12 @@ use ZfcDatagrid\Column\AbstractColumn;
 
 class Button extends AbstractAction
 {
+    /** @var string|AbstractColumn */
     protected $label = '';
 
+    /**
+     * Button constructor.
+     */
     public function __construct()
     {
         parent::__construct();
@@ -36,7 +40,7 @@ class Button extends AbstractAction
      *
      * @throws \Exception
      */
-    protected function getHtmlType()
+    protected function getHtmlType(): string
     {
         throw new \Exception('not needed...since we have toHtml() here directly!');
     }
@@ -46,9 +50,9 @@ class Button extends AbstractAction
      *
      * @return string
      */
-    public function toHtml(array $row)
+    public function toHtml(array $row): string
     {
-        if ($this->getLabel() == '') {
+        if ('' === $this->getLabel()) {
             throw new \InvalidArgumentException(
                 'A label is required for this action type, please call $action->setLabel()!'
             );

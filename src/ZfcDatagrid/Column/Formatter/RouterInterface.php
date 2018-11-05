@@ -17,7 +17,7 @@ interface RouterInterface
     public function setRouter(RouteStackInterface $router);
 
     /**
-     * @return RouteStackInterface
+     * @return null|RouteStackInterface
      */
-    public function getRouter(): RouteStackInterface;
+    public function getRouter(): ?RouteStackInterface;
 }
