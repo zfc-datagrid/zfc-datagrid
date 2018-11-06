@@ -41,17 +41,8 @@ class Doctrine2CollectionTest extends DataSourceTestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Unknown data input: "instanceof stdClass"
-     */
-    public function testConstructException()
-    {
-        $source = new Doctrine2Collection(new \stdClass());
-    }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Unknown data input: ""
+     * @expectedException \TypeError
+     * @expectedExceptionMessage Argument 1 passed to ZfcDatagrid\DataSource\Doctrine2Collection::__construct() must implement interface Doctrine\Common\Collections\Collection, null given,
      */
     public function testConstructExceptionClass()
     {

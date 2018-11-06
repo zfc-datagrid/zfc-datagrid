@@ -98,7 +98,7 @@ abstract class AbstractRenderer implements RendererInterface
     }
 
     /**
-     * @return ViewModel
+     * @return null|ViewModel
      */
     public function getViewModel(): ?ViewModel
     {
@@ -210,9 +210,9 @@ abstract class AbstractRenderer implements RendererInterface
     }
 
     /**
-     * @return Paginator
+     * @return null|Paginator
      */
-    public function getPaginator(): Paginator
+    public function getPaginator(): ?Paginator
     {
         return $this->paginator;
     }

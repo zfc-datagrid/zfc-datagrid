@@ -12,8 +12,8 @@ class PrepareData
     /** @var array */
     private $data = [];
 
-    /** @var array */
-    private $dataPrepared = [];
+    /** @var array|null */
+    private $dataPrepared;
 
     /** @var null|string */
     private $rendererName;
@@ -117,7 +117,7 @@ class PrepareData
     /**
      * @return RouteStackInterface
      */
-    public function getRouter(): RouteStackInterface
+    public function getRouter(): ?RouteStackInterface
     {
         return $this->router;
     }
@@ -131,7 +131,7 @@ class PrepareData
      */
     public function prepare(): bool
     {
-        if (!empty($this->dataPrepared)) {
+        if (null !== $this->dataPrepared) {
             return false;
         }
 

@@ -27,7 +27,6 @@ class DatagridFactory implements FactoryInterface
         $application = $container->get('application');
 
         $grid = new Datagrid();
-        $grid->setServiceLocator($container);
         $grid->setOptions($config['ZfcDatagrid']);
         $grid->setMvcEvent($application->getMvcEvent());
         $grid->setRouter($container->get('Router'));

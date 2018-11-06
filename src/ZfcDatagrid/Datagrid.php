@@ -4,7 +4,6 @@ namespace ZfcDatagrid;
 use ArrayIterator;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\QueryBuilder;
-use Interop\Container\ContainerInterface;
 use Zend\Cache;
 use Zend\Console\Request as ConsoleRequest;
 use Zend\Db\Sql\Select as ZendSelect;
@@ -14,6 +13,7 @@ use Zend\Mvc\MvcEvent;
 use Zend\Paginator\Paginator;
 use Zend\Router\RouteStackInterface;
 use Zend\Session\Container as SessionContainer;
+use Zend\Stdlib\RequestInterface;
 use Zend\Stdlib\ResponseInterface;
 use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
@@ -45,7 +45,7 @@ class Datagrid
     /** @var string */
     protected $url = '';
 
-    /** @var HttpRequest */
+    /** @var RequestInterface */
     protected $request;
 
     /**
@@ -300,9 +300,9 @@ class Datagrid
     }
 
     /**
-     * @return HttpRequest|null
+     * @return RequestInterface|null
      */
-    public function getRequest(): ?HttpRequest
+    public function getRequest(): ?RequestInterface
     {
         return $this->request;
     }
