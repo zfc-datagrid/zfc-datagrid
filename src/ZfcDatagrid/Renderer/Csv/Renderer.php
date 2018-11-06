@@ -7,6 +7,7 @@ namespace ZfcDatagrid\Renderer\Csv;
 
 use Zend\Http\Headers;
 use Zend\Http\Response\Stream as ResponseStream;
+use Zend\View\Model\ViewModel;
 use ZfcDatagrid\Column\Type;
 use ZfcDatagrid\Renderer\AbstractExport;
 
@@ -37,7 +38,7 @@ class Renderer extends AbstractExport
     }
 
     /**
-     * @return \Zend\View\Model\ViewModel
+     * @return ViewModel
      */
     public function execute()
     {

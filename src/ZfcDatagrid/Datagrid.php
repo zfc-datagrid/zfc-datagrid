@@ -1042,9 +1042,9 @@ class Datagrid
     /**
      * Set the toolbar view template.
      *
-     * @param string $name
+     * @param null|string $name
      */
-    public function setToolbarTemplate(string $name)
+    public function setToolbarTemplate(?string $name)
     {
         $this->toolbarTemplate = $name;
     }
@@ -1053,7 +1053,7 @@ class Datagrid
      * Get the toolbar template name
      * Return null if nothing custom set.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getToolbarTemplate(): ?string
     {

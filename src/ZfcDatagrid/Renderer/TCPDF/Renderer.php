@@ -113,7 +113,10 @@ class Renderer extends AbstractExport
         }
     }
 
-    protected function saveAndSend()
+    /**
+     * @return ResponseStream
+     */
+    protected function saveAndSend(): ResponseStream
     {
         $pdf = $this->getPdf();
 
@@ -215,10 +218,9 @@ class Renderer extends AbstractExport
 
     /**
      * @param array $row
-     *
-     * @return number
+     * @return float
      */
-    protected function getRowHeight(array $row)
+    protected function getRowHeight(array $row): float
     {
         $optionsRenderer = $this->getOptionsRenderer();
         $sizePoint       = $optionsRenderer['style']['data']['size'];

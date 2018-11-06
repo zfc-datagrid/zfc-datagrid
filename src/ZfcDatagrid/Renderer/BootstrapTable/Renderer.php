@@ -2,6 +2,7 @@
 namespace ZfcDatagrid\Renderer\BootstrapTable;
 
 use Zend\Http\PhpEnvironment\Request as HttpRequest;
+use Zend\View\Model\ViewModel;
 use ZfcDatagrid\Datagrid;
 use ZfcDatagrid\Renderer\AbstractRenderer;
 
@@ -203,9 +204,9 @@ class Renderer extends AbstractRenderer
     }
 
     /**
-     * @return \Zend\View\Model\ViewModel
+     * @return ViewModel
      */
-    public function execute(): \Zend\View\Model\ViewModel
+    public function execute(): ViewModel
     {
         $viewModel = $this->getViewModel();
         $viewModel->setTemplate($this->getTemplate());
