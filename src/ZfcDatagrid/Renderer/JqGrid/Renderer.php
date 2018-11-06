@@ -185,6 +185,10 @@ class Renderer extends AbstractRenderer
         return (int) $this->currentPageNumber;
     }
 
+    /**
+     * @return null|JsonModel|\Zend\View\Model\ViewModel
+     * @throws \Exception
+     */
     public function execute()
     {
         $request = $this->getRequest();

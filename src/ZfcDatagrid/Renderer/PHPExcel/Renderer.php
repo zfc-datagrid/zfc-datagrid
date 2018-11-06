@@ -44,6 +44,11 @@ class Renderer extends AbstractExport
         return false;
     }
 
+    /**
+     * @return ResponseStream|\Zend\View\Model\ViewModel
+     * @throws \PHPExcel_Exception
+     * @throws \PHPExcel_Writer_Exception
+     */
     public function execute()
     {
         $options       = $this->getOptions();

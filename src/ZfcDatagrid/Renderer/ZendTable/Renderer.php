@@ -232,20 +232,12 @@ class Renderer extends AbstractRenderer
         $tableRow = new Table\Row();
         foreach ($this->getColumnsToDisplay() as $column) {
             $label = $this->translate($column->getLabel());
-
-            if (function_exists('mb_strtoupper')) {
-                $label = mb_strtoupper($label);
-            } else {
-                $label = strtoupper($label);
-            }
+            $label = function_exists('mb_strtoupper') ? mb_strtoupper($label) : strtoupper($label);
 
             $tableColumn = new Table\Column($label);
-            if ($column->getType() instanceof Type\Number) {
-                $tableColumn->setAlign(Table\Column::ALIGN_RIGHT);
-            } else {
-                $tableColumn->setAlign(Table\Column::ALIGN_LEFT);
-            }
-
+            $tableColumn->setAlign(
+                $column->getType() instanceof Type\Number ? Table\Column::ALIGN_RIGHT : Table\Column::ALIGN_LEFT
+            );
             $tableRow->appendColumn($tableColumn);
         }
         $table->appendRow($tableRow);
@@ -266,11 +258,9 @@ class Renderer extends AbstractRenderer
                 }
 
                 $tableColumn = new Table\Column($value);
-                if ($column->getType() instanceof Type\Number) {
-                    $tableColumn->setAlign(Table\Column::ALIGN_RIGHT);
-                } else {
-                    $tableColumn->setAlign(Table\Column::ALIGN_LEFT);
-                }
+                $tableColumn->setAlign(
+                    $column->getType() instanceof Type\Number ? Table\Column::ALIGN_RIGHT : Table\Column::ALIGN_LEFT
+                );
                 $tableRow->appendColumn($tableColumn);
             }
 
