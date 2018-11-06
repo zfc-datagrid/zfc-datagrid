@@ -5,6 +5,10 @@ use Zend\I18n\Translator\TranslatorInterface;
 use Zend\View\Helper\AbstractHelper;
 use ZfcDatagrid\Column;
 use ZfcDatagrid\Column\Action\AbstractAction;
+use function implode;
+use function get_class;
+use function print_r;
+use function array_merge;
 
 /**
  * View Helper.

@@ -5,6 +5,7 @@ use Zend\Db\Sql;
 use Zend\Db\Sql\Expression;
 use Zend\Paginator\Adapter\DbSelect as PaginatorAdapter;
 use ZfcDatagrid\Column;
+use function sprintf;
 
 class ZendSelect extends AbstractDataSource
 {
@@ -82,8 +83,14 @@ class ZendSelect extends AbstractDataSource
 
             $colString = $col->getSelectPart1();
             if ($col->getSelectPart2() != '') {
-                $colString = new Expression(sprintf(
-                        '%s%s%s',$platform->quoteIdentifier($colString),$platform->getIdentifierSeparator(),$platform->quoteIdentifier($col->getSelectPart2())));
+                $colString = new Expression(
+                    sprintf(
+                        '%s%s%s',
+                        $platform->quoteIdentifier($colString),
+                        $platform->getIdentifierSeparator(),
+                        $platform->quoteIdentifier($col->getSelectPart2())
+                    )
+                );
             }
 
             $selectColumns[$col->getUniqueId()] = $colString;

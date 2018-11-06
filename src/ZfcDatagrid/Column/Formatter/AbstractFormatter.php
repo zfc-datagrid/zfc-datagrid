@@ -2,6 +2,7 @@
 namespace ZfcDatagrid\Column\Formatter;
 
 use ZfcDatagrid\Column\AbstractColumn;
+use function in_array;
 
 abstract class AbstractFormatter
 {
@@ -78,11 +79,8 @@ abstract class AbstractFormatter
     public function format(AbstractColumn $column): string
     {
         $data = $this->getRowData();
-        if ($this->isApply() === true) {
-            return $this->getFormattedValue($column);
-        }
 
-        return $data[$column->getUniqueId()];
+        return true === $this->isApply() ? $this->getFormattedValue($column) : $data[$column->getUniqueId()];
     }
 
     /**

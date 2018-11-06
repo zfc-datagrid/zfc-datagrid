@@ -2,6 +2,15 @@
 namespace ZfcDatagrid;
 
 use InvalidArgumentException;
+use function substr;
+use function trim;
+use function explode;
+use function is_array;
+use function min;
+use function max;
+use function stripos;
+use function strlen;
+use function count;
 
 class Filter
 {

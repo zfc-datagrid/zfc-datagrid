@@ -1,6 +1,8 @@
 <?php
 namespace ZfcDatagrid\Column\DataPopulation;
 
+use Exception;
+
 class StaticValue implements DataPopulationInterface
 {
     /** @var null|string */
@@ -34,11 +36,11 @@ class StaticValue implements DataPopulationInterface
      * @param string $name
      * @param mixed  $value
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function setObjectParameter(string $name, $value)
     {
-        throw new \Exception('setObjectParameter() is not supported by this class');
+        throw new Exception('setObjectParameter() is not supported by this class');
     }
 
     /**

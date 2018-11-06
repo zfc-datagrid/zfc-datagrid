@@ -4,6 +4,9 @@ namespace ZfcDatagrid\Column\Type;
 use Locale;
 use NumberFormatter;
 use ZfcDatagrid\Filter;
+use function strlen;
+use function substr;
+use function strpos;
 
 class Number extends AbstractType
 {

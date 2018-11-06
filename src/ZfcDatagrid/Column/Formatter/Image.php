@@ -2,6 +2,9 @@
 namespace ZfcDatagrid\Column\Formatter;
 
 use ZfcDatagrid\Column\AbstractColumn;
+use function is_array;
+use function implode;
+use function sprintf;
 
 class Image extends AbstractFormatter
 {

@@ -6,16 +6,16 @@ use ZfcDatagrid\Filter;
 
 abstract class AbstractColumn
 {
+    /** @var string */
     protected $label = '';
 
+    /** @var null|string */
     protected $uniqueId;
 
     /** @var int|null */
     protected $position;
 
-    /**
-     * @var Type\AbstractType|null
-     */
+    /** @var Type\AbstractType|null */
     protected $type;
 
     /** @var Style\AbstractStyle[] */
@@ -43,9 +43,7 @@ abstract class AbstractColumn
 
     protected $filterDefaultOperation;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $filterSelectOptions = [];
 
     protected $filterActive = false;

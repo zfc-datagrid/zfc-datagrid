@@ -7,6 +7,7 @@ use Zend\Db\Sql\Sql;
 use Zend\Db\Sql\Where;
 use ZfcDatagrid\Column;
 use ZfcDatagrid\Filter as DatagridFilter;
+use function sprintf;
 
 class Filter
 {

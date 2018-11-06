@@ -6,6 +6,13 @@ use Zend\View\Helper\AbstractHelper;
 use ZfcDatagrid\Column;
 use ZfcDatagrid\Column\Type;
 use ZfcDatagrid\Filter;
+use function get_class;
+use function is_array;
+use function is_bool;
+use function json_encode;
+use function stripos;
+use function sprintf;
+use function implode;
 
 /**
  * View Helper.

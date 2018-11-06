@@ -10,6 +10,14 @@ use Zend\Http\Response\Stream as ResponseStream;
 use Zend\View\Model\ViewModel;
 use ZfcDatagrid\Column\Type;
 use ZfcDatagrid\Renderer\AbstractExport;
+use function date;
+use function fopen;
+use function fprintf;
+use function chr;
+use function fputcsv;
+use function implode;
+use function fclose;
+use function filesize;
 
 class Renderer extends AbstractExport
 {

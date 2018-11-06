@@ -5,6 +5,9 @@ use Zend\Http\PhpEnvironment\Request as HttpRequest;
 use Zend\View\Model\ViewModel;
 use ZfcDatagrid\Datagrid;
 use ZfcDatagrid\Renderer\AbstractRenderer;
+use function explode;
+use function count;
+use function strtoupper;
 
 class Renderer extends AbstractRenderer
 {

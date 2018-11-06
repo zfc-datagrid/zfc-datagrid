@@ -1,6 +1,11 @@
 <?php
 namespace ZfcDatagrid\Column\Style;
 
+use function is_array;
+use function count;
+use function dechex;
+use function strlen;
+
 /**
  * Abstract color class for font and backgroundColor.
  */

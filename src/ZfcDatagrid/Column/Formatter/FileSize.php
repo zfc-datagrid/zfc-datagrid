@@ -2,6 +2,7 @@
 namespace ZfcDatagrid\Column\Formatter;
 
 use ZfcDatagrid\Column\AbstractColumn;
+use function sprintf;
 
 class FileSize extends AbstractFormatter
 {

@@ -9,6 +9,16 @@ use Zend\Text\Table\Table as TextTable;
 use ZfcDatagrid\Column;
 use ZfcDataGrid\Column\Type;
 use ZfcDatagrid\Renderer\AbstractRenderer;
+use function explode;
+use function strtoupper;
+use function count;
+use function function_exists;
+use function mb_strtoupper;
+use function is_array;
+use function implode;
+use function sprintf;
+use function floor;
+use function array_sum;
 
 /**
  * For CLI.

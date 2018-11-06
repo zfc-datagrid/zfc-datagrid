@@ -1,6 +1,8 @@
 <?php
 namespace ZfcDatagrid\Column\Action;
 
+use function sprintf;
+
 /**
  * @todo Checkbox for multi row actions...
  */

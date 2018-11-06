@@ -3,6 +3,12 @@ namespace ZfcDatagrid\DataSource;
 
 use Zend\Paginator\Adapter\ArrayAdapter as PaginatorAdapter;
 use ZfcDatagrid\Column;
+use function array_filter;
+use function in_array;
+use function get_class;
+use function end;
+use function count;
+use function call_user_func_array;
 
 class PhpArray extends AbstractDataSource
 {

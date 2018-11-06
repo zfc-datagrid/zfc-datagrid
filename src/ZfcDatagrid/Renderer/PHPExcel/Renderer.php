@@ -17,6 +17,14 @@ use Zend\Http\Headers;
 use Zend\Http\Response\Stream as ResponseStream;
 use ZfcDatagrid\Column;
 use ZfcDatagrid\Renderer\AbstractExport;
+use function is_array;
+use function implode;
+use function get_class;
+use function is_scalar;
+use function array_merge;
+use function fopen;
+use function filesize;
+use function date;
 
 class Renderer extends AbstractExport
 {

@@ -2,6 +2,7 @@
 namespace ZfcDatagrid\Column\DataPopulation\Object;
 
 use ZfcDatagrid\Column\DataPopulation\ObjectAwareInterface;
+use function md5;
 
 class Gravatar implements ObjectAwareInterface
 {

@@ -3,6 +3,11 @@ namespace ZfcDatagrid\Column\Formatter;
 
 use Zend\Router\RouteStackInterface;
 use ZfcDatagrid\Column\AbstractColumn;
+use function implode;
+use function strpos;
+use function sprintf;
+use function str_replace;
+use function rawurlencode;
 
 class HtmlTag extends AbstractFormatter implements RouterInterface
 {
