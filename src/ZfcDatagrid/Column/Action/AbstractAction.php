@@ -3,6 +3,9 @@ namespace ZfcDatagrid\Column\Action;
 
 use ZfcDatagrid\Column;
 use ZfcDatagrid\Filter;
+use function strpos;
+use function str_replace;
+use function implode;
 
 abstract class AbstractAction
 {

@@ -3,6 +3,9 @@ namespace ZfcDatagrid\DataSource\Doctrine2;
 
 use Doctrine\ORM\QueryBuilder;
 use Zend\Paginator\Adapter\AdapterInterface;
+use function count;
+use function implode;
+use function array_unique;
 
 class PaginatorFast implements AdapterInterface
 {

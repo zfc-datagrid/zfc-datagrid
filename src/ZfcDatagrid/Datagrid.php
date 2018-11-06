@@ -19,6 +19,22 @@ use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
 use ZfcDatagrid\Column\Style;
 use ZfcDatagrid\DataSource\DataSourceInterface;
+use function md5;
+use function preg_replace;
+use function is_array;
+use function func_get_args;
+use function count;
+use function class_exists;
+use function ucfirst;
+use function method_exists;
+use function in_array;
+use function call_user_func_array;
+use function call_user_func;
+use function ksort;
+use function is_object;
+use function sprintf;
+use function get_class;
+
 
 class Datagrid
 {

@@ -5,6 +5,10 @@ use Zend\Http\PhpEnvironment\Request as HttpRequest;
 use Zend\View\Model\JsonModel;
 use ZfcDatagrid\Column;
 use ZfcDatagrid\Renderer\AbstractRenderer;
+use function explode;
+use function count;
+use function strtoupper;
+use function implode;
 
 class Renderer extends AbstractRenderer
 {

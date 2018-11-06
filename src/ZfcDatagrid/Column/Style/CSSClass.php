@@ -1,11 +1,15 @@
 <?php
 namespace ZfcDatagrid\Column\Style;
 
+use function is_array;
+use function implode;
+
 /**
  * Css class for the row/cell.
  */
 class CSSClass extends AbstractStyle
 {
+    /** @var array|string */
     private $class;
 
     /**
@@ -21,11 +25,7 @@ class CSSClass extends AbstractStyle
      */
     public function getClass(): string
     {
-        if (is_array($this->class)) {
-            return implode(' ', $this->class);
-        }
-
-        return $this->class;
+        return is_array($this->class) ? implode(' ', $this->class) : $this->class;
     }
 
     /**

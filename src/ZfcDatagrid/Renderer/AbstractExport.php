@@ -6,6 +6,14 @@
 namespace ZfcDatagrid\Renderer;
 
 use ZfcDatagrid\Column;
+use function in_array;
+use function get_class;
+use function substr;
+use function floor;
+use function date;
+use function implode;
+use function str_replace;
+use function preg_replace;
 
 abstract class AbstractExport extends AbstractRenderer
 {

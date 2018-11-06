@@ -9,6 +9,9 @@ use Zend\Paginator\Paginator;
 use Zend\View\Model\ViewModel;
 use ZfcDatagrid\Datagrid;
 use ZfcDatagrid\Filter;
+use function implode;
+use function is_array;
+use function array_key_exists;
 
 abstract class AbstractRenderer implements RendererInterface
 {

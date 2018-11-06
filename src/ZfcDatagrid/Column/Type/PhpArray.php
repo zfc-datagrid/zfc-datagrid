@@ -1,6 +1,9 @@
 <?php
 namespace ZfcDatagrid\Column\Type;
 
+use function is_array;
+use function explode;
+
 class PhpArray extends AbstractType
 {
     /**

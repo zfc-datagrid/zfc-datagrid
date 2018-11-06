@@ -1,6 +1,8 @@
 <?php
 namespace ZfcDatagrid;
 
+use function array_merge_recursive;
+
 class Module
 {
     /**

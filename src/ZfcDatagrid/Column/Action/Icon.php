@@ -1,6 +1,8 @@
 <?php
 namespace ZfcDatagrid\Column\Action;
 
+use InvalidArgumentException;
+
 class Icon extends AbstractAction
 {
     /** @var string */
@@ -77,6 +79,6 @@ class Icon extends AbstractAction
             return '<img src="' . $this->getIconLink() . '" />';
         }
 
-        throw new \InvalidArgumentException('Either a link or a class for the icon is required');
+        throw new InvalidArgumentException('Either a link or a class for the icon is required');
     }
 }

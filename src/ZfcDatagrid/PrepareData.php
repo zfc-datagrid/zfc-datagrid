@@ -3,6 +3,11 @@ namespace ZfcDatagrid;
 
 use Zend\I18n\Translator\TranslatorInterface;
 use Zend\Router\RouteStackInterface;
+use function is_array;
+use function array_walk_recursive;
+use function is_object;
+use function trim;
+use function implode;
 
 class PrepareData
 {

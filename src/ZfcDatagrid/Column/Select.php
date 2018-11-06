@@ -1,6 +1,9 @@
 <?php
 namespace ZfcDatagrid\Column;
 
+use function is_string;
+use function is_object;
+
 class Select extends AbstractColumn
 {
     /** @var string|object|null */

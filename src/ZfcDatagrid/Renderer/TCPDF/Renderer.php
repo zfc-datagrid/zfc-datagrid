@@ -12,6 +12,20 @@ use ZfcDatagrid\Column\Style;
 use ZfcDatagrid\Column\Type;
 use ZfcDatagrid\Library\ImageResize;
 use ZfcDatagrid\Renderer\AbstractExport;
+use function fopen;
+use function filesize;
+use function date;
+use function get_class;
+use function implode;
+use function str_replace;
+use function strip_tags;
+use function file_get_contents;
+use function is_array;
+use function getimagesizefromstring;
+use function array_merge;
+use function trigger_error;
+use function array_shift;
+
 
 class Renderer extends AbstractExport
 {

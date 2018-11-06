@@ -2,6 +2,9 @@
 namespace ZfcDatagrid\Column\Type;
 
 use ZfcDatagrid\Filter;
+use function in_array;
+use function sprintf;
+use function strval;
 
 abstract class AbstractType implements TypeInterface
 {
