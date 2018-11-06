@@ -297,7 +297,7 @@ class AbstractRendererTest extends TestCase
         /* @var $renderer \ZfcDatagrid\Renderer\AbstractRenderer */
         $renderer = $this->getMockForAbstractClass(\ZfcDatagrid\Renderer\AbstractRenderer::class);
 
-        $this->assertNull($renderer->getTitle());
+        $this->assertSame('', $renderer->getTitle());
 
         $renderer->setTitle('My title');
         $this->assertEquals('My title', $renderer->getTitle());

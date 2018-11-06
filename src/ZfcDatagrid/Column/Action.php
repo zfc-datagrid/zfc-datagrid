@@ -15,7 +15,7 @@ class Action extends AbstractColumn
     /**
      * @param string $uniqueId
      */
-    public function __construct($uniqueId = 'action')
+    public function __construct(string $uniqueId = 'action')
     {
         $this->setUniqueId($uniqueId);
         $this->setLabel('Actions');
@@ -37,7 +37,7 @@ class Action extends AbstractColumn
     /**
      * @return Action\AbstractAction[]
      */
-    public function getActions()
+    public function getActions(): array
     {
         return $this->actions;
     }
@@ -55,13 +55,9 @@ class Action extends AbstractColumn
      *
      * @return Action\AbstractAction|null
      */
-    public function getAction($key)
+    public function getAction($key): ?Action\AbstractAction
     {
-        if (isset($this->actions[$key])) {
-            return $this->actions[$key];
-        }
-
-        return null;
+        return $this->actions[$key] ?? null;
     }
 
     /**

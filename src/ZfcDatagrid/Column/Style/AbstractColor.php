@@ -35,11 +35,14 @@ class AbstractColor extends AbstractStyle
         255,
     ];
 
-    protected $red;
+    /** @var int */
+    protected $red = 0;
 
-    protected $green;
+    /** @var int */
+    protected $green = 0;
 
-    protected $blue;
+    /** @var int */
+    protected $blue = 0;
 
     /**
      * Set red green blue.
@@ -51,7 +54,7 @@ class AbstractColor extends AbstractStyle
      * @param int   $blue
      *                                  0-255
      */
-    public function __construct($redOrStaticOrArray, $green = null, $blue = null)
+    public function __construct($redOrStaticOrArray, int $green = 0, int $blue = 0)
     {
         if (is_array($redOrStaticOrArray) && count($redOrStaticOrArray) === 3) {
             list($red, $green, $blue) = $redOrStaticOrArray;
@@ -74,7 +77,7 @@ class AbstractColor extends AbstractStyle
      * @param int $blue
      *                   0-255
      */
-    public function setRgb($red, $green, $blue)
+    public function setRgb(int $red, int $green, int $blue)
     {
         $this->red   = (int) $red;
         $this->green = (int) $green;
@@ -84,15 +87,15 @@ class AbstractColor extends AbstractStyle
     /**
      * @param int $red
      */
-    public function setRed($red)
+    public function setRed(int $red)
     {
-        $this->red = (int) $red;
+        $this->red = $red;
     }
 
     /**
      * @return int
      */
-    public function getRed()
+    public function getRed(): int
     {
         return $this->red;
     }
@@ -100,15 +103,15 @@ class AbstractColor extends AbstractStyle
     /**
      * @param int $green
      */
-    public function setGreen($green)
+    public function setGreen(int $green)
     {
-        $this->green = (int) $green;
+        $this->green = $green;
     }
 
     /**
      * @return int
      */
-    public function getGreen()
+    public function getGreen(): int
     {
         return $this->green;
     }
@@ -116,15 +119,15 @@ class AbstractColor extends AbstractStyle
     /**
      * @param int $blue
      */
-    public function setBlue($blue)
+    public function setBlue(int $blue)
     {
-        $this->blue = (int) $blue;
+        $this->blue = $blue;
     }
 
     /**
      * @return int
      */
-    public function getBlue()
+    public function getBlue(): int
     {
         return $this->blue;
     }
@@ -132,7 +135,7 @@ class AbstractColor extends AbstractStyle
     /**
      * @return array
      */
-    public function getRgbArray()
+    public function getRgbArray(): array
     {
         return [
             'red'   => $this->getRed(),
@@ -146,7 +149,7 @@ class AbstractColor extends AbstractStyle
      *
      * @return string
      */
-    public function getRgbHexString()
+    public function getRgbHexString(): string
     {
         $red = dechex($this->getRed());
         if (strlen($red) === 1) {

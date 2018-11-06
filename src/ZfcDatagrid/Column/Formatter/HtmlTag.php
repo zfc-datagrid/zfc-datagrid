@@ -8,42 +8,28 @@ class HtmlTag extends AbstractFormatter implements RouterInterface
 {
     const ROW_ID_PLACEHOLDER = ':rowId:';
 
-    /**
-     * @var array
-     */
+    /** @var string[] */
     protected $validRenderers = [
         'jqGrid',
         'bootstrapTable',
     ];
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $name = 'span';
 
-    /**
-     * @var AbstractColumn[]
-     */
+    /** @var AbstractColumn[] */
     protected $linkColumnPlaceholders = [];
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $attributes = [];
 
-    /**
-     * @var string
-     */
-    protected $route;
+    /** @var string */
+    protected $route = '';
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $routeParams = [];
 
-    /**
-     * @var RouteStackInterface
-     */
+    /** @var RouteStackInterface */
     public $router;
 
     /**
@@ -57,9 +43,9 @@ class HtmlTag extends AbstractFormatter implements RouterInterface
     }
 
     /**
-     * @return \Zend\Router\RouteStackInterface
+     * @return null|RouteStackInterface
      */
-    public function getRouter()
+    public function getRouter(): ?RouteStackInterface
     {
         return $this->router;
     }
@@ -67,7 +53,7 @@ class HtmlTag extends AbstractFormatter implements RouterInterface
     /**
      * @param $name
      */
-    public function setName($name)
+    public function setName(string $name)
     {
         $this->name = $name;
     }
@@ -75,7 +61,7 @@ class HtmlTag extends AbstractFormatter implements RouterInterface
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -86,9 +72,9 @@ class HtmlTag extends AbstractFormatter implements RouterInterface
      * @param string $name
      * @param string $value
      */
-    public function setAttribute($name, $value)
+    public function setAttribute(string $name, string $value)
     {
-        $this->attributes[$name] = (string) $value;
+        $this->attributes[$name] = $value;
     }
 
     /**
@@ -98,13 +84,9 @@ class HtmlTag extends AbstractFormatter implements RouterInterface
      *
      * @return string
      */
-    public function getAttribute($name)
+    public function getAttribute(string $name): string
     {
-        if (isset($this->attributes[$name])) {
-            return $this->attributes[$name];
-        }
-
-        return '';
+        return $this->attributes[$name] ?? '';
     }
 
     /**
@@ -112,11 +94,9 @@ class HtmlTag extends AbstractFormatter implements RouterInterface
      *
      * @param string $name
      */
-    public function removeAttribute($name)
+    public function removeAttribute(string $name)
     {
-        if (isset($this->attributes[$name])) {
-            unset($this->attributes[$name]);
-        }
+        unset($this->attributes[$name]);
     }
 
     /**
@@ -124,7 +104,7 @@ class HtmlTag extends AbstractFormatter implements RouterInterface
      *
      * @return array
      */
-    public function getAttributes()
+    public function getAttributes(): array
     {
         return $this->attributes;
     }
@@ -134,7 +114,7 @@ class HtmlTag extends AbstractFormatter implements RouterInterface
      *
      * @param string $href
      */
-    public function setLink($href)
+    public function setLink(string $href)
     {
         $this->setAttribute('href', $href);
     }
@@ -142,7 +122,7 @@ class HtmlTag extends AbstractFormatter implements RouterInterface
     /**
      * @return string
      */
-    public function getLink()
+    public function getLink(): string
     {
         return $this->getAttribute('href');
     }
@@ -150,7 +130,7 @@ class HtmlTag extends AbstractFormatter implements RouterInterface
     /**
      * @param string $route
      */
-    public function setRoute($route)
+    public function setRoute(string $route)
     {
         $this->route = $route;
     }
@@ -158,7 +138,7 @@ class HtmlTag extends AbstractFormatter implements RouterInterface
     /**
      * @return string
      */
-    public function getRoute()
+    public function getRoute(): string
     {
         return $this->route;
     }
@@ -174,7 +154,7 @@ class HtmlTag extends AbstractFormatter implements RouterInterface
     /**
      * @return array
      */
-    public function getRouteParams()
+    public function getRouteParams(): array
     {
         return $this->routeParams;
     }
@@ -197,7 +177,7 @@ class HtmlTag extends AbstractFormatter implements RouterInterface
     /**
      * @return AbstractColumn[]
      */
-    public function getLinkColumnPlaceholders()
+    public function getLinkColumnPlaceholders(): array
     {
         return $this->linkColumnPlaceholders;
     }
@@ -207,7 +187,7 @@ class HtmlTag extends AbstractFormatter implements RouterInterface
      *
      * @return string
      */
-    public function getRowIdPlaceholder()
+    public function getRowIdPlaceholder(): string
     {
         return self::ROW_ID_PLACEHOLDER;
     }
@@ -217,7 +197,7 @@ class HtmlTag extends AbstractFormatter implements RouterInterface
      *
      * @return string
      */
-    public function getFormattedValue(AbstractColumn $col)
+    public function getFormattedValue(AbstractColumn $col): string
     {
         $row = $this->getRowData();
 
@@ -237,7 +217,7 @@ class HtmlTag extends AbstractFormatter implements RouterInterface
      *
      * @return string
      */
-    protected function getAttributesString(AbstractColumn $col)
+    protected function getAttributesString(AbstractColumn $col): string
     {
         $attributes = [];
 
@@ -265,7 +245,7 @@ class HtmlTag extends AbstractFormatter implements RouterInterface
      *
      * @return string
      */
-    protected function getLinkReplaced(AbstractColumn $col)
+    protected function getLinkReplaced(AbstractColumn $col): string
     {
         $row = $this->getRowData();
 

@@ -9,14 +9,14 @@ class PaginatorFast implements AdapterInterface
     /**
      * @var QueryBuilder
      */
-    protected $qb = null;
+    protected $qb;
 
     /**
      * Total item count.
      *
-     * @var int
+     * @var int|null
      */
-    protected $rowCount = null;
+    protected $rowCount;
 
     /**
      * @param QueryBuilder $qb

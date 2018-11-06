@@ -22,7 +22,7 @@ class Image extends AbstractType
     /**
      * @return string
      */
-    public function getTypeName()
+    public function getTypeName(): string
     {
         return 'image';
     }
@@ -34,7 +34,7 @@ class Image extends AbstractType
      *
      * @throws InvalidArgumentException
      */
-    public function setResizeType($type)
+    public function setResizeType(string $type)
     {
         if ($type != 'fixed' && $type != 'dynamic') {
             throw new InvalidArgumentException('Only dynamic or fixed is allowed as Type');
@@ -46,7 +46,7 @@ class Image extends AbstractType
     /**
      * @return string
      */
-    public function getResizeType()
+    public function getResizeType(): string
     {
         return $this->resizeType;
     }
@@ -54,7 +54,7 @@ class Image extends AbstractType
     /**
      * @param float $height
      */
-    public function setResizeHeight($height)
+    public function setResizeHeight(float $height)
     {
         $this->resizeHeight = $height;
     }
@@ -62,7 +62,7 @@ class Image extends AbstractType
     /**
      * @return float
      */
-    public function getResizeHeight()
+    public function getResizeHeight(): float
     {
         return $this->resizeHeight;
     }

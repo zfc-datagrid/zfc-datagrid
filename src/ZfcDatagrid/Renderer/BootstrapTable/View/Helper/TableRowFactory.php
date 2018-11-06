@@ -13,7 +13,7 @@ class TableRowFactory implements FactoryInterface
      *
      * @return TableRow
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): TableRow
     {
         $tableRow = new TableRow();
         if ($container->has('translator')) {

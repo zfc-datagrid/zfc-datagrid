@@ -1,22 +1,12 @@
 <?php
 namespace ZfcDatagrid\DataSource;
 
+use Zend\Paginator\Adapter\AdapterInterface;
 use ZfcDatagrid\Column;
 use ZfcDatagrid\Filter;
 
 interface DataSourceInterface
 {
-    /**
-     * Set the data source
-     * - array
-     * - ZF2: Zend\Db\Sql\Select
-     * - Doctrine2: Doctrine\ORM\QueryBuilder
-     * - ...
-     *
-     * @param mixed $data
-     */
-    public function __construct($data);
-
     /**
      * Get the data back from construct.
      *
@@ -44,7 +34,7 @@ interface DataSourceInterface
      * @param Column\AbstractColumn $column
      * @param string                $sortDirection
      */
-    public function addSortCondition(Column\AbstractColumn $column, $sortDirection = 'ASC');
+    public function addSortCondition(Column\AbstractColumn $column, string $sortDirection = 'ASC');
 
     /**
      * @param Filter $filters
@@ -52,7 +42,7 @@ interface DataSourceInterface
     public function addFilter(Filter $filter);
 
     /**
-     * @return \Zend\Paginator\Adapter\AdapterInterface
+     * @return AdapterInterface
      */
-    public function getPaginatorAdapter();
+    public function getPaginatorAdapter(): ?AdapterInterface;
 }

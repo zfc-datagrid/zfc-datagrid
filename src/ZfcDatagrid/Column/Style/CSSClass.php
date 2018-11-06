@@ -19,7 +19,7 @@ class CSSClass extends AbstractStyle
     /**
      * @return string
      */
-    public function getClass()
+    public function getClass(): string
     {
         if (is_array($this->class)) {
             return implode(' ', $this->class);

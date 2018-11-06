@@ -3,9 +3,11 @@ namespace ZfcDatagrid\Column\Action;
 
 class Icon extends AbstractAction
 {
-    protected $iconClass;
+    /** @var string */
+    protected $iconClass = '';
 
-    protected $iconLink;
+    /** @var string */
+    protected $iconLink = '';
 
     /**
      * Set the icon class (CSS)
@@ -13,15 +15,15 @@ class Icon extends AbstractAction
      *
      * @param string $name
      */
-    public function setIconClass($name)
+    public function setIconClass(string $name)
     {
-        $this->iconClass = (string) $name;
+        $this->iconClass = $name;
     }
 
     /**
      * @return string
      */
-    public function getIconClass()
+    public function getIconClass(): string
     {
         return $this->iconClass;
     }
@@ -29,9 +31,9 @@ class Icon extends AbstractAction
     /**
      * @return bool
      */
-    public function hasIconClass()
+    public function hasIconClass(): bool
     {
-        return $this->getIconClass() != '';
+        return '' !== $this->getIconClass();
     }
 
     /**
@@ -39,9 +41,9 @@ class Icon extends AbstractAction
      *
      * @param string $httpLink
      */
-    public function setIconLink($httpLink)
+    public function setIconLink(string $httpLink)
     {
-        $this->iconLink = (string) $httpLink;
+        $this->iconLink = $httpLink;
     }
 
     /**
@@ -49,7 +51,7 @@ class Icon extends AbstractAction
      *
      * @return string
      */
-    public function getIconLink()
+    public function getIconLink(): string
     {
         return $this->iconLink;
     }
@@ -57,20 +59,20 @@ class Icon extends AbstractAction
     /**
      * @return bool
      */
-    public function hasIconLink()
+    public function hasIconLink(): bool
     {
-        return $this->getIconLink() != '';
+        return '' !== $this->getIconLink();
     }
 
     /**
      * @return string
      */
-    protected function getHtmlType()
+    protected function getHtmlType(): string
     {
-        if ($this->hasIconClass() === true) {
+        if (true === $this->hasIconClass()) {
             // a css class is provided, so use it
             return '<i class="' . $this->getIconClass() . '"></i>';
-        } elseif ($this->hasIconLink() === true) {
+        } elseif (true === $this->hasIconLink()) {
             // no css class -> use the icon link instead
             return '<img src="' . $this->getIconLink() . '" />';
         }

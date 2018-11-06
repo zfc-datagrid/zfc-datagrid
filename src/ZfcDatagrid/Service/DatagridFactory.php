@@ -15,7 +15,7 @@ class DatagridFactory implements FactoryInterface
      *
      * @return Datagrid
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Datagrid
     {
         $config = $container->get('config');
 
@@ -27,11 +27,11 @@ class DatagridFactory implements FactoryInterface
         $application = $container->get('application');
 
         $grid = new Datagrid();
-        $grid->setServiceLocator($container);
         $grid->setOptions($config['ZfcDatagrid']);
         $grid->setMvcEvent($application->getMvcEvent());
+        $grid->setRouter($container->get('Router'));
 
-        if ($container->has('translator') === true) {
+        if (true === $container->has('translator')) {
             $grid->setTranslator($container->get('translator'));
         }
 

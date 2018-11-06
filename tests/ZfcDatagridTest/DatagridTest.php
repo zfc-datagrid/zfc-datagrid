@@ -260,7 +260,7 @@ class DatagridTest extends TestCase
 
     public function testUrl()
     {
-        $this->assertEquals(null, $this->grid->getUrl());
+        $this->assertSame('', $this->grid->getUrl());
 
         $this->grid->setUrl('/module/controller/action');
         $this->assertEquals('/module/controller/action', $this->grid->getUrl());

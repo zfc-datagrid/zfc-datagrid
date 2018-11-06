@@ -25,7 +25,7 @@ abstract class AbstractFormatter
     /**
      * @return array
      */
-    public function getRowData()
+    public function getRowData(): array
     {
         return $this->data;
     }
@@ -33,7 +33,7 @@ abstract class AbstractFormatter
     /**
      * @param string $name
      */
-    public function setRendererName($name = null)
+    public function setRendererName(?string $name = null)
     {
         $this->rendererName = $name;
     }
@@ -41,7 +41,7 @@ abstract class AbstractFormatter
     /**
      * @return string null
      */
-    public function getRendererName()
+    public function getRendererName(): ?string
     {
         return $this->rendererName;
     }
@@ -57,7 +57,7 @@ abstract class AbstractFormatter
     /**
      * @return array
      */
-    public function getValidRendererNames()
+    public function getValidRendererNames(): array
     {
         return $this->validRenderers;
     }
@@ -65,7 +65,7 @@ abstract class AbstractFormatter
     /**
      * @return bool
      */
-    public function isApply()
+    public function isApply(): bool
     {
         return in_array($this->getRendererName(), $this->validRenderers);
     }
@@ -75,7 +75,7 @@ abstract class AbstractFormatter
      *
      * @return string
      */
-    public function format(AbstractColumn $column)
+    public function format(AbstractColumn $column): string
     {
         $data = $this->getRowData();
         if ($this->isApply() === true) {
@@ -90,5 +90,5 @@ abstract class AbstractFormatter
      *
      * @return string
      */
-    abstract public function getFormattedValue(AbstractColumn $column);
+    abstract public function getFormattedValue(AbstractColumn $column): string;
 }

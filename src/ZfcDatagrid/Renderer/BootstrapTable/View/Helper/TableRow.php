@@ -1,6 +1,7 @@
 <?php
 namespace ZfcDatagrid\Renderer\BootstrapTable\View\Helper;
 
+use Zend\I18n\Translator\TranslatorInterface;
 use Zend\View\Helper\AbstractHelper;
 use ZfcDatagrid\Column;
 use ZfcDatagrid\Column\Action\AbstractAction;
@@ -10,15 +11,15 @@ use ZfcDatagrid\Column\Action\AbstractAction;
  */
 class TableRow extends AbstractHelper
 {
-    /** @var \Zend\I18n\Translator\TranslatorInterface|null */
+    /** @var TranslatorInterface|null */
     private $translator;
 
     /**
-     * @param null|\Zend\I18n\Translator\TranslatorInterface $translator
+     * @param null|TranslatorInterface $translator
      *
      * @return self
      */
-    public function setTranslator($translator)
+    public function setTranslator(?TranslatorInterface $translator)
     {
         $this->translator = $translator;
 
@@ -30,7 +31,7 @@ class TableRow extends AbstractHelper
      *
      * @return string
      */
-    private function translate($message)
+    private function translate(string $message): string
     {
         if (null === $this->translator) {
             return $message;
@@ -40,12 +41,12 @@ class TableRow extends AbstractHelper
     }
 
     /**
-     * @param $row
-     * @param bool|true $open
+     * @param array $row
+     * @param bool  $open
      *
      * @return string
      */
-    private function getTr($row, $open = true)
+    private function getTr(array $row, bool $open = true): string
     {
         if ($open !== true) {
             return '</tr>';
@@ -59,12 +60,12 @@ class TableRow extends AbstractHelper
     }
 
     /**
-     * @param $dataValue
+     * @param string $dataValue
      * @param array $attributes
      *
      * @return string
      */
-    private function getTd($dataValue, $attributes = [])
+    private function getTd(string $dataValue, array $attributes = []): string
     {
         $attr = [];
         foreach ($attributes as $name => $value) {
@@ -83,18 +84,19 @@ class TableRow extends AbstractHelper
      * @param array          $cols
      * @param AbstractAction $rowClickAction
      * @param array          $rowStyles
+     * @param bool           $hasMassActions
      *
      * @throws \Exception
      *
      * @return string
      */
     public function __invoke(
-        $row,
+        array $row,
         array $cols,
         AbstractAction $rowClickAction = null,
         array $rowStyles = [],
-        $hasMassActions = false
-    ) {
+        bool $hasMassActions = false
+    ): string {
         $return = $this->getTr($row);
 
         if (true === $hasMassActions) {
@@ -103,13 +105,12 @@ class TableRow extends AbstractHelper
 
         foreach ($cols as $col) {
             /* @var $col Column\AbstractColumn */
-
             $value = $row[$col->getUniqueId()];
 
             $cssStyles = [];
             $classes   = [];
 
-            if ($col->isHidden() === true) {
+            if (true === $col->isHidden()) {
                 $classes[] = 'hidden';
             }
 
@@ -187,8 +188,10 @@ class TableRow extends AbstractHelper
             }
 
             // "rowClick" action
-            if ($col instanceof Column\Select && $rowClickAction instanceof AbstractAction
-                    && $col->isRowClickEnabled()) {
+            if ($col instanceof Column\Select
+                && $rowClickAction instanceof AbstractAction
+                && $col->isRowClickEnabled()
+            ) {
                 $value = '<a href="' . $rowClickAction->getLinkReplaced($row) . '">' . $value . '</a>';
             }
 

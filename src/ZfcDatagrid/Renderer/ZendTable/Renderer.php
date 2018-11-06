@@ -15,20 +15,16 @@ use ZfcDatagrid\Renderer\AbstractRenderer;
  */
 class Renderer extends AbstractRenderer
 {
-    /**
-     * @var ConsoleAdapter
-     */
+    /** @var ConsoleAdapter */
     private $consoleAdapter;
 
-    /**
-     * @var Column\AbstractColumn[]
-     */
-    private $columnsToDisplay;
+    /** @var Column\AbstractColumn[] */
+    private $columnsToDisplay = [];
 
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return 'zendTable';
     }
@@ -36,7 +32,7 @@ class Renderer extends AbstractRenderer
     /**
      * @return bool
      */
-    public function isExport()
+    public function isExport(): bool
     {
         return false;
     }
@@ -44,7 +40,7 @@ class Renderer extends AbstractRenderer
     /**
      * @return bool
      */
-    public function isHtml()
+    public function isHtml(): bool
     {
         return false;
     }
@@ -54,7 +50,7 @@ class Renderer extends AbstractRenderer
      *
      * @throws \Exception
      */
-    public function getRequest()
+    public function getRequest(): ConsoleRequest
     {
         $request = parent::getRequest();
         if (! $request instanceof ConsoleRequest) {
@@ -75,7 +71,7 @@ class Renderer extends AbstractRenderer
     /**
      * @return ConsoleAdapter
      */
-    public function getConsoleAdapter()
+    public function getConsoleAdapter(): ConsoleAdapter
     {
         if (null === $this->consoleAdapter) {
             $this->consoleAdapter = Console::getInstance();
@@ -89,9 +85,9 @@ class Renderer extends AbstractRenderer
      *
      * @return array
      */
-    public function getSortConditions()
+    public function getSortConditions(): array
     {
-        if (is_array($this->sortConditions)) {
+        if (!empty($this->sortConditions)) {
             return $this->sortConditions;
         }
 
@@ -148,7 +144,7 @@ class Renderer extends AbstractRenderer
      *
      * @return array
      */
-    public function getFilters()
+    public function getFilters(): array
     {
         return [];
     }
@@ -158,7 +154,7 @@ class Renderer extends AbstractRenderer
      *
      * @return int
      */
-    public function getCurrentPageNumber()
+    public function getCurrentPageNumber(): int
     {
         $request = $this->getRequest();
 
@@ -178,7 +174,7 @@ class Renderer extends AbstractRenderer
      *
      * @throws \Exception
      */
-    public function getItemsPerPage($defaultItems = 25)
+    public function getItemsPerPage($defaultItems = 25): int
     {
         $request = $this->getRequest();
 
@@ -207,7 +203,7 @@ class Renderer extends AbstractRenderer
     /**
      * @return TextTable
      */
-    private function getTable()
+    private function getTable(): TextTable
     {
         $paginator = $this->getPaginator();
 
@@ -236,20 +232,12 @@ class Renderer extends AbstractRenderer
         $tableRow = new Table\Row();
         foreach ($this->getColumnsToDisplay() as $column) {
             $label = $this->translate($column->getLabel());
-
-            if (function_exists('mb_strtoupper')) {
-                $label = mb_strtoupper($label);
-            } else {
-                $label = strtoupper($label);
-            }
+            $label = function_exists('mb_strtoupper') ? mb_strtoupper($label) : strtoupper($label);
 
             $tableColumn = new Table\Column($label);
-            if ($column->getType() instanceof Type\Number) {
-                $tableColumn->setAlign(Table\Column::ALIGN_RIGHT);
-            } else {
-                $tableColumn->setAlign(Table\Column::ALIGN_LEFT);
-            }
-
+            $tableColumn->setAlign(
+                $column->getType() instanceof Type\Number ? Table\Column::ALIGN_RIGHT : Table\Column::ALIGN_LEFT
+            );
             $tableRow->appendColumn($tableColumn);
         }
         $table->appendRow($tableRow);
@@ -270,11 +258,9 @@ class Renderer extends AbstractRenderer
                 }
 
                 $tableColumn = new Table\Column($value);
-                if ($column->getType() instanceof Type\Number) {
-                    $tableColumn->setAlign(Table\Column::ALIGN_RIGHT);
-                } else {
-                    $tableColumn->setAlign(Table\Column::ALIGN_LEFT);
-                }
+                $tableColumn->setAlign(
+                    $column->getType() instanceof Type\Number ? Table\Column::ALIGN_RIGHT : Table\Column::ALIGN_LEFT
+                );
                 $tableRow->appendColumn($tableColumn);
             }
 
@@ -317,9 +303,9 @@ class Renderer extends AbstractRenderer
      *
      * @throws \Exception
      */
-    private function getColumnsToDisplay()
+    private function getColumnsToDisplay(): array
     {
-        if (is_array($this->columnsToDisplay)) {
+        if (!empty($this->columnsToDisplay)) {
             return $this->columnsToDisplay;
         }
 
@@ -343,7 +329,7 @@ class Renderer extends AbstractRenderer
     /**
      * @return array
      */
-    private function getColumnWidths()
+    private function getColumnWidths(): array
     {
         $cols = $this->getColumnsToDisplay();
 

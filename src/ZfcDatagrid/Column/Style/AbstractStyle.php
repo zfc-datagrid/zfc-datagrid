@@ -6,11 +6,10 @@ use ZfcDatagrid\Filter;
 
 abstract class AbstractStyle
 {
+    /** @var string */
     protected $byValueOperator = 'OR';
 
-    /**
-     * @var array
-     */
+    /** @var array */
     private $byValues = [];
 
     /**
@@ -18,13 +17,13 @@ abstract class AbstractStyle
      *
      * @param string $operator
      */
-    public function setByValueOperator($operator = 'OR')
+    public function setByValueOperator(string $operator = 'OR')
     {
         if ($operator != 'AND' && $operator != 'OR') {
             throw new \InvalidArgumentException('not allowed operator: "' . $operator . '" (AND / OR is allowed)');
         }
 
-        $this->byValueOperator = (string) $operator;
+        $this->byValueOperator = $operator;
     }
 
     /**
@@ -33,7 +32,7 @@ abstract class AbstractStyle
      *
      * @return string
      */
-    public function getByValueOperator()
+    public function getByValueOperator(): string
     {
         return $this->byValueOperator;
     }
@@ -57,7 +56,7 @@ abstract class AbstractStyle
     /**
      * @return array
      */
-    public function getByValues()
+    public function getByValues(): array
     {
         return $this->byValues;
     }
@@ -65,7 +64,7 @@ abstract class AbstractStyle
     /**
      * @return bool
      */
-    public function hasByValues()
+    public function hasByValues(): bool
     {
         return !empty($this->byValues);
     }
@@ -75,7 +74,7 @@ abstract class AbstractStyle
      *
      * @return bool
      */
-    public function isApply(array $row)
+    public function isApply(array $row): bool
     {
         if (false === $this->hasByValues()) {
             return true;

@@ -17,7 +17,7 @@ interface RouterInterface
     public function setRouter(RouteStackInterface $router);
 
     /**
-     * @return \Zend\Router\RouteStackInterface
+     * @return null|RouteStackInterface
      */
-    public function getRouter();
+    public function getRouter(): ?RouteStackInterface;
 }

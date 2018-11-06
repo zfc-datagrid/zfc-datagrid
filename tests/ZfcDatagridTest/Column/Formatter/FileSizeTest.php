@@ -32,7 +32,7 @@ class FileSizeTest extends TestCase
         $formatter->setRowData([
             'myCol' => null,
         ]);
-        $this->assertNull($formatter->getFormattedValue($col));
+        $this->assertSame('', $formatter->getFormattedValue($col));
 
         $formatter->setRowData([
             'myCol' => '',
@@ -42,7 +42,7 @@ class FileSizeTest extends TestCase
         $formatter->setRowData([
             'myCol' => null,
         ]);
-        $this->assertNull($formatter->getFormattedValue($col));
+        $this->assertSame('', $formatter->getFormattedValue($col));
 
         $formatter->setRowData([
             'myCol' => 1,

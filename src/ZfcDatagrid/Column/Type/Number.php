@@ -15,7 +15,7 @@ class Number extends AbstractType
     /**
      * Locale to use instead of the default.
      *
-     * @var string
+     * @var string|null
      */
     protected $locale;
 
@@ -24,64 +24,95 @@ class Number extends AbstractType
      *
      * @var int
      */
-    protected $formatStyle;
+    protected $formatStyle = NumberFormatter::DECIMAL;
 
     /**
      * NumberFormat type to use.
      *
      * @var int
      */
-    protected $formatType;
+    protected $formatType = NumberFormatter::TYPE_DEFAULT;
 
+    /** @var array */
     protected $attributes = [];
 
+    /** @var string */
     protected $prefix = '';
 
+    /** @var string */
     protected $suffix = '';
 
+    /** @var null|string */
     protected $pattern;
 
+    /**
+     * Number constructor.
+     * @param int $formatStyle
+     * @param int $formatType
+     * @param null $locale
+     */
     public function __construct(
-        $formatStyle = NumberFormatter::DECIMAL,
-        $formatType = NumberFormatter::TYPE_DEFAULT,
-        $locale = null
+        int $formatStyle = NumberFormatter::DECIMAL,
+        int $formatType = NumberFormatter::TYPE_DEFAULT,
+        ?string $locale = null
     ) {
         $this->setFormatStyle($formatStyle);
         $this->setFormatType($formatType);
         $this->setLocale($locale);
     }
 
-    public function getTypeName()
+    /**
+     * @return string
+     */
+    public function getTypeName(): string
     {
         return 'number';
     }
 
-    public function setFormatStyle($style = NumberFormatter::DECIMAL)
+    /**
+     * @param int $style
+     */
+    public function setFormatStyle(int $style = NumberFormatter::DECIMAL)
     {
         $this->formatStyle = $style;
     }
 
-    public function getFormatStyle()
+    /**
+     * @return int
+     */
+    public function getFormatStyle(): int
     {
         return $this->formatStyle;
     }
 
-    public function setFormatType($type = NumberFormatter::TYPE_DEFAULT)
+    /**
+     * @param int $type
+     */
+    public function setFormatType(int $type = NumberFormatter::TYPE_DEFAULT)
     {
         $this->formatType = $type;
     }
 
-    public function getFormatType()
+    /**
+     * @return int
+     */
+    public function getFormatType(): int
     {
         return $this->formatType;
     }
 
-    public function setLocale($locale = null)
+    /**
+     * @param null|string $locale
+     */
+    public function setLocale(?string $locale = null)
     {
         $this->locale = $locale;
     }
 
-    public function getLocale()
+    /**
+     * @return string
+     */
+    public function getLocale(): string
     {
         if (null === $this->locale) {
             $this->locale = Locale::getDefault();
@@ -95,17 +126,10 @@ class Number extends AbstractType
      *
      * @link http://www.php.net/manual/en/numberformatter.setattribute.php
      *
-     * @param
-     *            attr int <p>
-     *            Attribute specifier - one of the
-     *            numeric attribute constants.
-     *            </p>
-     * @param
-     *            value int <p>
-     *            The attribute value.
-     *            </p>
+     * @param int $attr
+     * @param int $value
      */
-    public function addAttribute($attr, $value)
+    public function addAttribute(int $attr, int $value)
     {
         $this->attributes[] = [
             'attribute' => $attr,
@@ -113,37 +137,58 @@ class Number extends AbstractType
         ];
     }
 
-    public function getAttributes()
+    /**
+     * @return array
+     */
+    public function getAttributes(): array
     {
         return $this->attributes;
     }
 
-    public function setSuffix($string = '')
+    /**
+     * @param string $string
+     */
+    public function setSuffix(string $string = '')
     {
-        $this->suffix = (string) $string;
+        $this->suffix = $string;
     }
 
-    public function getSuffix()
+    /**
+     * @return string
+     */
+    public function getSuffix(): string
     {
         return $this->suffix;
     }
 
-    public function setPrefix($string = '')
+    /**
+     * @param string $string
+     */
+    public function setPrefix(string $string = '')
     {
-        $this->prefix = (string) $string;
+        $this->prefix = $string;
     }
 
-    public function getPrefix()
+    /**
+     * @return string
+     */
+    public function getPrefix(): string
     {
         return $this->prefix;
     }
 
-    public function setPattern($pattern)
+    /**
+     * @param null|string $pattern
+     */
+    public function setPattern(?string $pattern)
     {
         $this->pattern = $pattern;
     }
 
-    public function getPattern()
+    /**
+     * @return null|string
+     */
+    public function getPattern(): ?string
     {
         return $this->pattern;
     }
@@ -151,10 +196,10 @@ class Number extends AbstractType
     /**
      * @return NumberFormatter
      */
-    protected function getFormatter()
+    protected function getFormatter(): NumberFormatter
     {
         $formatter = new NumberFormatter($this->getLocale(), $this->getFormatStyle());
-        if ($this->getPattern() !== null) {
+        if (null !== $this->getPattern()) {
             $formatter->setPattern($this->getPattern());
         }
         foreach ($this->getAttributes() as $attribute) {
@@ -169,7 +214,7 @@ class Number extends AbstractType
      *
      * @return string
      */
-    public function getFilterValue($val)
+    public function getFilterValue(string $val): string
     {
         $formatter = $this->getFormatter();
 
@@ -196,9 +241,9 @@ class Number extends AbstractType
     /**
      * Convert the value from the source to the value, which the user will see.
      *
-     * @param string $val
+     * @param mixed $val
      *
-     * @return string
+     * @return mixed
      */
     public function getUserValue($val)
     {
@@ -206,6 +251,6 @@ class Number extends AbstractType
 
         $formattedValue = $formatter->format($val, $this->getFormatType());
 
-        return (string) $this->getPrefix() . $formattedValue . $this->getSuffix();
+        return $this->getPrefix() . $formattedValue . $this->getSuffix();
     }
 }

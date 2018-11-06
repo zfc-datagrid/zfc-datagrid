@@ -34,7 +34,7 @@ class Doctrine2Test extends AbstractDoctrine2Test
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \TypeError
      */
     public function testConstruct()
     {

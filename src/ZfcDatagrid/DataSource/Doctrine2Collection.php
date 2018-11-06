@@ -2,61 +2,49 @@
 namespace ZfcDatagrid\DataSource;
 
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use ZfcDatagrid\Column;
 use ZfcDatagrid\DataSource\PhpArray as SourceArray;
 
 class Doctrine2Collection extends AbstractDataSource
 {
-    /**
-     * @var Collection
-     */
+    /** @var Collection */
     private $data;
 
-    /**
-     * @var EntityManager
-     */
+    /** @var EntityManagerInterface|null */
     private $em;
 
     /**
      * Data source.
      *
-     * @param mixed $data
+     * @param Collection $data
      */
-    public function __construct($data)
+    public function __construct(Collection $data)
     {
-        if ($data instanceof Collection) {
-            $this->data = $data;
-        } else {
-            $return = $data;
-            if (is_object($data)) {
-                $return = 'instanceof ' . get_class($return);
-            }
-            throw new \InvalidArgumentException('Unknown data input: "' . $return . '"');
-        }
+        $this->data = $data;
     }
 
     /**
      * @return Collection
      */
-    public function getData()
+    public function getData(): Collection
     {
         return $this->data;
     }
 
     /**
-     * @param EntityManager $em
+     * @param EntityManagerInterface $em
      */
-    public function setEntityManager(EntityManager $em)
+    public function setEntityManager(EntityManagerInterface $em)
     {
         $this->em = $em;
     }
 
     /**
-     * @return EntityManager
+     * @return EntityManagerInterface|null
      */
-    public function getEntityManager()
+    public function getEntityManager(): ?EntityManagerInterface
     {
         return $this->em;
     }

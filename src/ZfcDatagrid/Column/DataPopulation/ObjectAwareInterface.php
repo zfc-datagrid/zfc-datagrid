@@ -9,12 +9,12 @@ interface ObjectAwareInterface
      * @param string $name
      * @param mixed  $value
      */
-    public function setParameterFromColumn($name, $value);
+    public function setParameterFromColumn(string $name, $value);
 
     /**
      * Return the result based on the parameters.
      *
      * @return string
      */
-    public function toString();
+    public function toString(): string;
 }
