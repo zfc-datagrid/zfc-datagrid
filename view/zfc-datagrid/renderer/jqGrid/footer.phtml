@@ -3,49 +3,49 @@
 $paginator = $this->paginator;
 ?>
 <!-- Start footer -->
-<div class="row-fluid row" id="<?php echo $this->gridId; ?>_pager">
+<div class="row-fluid row" id="<?= $this->gridId; ?>_pager">
 
     <!-- mass actions -->
-    <div class="span3 col-md-3 col-sm-3" id="<?php echo $this->gridId; ?>_pager_left">
+    <div class="span3 col-md-3 col-sm-3" id="<?= $this->gridId; ?>_pager_left">
         <?php 
         foreach($this->massActions as $action){
             /* @var $action \ZfcDatagrid\Action\Mass */
             ?>
-            <a href="#" class="btn btn-default massAction" data-url="<?php echo $action->getLink(); ?>">
-                <?php echo $this->translate($action->getTitle()); ?>
+            <a href="#" class="btn btn-default massAction" data-url="<?= $action->getLink(); ?>">
+                <?= $this->translate($action->getTitle()); ?>
             </a>
             <?php
         }
         ?>
     </div>
     <!-- Pagination -->
-    <div class="span6 col-md-6 col-sm-6 text-center" id="<?php echo $this->gridId; ?>_pager_center">
+    <div class="span6 col-md-6 col-sm-6 text-center" id="<?= $this->gridId; ?>_pager_center">
     </div>
     <!-- Info -->
-    <div class="span3 col-md-3 col-sm-3 text-right" id="<?php echo $this->gridId; ?>_pager_right">
-        <?php echo $this->translate('Showing').' <span id="'.$this->gridId.'_currentItems"></span> '.$this->translate('of').' <span id="'.$this->gridId.'_totalItems"></span> '.$this->translate('items'); ?><br />
-        <?php echo $this->translate('Page') . ' <span id="'.$this->gridId.'_currentPage"></span> ' . $this->translate('of') . ' <span id="'.$this->gridId.'_totalPages"></span>'; ?>
+    <div class="span3 col-md-3 col-sm-3 text-right" id="<?= $this->gridId; ?>_pager_right">
+        <?= $this->translate('Showing').' <span id="'.$this->gridId.'_currentItems"></span> '.$this->translate('of').' <span id="'.$this->gridId.'_totalItems"></span> '.$this->translate('items'); ?><br />
+        <?= $this->translate('Page') . ' <span id="'.$this->gridId.'_currentPage"></span> ' . $this->translate('of') . ' <span id="'.$this->gridId.'_totalPages"></span>'; ?>
     </div>
 </div><!-- End footer -->
 
 
 <?php $this->inlineScript()->captureStart(); ?>
 $( document ).ready(function() {
-    $('#<?php echo $this->gridId; ?>_pager_left a.massAction').click( function() {
-    	var grid = $("#<?php echo $this->gridId; ?>");
+    $('#<?= $this->gridId; ?>_pager_left a.massAction').click( function() {
+    	var grid = $("#<?= $this->gridId; ?>");
     	
-        $.post($(this).attr('data-url'), { '<?php echo $this->parameterNames['massIds']; ?>[]': grid.jqGrid('getGridParam','selarrrow') })
+        $.post($(this).attr('data-url'), { '<?= $this->parameterNames['massIds']; ?>[]': grid.jqGrid('getGridParam','selarrrow') })
         .done(function( data ) {
         	grid.trigger('reloadGrid');
         });
     });
 });
 
-function <?php echo $this->gridId; ?>_loadPage(gridId, newPage){
+function <?= $this->gridId; ?>_loadPage(gridId, newPage){
 	$('#' + gridId).trigger('reloadGrid',[{page: newPage}]);
 }
 
-function <?php echo $this->gridId; ?>_customPaginator(gridId){
+function <?= $this->gridId; ?>_customPaginator(gridId){
 	
 	var myPageRefresh = function(e) {
 	    var newPage = $(e.target).attr('data-page');
@@ -78,14 +78,14 @@ function <?php echo $this->gridId; ?>_customPaginator(gridId){
 
 	//to first page
     if(currentPage > 1){
-        html += '<li><a href="#" onclick="<?php echo $this->gridId; ?>_loadPage(\'' + gridId + '\', 1);">&laquo;</a></li>';
+        html += '<li><a href="#" onclick="<?= $this->gridId; ?>_loadPage(\'' + gridId + '\', 1);">&laquo;</a></li>';
     } else{
     	html += '<li class="disabled"><a href="#">&laquo;</a></li>';
     }
 
     //one page left
     if(currentPage > 1){
-        html += '<li><a href="#" onclick="<?php echo $this->gridId; ?>_loadPage(\'' + gridId + '\', ' + (currentPage - 1) + ');">&lt;</a></li>';
+        html += '<li><a href="#" onclick="<?= $this->gridId; ?>_loadPage(\'' + gridId + '\', ' + (currentPage - 1) + ');">&lt;</a></li>';
     } else{
     	html += '<li class="disabled"><a href="#">&lt;</a></li>';
     }
@@ -120,7 +120,7 @@ function <?php echo $this->gridId; ?>_customPaginator(gridId){
     for (usePage = pageRangeStart; usePage <= pageRangeEnd; usePage++) {
 
         if(usePage != currentPage){
-     	   html += '<li><a href="#" onclick="<?php echo $this->gridId; ?>_loadPage(\'' + gridId + '\', ' + usePage + ');">' + usePage + '</a></li>';
+     	   html += '<li><a href="#" onclick="<?= $this->gridId; ?>_loadPage(\'' + gridId + '\', ' + usePage + ');">' + usePage + '</a></li>';
         } else{
         	html += '<li class="active"><a href="#">' + usePage + '</a></li>';
         }
@@ -128,14 +128,14 @@ function <?php echo $this->gridId; ?>_customPaginator(gridId){
 
     //one page right
     if(currentPage < totalPages){
-        html += '<li><a href="#" onclick="<?php echo $this->gridId; ?>_loadPage(\'' + gridId + '\', ' + (currentPage + 1) + ');">&gt;</a></li>';
+        html += '<li><a href="#" onclick="<?= $this->gridId; ?>_loadPage(\'' + gridId + '\', ' + (currentPage + 1) + ');">&gt;</a></li>';
     } else{
     	html += '<li class="disabled"><a href="#">&gt;</a></li>';
     }
 
     //to last page
     if(currentPage < totalPages){
-        html += '<li><a href="#" onclick="<?php echo $this->gridId; ?>_loadPage(\'' + gridId + '\', ' + totalPages + ');">&raquo;</a></li>';
+        html += '<li><a href="#" onclick="<?= $this->gridId; ?>_loadPage(\'' + gridId + '\', ' + totalPages + ');">&raquo;</a></li>';
     } else{
     	html += '<li class="disabled"><a href="#">&raquo;</a></li>';
     }
