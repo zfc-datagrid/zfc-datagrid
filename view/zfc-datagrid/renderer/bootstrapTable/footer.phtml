@@ -3,7 +3,7 @@
 $paginator = $this->paginator;
 ?>
 <!-- Start footer -->
-<div class="row-fluid row" id="<?php echo $this->gridId; ?>_footer">
+<div class="row-fluid row" id="<?= $this->gridId; ?>_footer">
 
     <!-- mass actions -->
     <div class="span4 col-md-4">
@@ -11,8 +11,8 @@ $paginator = $this->paginator;
         foreach($this->massActions as $action){
             /* @var $action \ZfcDatagrid\Action\Mass */
             ?>
-            <a href="#" class="btn btn-default massAction" data-url="<?php echo $action->getLink(); ?>">
-                <?php echo $this->translate($action->getTitle()); ?>
+            <a href="#" class="btn btn-default massAction" data-url="<?= $action->getLink(); ?>">
+                <?= $this->translate($action->getTitle()); ?>
             </a>
             <?php
         }
@@ -21,24 +21,22 @@ $paginator = $this->paginator;
     
     <!-- Pagination -->
     <div class="span4 col-md-4 text-center">
-        <input type="hidden" name="<?php echo $this->parameterNames['currentPage']; ?>" value="<?php echo $this->paginator->getPages()->current; ?>" />
-        <?php 
-        echo $this->paginationcontrol($this->paginator, 'Elastic', 'zfc-datagrid/renderer/bootstrapTable/paginator', [
+        <input type="hidden" name="<?= $this->parameterNames['currentPage']; ?>" value="<?= $this->paginator->getPages()->current; ?>" />
+        <?= $this->paginationcontrol($this->paginator, 'Elastic', 'zfc-datagrid/renderer/bootstrapTable/paginator', [
             'activeParameters' => $this->activeParameters, 
             'parameterNames' => $this->parameterNames,
             'gridId' => $this->gridId
-        ]);
-        ?>
+        ]); ?>
     </div>
     <!-- Info -->
     <div class="span4 col-md-4 text-right">
-        <?php echo $this->translate('Showing').' '.$paginator->getCurrentItemCount().' '.$this->translate('of').' '.$paginator->getTotalItemCount().' '.$this->translate('item(s)'); ?><br />
-        <?php echo $this->translate('Page') . ' ' . $paginator->getCurrentPageNumber() . ' ' . $this->translate('of') . ' ' .$paginator->count();?>
+        <?= $this->translate('Showing').' '.$paginator->getCurrentItemCount().' '.$this->translate('of').' '.$paginator->getTotalItemCount().' '.$this->translate('item(s)'); ?><br />
+        <?= $this->translate('Page') . ' ' . $paginator->getCurrentPageNumber() . ' ' . $this->translate('of') . ' ' .$paginator->count();?>
     </div>
 </div><!-- End footer -->
 
 <?php $this->inlineScript()->captureStart();?>
-function <?php echo $this->gridId; ?>_toggleCheckboxes(element){
+function <?= $this->gridId; ?>_toggleCheckboxes(element){
     var elements = document.getElementsByName('massActionSelected[]');
     
     var useThis = element.checked;
@@ -48,7 +46,7 @@ function <?php echo $this->gridId; ?>_toggleCheckboxes(element){
 }
 
 $( document ).ready(function() {
-    $('#<?php echo $this->gridId; ?>_footer a.massAction').click( function() {
+    $('#<?= $this->gridId; ?>_footer a.massAction').click( function() {
         var form = document.createElement('form');
         form.setAttribute('name', 'massAction');
         form.setAttribute('method', 'post');
@@ -57,7 +55,7 @@ $( document ).ready(function() {
         var checkboxes = document.getElementsByName('massActionSelected[]');
         for(i = 0; i < checkboxes.length; i++){
             var node = checkboxes[i].cloneNode();
-            node.name = '<?php echo $this->parameterNames['massIds']; ?>[]';
+            node.name = '<?= $this->parameterNames['massIds']; ?>[]';
             form.appendChild(node);
         }
         
@@ -66,7 +64,7 @@ $( document ).ready(function() {
         document.body.removeChild(form);
     });
     
-    $('#<?php echo $this->gridId; ?> tr').click(function(event) {
+    $('#<?= $this->gridId; ?> tr').click(function(event) {
         if (event.target.type !== 'checkbox') {
           $(':checkbox', this).trigger('click');
         }
