@@ -16,7 +16,7 @@ class HtmlTagTest extends TestBase
     {
         $htmlTag = new Formatter\HtmlTag();
         $this->assertInstanceOf(Formatter\AbstractFormatter::class, $htmlTag);
-        $this->assertInstanceOf(Formatter\AbstractFormatter::class, $htmlTag);
+        $this->assertInstanceOf(RouteStackInterface::class, $htmlTag);
     }
 
     public function testGetLinkColumnPlaceholders()
