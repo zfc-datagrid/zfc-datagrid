@@ -11,7 +11,7 @@ use Zend\Console\Request as ConsoleRequest;
 use Zend\Db\Sql\Select as ZendSelect;
 use Zend\Http\PhpEnvironment\Request as HttpRequest;
 use Zend\Stdlib\RequestInterface;
-use Zend\I18n\Translator\Translator;
+use Zend\I18n\Translator\TranslatorInterface;
 use Zend\Mvc\MvcEvent;
 use Zend\Paginator\Paginator;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -23,6 +23,8 @@ use ZfcDatagrid\Column\Style;
 
 class Datagrid
 {
+    const DEFAULT_POSITION = 1;
+    
     /**
      * @var array
      */
@@ -76,7 +78,7 @@ class Datagrid
     private $renderer;
 
     /**
-     * @var Translator
+     * @var TranslatorInterface|null
      */
     protected $translator;
 
@@ -108,6 +110,11 @@ class Datagrid
     protected $columns = [];
 
     /**
+     * @var array
+     */
+    protected $positions = [];
+
+    /**
      * @var Style\AbstractStyle[]
      */
     protected $rowStyles = [];
@@ -118,7 +125,7 @@ class Datagrid
     protected $rowClickAction;
 
     /**
-     * @var Action\Mass
+     * @var Action\Mass[]
      */
     protected $massActions = [];
 
@@ -130,7 +137,7 @@ class Datagrid
     protected $preparedData = [];
 
     /**
-     * @var array
+     * @var bool
      */
     protected $isUserFilterEnabled = true;
 
@@ -375,26 +382,15 @@ class Datagrid
     /**
      * Set the translator.
      *
-     * @param Translator $translator
-     *
-     * @throws \InvalidArgumentException
+     * @param TranslatorInterface $translator
      */
-    public function setTranslator($translator = null)
+    public function setTranslator(TranslatorInterface $translator)
     {
-        if (! $translator instanceof Translator &&
-            ! $translator instanceof \Zend\I18n\Translator\TranslatorInterface
-        ) {
-            throw new \InvalidArgumentException(
-                'Translator must be an instanceof "Zend\I18n\Translator\Translator" ' .
-                'or "Zend\I18n\Translator\TranslatorInterface"'
-            );
-        }
-
         $this->translator = $translator;
     }
 
     /**
-     * @return Translator
+     * @return TranslatorInterface|null
      */
     public function getTranslator()
     {
@@ -406,11 +402,7 @@ class Datagrid
      */
     public function hasTranslator()
     {
-        if ($this->translator !== null) {
-            return true;
-        }
-
-        return false;
+        return null !== $this->translator;
     }
 
     /**
@@ -470,11 +462,7 @@ class Datagrid
      */
     public function hasDataSource()
     {
-        if ($this->dataSource !== null) {
-            return true;
-        }
-
-        return false;
+        return null !== $this->dataSource;
     }
 
     /**
@@ -602,18 +590,8 @@ class Datagrid
      *
      * @return Column\AbstractColumn
      */
-    private function createColumn($config)
+    private function createColumn(array $config)
     {
-        if ($config instanceof Column\AbstractColumn) {
-            return $config;
-        }
-
-        if (! is_array($config) && ! $config instanceof Column\AbstractColumn) {
-            throw new \InvalidArgumentException(
-                'createColumn() supports only a config array or instanceof Column\AbstractColumn as a parameter'
-            );
-        }
-
         $colType = isset($config['colType']) ? $config['colType'] : 'Select';
         if (class_exists($colType, true)) {
             $class = $colType;
@@ -665,12 +643,15 @@ class Datagrid
      * Set multiple columns by array (willoverwrite all existing).
      *
      * @param array $columns
+     */
     public function setColumns(array $columns)
     {
         $useColumns = [];
 
         foreach ($columns as $col) {
-            $col = $this->createColumn($col);
+            if (!$col instanceof Column\AbstractColumn) {
+                $col = $this->createColumn($col);
+            }
             $useColumns[$col->getUniqueId()] = $col;
         }
 
@@ -684,47 +665,31 @@ class Datagrid
      */
     public function addColumn($col)
     {
-        $col = $this->createColumn($col);
+        if (!$col instanceof Column\AbstractColumn) {
+            $col = $this->createColumn($col);
+        }
 
-        if (!$col->getPosition()) {
-            $col->setPosition(1000);
+        if (null === $col->getPosition()) {
+            $col->setPosition(self::DEFAULT_POSITION);
         }
 
         $this->columns[$col->getUniqueId()] = $col;
-
-        $first = false;
-        foreach ($this->columns as $column) {
-            if ($first != true)
-            {
-                $first = true;
-                continue;
-            }
-
-            if ($col->getPosition() < $column->getPosition() && $col->getUniqueId() != $column->getUniqueId()) {
-                $this->columns = $this->swapColumns($col, $column, $this->columns);
-                return;
-            }
-        }
+        $this->positions[$col->getPosition()][$col->getUniqueId()] = $col;
     }
 
-    public function swapColumns($column1, $column2, $array) {
-        $newArray = array ();
-        foreach ($array as $key => $value) {
-            if ($key == $column1->getUniqueId() && !isset($newArray[$column1->getUniqueId()])) {
-                $newArray[$column2->getUniqueId()] = $array[$column2->getUniqueId()];
-                $newArray[$column1->getUniqueId()] = $array[$column1->getUniqueId()];
-            } elseif ($key == $column2->getUniqueId() && !isset($newArray[$column2->getUniqueId()])) {
-                $newArray[$column1->getUniqueId()] = $array[$column1->getUniqueId()];
-                $newArray[$column2->getUniqueId()] = $array[$column2->getUniqueId()];
-            } else {
-                if (count($newArray) < count($array)) {
-                    $newArray[$key] = $value;
-                } else {
-                    return $newArray;
-                }
-            }
+    /**
+     * @return \ZfcDatagrid\Column\AbstractColumn[]
+     */
+    public function sortColumns()
+    {
+        ksort($this->positions);
+
+        $columns = [];
+        foreach ($this->positions as $position => $column) {
+            $columns += $column;
         }
-        return $newArray;
+
+        return $this->columns = $columns;
     }
 
     /**
@@ -958,6 +923,8 @@ class Datagrid
         if ($this->hasDataSource() === false) {
             throw new \Exception('No datasource defined! Please call "setDataSource()" first"');
         }
+
+        $this->sortColumns();
 
         /**
          * Apply cache.

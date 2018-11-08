@@ -19,7 +19,7 @@ abstract class AbstractExport extends AbstractRenderer
     ];
 
     /**
-     * @var Column\AbstractColumn[]
+     * @var Column\AbstractColumn[]|null
      */
     protected $columnsToExport;
 

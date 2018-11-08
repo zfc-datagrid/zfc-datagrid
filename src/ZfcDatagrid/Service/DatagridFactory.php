@@ -2,7 +2,7 @@
 
 namespace ZfcDatagrid\Service;
 
-use Doctrine\Common\Proxy\Exception\InvalidArgumentException;
+use InvalidArgumentException;
 use Interop\Container\ContainerInterface;
 use Popov\ZfcCurrent\CurrentHelper;
 use Zend\ServiceManager\FactoryInterface;
