@@ -6,6 +6,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use ReflectionMethod;
+use ReflectionProperty;
 
 class TestBase extends TestCase
 {
@@ -44,10 +45,23 @@ class TestBase extends TestCase
     protected function getProperty(string $name, $class = null)
     {
         $class = $class ?: $this->getClass();
-        $reflection = new \ReflectionProperty($class, $name);
+        $reflection = new ReflectionProperty($class, $name);
         $reflection->setAccessible(true);
 
         return $reflection->getValue($class);
+    }
+
+    /**
+     * @param string $name
+     * @param mixed $value
+     * @param null|object $class
+     */
+    protected function setProperty(string $name, $value, $class = null)
+    {
+        $class = $class ?: $this->getClass();
+        $reflection = new ReflectionProperty($class, $name);
+        $reflection->setAccessible(true);
+        $reflection->setValue($class, $value);
     }
 
     /**

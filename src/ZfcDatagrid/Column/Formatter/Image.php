@@ -85,21 +85,17 @@ class Image extends AbstractFormatter
     public function getFormattedValue(AbstractColumn $column): string
     {
         $row    = $this->getRowData();
-        $value  = $row[$column->getUniqueId()];
-        $prefix = $this->getPrefix();
+        $value  = $row[$column->getUniqueId()] ?? '';
 
         if ($value == '') {
             return '';
         }
 
+        $prefix = $this->getPrefix();
+
         if (is_array($value)) {
             $thumb = $value[0];
-
-            if (isset($value[1])) {
-                $original = $value[1];
-            } else {
-                $original = $thumb;
-            }
+            $original = $value[1] ?? $thumb;
         } else {
             $thumb    = $value;
             $original = $value;

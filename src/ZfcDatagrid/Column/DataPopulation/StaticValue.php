@@ -6,7 +6,7 @@ use Exception;
 class StaticValue implements DataPopulationInterface
 {
     /** @var null|string */
-    private $value;
+    protected $value;
 
     /**
      * @param mixed $value

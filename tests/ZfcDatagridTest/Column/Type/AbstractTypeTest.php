@@ -17,7 +17,7 @@ class AbstractTypeTest extends TestCase
      */
     private $type;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->type = $this->getMockForAbstractClass(\ZfcDatagrid\Column\Type\AbstractType::class);
     }
@@ -25,7 +25,7 @@ class AbstractTypeTest extends TestCase
     /**
      * @throws \Exception
      */
-    public function testFilterDefaultOperation()
+    public function testFilterDefaultOperationException(): void
     {
         // Test default value.
         $this->assertEquals(Filter::LIKE, $this->type->getFilterDefaultOperation());
@@ -33,6 +33,10 @@ class AbstractTypeTest extends TestCase
         // Set incorrect value.
         $this->expectException(\InvalidArgumentException::class);
         $this->type->setFilterDefaultOperation('invalid');
+    }
+
+    public function testFilterDefaultOperation(): void
+    {
         $this->assertEquals(Filter::LIKE, $this->type->getFilterDefaultOperation());
 
         // Set correct value.
@@ -42,12 +46,12 @@ class AbstractTypeTest extends TestCase
         }
     }
 
-    public function testGetFilterValue()
+    public function testGetFilterValue(): void
     {
         $this->assertEquals('01.05.12', $this->type->getFilterValue('01.05.12'));
     }
 
-    public function testGetUserValue()
+    public function testGetUserValue(): void
     {
         $this->assertEquals('01.05.12', $this->type->getUserValue('01.05.12'));
     }

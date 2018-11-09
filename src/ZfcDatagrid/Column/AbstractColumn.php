@@ -215,7 +215,7 @@ abstract class AbstractColumn
     /**
      * Set styles.
      *
-     * @param array $styles
+     * @param Style\AbstractStyle[] $styles
      */
     public function setStyles(array $styles)
     {
