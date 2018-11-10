@@ -1,0 +1,75 @@
+<?php 
+/* @var $paginator \Zend\Paginator\Paginator */
+$paginator = $this->paginator;
+?>
+<!-- Start footer -->
+<div class="row-fluid row" id="<?= $this->gridId; ?>_footer">
+
+    <!-- mass actions -->
+    <div class="col-md-4">
+        <?php 
+        foreach($this->massActions as $action){
+            /* @var $action \ZfcDatagrid\Action\Mass */
+            ?>
+            <a href="#" class="btn btn-default massAction" data-url="<?= $action->getLink(); ?>">
+                <?= $this->translate($action->getTitle()); ?>
+            </a>
+            <?php
+        }
+        ?>
+    </div>
+    
+    <!-- Pagination -->
+    <div class="col-md-4 text-center">
+        <input type="hidden" name="<?= $this->parameterNames['currentPage']; ?>" value="<?= $this->paginator->getPages()->current; ?>" />
+        <?= $this->paginationcontrol($this->paginator, 'Elastic', 'zfc-datagrid/renderer/bootstrapTable/paginator', [
+            'activeParameters' => $this->activeParameters, 
+            'parameterNames' => $this->parameterNames,
+            'gridId' => $this->gridId
+        ]);
+        ?>
+    </div>
+    <!-- Info -->
+    <div class="col-md-4 text-right">
+        <?= $this->translate('Showing').' '.$paginator->getCurrentItemCount().' '.$this->translate('of').' '.$paginator->getTotalItemCount().' '.$this->translate('item(s)'); ?><br />
+        <?= $this->translate('Page') . ' ' . $paginator->getCurrentPageNumber() . ' ' . $this->translate('of') . ' ' .$paginator->count();?>
+    </div>
+</div><!-- End footer -->
+
+<?php $this->inlineScript()->captureStart();?>
+function <?= $this->gridId; ?>_toggleCheckboxes(element){
+    var elements = document.getElementsByName('massActionSelected[]');
+    
+    var useThis = element.checked;
+    for(i = 0; i < elements.length; i++){
+        elements[i].checked = useThis;
+    }
+}
+
+jQuery( document ).ready(function() {
+    jQuery('#<?= $this->gridId; ?>_footer a.massAction').click( function() {
+        var form = document.createElement('form');
+        form.setAttribute('name', 'massAction');
+        form.setAttribute('method', 'post');
+        form.setAttribute('action', $(this).attr('data-url'));
+        
+        var checkboxes = document.getElementsByName('massActionSelected[]');
+        for(i = 0; i < checkboxes.length; i++){
+            var node = checkboxes[i].cloneNode();
+            node.name = '<?= $this->parameterNames['massIds']; ?>[]';
+            form.appendChild(node);
+        }
+        
+        document.body.appendChild(form);
+        form.submit();
+        document.body.removeChild(form);
+    });
+
+    jQuery('#<?= $this->gridId; ?> tr').click(function(event) {
+        if (event.target.type !== 'checkbox') {
+            jQuery(':checkbox', this).trigger('click');
+        }
+    });
+});
+
+<?php $this->inlineScript()->captureEnd(); ?>
