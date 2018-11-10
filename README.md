@@ -17,7 +17,7 @@ Over ***400 tests and 1000 assertions*** testing the stability currently!
 
 If you need help, please use following ressources
 - [Installation](https://github.com/zfc-datagrid/zfc-datagrid#installation) 
--  ["Getting started guide"](https://github.com/zfc-datagrid/zfc-datagrid/blob/master/docs/02.%20Quick%20Start.md)
+- ["Getting started guide"](https://github.com/zfc-datagrid/zfc-datagrid/blob/master/docs/02.%20Quick%20Start.md)
 - [Documentation](https://github.com/zfc-datagrid/zfc-datagrid/blob/master/docs/)
 - [Code examples](https://github.com/ThaDafinser/ZfcDatagridExamples/tree/master/src/ZfcDatagridExamples/Controller/)
 - [Issues/Help](https://github.com/zfc-datagrid/zfc-datagrid/issues)
@@ -30,7 +30,7 @@ If you want to help out on this project:
 ## Features
 * Datasources: Doctrine2 (QueryBuilder + Collections), Zend\Db, PhpArray, ... (others possible)
 * Output types: jqGrid, Bootstrap table, PDF, Excel, CSV, console, ... (others possible)
-  *  Bootstrap table with Daterange Filter need to load manually js and css
+  * Bootstrap table with Daterange Filter need to load manually js and css
 * different column types
 * custom formatting, type based formatting (string, date, number, array...)
 * column/row styling for all or based on value comparison
@@ -64,9 +64,7 @@ You can continue
 > For Zend\Db\Sql\Select and Doctrine2 you need to install DoctrineORMModule (Doctrin2 creates the database for Zend\Db\Sql\Select)
 
 **PhpArray** http://YOUR-PROJECT/zfcDatagrid/person/bootstrap
-
 **Doctrine2** http://YOUR-PROJECT/zfcDatagrid/personDoctrine2/bootstrap
-
 **Zend\Db\Sql\Select** http://YOUR-PROJECT/zfcDatagrid/personZend/bootstrap
 
 
