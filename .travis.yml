@@ -73,7 +73,7 @@ script:
 after_script:
   - if [[ $TEST_COVERAGE == 'true' ]]; then curl -LO https://scrutinizer-ci.com/ocular.phar; fi
   - if [[ $TEST_COVERAGE == 'true' ]]; then php ocular.phar code-coverage:upload --format=php-clover ./clover.xml; fi
-  - if [[ $TEST_COVERAGE == 'true' ]]; then composer upload-coverage ; fi
+  - if [[ $TEST_COVERAGE == 'true' ]]; then travis_retry composer upload-coverage ; fi
 
 notifications:
   email: false

@@ -98,6 +98,6 @@
         "cs-fix": "phpcbf",
         "test": "phpunit",
         "test-coverage": "phpunit --colors=always --coverage-clover clover.xml",
-        "upload-coverage": "coveralls -v"
+        "upload-coverage": "vendor/bin/php-coveralls -v"
     }
 }
