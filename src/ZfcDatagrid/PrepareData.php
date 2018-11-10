@@ -41,10 +41,14 @@ class PrepareData
 
     /**
      * @param array $columns
+     *
+     * @return $this
      */
-    public function setColumns(array $columns)
+    public function setColumns(array $columns): self
     {
         $this->columns = $columns;
+
+        return $this;
     }
 
     /**
@@ -57,10 +61,14 @@ class PrepareData
 
     /**
      * @param array $data
+     *
+     * @return $this
      */
-    public function setData(array $data)
+    public function setData(array $data): self
     {
         $this->data = $data;
+
+        return $this;
     }
 
     /**
@@ -81,10 +89,14 @@ class PrepareData
 
     /**
      * @param string $name
+     *
+     * @return $this
      */
-    public function setRendererName(?string $name = null)
+    public function setRendererName(?string $name = null): self
     {
         $this->rendererName = $name;
+
+        return $this;
     }
 
     /**
@@ -97,10 +109,14 @@ class PrepareData
 
     /**
      * @param TranslatorInterface $translator
+     *
+     * @return $this
      */
-    public function setTranslator(TranslatorInterface $translator)
+    public function setTranslator(TranslatorInterface $translator): self
     {
         $this->translator = $translator;
+
+        return $this;
     }
 
     /**
@@ -113,10 +129,14 @@ class PrepareData
 
     /**
      * @param RouteStackInterface $router
+     *
+     * @return $this
      */
-    public function setRouter(RouteStackInterface $router)
+    public function setRouter(RouteStackInterface $router): self
     {
         $this->router = $router;
+
+        return $this;
     }
 
     /**

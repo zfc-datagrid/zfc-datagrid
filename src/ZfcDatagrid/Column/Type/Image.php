@@ -9,14 +9,10 @@ use InvalidArgumentException;
 
 class Image extends AbstractType
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $resizeType = 'fixed';
 
-    /**
-     * @var float
-     */
+    /** @var float */
     protected $resizeHeight = 20.5;
 
     /**
@@ -33,14 +29,17 @@ class Image extends AbstractType
      * @param string $type
      *
      * @throws InvalidArgumentException
+     * @return $this
      */
-    public function setResizeType(string $type)
+    public function setResizeType(string $type): self
     {
         if ($type != 'fixed' && $type != 'dynamic') {
             throw new InvalidArgumentException('Only dynamic or fixed is allowed as Type');
         }
 
         $this->resizeType = $type;
+
+        return $this;
     }
 
     /**
@@ -53,10 +52,14 @@ class Image extends AbstractType
 
     /**
      * @param float $height
+     *
+     * @return $this
      */
-    public function setResizeHeight(float $height)
+    public function setResizeHeight(float $height): self
     {
         $this->resizeHeight = $height;
+
+        return $this;
     }
 
     /**

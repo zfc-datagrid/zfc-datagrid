@@ -32,9 +32,9 @@ class Columns extends AbstractHelper
     /**
      * @param null|TranslatorInterface $translator
      *
-     * @return self
+     * @return $this
      */
-    public function setTranslator(?TranslatorInterface $translator)
+    public function setTranslator(?TranslatorInterface $translator): self
     {
         $this->translator = $translator;
 

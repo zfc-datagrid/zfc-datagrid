@@ -102,12 +102,16 @@ class Filter
      * Apply a filter based on a column.
      *
      * @param Column\AbstractColumn $column
-     * @param string                $inputFilterValue
+     * @param string $inputFilterValue
+     *
+     * @return $this
      */
-    public function setFromColumn(Column\AbstractColumn $column, string $inputFilterValue)
+    public function setFromColumn(Column\AbstractColumn $column, string $inputFilterValue): self
     {
         $this->column = $column;
         $this->setColumnOperator($inputFilterValue, $column->getFilterDefaultOperation());
+
+        return $this;
     }
 
     /**
@@ -120,9 +124,9 @@ class Filter
      * @param string $inputFilterValue
      * @param mixed  $defaultOperator
      *
-     * @return array
+     * @return $this
      */
-    private function setColumnOperator(string $inputFilterValue, $defaultOperator = self::LIKE)
+    private function setColumnOperator(string $inputFilterValue, $defaultOperator = self::LIKE): self
     {
         $inputFilterValue = (string) $inputFilterValue;
         $inputFilterValue = trim($inputFilterValue);
@@ -279,6 +283,8 @@ class Filter
         }
 
         $this->value = $value;
+
+        return $this;
     }
 
     /**

@@ -51,9 +51,10 @@ class Filter
     /**
      * @param DatagridFilter $filter
      *
+     * @return $this
      * @throws \Exception
      */
-    public function applyFilter(DatagridFilter $filter)
+    public function applyFilter(DatagridFilter $filter): self
     {
         $select = $this->getSelect();
 
@@ -151,5 +152,7 @@ class Filter
             $set = new PredicateSet($wheres, PredicateSet::OP_OR);
             $select->where->andPredicate($set);
         }
+
+        return $this;
     }
 }

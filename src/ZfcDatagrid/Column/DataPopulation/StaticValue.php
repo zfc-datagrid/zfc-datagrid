@@ -18,10 +18,14 @@ class StaticValue implements DataPopulationInterface
 
     /**
      * @param null|string $value
+     *
+     * @return $this
      */
-    public function setValue(?string $value)
+    public function setValue(?string $value): self
     {
         $this->value = $value;
+
+        return $this;
     }
 
     /**
@@ -34,11 +38,12 @@ class StaticValue implements DataPopulationInterface
 
     /**
      * @param string $name
-     * @param mixed  $value
+     * @param mixed $value
      *
+     * @return DataPopulationInterface
      * @throws Exception
      */
-    public function setObjectParameter(string $name, $value)
+    public function setObjectParameter(string $name, $value): DataPopulationInterface
     {
         throw new Exception('setObjectParameter() is not supported by this class');
     }

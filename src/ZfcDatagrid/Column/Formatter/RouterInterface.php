@@ -12,9 +12,9 @@ interface RouterInterface
     /**
      * @param \Zend\Router\RouteStackInterface $router
      *
-     * @return void
+     * @return $this
      */
-    public function setRouter(RouteStackInterface $router);
+    public function setRouter(RouteStackInterface $router): self;
 
     /**
      * @return null|RouteStackInterface

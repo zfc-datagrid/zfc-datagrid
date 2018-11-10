@@ -35,10 +35,14 @@ class Doctrine2Collection extends AbstractDataSource
 
     /**
      * @param EntityManagerInterface $em
+     *
+     * @return $this
      */
-    public function setEntityManager(EntityManagerInterface $em)
+    public function setEntityManager(EntityManagerInterface $em): self
     {
         $this->em = $em;
+
+        return $this;
     }
 
     /**

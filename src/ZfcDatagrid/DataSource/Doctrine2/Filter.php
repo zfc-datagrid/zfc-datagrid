@@ -35,8 +35,9 @@ class Filter
      * @param DatagridFilter $filter
      *
      * @throws \Exception
+     * @return $this
      */
-    public function applyFilter(DatagridFilter $filter)
+    public function applyFilter(DatagridFilter $filter): self
     {
         $qb   = $this->getQueryBuilder();
         $expr = new Expr();
@@ -142,5 +143,7 @@ class Filter
 
             $qb->andWhere($orWhere);
         }
+
+        return $this;
     }
 }

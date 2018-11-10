@@ -40,11 +40,13 @@ class HtmlTag extends AbstractFormatter implements RouterInterface
     /**
      * @param RouteStackInterface $router
      *
-     * @return void
+     * @return $this
      */
-    public function setRouter(RouteStackInterface $router)
+    public function setRouter(RouteStackInterface $router): RouterInterface
     {
         $this->router = $router;
+
+        return $this;
     }
 
     /**
@@ -56,11 +58,15 @@ class HtmlTag extends AbstractFormatter implements RouterInterface
     }
 
     /**
-     * @param $name
+     * @param string $name
+     *
+     * @return $this
      */
-    public function setName(string $name)
+    public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
     }
 
     /**
@@ -76,10 +82,14 @@ class HtmlTag extends AbstractFormatter implements RouterInterface
      *
      * @param string $name
      * @param string $value
+     *
+     * @return $this
      */
-    public function setAttribute(string $name, string $value)
+    public function setAttribute(string $name, string $value): self
     {
         $this->attributes[$name] = $value;
+
+        return $this;
     }
 
     /**
@@ -98,10 +108,14 @@ class HtmlTag extends AbstractFormatter implements RouterInterface
      * Removes an HTML attribute.
      *
      * @param string $name
+     *
+     * @return $this
      */
-    public function removeAttribute(string $name)
+    public function removeAttribute(string $name): self
     {
         unset($this->attributes[$name]);
+
+        return $this;
     }
 
     /**
@@ -118,10 +132,14 @@ class HtmlTag extends AbstractFormatter implements RouterInterface
      * Set the link.
      *
      * @param string $href
+     *
+     * @return $this
      */
-    public function setLink(string $href)
+    public function setLink(string $href): self
     {
         $this->setAttribute('href', $href);
+
+        return $this;
     }
 
     /**
@@ -134,10 +152,14 @@ class HtmlTag extends AbstractFormatter implements RouterInterface
 
     /**
      * @param string $route
+     *
+     * @return $this
      */
-    public function setRoute(string $route)
+    public function setRoute(string $route): self
     {
         $this->route = $route;
+
+        return $this;
     }
 
     /**
@@ -150,10 +172,14 @@ class HtmlTag extends AbstractFormatter implements RouterInterface
 
     /**
      * @param array $params
+     *
+     * @return $this
      */
-    public function setRouteParams(array $params)
+    public function setRouteParams(array $params): self
     {
         $this->routeParams = $params;
+
+        return $this;
     }
 
     /**

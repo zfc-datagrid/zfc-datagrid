@@ -8,8 +8,10 @@ interface ObjectAwareInterface
      *
      * @param string $name
      * @param mixed  $value
+     *
+     * @return $this
      */
-    public function setParameterFromColumn(string $name, $value);
+    public function setParameterFromColumn(string $name, $value): self;
 
     /**
      * Return the result based on the parameters.

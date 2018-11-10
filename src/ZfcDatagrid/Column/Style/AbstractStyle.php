@@ -16,14 +16,18 @@ abstract class AbstractStyle
      * Display the values with AND or OR (if multiple showOnValues are defined).
      *
      * @param string $operator
+     *
+     * @return $this
      */
-    public function setByValueOperator(string $operator = 'OR')
+    public function setByValueOperator(string $operator = 'OR'): self
     {
         if ($operator != 'AND' && $operator != 'OR') {
             throw new \InvalidArgumentException('not allowed operator: "' . $operator . '" (AND / OR is allowed)');
         }
 
         $this->byValueOperator = $operator;
+
+        return $this;
     }
 
     /**
@@ -43,14 +47,18 @@ abstract class AbstractStyle
      * @param AbstractColumn $column
      * @param mixed          $value
      * @param string         $operator
+     *
+     * @return $this
      */
-    public function addByValue(AbstractColumn $column, $value, $operator = Filter::EQUAL)
+    public function addByValue(AbstractColumn $column, $value, $operator = Filter::EQUAL): self
     {
         $this->byValues[] = [
             'column'   => $column,
             'value'    => $value,
             'operator' => $operator,
         ];
+
+        return $this;
     }
 
     /**

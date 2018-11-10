@@ -17,10 +17,14 @@ abstract class AbstractFormatter
 
     /**
      * @param array $data
+     *
+     * @return $this
      */
-    public function setRowData(array $data)
+    public function setRowData(array $data): self
     {
         $this->data = $data;
+
+        return $this;
     }
 
     /**
@@ -33,10 +37,14 @@ abstract class AbstractFormatter
 
     /**
      * @param string $name
+     *
+     * @return $this
      */
-    public function setRendererName(?string $name = null)
+    public function setRendererName(?string $name = null): self
     {
         $this->rendererName = $name;
+
+        return $this;
     }
 
     /**
@@ -48,11 +56,15 @@ abstract class AbstractFormatter
     }
 
     /**
-     * @param array $validRendrerers
+     * @param array $validRenderers
+     *
+     * @return $this
      */
-    public function setValidRendererNames(array $validRendrerers)
+    public function setValidRendererNames(array $validRenderers): self
     {
-        $this->validRenderers = $validRendrerers;
+        $this->validRenderers = $validRenderers;
+
+        return $this;
     }
 
     /**

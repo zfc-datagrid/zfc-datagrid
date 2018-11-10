@@ -60,11 +60,15 @@ class Select extends AbstractColumn
     /**
      * @params string|object|null $part1
      * @params string|object|null $part2
+     *
+     * @return $this
      */
-    public function setSelect($part1, $part2 = null)
+    public function setSelect($part1, $part2 = null): self
     {
         $this->selectPart1 = $part1;
         $this->selectPart2 = $part2;
+
+        return $this;
     }
 
     /**
@@ -85,10 +89,14 @@ class Select extends AbstractColumn
 
     /**
      * @param string|null $filterSelectExpression
+     *
+     * @return $this
      */
-    public function setFilterSelectExpression(?string $filterSelectExpression)
+    public function setFilterSelectExpression(?string $filterSelectExpression): self
     {
         $this->filterSelectExpression = $filterSelectExpression;
+
+        return $this;
     }
 
     /**
