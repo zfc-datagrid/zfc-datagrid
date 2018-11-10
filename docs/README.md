@@ -35,6 +35,7 @@ If you are looking for some information that is not listed in the documentation,
     * Background color
     * Bold
     * Color
+    * CSSClass
     * Italic
     * Align
     * Strikethrough
@@ -42,6 +43,7 @@ If you are looking for some information that is not listed in the documentation,
   5. [Column Data Formatters](/docs/03.%20Columns.md#column-data-formatters)
     * Email
     * File Size
+    * HtmlTag
     * Image Formatter
     * Link
 
@@ -49,10 +51,10 @@ If you are looking for some information that is not listed in the documentation,
 
 5. [Toolbar and Custom Filtering](/docs/05.%20Toolbar%20and%20Custom%20Filtering.md)
    1. [Introduction](/docs/05.%20Toolbar%20and%20Custom%20Filtering.md#introduction)
-   2. [Use Custome Toolbar](/docs/05.%20Toolbar%20and%20Custom%20Filtering.md#use-custome-toolbar)
+   2. [Use Custom Toolbar](/docs/05.%20Toolbar%20and%20Custom%20Filtering.md#use-custome-toolbar)
    3. [Toolbar Variables](/docs/05.%20Toolbar%20and%20Custom%20Filtering.md#toolbar-variables)
-   4. [Custome Toolbar Example](/docs/05.%20Toolbar%20and%20Custom%20Filtering.md#custome-toolbar-example)
-   5. [Custome Filtering](/docs/05.%20Toolbar%20and%20Custom%20Filtering.md#custome-filtering)
+   4. [Custom Toolbar Example](/docs/05.%20Toolbar%20and%20Custom%20Filtering.md#custome-toolbar-example)
+   5. [Custom Filtering](/docs/05.%20Toolbar%20and%20Custom%20Filtering.md#custome-filtering)
 
 6. [Exporting](/docs/06.%20Exporting.md)
 
