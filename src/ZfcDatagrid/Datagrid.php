@@ -72,7 +72,7 @@ class Datagrid
     protected $response;
 
     /** @var Renderer\AbstractRenderer */
-    private $renderer;
+    protected $renderer;
 
     /** @var TranslatorInterface|null */
     protected $translator;
@@ -148,11 +148,11 @@ class Datagrid
     /** @var string */
     protected $forceRenderer;
 
-    /** @var Renderer\AbstractRenderer */
-    private $rendererService;
+    /** @var Renderer\AbstractRenderer|null */
+    protected $rendererService;
 
     /** @var string[] */
-    private $specialMethods = [
+    protected $specialMethods = [
         'filterSelectOptions',
         'rendererParameter',
         'replaceValues',
@@ -824,7 +824,7 @@ class Datagrid
     public function getRenderer(): Renderer\AbstractRenderer
     {
         if (null === $this->renderer) {
-            if (isset($this->rendererService)) {
+            if (null !== $this->rendererService) {
                 $renderer = $this->rendererService;
                 if (! $renderer instanceof Renderer\AbstractRenderer) {
                     throw new \Exception(
@@ -1050,7 +1050,7 @@ class Datagrid
     /**
      * @return array
      */
-    private function getPreparedData(): array
+    protected function getPreparedData(): array
     {
         return $this->preparedData;
     }

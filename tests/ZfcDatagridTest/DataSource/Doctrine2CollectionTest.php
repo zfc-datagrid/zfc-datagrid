@@ -14,6 +14,12 @@ use ZfcDatagridTest\Util\TestBase;
  */
 class Doctrine2CollectionTest extends TestBase
 {
+    /** @var Column\Select */
+    protected $colVolumne;
+
+    /** @var Column\Select */
+    protected $colEdition;
+
     /** @var Doctrine2Collection */
     private $source;
 
@@ -23,11 +29,8 @@ class Doctrine2CollectionTest extends TestBase
     {
         parent::setUp();
 
-        $col1 = new Column\Select('volume');
-        $this->colVolumne = $col1;
-
-        $col1 = new Column\Select('edition');
-        $this->colEdition = $col1;
+        $this->colVolumne = new Column\Select('volume');
+        $this->colEdition = new Column\Select('edition');
 
         $collection = new ArrayCollection();
         foreach ([1, 1, 1] as $row) {
