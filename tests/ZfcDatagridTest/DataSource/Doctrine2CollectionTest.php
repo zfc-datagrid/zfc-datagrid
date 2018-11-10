@@ -2,21 +2,25 @@
 namespace ZfcDatagridTest\DataSource;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use ZfcDatagrid\Column;
 use ZfcDatagrid\DataSource\Doctrine2Collection;
-use ZfcDatagrid\Filter;
 use ZfcDatagridTest\DataSource\Doctrine2\Assets\Entity\Category;
+use ZfcDatagridTest\Util\TestBase;
 
 /**
  * @group DataSource
  *
  * @covers \ZfcDatagrid\DataSource\Doctrine2Collection
  */
-class Doctrine2CollectionTest extends DataSourceTestCase
+class Doctrine2CollectionTest extends TestBase
 {
-    /**
-     *
-     * @var Doctrine2Collection
-     */
+    /** @var Column\Select */
+    protected $colVolumne;
+
+    /** @var Column\Select */
+    protected $colEdition;
+
+    /** @var Doctrine2Collection */
     private $source;
 
     private $collection;
@@ -25,8 +29,11 @@ class Doctrine2CollectionTest extends DataSourceTestCase
     {
         parent::setUp();
 
+        $this->colVolumne = new Column\Select('volume');
+        $this->colEdition = new Column\Select('edition');
+
         $collection = new ArrayCollection();
-        foreach ($this->data as $row) {
+        foreach ([1, 1, 1] as $row) {
             $collection->add(new Category());
         }
         $this->collection = $collection;
@@ -46,7 +53,7 @@ class Doctrine2CollectionTest extends DataSourceTestCase
      */
     public function testConstructExceptionClass()
     {
-        $source = new Doctrine2Collection(null);
+        new Doctrine2Collection(null);
     }
 
     public function testGetData()
@@ -69,34 +76,4 @@ class Doctrine2CollectionTest extends DataSourceTestCase
         $this->assertSame($em, $source->getEntityManager());
     }
 
-//     public function testExecute()
-//     {
-//         $em = $this->getMock(\Doctrine\ORM\EntityManager::class, array(), array(), '', false);
-
-//         $source = clone $this->source;
-//         $source->setEntityManager($em);
-
-//         $source->addSortCondition($this->colVolumne);
-//         $source->addSortCondition($this->colEdition, 'DESC');
-//         $source->execute();
-
-//         $this->assertInstanceOf(\Zend\Paginator\Adapter\ArrayAdapter::class, $source->getPaginatorAdapter());
-//     }
-
-    // public function testFilter()
-    // {
-    // $source = clone $this->source;
-
-    // /*
-    // * LIKE
-    // */
-    // $filter = new Filter();
-    // $filter->setFromColumn($this->colVolumne, '~7');
-
-    // $source->addFilter($filter);
-    // $source->execute();
-
-    // $this->assertEquals(2, $source->getPaginatorAdapter()
-    // ->count());
-    // }
 }

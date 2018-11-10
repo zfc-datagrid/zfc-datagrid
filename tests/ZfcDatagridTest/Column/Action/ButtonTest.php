@@ -1,15 +1,19 @@
 <?php
 namespace ZfcDatagridTest\Column\Action;
 
-use PHPUnit\Framework\TestCase;
+use Exception;
 use ZfcDatagrid\Column\Action\Button;
+use ZfcDatagridTest\Util\TestBase;
 
 /**
  * @group Column
  * @covers \ZfcDatagrid\Column\Action\Button
  */
-class ButtonTest extends TestCase
+class ButtonTest extends TestBase
 {
+    /** @var string */
+    protected $className = Button::class;
+    
     public function testConstruct()
     {
         $button = new Button();
@@ -53,5 +57,13 @@ class ButtonTest extends TestCase
         $button = new Button();
 
         $button->toHtml([]);
+    }
+
+    public function testGetHtmlTypeException(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('not needed...since we have toHtml() here directly!');
+
+        $this->getMethod('getHtmlType')->invoke($this->getClass());
     }
 }

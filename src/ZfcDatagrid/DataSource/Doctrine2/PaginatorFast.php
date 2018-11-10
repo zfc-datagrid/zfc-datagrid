@@ -9,9 +9,7 @@ use function array_unique;
 
 class PaginatorFast implements AdapterInterface
 {
-    /**
-     * @var QueryBuilder
-     */
+    /** @var QueryBuilder */
     protected $qb;
 
     /**
@@ -74,7 +72,7 @@ class PaginatorFast implements AdapterInterface
         $dqlParts   = $qb->getDQLParts();
         $groupParts = $dqlParts['groupBy'];
 
-        /*
+        /**
          * Reset things
          */
         $qb->setFirstResult(null)

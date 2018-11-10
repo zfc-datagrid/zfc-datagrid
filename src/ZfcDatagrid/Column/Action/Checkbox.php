@@ -9,7 +9,7 @@ use function sprintf;
 class Checkbox extends AbstractAction
 {
     /** @var string */
-    private $name = 'rowSelections';
+    protected $name = 'rowSelections';
 
     /**
      * Checkbox constructor.
@@ -24,15 +24,7 @@ class Checkbox extends AbstractAction
     }
 
     /**
-     * @return string
-     */
-    protected function getHtmlType(): string
-    {
-        return '';
-    }
-
-    /**
-     * @see \ZfcDatagrid\Column\Action\AbstractAction::toHtml()
+     * @inheritdoc
      */
     public function toHtml(array $row): string
     {
@@ -45,5 +37,13 @@ class Checkbox extends AbstractAction
             $row['idConcated'],
             $this->getAttributesString($row)
         );
+    }
+
+    /**
+     * @return string
+     */
+    protected function getHtmlType(): string
+    {
+        return '';
     }
 }

@@ -10,9 +10,7 @@ use function strpos;
 
 class Number extends AbstractType
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $filterDefaultOperation = Filter::EQUAL;
 
     /**

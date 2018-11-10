@@ -38,7 +38,7 @@ class HtmlTag extends AbstractFormatter implements RouterInterface
     public $router;
 
     /**
-     * @param \Zend\Router\RouteStackInterface $router
+     * @param RouteStackInterface $router
      *
      * @return void
      */
@@ -261,11 +261,7 @@ class HtmlTag extends AbstractFormatter implements RouterInterface
 
         // Replace placeholders
         if (strpos($link, self::ROW_ID_PLACEHOLDER) !== false) {
-            $id = '';
-            if (isset($row['idConcated'])) {
-                $id = $row['idConcated'];
-            }
-            $link = str_replace(self::ROW_ID_PLACEHOLDER, rawurlencode($id), $link);
+            $link = str_replace(self::ROW_ID_PLACEHOLDER, rawurlencode($row['idConcated'] ?? ''), $link);
         }
 
         foreach ($this->getLinkColumnPlaceholders() as $col) {

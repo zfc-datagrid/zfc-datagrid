@@ -1,6 +1,8 @@
 <?php
 namespace ZfcDatagrid\Column\Action;
 
+use Exception;
+use InvalidArgumentException;
 use ZfcDatagrid\Column\AbstractColumn;
 
 class Button extends AbstractAction
@@ -38,11 +40,11 @@ class Button extends AbstractAction
     /**
      * @return string
      *
-     * @throws \Exception
+     * @throws Exception
      */
     protected function getHtmlType(): string
     {
-        throw new \Exception('not needed...since we have toHtml() here directly!');
+        throw new Exception('not needed...since we have toHtml() here directly!');
     }
 
     /**
@@ -53,7 +55,7 @@ class Button extends AbstractAction
     public function toHtml(array $row): string
     {
         if ('' === $this->getLabel()) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'A label is required for this action type, please call $action->setLabel()!'
             );
         }

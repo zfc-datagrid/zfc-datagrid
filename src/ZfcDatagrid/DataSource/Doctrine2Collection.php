@@ -10,10 +10,10 @@ use ZfcDatagrid\DataSource\PhpArray as SourceArray;
 class Doctrine2Collection extends AbstractDataSource
 {
     /** @var Collection */
-    private $data;
+    protected $data;
 
     /** @var EntityManagerInterface|null */
-    private $em;
+    protected $em;
 
     /**
      * Data source.

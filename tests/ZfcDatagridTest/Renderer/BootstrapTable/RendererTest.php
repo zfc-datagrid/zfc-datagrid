@@ -2,14 +2,19 @@
 namespace ZfcDatagridTest\Renderer\BootstrapTable;
 
 use PHPUnit\Framework\TestCase;
+use Zend\View\Model\ViewModel;
 use ZfcDatagrid\Renderer\BootstrapTable;
+use ZfcDatagridTest\Util\TestBase;
 
 /**
  * @group Renderer
  * @covers \ZfcDatagrid\Renderer\BootstrapTable\Renderer
  */
-class RendererTest extends TestCase
+class RendererTest extends TestBase
 {
+    /** @var string */
+    protected $className = BootstrapTable\Renderer::class;
+
     public function testGetName()
     {
         $renderer = new BootstrapTable\Renderer();
@@ -72,5 +77,23 @@ class RendererTest extends TestCase
         $renderer->setMvcEvent($mvcEvent);
 
         $this->assertEquals($request, $renderer->getRequest());
+    }
+
+    public function testExecute(): void
+    {
+        $this->mockedMethodList = [
+            'getViewModel',
+        ];
+        $viewModel = $this->getMockBuilder(ViewModel::class)
+            ->getMock();
+
+        $viewModel->expects($this->once())
+            ->method('setTemplate');
+        $class = $this->getClass();
+        $class->expects($this->once())
+            ->method('getViewModel')
+            ->willReturn($viewModel);
+
+        $this->assertSame($viewModel, $this->getMethod('execute')->invoke($this->getClass()));
     }
 }

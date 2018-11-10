@@ -13,9 +13,7 @@ use ZfcDatagrid\DataSource\Doctrine2\PaginatorFast as ZfcDatagridPaginator;
 
 class Paginator implements AdapterInterface
 {
-    /**
-     * @var QueryBuilder
-     */
+    /** @var QueryBuilder */
     protected $qb;
 
     /**
@@ -25,10 +23,8 @@ class Paginator implements AdapterInterface
      */
     protected $rowCount;
 
-    /**
-     * @var ZfcDatagridPaginator|Doctrine2Paginator|null
-     */
-    private $paginator;
+    /** @var ZfcDatagridPaginator|Doctrine2Paginator|null */
+    protected $paginator;
 
     /**
      * @param QueryBuilder $qb
@@ -44,44 +40,6 @@ class Paginator implements AdapterInterface
     public function getQueryBuilder(): QueryBuilder
     {
         return $this->qb;
-    }
-
-    /**
-     * Test which pagination solution to use.
-     *
-     * @return bool
-     */
-    private function useCustomPaginator(): bool
-    {
-        $qb    = $this->getQueryBuilder();
-        $parts = $qb->getDQLParts();
-
-        if (null !== $parts['having'] || true === $parts['distinct']) {
-            // never tried having in such queries...
-            return false;
-        }
-
-        // @todo maybe more detection needed :-/
-        return true;
-    }
-
-    /**
-     * @return Doctrine2Paginator|ZfcDatagridPaginator
-     */
-    private function getPaginator()
-    {
-        if (null !== $this->paginator) {
-            return $this->paginator;
-        }
-
-        if ($this->useCustomPaginator() === true) {
-            $this->paginator = new ZfcDatagridPaginator($this->getQueryBuilder());
-        } else {
-            // Doctrine2Paginator as fallback...they are using 3 queries
-            $this->paginator = new Doctrine2Paginator($this->getQueryBuilder());
-        }
-
-        return $this->paginator;
     }
 
     /**
@@ -114,5 +72,43 @@ class Paginator implements AdapterInterface
     public function count(): int
     {
         return $this->getPaginator()->count();
+    }
+
+    /**
+     * Test which pagination solution to use.
+     *
+     * @return bool
+     */
+    protected function useCustomPaginator(): bool
+    {
+        $qb    = $this->getQueryBuilder();
+        $parts = $qb->getDQLParts();
+
+        if (null !== $parts['having'] || true === $parts['distinct']) {
+            // never tried having in such queries...
+            return false;
+        }
+
+        // @todo maybe more detection needed :-/
+        return true;
+    }
+
+    /**
+     * @return Doctrine2Paginator|ZfcDatagridPaginator
+     */
+    protected function getPaginator()
+    {
+        if (null !== $this->paginator) {
+            return $this->paginator;
+        }
+
+        if ($this->useCustomPaginator() === true) {
+            $this->paginator = new ZfcDatagridPaginator($this->getQueryBuilder());
+        } else {
+            // Doctrine2Paginator as fallback...they are using 3 queries
+            $this->paginator = new Doctrine2Paginator($this->getQueryBuilder());
+        }
+
+        return $this->paginator;
     }
 }

@@ -9,16 +9,12 @@ use PHPUnit\Framework\TestCase;
 class AbstractDataSourceTest extends TestCase
 {
     /**
-     *
      * @var \ZfcDatagrid\DataSource\AbstractDataSource
      */
     private $dsMock;
 
     public function setUp()
     {
-        // if (defined('HPHP_VERSION') === true) {
-        // $this->fail('HHVM Fatals');
-        // }
         $this->dsMock = $this->getMockForAbstractClass(\ZfcDatagrid\DataSource\AbstractDataSource::class, [
             [],
         ], '', false);
@@ -81,6 +77,9 @@ class AbstractDataSourceTest extends TestCase
                 'sortDirection' => 'DESC',
             ],
         ], $ds->getSortConditions());
+
+        $ds->setSortConditions([]);
+        $this->assertEquals([], $ds->getSortConditions());
     }
 
     public function testFilter()
@@ -94,6 +93,9 @@ class AbstractDataSourceTest extends TestCase
         $this->assertEquals([
             $filter,
         ], $ds->getFilters());
+
+        $ds->setFilters([]);
+        $this->assertEquals([], $ds->getFilters());
     }
 
     public function testPaginatorAdapter()
