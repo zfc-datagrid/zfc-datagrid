@@ -27,10 +27,14 @@ class Image extends AbstractFormatter
     /**
      * @param string $name
      * @param string $value
+     *
+     * @return $this
      */
-    public function setAttribute(string $name, string $value)
+    public function setAttribute(string $name, string $value): self
     {
         $this->attributes[$name] = $value;
+
+        return $this;
     }
 
     /**
@@ -44,10 +48,14 @@ class Image extends AbstractFormatter
     /**
      * @param string $name
      * @param string $value
+     *
+     * @return $this
      */
-    public function setLinkAttribute(string $name, string $value)
+    public function setLinkAttribute(string $name, string $value): self
     {
         $this->linkAttributes[$name] = $value;
+
+        return $this;
     }
 
     /**
@@ -72,10 +80,14 @@ class Image extends AbstractFormatter
      * Set the prefix of the image path and the prefix of the link.
      *
      * @param string $prefix
+     *
+     * @return $this
      */
-    public function setPrefix(string $prefix)
+    public function setPrefix(string $prefix): self
     {
         $this->prefix = $prefix;
+
+        return $this;
     }
 
     /**

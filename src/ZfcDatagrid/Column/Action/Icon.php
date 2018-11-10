@@ -16,10 +16,14 @@ class Icon extends AbstractAction
      * - used for HTML if provided, overwise the iconLink is used.
      *
      * @param string $name
+     *
+     * @return $this
      */
-    public function setIconClass(string $name)
+    public function setIconClass(string $name): self
     {
         $this->iconClass = $name;
+
+        return $this;
     }
 
     /**
@@ -42,10 +46,14 @@ class Icon extends AbstractAction
      * Set the icon link (is used, if no icon class is provided).
      *
      * @param string $httpLink
+     *
+     * @return $this
      */
-    public function setIconLink(string $httpLink)
+    public function setIconLink(string $httpLink): self
     {
         $this->iconLink = $httpLink;
+
+        return $this;
     }
 
     /**

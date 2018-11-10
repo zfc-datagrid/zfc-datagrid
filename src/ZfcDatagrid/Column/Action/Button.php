@@ -23,10 +23,14 @@ class Button extends AbstractAction
 
     /**
      * @param string|AbstractColumn $name
+     *
+     * @return $this
      */
-    public function setLabel($name)
+    public function setLabel($name): self
     {
         $this->label = $name;
+
+        return $this;
     }
 
     /**

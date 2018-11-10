@@ -28,10 +28,14 @@ class Action extends AbstractColumn
 
     /**
      * @param Action\AbstractAction $action
+     *
+     * @return $this
      */
-    public function addAction(Action\AbstractAction $action)
+    public function addAction(Action\AbstractAction $action): self
     {
         $this->actions[] = $action;
+
+        return $this;
     }
 
     /**
@@ -44,10 +48,14 @@ class Action extends AbstractColumn
 
     /**
      * @param array|Action\AbstractAction[] $actions
+     *
+     * @return $this
      */
-    public function setActions(array $actions)
+    public function setActions(array $actions): self
     {
         $this->actions = $actions;
+
+        return $this;
     }
 
     /**
@@ -62,17 +70,23 @@ class Action extends AbstractColumn
 
     /**
      * @param int $key
+     *
+     * @return $this
      */
-    public function removeAction($key = null)
+    public function removeAction($key = null): self
     {
         unset($this->actions[$key]);
+
+        return $this;
     }
 
     /**
-     *
+     * @return $this
      */
-    public function clearActions()
+    public function clearActions(): self
     {
         $this->actions = [];
+
+        return $this;
     }
 }

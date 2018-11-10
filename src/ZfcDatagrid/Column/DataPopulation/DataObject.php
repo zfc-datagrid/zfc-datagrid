@@ -17,11 +17,15 @@ class DataObject implements DataPopulationInterface
     /**
      * @param null|ObjectAwareInterface $object
      *
+     * @return $this
+     *
      * @throws \Exception
      */
-    public function setObject(?ObjectAwareInterface $object)
+    public function setObject(?ObjectAwareInterface $object): self
     {
         $this->object = $object;
+
+        return $this;
     }
 
     /**
@@ -37,13 +41,17 @@ class DataObject implements DataPopulationInterface
      *
      * @param string                $objectParameterName
      * @param Column\AbstractColumn $column
+     *
+     * @return $this
      */
-    public function addObjectParameterColumn(string $objectParameterName, Column\AbstractColumn $column)
+    public function addObjectParameterColumn(string $objectParameterName, Column\AbstractColumn $column): self
     {
         $this->objectParameters[] = [
             'objectParameterName' => $objectParameterName,
             'column'              => $column,
         ];
+
+        return $this;
     }
 
     /**
@@ -59,12 +67,16 @@ class DataObject implements DataPopulationInterface
      *
      * @param string $name
      * @param mixed  $value
+     *
+     * @return $this
      */
-    public function setObjectParameter(string $name, $value)
+    public function setObjectParameter(string $name, $value): DataPopulationInterface
     {
         if ($this->getObject()) {
             $this->getObject()->setParameterFromColumn($name, $value);   
         }
+
+        return $this;
     }
 
     /**

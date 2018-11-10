@@ -72,10 +72,14 @@ class Renderer extends AbstractRenderer
 
     /**
      * @param ConsoleAdapter $adapter
+     *
+     * @return $this
      */
-    public function setConsoleAdapter(ConsoleAdapter $adapter)
+    public function setConsoleAdapter(ConsoleAdapter $adapter): self
     {
         $this->consoleAdapter = $adapter;
+
+        return $this;
     }
 
     /**

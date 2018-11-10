@@ -41,10 +41,14 @@ abstract class AbstractAction
      * Set the link.
      *
      * @param string $href
+     *
+     * @return $this
      */
-    public function setLink(string $href)
+    public function setLink(string $href): self
     {
         $this->setAttribute('href', $href);
+
+        return $this;
     }
 
     /**
@@ -57,10 +61,14 @@ abstract class AbstractAction
 
     /**
      * @param string $route
+     *
+     * @return $this
      */
-    public function setRoute(string $route)
+    public function setRoute(string $route): self
     {
         $this->route = $route;
+
+        return $this;
     }
 
     /**
@@ -73,10 +81,14 @@ abstract class AbstractAction
 
     /**
      * @param array $params
+     *
+     * @return $this
      */
     public function setRouteParams(array $params)
     {
         $this->routeParams = $params;
+
+        return $this;
     }
 
     /**
@@ -150,10 +162,14 @@ abstract class AbstractAction
      *
      * @param string $name
      * @param string $value
+     *
+     * @return $this
      */
-    public function setAttribute(string $name, string $value)
+    public function setAttribute(string $name, string $value): self
     {
         $this->htmlAttributes[$name] = $value;
+
+        return $this;
     }
 
     /**
@@ -172,10 +188,14 @@ abstract class AbstractAction
      * Removes an HTML attribute.
      *
      * @param string $name
+     *
+     * @return $this
      */
-    public function removeAttribute(string $name)
+    public function removeAttribute(string $name): self
     {
         unset($this->htmlAttributes[$name]);
+
+        return $this;
     }
 
     /**
@@ -212,10 +232,14 @@ abstract class AbstractAction
      * Set the title attribute.
      *
      * @param string $name
+     *
+     * @return $this
      */
-    public function setTitle(string $name)
+    public function setTitle(string $name): self
     {
         $this->setAttribute('title', $name);
+
+        return $this;
     }
 
     /**
@@ -232,8 +256,10 @@ abstract class AbstractAction
      * Add a css class.
      *
      * @param string $className
+     *
+     * @return $this
      */
-    public function addClass(string $className)
+    public function addClass(string $className): self
     {
         $attr = $this->getAttribute('class');
         if ($attr != '') {
@@ -242,20 +268,26 @@ abstract class AbstractAction
         $attr .= (string) $className;
 
         $this->setAttribute('class', $attr);
+
+        return $this;
     }
 
     /**
      * Display the values with AND or OR (if multiple showOnValues are defined).
      *
      * @param string $operator
+     *
+     * @return $this
      */
-    public function setShowOnValueOperator(string $operator = 'OR')
+    public function setShowOnValueOperator(string $operator = 'OR'): self
     {
         if ($operator != 'AND' && $operator != 'OR') {
             throw new \InvalidArgumentException('not allowed operator: "' . $operator . '" (AND / OR is allowed)');
         }
 
         $this->showOnValueOperator = (string) $operator;
+
+        return $this;
     }
 
     /**
@@ -275,14 +307,18 @@ abstract class AbstractAction
      * @param Column\AbstractColumn        $col
      * @param Column\AbstractColumn|string $value
      * @param string                       $comparison
+     *
+     * @return $this
      */
-    public function addShowOnValue(Column\AbstractColumn $col, $value = null, string $comparison = Filter::EQUAL)
+    public function addShowOnValue(Column\AbstractColumn $col, $value = null, string $comparison = Filter::EQUAL): self
     {
         $this->showOnValues[] = [
             'column'     => $col,
             'value'      => $value,
             'comparison' => $comparison,
         ];
+
+        return $this;
     }
 
     /**

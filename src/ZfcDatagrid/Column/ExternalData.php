@@ -24,14 +24,18 @@ class ExternalData extends AbstractColumn
      * @param DataPopulation\DataPopulationInterface $dataPopulation
      *
      * @throws \Exception
+     *
+     * @return $this
      */
-    public function setDataPopulation(DataPopulation\DataPopulationInterface $dataPopulation)
+    public function setDataPopulation(DataPopulation\DataPopulationInterface $dataPopulation): self
     {
         if ($dataPopulation instanceof DataPopulation\DataObject && $dataPopulation->getObject() === null) {
             throw new \Exception('object is missing in DataPopulation\DataObject!');
         }
 
         $this->dataPopulation = $dataPopulation;
+
+        return $this;
     }
 
     /**

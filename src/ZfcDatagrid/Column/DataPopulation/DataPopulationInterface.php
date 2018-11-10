@@ -15,8 +15,10 @@ interface DataPopulationInterface
      *
      * @param string $name
      * @param mixed  $value
+     *
+     * @return $this
      */
-    public function setObjectParameter(string $name, $value);
+    public function setObjectParameter(string $name, $value): self;
 
     /**
      * @return array

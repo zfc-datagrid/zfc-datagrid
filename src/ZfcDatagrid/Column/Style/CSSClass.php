@@ -30,9 +30,13 @@ class CSSClass extends AbstractStyle
 
     /**
      * @param string|array $class
+     *
+     * @return $this
      */
-    public function setClass($class)
+    public function setClass($class): self
     {
         $this->class = $class;
+
+        return $this;
     }
 }

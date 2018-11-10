@@ -68,10 +68,14 @@ abstract class AbstractRenderer implements RendererInterface
 
     /**
      * @param array $options
+     *
+     * @return $this
      */
-    public function setOptions(array $options)
+    public function setOptions(array $options): self
     {
         $this->options = $options;
+
+        return $this;
     }
 
     /**
@@ -94,10 +98,14 @@ abstract class AbstractRenderer implements RendererInterface
 
     /**
      * @param ViewModel $viewModel
+     *
+     * @return $this
      */
-    public function setViewModel(ViewModel $viewModel)
+    public function setViewModel(ViewModel $viewModel): self
     {
         $this->viewModel = $viewModel;
+
+        return $this;
     }
 
     /**
@@ -112,10 +120,14 @@ abstract class AbstractRenderer implements RendererInterface
      * Set the view template.
      *
      * @param string $name
+     *
+     * @return $this
      */
-    public function setTemplate(string $name)
+    public function setTemplate(string $name): self
     {
         $this->template = (string) $name;
+
+        return $this;
     }
 
     /**
@@ -161,10 +173,14 @@ abstract class AbstractRenderer implements RendererInterface
      * Set the toolbar view template name.
      *
      * @param string $name
+     *
+     * @return $this
      */
-    public function setToolbarTemplate(string $name)
+    public function setToolbarTemplate(string $name): self
     {
         $this->templateToolbar = $name;
+
+        return $this;
     }
 
     /**
@@ -185,10 +201,14 @@ abstract class AbstractRenderer implements RendererInterface
      * Set the toolbar view template variables.
      *
      * @param array $variables
+     *
+     * @return $this
      */
-    public function setToolbarTemplateVariables(array $variables)
+    public function setToolbarTemplateVariables(array $variables): self
     {
         $this->toolbarTemplateVariables = $variables;
+
+        return $this;
     }
 
     /**
@@ -206,10 +226,14 @@ abstract class AbstractRenderer implements RendererInterface
      * NOT FOR THE ACTUAL DATA!!!!
      *
      * @param Paginator $paginator
+     *
+     * @return $this
      */
-    public function setPaginator(Paginator $paginator)
+    public function setPaginator(Paginator $paginator): self
     {
         $this->paginator = $paginator;
+
+        return $this;
     }
 
     /**
@@ -224,10 +248,14 @@ abstract class AbstractRenderer implements RendererInterface
      * Set the columns.
      *
      * @param array $columns
+     *
+     * @return $this
      */
-    public function setColumns(array $columns)
+    public function setColumns(array $columns): self
     {
         $this->columns = $columns;
+
+        return $this;
     }
 
     /**
@@ -242,10 +270,14 @@ abstract class AbstractRenderer implements RendererInterface
 
     /**
      * @param \ZfcDataGrid\Column\Style\AbstractStyle[] $rowStyles
+     *
+     * @return $this
      */
-    public function setRowStyles(array $rowStyles = [])
+    public function setRowStyles(array $rowStyles = []): self
     {
         $this->rowStyles = $rowStyles;
+
+        return $this;
     }
 
     /**
@@ -260,8 +292,10 @@ abstract class AbstractRenderer implements RendererInterface
      * Calculate the sum of the displayed column width to 100%.
      *
      * @param array $columns
+     *
+     * @return $this
      */
-    protected function calculateColumnWidthPercent(array $columns)
+    protected function calculateColumnWidthPercent(array $columns): self
     {
         $widthAllColumn = 0;
         foreach ($columns as $column) {
@@ -277,16 +311,22 @@ abstract class AbstractRenderer implements RendererInterface
             $widthSum += (($column->getWidth() / $relativeOnePercent));
             $column->setWidth(($column->getWidth() / $relativeOnePercent));
         }
+
+        return $this;
     }
 
     /**
      * The prepared data.
      *
      * @param array $data
+     *
+     * @return $this
      */
-    public function setData(array $data)
+    public function setData(array $data): self
     {
         $this->data = $data;
+
+        return $this;
     }
 
     /**
@@ -331,10 +371,14 @@ abstract class AbstractRenderer implements RendererInterface
 
     /**
      * @param MvcEvent $mvcEvent
+     *
+     * @return $this
      */
-    public function setMvcEvent(MvcEvent $mvcEvent)
+    public function setMvcEvent(MvcEvent $mvcEvent): self
     {
         $this->mvcEvent = $mvcEvent;
+
+        return $this;
     }
 
     /**
@@ -355,10 +399,14 @@ abstract class AbstractRenderer implements RendererInterface
 
     /**
      * @param TranslatorInterface $translator
+     *
+     * @return $this
      */
-    public function setTranslator(TranslatorInterface $translator)
+    public function setTranslator(TranslatorInterface $translator): self
     {
         $this->translator = $translator;
+
+        return $this;
     }
 
     /**
@@ -383,10 +431,14 @@ abstract class AbstractRenderer implements RendererInterface
      * Set the title.
      *
      * @param string $title
+     *
+     * @return $this
      */
-    public function setTitle(string $title)
+    public function setTitle(string $title): self
     {
         $this->title = $title;
+
+        return $this;
     }
 
     /**
@@ -399,10 +451,14 @@ abstract class AbstractRenderer implements RendererInterface
 
     /**
      * @param Cache\Storage\StorageInterface $cache
+     *
+     * @return $this
      */
-    public function setCache(Cache\Storage\StorageInterface $cache)
+    public function setCache(Cache\Storage\StorageInterface $cache): self
     {
         $this->cache = $cache;
+
+        return $this;
     }
 
     /**
@@ -415,10 +471,14 @@ abstract class AbstractRenderer implements RendererInterface
 
     /**
      * @param string $cacheId
+     *
+     * @return $this
      */
-    public function setCacheId(string $cacheId)
+    public function setCacheId(string $cacheId): self
     {
         $this->cacheId = $cacheId;
+
+        return $this;
     }
 
     /**
@@ -434,8 +494,10 @@ abstract class AbstractRenderer implements RendererInterface
      * from a custom form).
      *
      * @param array $sortConditions
+     *
+     * @return $this
      */
-    public function setSortConditions(array $sortConditions)
+    public function setSortConditions(array $sortConditions): self
     {
         foreach ($sortConditions as $sortCondition) {
             if (! is_array($sortCondition)) {
@@ -448,6 +510,8 @@ abstract class AbstractRenderer implements RendererInterface
         }
 
         $this->sortConditions = $sortConditions;
+
+        return $this;
     }
 
     /**
@@ -503,8 +567,10 @@ abstract class AbstractRenderer implements RendererInterface
      * from a custom form).
      *
      * @param Filter[] $filters
+     *
+     * @return $this
      */
-    public function setFilters(array $filters)
+    public function setFilters(array $filters): self
     {
         foreach ($filters as $filter) {
             if (! $filter instanceof Filter) {
@@ -513,6 +579,8 @@ abstract class AbstractRenderer implements RendererInterface
         }
 
         $this->filters = $filters;
+
+        return $this;
     }
 
     /**
@@ -563,10 +631,14 @@ abstract class AbstractRenderer implements RendererInterface
      * Set the current page number.
      *
      * @param int $page
+     *
+     * @return $this
      */
-    public function setCurrentPageNumber(int $page)
+    public function setCurrentPageNumber(int $page): self
     {
         $this->currentPageNumber = $page;
+
+        return $this;
     }
 
     /**

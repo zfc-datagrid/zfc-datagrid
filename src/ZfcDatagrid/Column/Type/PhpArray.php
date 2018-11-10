@@ -25,10 +25,14 @@ class PhpArray extends AbstractType
      * Set separator of the string to be used to explode the array.
      *
      * @param string $separator
+     *
+     * @return $this
      */
-    public function setSeparator(string $separator)
+    public function setSeparator(string $separator): self
     {
         $this->separator = $separator;
+
+        return $this;
     }
 
     /*

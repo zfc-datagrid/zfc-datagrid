@@ -72,10 +72,14 @@ class Number extends AbstractType
 
     /**
      * @param int $style
+     *
+     * @return $this
      */
-    public function setFormatStyle(int $style = NumberFormatter::DECIMAL)
+    public function setFormatStyle(int $style = NumberFormatter::DECIMAL): self
     {
         $this->formatStyle = $style;
+
+        return $this;
     }
 
     /**
@@ -88,10 +92,14 @@ class Number extends AbstractType
 
     /**
      * @param int $type
+     *
+     * @return $this
      */
-    public function setFormatType(int $type = NumberFormatter::TYPE_DEFAULT)
+    public function setFormatType(int $type = NumberFormatter::TYPE_DEFAULT): self
     {
         $this->formatType = $type;
+
+        return $this;
     }
 
     /**
@@ -104,10 +112,14 @@ class Number extends AbstractType
 
     /**
      * @param null|string $locale
+     *
+     * @return $this
      */
-    public function setLocale(?string $locale = null)
+    public function setLocale(?string $locale = null): self
     {
         $this->locale = $locale;
+
+        return $this;
     }
 
     /**
@@ -129,13 +141,17 @@ class Number extends AbstractType
      *
      * @param int $attr
      * @param int $value
+     *
+     * @return $this
      */
-    public function addAttribute(int $attr, int $value)
+    public function addAttribute(int $attr, int $value): self
     {
         $this->attributes[] = [
             'attribute' => $attr,
             'value'     => $value,
         ];
+
+        return $this;
     }
 
     /**
@@ -148,10 +164,14 @@ class Number extends AbstractType
 
     /**
      * @param string $string
+     *
+     * @return $this
      */
-    public function setSuffix(string $string = '')
+    public function setSuffix(string $string = ''): self
     {
         $this->suffix = $string;
+
+        return $this;
     }
 
     /**
@@ -164,10 +184,14 @@ class Number extends AbstractType
 
     /**
      * @param string $string
+     *
+     * @return $this
      */
-    public function setPrefix(string $string = '')
+    public function setPrefix(string $string = ''): self
     {
         $this->prefix = $string;
+
+        return $this;
     }
 
     /**
@@ -180,10 +204,14 @@ class Number extends AbstractType
 
     /**
      * @param null|string $pattern
+     *
+     * @return $this
      */
-    public function setPattern(?string $pattern)
+    public function setPattern(?string $pattern): self
     {
         $this->pattern = $pattern;
+
+        return $this;
     }
 
     /**

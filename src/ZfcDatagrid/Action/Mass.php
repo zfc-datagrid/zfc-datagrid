@@ -26,10 +26,14 @@ class Mass
 
     /**
      * @param string $title
+     *
+     * @return $this
      */
-    public function setTitle(string $title)
+    public function setTitle(string $title): self
     {
         $this->title = $title;
+
+        return $this;
     }
 
     /**
@@ -42,10 +46,14 @@ class Mass
 
     /**
      * @param string $link
+     *
+     * @return $this
      */
-    public function setLink(string $link)
+    public function setLink(string $link): self
     {
         $this->link = $link;
+
+        return $this;
     }
 
     /**
@@ -58,10 +66,14 @@ class Mass
 
     /**
      * @param bool $mode
+     *
+     * @return $this
      */
-    public function setConfirm(bool $mode = true)
+    public function setConfirm(bool $mode = true): self
     {
         $this->confirm = $mode;
+
+        return $this;
     }
 
     /**
