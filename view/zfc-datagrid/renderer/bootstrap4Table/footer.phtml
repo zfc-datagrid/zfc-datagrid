@@ -22,7 +22,7 @@ $paginator = $this->paginator;
     <!-- Pagination -->
     <div class="col-md-4 text-center">
         <input type="hidden" name="<?= $this->parameterNames['currentPage']; ?>" value="<?= $this->paginator->getPages()->current; ?>" />
-        <?= $this->paginationcontrol($this->paginator, 'Elastic', 'zfc-datagrid/renderer/bootstrapTable/paginator', [
+        <?= $this->paginationcontrol($this->paginator, 'Elastic', 'zfc-datagrid/renderer/bootstrap4Table/paginator', [
             'activeParameters' => $this->activeParameters, 
             'parameterNames' => $this->parameterNames,
             'gridId' => $this->gridId
