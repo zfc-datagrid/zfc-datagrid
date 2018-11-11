@@ -263,6 +263,11 @@ return [
         'template_map' => [
             'zfc-datagrid/renderer/bootstrapTable/layout' =>
                 __DIR__ . '/../view/zfc-datagrid/renderer/bootstrapTable/layout.phtml',
+            /**
+             * for BS4, you have to set this layout
+            'zfc-datagrid/renderer/bootstrapTable/layout' =>
+                './vendor/zfc-datagrid/zfc-datagrid/view/zfc-datagrid/renderer/bootstrap4Table/layout.phtml',
+             */
             'zfc-datagrid/renderer/printHtml/layout'      =>
                 __DIR__ . '/../view/zfc-datagrid/renderer/printHtml/layout.phtml',
             'zfc-datagrid/renderer/printHtml/table'       =>
