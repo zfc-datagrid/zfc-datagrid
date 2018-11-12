@@ -1,18 +1,21 @@
 <?php
-
 namespace ZfcDatagrid\Renderer\JqGrid;
 
 use Zend\Http\PhpEnvironment\Request as HttpRequest;
 use Zend\View\Model\JsonModel;
 use ZfcDatagrid\Column;
 use ZfcDatagrid\Renderer\AbstractRenderer;
+use function explode;
+use function count;
+use function strtoupper;
+use function implode;
 
 class Renderer extends AbstractRenderer
 {
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return 'jqGrid';
     }
@@ -20,7 +23,7 @@ class Renderer extends AbstractRenderer
     /**
      * @return bool
      */
-    public function isHtml()
+    public function isHtml(): bool
     {
         return true;
     }
@@ -28,7 +31,7 @@ class Renderer extends AbstractRenderer
     /**
      * @return bool
      */
-    public function isExport()
+    public function isExport(): bool
     {
         return false;
     }
@@ -38,7 +41,7 @@ class Renderer extends AbstractRenderer
      *
      * @throws \Exception
      */
-    public function getRequest()
+    public function getRequest(): HttpRequest
     {
         $request = parent::getRequest();
         if (! $request instanceof HttpRequest) {
@@ -57,20 +60,20 @@ class Renderer extends AbstractRenderer
      *
      * @throws \Exception
      */
-    public function getSortConditions()
+    public function getSortConditions(): array
     {
-        if (is_array($this->sortConditions)) {
+        if (!empty($this->sortConditions)) {
             return $this->sortConditions;
         }
 
         $request = $this->getRequest();
 
         $optionsRenderer = $this->getOptionsRenderer();
-        $parameterNames = $optionsRenderer['parameterNames'];
+        $parameterNames  = $optionsRenderer['parameterNames'];
 
         $sortConditions = [];
 
-        $sortColumns = $request->getPost(
+        $sortColumns    = $request->getPost(
             $parameterNames['sortColumns'],
             $request->getQuery($parameterNames['sortColumns'])
         );
@@ -79,10 +82,10 @@ class Renderer extends AbstractRenderer
             $request->getQuery($parameterNames['sortDirections'])
         );
         if ($sortColumns != '') {
-            $sortColumns = explode(',', $sortColumns);
+            $sortColumns    = explode(',', $sortColumns);
             $sortDirections = explode(',', $sortDirections);
 
-            if (count($sortColumns) != count($sortDirections)) {
+            if (count($sortColumns) !== count($sortDirections)) {
                 throw new \Exception('Count missmatch order columns/direction');
             }
 
@@ -98,7 +101,7 @@ class Renderer extends AbstractRenderer
                     if ($column->getUniqueId() == $sortColumn) {
                         $sortConditions[] = [
                             'sortDirection' => $sortDirection,
-                            'column' => $column,
+                            'column'        => $column,
                         ];
 
                         $column->setSortActive($sortDirection);
@@ -119,16 +122,18 @@ class Renderer extends AbstractRenderer
 
     /**
      * @return array
+     *
      * @throws \Exception
      */
-    public function getFilters()
+    public function getFilters(): array
     {
-        if (is_array($this->filters)) {
+        if (!empty($this->filters)) {
             // set from cache! (for export)
             return $this->filters;
         }
 
         $filters = [];
+
         $optionsRenderer = $this->getOptionsRenderer();
         $parameterNames  = $optionsRenderer['parameterNames'];
 
@@ -136,16 +141,17 @@ class Renderer extends AbstractRenderer
         $isSearch = $request->getPost($parameterNames['isSearch'], $request->getQuery($parameterNames['isSearch']));
         if ('true' == $isSearch) {
             // User filtering
-            $values = $this->prepareFilter(json_decode($request->getPost('filters'), true));
             foreach ($this->getColumns() as $column) {
                 /* @var $column \ZfcDatagrid\Column\AbstractColumn */
                 if ($request->getPost($column->getUniqueId(), $request->getQuery($column->getUniqueId())) != '') {
                     $value = $request->getPost($column->getUniqueId(), $request->getQuery($column->getUniqueId()));
-                    $filters[] = $this->createFilter($column, $value);
-                } elseif ($values !== null && isset($values[$column->getUniqueId()])) {
-                    $value = implode(',', $values[$column->getUniqueId()]['values']);
-                    $filter = $this->createFilter($column, $value);
+
+                    $filter = new \ZfcDatagrid\Filter();
+                    $filter->setFromColumn($column, $value);
+
                     $filters[] = $filter;
+
+                    $column->setFilterActive($filter->getDisplayColumnValue());
                 }
             }
         }
@@ -154,50 +160,20 @@ class Renderer extends AbstractRenderer
             // No user sorting -> get default sorting
             $filters = $this->getFiltersDefault();
         }
+
         $this->filters = $filters;
 
         return $this->filters;
     }
 
-    public function createFilter($column, $value) {
-        /* @var $column \ZfcDatagrid\Column\AbstractColumn */
-        $filter = new \ZfcDatagrid\Filter();
-        $filter->setFromColumn($column, $value);
-        $column->setFilterActive($filter->getDisplayColumnValue());
-
-        return $filter;
-    }
-
-    public function prepareFilter($rawFilters) {
-        static $fields = [];
-
-        if (!$rawFilters) {
-            return [];
-        }
-
-        foreach ($rawFilters as $key => $values) {
-            if ($values && $key === 'rules') {
-                foreach ($values as $rule) {
-                    if (!isset($fields[$rule['field']])) {
-                        $fields[$rule['field']] = [];
-                    }
-                    $fields[$rule['field']]['values'][] = $rule['data'];
-                }
-            }
-            if ($values && $key === 'groups') {
-                foreach ($values as $sub) {
-                    $this->prepareFilter($sub);
-                }
-            }
-        }
-
-        return $fields;
-    }
-
-    public function getCurrentPageNumber()
+    /**
+     * @return int
+     * @throws \Exception
+     */
+    public function getCurrentPageNumber(): int
     {
         $optionsRenderer = $this->getOptionsRenderer();
-        $parameterNames = $optionsRenderer['parameterNames'];
+        $parameterNames  = $optionsRenderer['parameterNames'];
 
         $request = $this->getRequest();
         if ($request instanceof HttpRequest) {
@@ -213,6 +189,10 @@ class Renderer extends AbstractRenderer
         return (int) $this->currentPageNumber;
     }
 
+    /**
+     * @return null|JsonModel|\Zend\View\Model\ViewModel
+     * @throws \Exception
+     */
     public function execute()
     {
         $request = $this->getRequest();
@@ -228,7 +208,7 @@ class Renderer extends AbstractRenderer
             $viewModel->setVariable('data', $this->getDataJqGrid());
 
             $columnsRowClickDisabled = [];
-            $columns = $viewModel->getVariable('columns');
+            $columns                 = $viewModel->getVariable('columns');
             foreach ($columns as $column) {
                 /* @var $column \ZfcDatagrid\Column\AbstractColumn */
 
@@ -243,7 +223,10 @@ class Renderer extends AbstractRenderer
         return $viewModel;
     }
 
-    public function getData()
+    /**
+     * @return array
+     */
+    public function getData(): array
     {
         $data = parent::getData();
 
@@ -254,7 +237,7 @@ class Renderer extends AbstractRenderer
                 } elseif ($column instanceof Column\Action) {
                     /* @var $column \ZfcDatagrid\Column\Action */
 
-                    if ($columnActions = $column->getActions()) {
+                    if ($column->getActions()) {
                         $actions = [];
                         foreach ($column->getActions() as $action) {
                             /* @var $action \ZfcDatagrid\Column\Action\AbstractAction */
@@ -274,12 +257,15 @@ class Renderer extends AbstractRenderer
         return $data;
     }
 
-    private function getDataJqGrid()
+    /**
+     * @return array
+     */
+    private function getDataJqGrid(): array
     {
         return [
-            'rows' => $this->getData(),
-            'page' => $this->getPaginator()->getCurrentPageNumber(),
-            'total' => $this->getPaginator()->count(),
+            'rows'    => $this->getData(),
+            'page'    => $this->getPaginator()->getCurrentPageNumber(),
+            'total'   => $this->getPaginator()->count(),
             'records' => $this->getPaginator()->getTotalItemCount(),
         ];
     }

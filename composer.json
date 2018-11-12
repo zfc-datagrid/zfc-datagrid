@@ -1,6 +1,6 @@
 {
     "name":        "zfc-datagrid/zfc-datagrid",
-    "description": "Zend Framework 2/3 Module that provides a datagrid for different datasources and output formats",
+    "description": "Zend Framework 3 Module that provides a datagrid for different datasources and output formats",
     "type":        "library",
     "license":     "MIT",
     "keywords": [
@@ -10,7 +10,8 @@
         "Datagrid",
         "Datatable",
         "module",
-        "zf2",
+        "zf",
+        "zf3",
         "Zend Framework",
         "pdf",
         "excel",
@@ -25,27 +26,26 @@
     }],
 
     "require": {
-        "php": "~5.6|~7.0",
+        "php": "^7.1",
         
-        "zendframework/zend-mvc": "~2.7|~3.0",
-        "zendframework/zend-modulemanager": "~2.5",
+        "zendframework/zend-mvc": "^3.0",
         "zendframework/zend-session": "^2.7.4",
-        "zendframework/zend-view": "~2.5",
+        "zendframework/zend-view": "^2.5",
         "zendframework/zend-http": "^2.8",
-        "zendframework/zend-paginator": "~2.5",
-        "zendframework/zend-cache": "~2.5",
-        "zendframework/zend-servicemanager": "~2.7|~3.0"
+        "zendframework/zend-paginator": "^2.5",
+        "zendframework/zend-cache": "^2.5",
+        "zendframework/zend-servicemanager": "^3.0"
     },
     
     "require-dev": {
-        "phpunit/phpunit": "^5.7.21 || ^6.3 || ^7.4.3",
+        "phpunit/phpunit": "^7.4.3",
         "doctrine/doctrine-orm-module": "^1.1.4 || ^2.1.2",
         
-        "zendframework/zend-console": "~2.5",
-        "zendframework/zend-db": "~2.5",
-        "zendframework/zend-i18n": "~2.5",
-        "zendframework/zend-text": "~2.5",
-        "zendframework/zend-json": "~2.5",
+        "zendframework/zend-console": "^2.5",
+        "zendframework/zend-db": "^2.5",
+        "zendframework/zend-i18n": "^2.5",
+        "zendframework/zend-text": "^2.5",
+        "zendframework/zend-json": "^2.5",
         "zendframework/zend-coding-standard": "~1.0",
 
         "phpoffice/phpexcel": "^1.8",
@@ -64,6 +64,9 @@
     },
 
     "extra": {
+        "zf": {
+            "module": "ZfcDatagrid"
+        },
         "branch-alias": {
             "dev-master": "1.4-dev",
             "dev-develop": "2.0-dev"
@@ -94,7 +97,7 @@
         "cs-check": "phpcs",
         "cs-fix": "phpcbf",
         "test": "phpunit",
-        "test-coverage": "phpunit --coverage-clover ./clover.xml",
-        "upload-coverage": "coveralls -v --coverage_clover ./clover.xml"
+        "test-coverage": "phpunit --colors=always --coverage-clover clover.xml",
+        "upload-coverage": "vendor/bin/php-coveralls -v"
     }
 }

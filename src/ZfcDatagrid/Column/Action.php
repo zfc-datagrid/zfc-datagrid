@@ -1,5 +1,4 @@
 <?php
-
 namespace ZfcDatagrid\Column;
 
 /**
@@ -16,7 +15,7 @@ class Action extends AbstractColumn
     /**
      * @param string $uniqueId
      */
-    public function __construct($uniqueId = 'action')
+    public function __construct(string $uniqueId = 'action')
     {
         $this->setUniqueId($uniqueId);
         $this->setLabel('Actions');
@@ -29,26 +28,34 @@ class Action extends AbstractColumn
 
     /**
      * @param Action\AbstractAction $action
+     *
+     * @return $this
      */
-    public function addAction(Action\AbstractAction $action)
+    public function addAction(Action\AbstractAction $action): self
     {
         $this->actions[] = $action;
+
+        return $this;
     }
 
     /**
      * @return Action\AbstractAction[]
      */
-    public function getActions()
+    public function getActions(): array
     {
         return $this->actions;
     }
 
     /**
      * @param array|Action\AbstractAction[] $actions
+     *
+     * @return $this
      */
-    public function setActions(array $actions)
+    public function setActions(array $actions): self
     {
         $this->actions = $actions;
+
+        return $this;
     }
 
     /**
@@ -56,28 +63,30 @@ class Action extends AbstractColumn
      *
      * @return Action\AbstractAction|null
      */
-    public function getAction($key)
+    public function getAction($key): ?Action\AbstractAction
     {
-        if (isset($this->actions[$key])) {
-            return $this->actions[$key];
-        }
-
-        return null;
+        return $this->actions[$key] ?? null;
     }
 
     /**
      * @param int $key
+     *
+     * @return $this
      */
-    public function removeAction($key = null)
+    public function removeAction($key = null): self
     {
         unset($this->actions[$key]);
+
+        return $this;
     }
 
     /**
-     *
+     * @return $this
      */
-    public function clearActions()
+    public function clearActions(): self
     {
         $this->actions = [];
+
+        return $this;
     }
 }

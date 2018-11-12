@@ -79,8 +79,8 @@ class ZendSelectTest extends DataSourceTestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage A instance of Zend\Db\SqlSelect is needed to use this dataSource!
+     * @expectedException \TypeError
+     * @expectedExceptionMessage Argument 1 passed to ZfcDatagrid\DataSource\ZendSelect::__construct() must be an instance of Zend\Db\Sql\Select, array given, called in
      */
     public function testConstruct()
     {
@@ -156,5 +156,23 @@ class ZendSelectTest extends DataSourceTestCase
             $col2,
         ]);
         $source->execute();
+    }
+
+    public function testFilter()
+    {
+        $this->markTestSkipped();
+        $source = clone $this->source;
+
+        /*
+         * LIKE
+         */
+        $filter = new Filter();
+        $filter->setFromColumn($this->colVolumne, '~7');
+
+        $source->addFilter($filter);
+        $source->execute();
+
+        // $this->assertEquals(2, $source->getPaginatorAdapter()
+        // ->count());
     }
 }

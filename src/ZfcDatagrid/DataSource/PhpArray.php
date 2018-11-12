@@ -1,9 +1,14 @@
 <?php
-
 namespace ZfcDatagrid\DataSource;
 
 use Zend\Paginator\Adapter\ArrayAdapter as PaginatorAdapter;
 use ZfcDatagrid\Column;
+use function array_filter;
+use function in_array;
+use function get_class;
+use function end;
+use function count;
+use function call_user_func_array;
 
 class PhpArray extends AbstractDataSource
 {
@@ -14,19 +19,15 @@ class PhpArray extends AbstractDataSource
      *
      * @param array $data
      */
-    public function __construct($data)
+    public function __construct(array $data)
     {
-        if (is_array($data)) {
-            $this->data = $data;
-        } else {
-            throw new \InvalidArgumentException('Unsupported data input, please provide an array');
-        }
+        $this->data = $data;
     }
 
     /**
      * @return array
      */
-    public function getData()
+    public function getData(): array
     {
         return $this->data;
     }
@@ -76,7 +77,7 @@ class PhpArray extends AbstractDataSource
 
             $colString = $col->getSelectPart1();
             if ($col->getSelectPart2() != '') {
-                $colString = $col->getSelectPart1().'_'.$col->getSelectPart2();
+                $colString = $col->getSelectPart1() . '_' . $col->getSelectPart2();
             }
 
             $selectedColumns[] = $colString;
@@ -108,16 +109,16 @@ class PhpArray extends AbstractDataSource
         ];
 
         if ('DESC' === $sortCondition['sortDirection']) {
-            $desc = SORT_DESC;
+            $desc        = SORT_DESC;
             $sortArray[] = $desc;
         } else {
-            $asc = SORT_ASC;
+            $asc         = SORT_ASC;
             $sortArray[] = $asc;
         }
 
         switch (get_class($sortCondition['column']->getType())) {
             case Column\Type\Number::class:
-                $numeric = SORT_NUMERIC;
+                $numeric     = SORT_NUMERIC;
                 $sortArray[] = $numeric;
                 break;
 
@@ -127,7 +128,7 @@ class PhpArray extends AbstractDataSource
                 break;
 
             default:
-                $regular = SORT_REGULAR;
+                $regular     = SORT_REGULAR;
                 $sortArray[] = $regular;
                 break;
         }

@@ -1,5 +1,4 @@
 <?php
-
 namespace ZfcDatagrid\DataSource;
 
 use Zend\Paginator\Adapter\AdapterInterface as PaginatorAdapterInterface;
@@ -8,59 +7,40 @@ use ZfcDatagrid\Filter;
 
 abstract class AbstractDataSource implements DataSourceInterface
 {
-    /**
-     * @var array
-     */
+    /** @var Column\AbstractColumn[] */
     protected $columns = [];
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $sortConditions = [];
 
-    /**
-     * @var array
-     */
+    /** @var Filter[] */
     protected $filters = [];
 
     /**
      * The data result.
      *
-     * @var \Zend\Paginator\Adapter\AdapterInterface
+     * @var PaginatorAdapterInterface|null
      */
     protected $paginatorAdapter;
 
     /**
-     * Set the data source
-     * - array
-     * - ZF2: Zend\Db\Sql\Select
-     * - Doctrine2: Doctrine\ORM\QueryBuilder
-     * - ...
-     *
-     * @param mixed $data
-     *
-     * @throws \Exception
-     */
-    public function __construct($data)
-    {
-        // we need this exception, because a abstract __construct, create a exception in php-unit for mocking
-        throw new \Exception(sprintf('Missing __construct in %s', get_class($this)));
-    }
-
-    /**
      * Set the columns.
      *
-     * @param array $columns
+     * @param Column\AbstractColumn[] $columns
+     *
+     * @return $this
      */
-    public function setColumns(array $columns)
+    public function setColumns(array $columns): DataSourceInterface
     {
         $this->columns = $columns;
+
+        return $this;
     }
 
     /**
      * @return Column\AbstractColumn[]
      */
-    public function getColumns()
+    public function getColumns(): array
     {
         return $this->columns;
     }
@@ -70,27 +50,35 @@ abstract class AbstractDataSource implements DataSourceInterface
      *
      * @param Column\AbstractColumn $column
      * @param string                $sortDirection
+     *
+     * @return $this
      */
-    public function addSortCondition(Column\AbstractColumn $column, $sortDirection = 'ASC')
+    public function addSortCondition(Column\AbstractColumn $column, string $sortDirection = 'ASC'): DataSourceInterface
     {
         $this->sortConditions[] = [
-            'column' => $column,
+            'column'        => $column,
             'sortDirection' => $sortDirection,
         ];
+
+        return $this;
     }
 
     /**
      * @param array $sortConditions
+     *
+     * @return $this
      */
-    public function setSortConditions(array $sortConditions)
+    public function setSortConditions(array $sortConditions): self
     {
         $this->sortConditions = $sortConditions;
+
+        return $this;
     }
 
     /**
      * @return array
      */
-    public function getSortConditions()
+    public function getSortConditions(): array
     {
         return $this->sortConditions;
     }
@@ -99,40 +87,52 @@ abstract class AbstractDataSource implements DataSourceInterface
      * Add a filter rule.
      *
      * @param Filter $filter
+     *
+     * @return $this
      */
-    public function addFilter(Filter $filter)
+    public function addFilter(Filter $filter): DataSourceInterface
     {
         $this->filters[] = $filter;
+
+        return $this;
     }
 
     /**
-     * @param array $filters
+     * @param Filter[] $filters
+     *
+     * @return $this
      */
-    public function setFilters(array $filters)
+    public function setFilters(array $filters): self
     {
         $this->filters = $filters;
+
+        return $this;
     }
 
     /**
-     * @return \ZfcDatagrid\Filter[]
+     * @return Filter[]
      */
-    public function getFilters()
+    public function getFilters(): array
     {
         return $this->filters;
     }
 
     /**
-     * @param PaginatorAdapterInterface $paginator
+     * @param PaginatorAdapterInterface|null $paginator
+     *
+     * @return $this
      */
-    public function setPaginatorAdapter(PaginatorAdapterInterface $paginator)
+    public function setPaginatorAdapter(?PaginatorAdapterInterface $paginator): self
     {
         $this->paginatorAdapter = $paginator;
+
+        return $this;
     }
 
     /**
-     * @return \Zend\Paginator\Adapter\AdapterInterface
+     * @return PaginatorAdapterInterface
      */
-    public function getPaginatorAdapter()
+    public function getPaginatorAdapter(): ?PaginatorAdapterInterface
     {
         return $this->paginatorAdapter;
     }

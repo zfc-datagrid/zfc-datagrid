@@ -1,11 +1,12 @@
 <?php
-
 namespace ZfcDatagrid\DataSource\Doctrine2;
 
 use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\QueryBuilder;
 use ZfcDatagrid\Column;
 use ZfcDatagrid\Filter as DatagridFilter;
+use function sprintf;
+use function str_replace;
 
 class Filter
 {
@@ -23,9 +24,9 @@ class Filter
     }
 
     /**
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
-    public function getQueryBuilder()
+    public function getQueryBuilder(): QueryBuilder
     {
         return $this->qb;
     }
@@ -34,20 +35,21 @@ class Filter
      * @param DatagridFilter $filter
      *
      * @throws \Exception
+     * @return $this
      */
-    public function applyFilter(DatagridFilter $filter)
+    public function applyFilter(DatagridFilter $filter): self
     {
-        $qb = $this->getQueryBuilder();
+        $qb   = $this->getQueryBuilder();
         $expr = new Expr();
 
         $col = $filter->getColumn();
         if (! $col instanceof Column\Select) {
-            throw new \Exception('This column cannot be filtered: '.$col->getUniqueId());
+            throw new \Exception('This column cannot be filtered: ' . $col->getUniqueId());
         }
 
         $colString = $col->getSelectPart1();
         if ($col->getSelectPart2() != '') {
-            $colString .= '.'.$col->getSelectPart2();
+            $colString .= '.' . $col->getSelectPart2();
         }
         if ($col instanceof Column\Select && $col->hasFilterSelectExpression()) {
             $colString = sprintf($col->getFilterSelectExpression(), $colString);
@@ -56,37 +58,37 @@ class Filter
 
         $wheres = [];
         foreach ($values as $key => $value) {
-            $valueParameterName = ':'.str_replace('.', '', $col->getUniqueId().$key);
+            $valueParameterName = ':' . str_replace('.', '', $col->getUniqueId() . $key);
 
             switch ($filter->getOperator()) {
                 case DatagridFilter::LIKE:
                     $wheres[] = $expr->like($colString, $valueParameterName);
-                    $qb->setParameter($valueParameterName, '%'.$value.'%');
+                    $qb->setParameter($valueParameterName, '%' . $value . '%');
                     break;
 
                 case DatagridFilter::LIKE_LEFT:
                     $wheres[] = $expr->like($colString, $valueParameterName);
-                    $qb->setParameter($valueParameterName, '%'.$value);
+                    $qb->setParameter($valueParameterName, '%' . $value);
                     break;
 
                 case DatagridFilter::LIKE_RIGHT:
                     $wheres[] = $expr->like($colString, $valueParameterName);
-                    $qb->setParameter($valueParameterName, $value.'%');
+                    $qb->setParameter($valueParameterName, $value . '%');
                     break;
 
                 case DatagridFilter::NOT_LIKE:
                     $wheres[] = $expr->notLike($colString, $valueParameterName);
-                    $qb->setParameter($valueParameterName, '%'.$value.'%');
+                    $qb->setParameter($valueParameterName, '%' . $value . '%');
                     break;
 
                 case DatagridFilter::NOT_LIKE_LEFT:
                     $wheres[] = $expr->notLike($colString, $valueParameterName);
-                    $qb->setParameter($valueParameterName, '%'.$value);
+                    $qb->setParameter($valueParameterName, '%' . $value);
                     break;
 
                 case DatagridFilter::NOT_LIKE_RIGHT:
                     $wheres[] = $expr->notLike($colString, $valueParameterName);
-                    $qb->setParameter($valueParameterName, $value.'%');
+                    $qb->setParameter($valueParameterName, $value . '%');
                     break;
 
                 case DatagridFilter::EQUAL:
@@ -120,8 +122,8 @@ class Filter
                     break;
 
                 case DatagridFilter::BETWEEN:
-                    $minParameterName = ':'.str_replace('.', '', $colString.'0');
-                    $maxParameterName = ':'.str_replace('.', '', $colString.'1');
+                    $minParameterName = ':' . str_replace('.', '', $colString . '0');
+                    $maxParameterName = ':' . str_replace('.', '', $colString . '1');
 
                     $wheres[] = $expr->between($colString, $minParameterName, $maxParameterName);
 
@@ -130,10 +132,7 @@ class Filter
                     break 2;
 
                 default:
-                    throw new \InvalidArgumentException(
-                        'This operator is currently not supported: ' .
-                        $filter->getOperator()
-                    );
+                    throw new \InvalidArgumentException('This operator is currently not supported: '.$filter->getOperator());
                     break;
             }
         }
@@ -144,5 +143,7 @@ class Filter
 
             $qb->andWhere($orWhere);
         }
+
+        return $this;
     }
 }

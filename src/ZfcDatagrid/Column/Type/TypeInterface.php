@@ -1,5 +1,4 @@
 <?php
-
 namespace ZfcDatagrid\Column\Type;
 
 interface TypeInterface
@@ -9,14 +8,14 @@ interface TypeInterface
      *
      * @return string
      */
-    public function getTypeName();
+    public function getTypeName(): string;
 
     /**
      * the default filter operation.
      *
      * @return string
      */
-    public function getFilterDefaultOperation();
+    public function getFilterDefaultOperation(): string;
 
     /**
      * @param string $operator
@@ -24,5 +23,5 @@ interface TypeInterface
      * @return $this
      * @throws \Exception
      */
-    public function setFilterDefaultOperation($operator);
+    public function setFilterDefaultOperation(string $operator): self;
 }

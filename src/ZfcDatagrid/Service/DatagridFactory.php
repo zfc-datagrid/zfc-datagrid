@@ -1,10 +1,8 @@
 <?php
-
 namespace ZfcDatagrid\Service;
 
 use InvalidArgumentException;
 use Interop\Container\ContainerInterface;
-use Popov\ZfcCurrent\CurrentHelper;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use ZfcDatagrid\Datagrid;
@@ -19,7 +17,7 @@ class DatagridFactory implements FactoryInterface
      *
      * @return Datagrid
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Datagrid
     {
         $config = $container->get('config');
 
@@ -34,16 +32,15 @@ class DatagridFactory implements FactoryInterface
         $requestHelper = $container->get(RequestHelper::class);
 
         $grid = new Datagrid();
-        $grid->setServiceLocator($container);
         $grid->setOptions($config['ZfcDatagrid']);
-        //$grid->setMvcEvent($application->getMvcEvent());
         $grid->setRequest($requestHelper->getRequest());
+        $grid->setRouter($container->get('Router'));
 
-        if ($container->has('translator') === true) {
+        if (true === $container->has('translator')) {
             $grid->setTranslator($container->get('translator'));
         }
 
-        $grid->setRendererService($container->get('zfcDatagrid.renderer.'.$grid->getRendererName()));
+        $grid->setRendererService($container->get('zfcDatagrid.renderer.' . $grid->getRendererName()));
         $grid->init();
 
         return $grid;

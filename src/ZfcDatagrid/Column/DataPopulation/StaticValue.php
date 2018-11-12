@@ -1,11 +1,12 @@
 <?php
-
 namespace ZfcDatagrid\Column\DataPopulation;
+
+use Exception;
 
 class StaticValue implements DataPopulationInterface
 {
-    /** @var mixed */
-    private $value;
+    /** @var null|string */
+    protected $value;
 
     /**
      * @param mixed $value
@@ -16,45 +17,50 @@ class StaticValue implements DataPopulationInterface
     }
 
     /**
-     * @param $value
+     * @param null|string $value
+     *
+     * @return $this
      */
-    public function setValue($value)
+    public function setValue(?string $value): self
     {
         $this->value = $value;
+
+        return $this;
     }
 
     /**
-     * @return mixed
+     * @return null|string
      */
-    public function getValue()
+    public function getValue(): ?string
     {
         return $this->value;
     }
 
     /**
      * @param string $name
-     * @param mixed  $value
+     * @param mixed $value
      *
-     * @throws \Exception
+     * @return DataPopulationInterface
+     * @throws Exception
      */
-    public function setObjectParameter($name, $value)
+    public function setObjectParameter(string $name, $value): DataPopulationInterface
     {
-        throw new \Exception('setObjectParameter() is not supported by this class');
+        throw new Exception('setObjectParameter() is not supported by this class');
     }
 
     /**
      * @return array
      */
-    public function getObjectParametersColumn()
+    public function getObjectParametersColumn(): array
     {
         return [];
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function toString()
+    public function toString(): string
     {
-        return $this->getValue();
+        return (string)$this->getValue();
     }
 }

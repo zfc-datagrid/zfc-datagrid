@@ -1,5 +1,4 @@
 <?php
-
 namespace ZfcDatagrid\Column\Style;
 
 class Align extends AbstractStyle
@@ -34,7 +33,7 @@ class Align extends AbstractStyle
      */
     public function __construct($alignment = null)
     {
-        if (is_null($alignment)) {
+        if (null === $alignment) {
             $alignment = self::$LEFT;
         }
 
@@ -43,16 +42,20 @@ class Align extends AbstractStyle
 
     /**
      * @param string $alignment
+     *
+     * @return $this
      */
-    public function setAlignment($alignment)
+    public function setAlignment(string $alignment): self
     {
         $this->alignment = $alignment;
+
+        return $this;
     }
 
     /**
      * @return string
      */
-    public function getAlignment()
+    public function getAlignment(): string
     {
         return $this->alignment;
     }

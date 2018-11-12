@@ -1,35 +1,37 @@
 <?php
-
 namespace ZfcDatagrid\Column\Action;
 
 use ZfcDatagrid\Column;
-use ZfcDatagrid\Column\AbstractColumn;
 use ZfcDatagrid\Filter;
+use function strpos;
+use function str_replace;
+use function implode;
 
 abstract class AbstractAction
 {
     const ROW_ID_PLACEHOLDER = ':rowId:';
 
-    /**
-     * @var \ZfcDatagrid\Column\AbstractColumn[]
-     */
+    /** @var Column\AbstractColumn[] */
     protected $linkColumnPlaceholders = [];
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $htmlAttributes = [];
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $showOnValueOperator = 'OR';
 
-    /**
-     * @var array
-     */
+    /** @var string */
+    protected $route = '';
+
+    /** @var array */
+    protected $routeParams = [];
+
+    /** @var array */
     protected $showOnValues = [];
 
+    /**
+     * AbstractAction constructor.
+     */
     public function __construct()
     {
         $this->setLink('#');
@@ -39,18 +41,62 @@ abstract class AbstractAction
      * Set the link.
      *
      * @param string $href
+     *
+     * @return $this
      */
-    public function setLink($href)
+    public function setLink(string $href): self
     {
         $this->setAttribute('href', $href);
+
+        return $this;
     }
 
     /**
      * @return string
      */
-    public function getLink()
+    public function getLink(): string
     {
         return $this->getAttribute('href');
+    }
+
+    /**
+     * @param string $route
+     *
+     * @return $this
+     */
+    public function setRoute(string $route): self
+    {
+        $this->route = $route;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRoute(): string
+    {
+        return $this->route;
+    }
+
+    /**
+     * @param array $params
+     *
+     * @return $this
+     */
+    public function setRouteParams(array $params)
+    {
+        $this->routeParams = $params;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getRouteParams(): array
+    {
+        return $this->routeParams;
     }
 
     /**
@@ -60,21 +106,17 @@ abstract class AbstractAction
      *
      * @return string
      */
-    public function getLinkReplaced(array $row)
+    public function getLinkReplaced(array $row): string
     {
         $link = $this->getLink();
 
         // Replace placeholders
         if (strpos($this->getLink(), self::ROW_ID_PLACEHOLDER) !== false) {
-            $id = '';
-            if (isset($row['idConcated'])) {
-                $id = $row['idConcated'];
-            }
-            $link = str_replace(self::ROW_ID_PLACEHOLDER, $id, $link);
+            $link = str_replace(self::ROW_ID_PLACEHOLDER, $row['idConcated'] ?? '', $link);
         }
 
         foreach ($this->getLinkColumnPlaceholders() as $col) {
-            $link = str_replace(':'.$col->getUniqueId().':', $row[$col->getUniqueId()], $link);
+            $link = str_replace(':' . $col->getUniqueId() . ':', $row[$col->getUniqueId()], $link);
         }
 
         return $link;
@@ -84,21 +126,21 @@ abstract class AbstractAction
      * Get the column row value placeholder
      * $action->setLink('/myLink/something/id/'.$action->getRowIdPlaceholder().'/something/'.$action->getColumnRowPlaceholder($myCol));.
      *
-     * @param AbstractColumn $col
+     * @param Column\AbstractColumn $col
      *
      * @return string
      */
-    public function getColumnValuePlaceholder(AbstractColumn $col)
+    public function getColumnValuePlaceholder(Column\AbstractColumn $col): string
     {
         $this->linkColumnPlaceholders[] = $col;
 
-        return ':'.$col->getUniqueId().':';
+        return ':' . $col->getUniqueId() . ':';
     }
 
     /**
-     * @return \ZfcDatagrid\Column\AbstractColumn[]
+     * @return Column\AbstractColumn[]
      */
-    public function getLinkColumnPlaceholders()
+    public function getLinkColumnPlaceholders(): array
     {
         return $this->linkColumnPlaceholders;
     }
@@ -110,7 +152,7 @@ abstract class AbstractAction
      *
      * @return string
      */
-    public function getRowIdPlaceholder()
+    public function getRowIdPlaceholder(): string
     {
         return self::ROW_ID_PLACEHOLDER;
     }
@@ -120,10 +162,14 @@ abstract class AbstractAction
      *
      * @param string $name
      * @param string $value
+     *
+     * @return $this
      */
-    public function setAttribute($name, $value)
+    public function setAttribute(string $name, string $value): self
     {
-        $this->htmlAttributes[$name] = (string) $value;
+        $this->htmlAttributes[$name] = $value;
+
+        return $this;
     }
 
     /**
@@ -133,23 +179,23 @@ abstract class AbstractAction
      *
      * @return string
      */
-    public function getAttribute($name)
+    public function getAttribute(string $name)
     {
-        if (isset($this->htmlAttributes[$name])) {
-            return $this->htmlAttributes[$name];
-        }
-
-        return '';
+        return $this->htmlAttributes[$name] ?? '';
     }
 
     /**
      * Removes an HTML attribute.
      *
      * @param string $name
+     *
+     * @return $this
      */
-    public function removeAttribute($name)
+    public function removeAttribute(string $name): self
     {
         unset($this->htmlAttributes[$name]);
+
+        return $this;
     }
 
     /**
@@ -157,7 +203,7 @@ abstract class AbstractAction
      *
      * @return array
      */
-    public function getAttributes()
+    public function getAttributes(): array
     {
         return $this->htmlAttributes;
     }
@@ -169,14 +215,14 @@ abstract class AbstractAction
      *
      * @return string
      */
-    protected function getAttributesString(array $row)
+    protected function getAttributesString(array $row): string
     {
         $attributes = [];
         foreach ($this->getAttributes() as $attrKey => $attrValue) {
             if ('href' === $attrKey) {
                 $attrValue = $this->getLinkReplaced($row);
             }
-            $attributes[] = $attrKey.'="'.$attrValue.'"';
+            $attributes[] = $attrKey . '="' . $attrValue . '"';
         }
 
         return implode(' ', $attributes);
@@ -186,10 +232,14 @@ abstract class AbstractAction
      * Set the title attribute.
      *
      * @param string $name
+     *
+     * @return $this
      */
-    public function setTitle($name)
+    public function setTitle(string $name): self
     {
         $this->setAttribute('title', $name);
+
+        return $this;
     }
 
     /**
@@ -197,7 +247,7 @@ abstract class AbstractAction
      *
      * @return string
      */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->getAttribute('title');
     }
@@ -206,8 +256,10 @@ abstract class AbstractAction
      * Add a css class.
      *
      * @param string $className
+     *
+     * @return $this
      */
-    public function addClass($className)
+    public function addClass(string $className): self
     {
         $attr = $this->getAttribute('class');
         if ($attr != '') {
@@ -216,20 +268,26 @@ abstract class AbstractAction
         $attr .= (string) $className;
 
         $this->setAttribute('class', $attr);
+
+        return $this;
     }
 
     /**
      * Display the values with AND or OR (if multiple showOnValues are defined).
      *
      * @param string $operator
+     *
+     * @return $this
      */
-    public function setShowOnValueOperator($operator = 'OR')
+    public function setShowOnValueOperator(string $operator = 'OR'): self
     {
         if ($operator != 'AND' && $operator != 'OR') {
-            throw new \InvalidArgumentException('not allowed operator: "'.$operator.'" (AND / OR is allowed)');
+            throw new \InvalidArgumentException('not allowed operator: "' . $operator . '" (AND / OR is allowed)');
         }
 
         $this->showOnValueOperator = (string) $operator;
+
+        return $this;
     }
 
     /**
@@ -238,7 +296,7 @@ abstract class AbstractAction
      *
      * @return string
      */
-    public function getShowOnValueOperator()
+    public function getShowOnValueOperator(): string
     {
         return $this->showOnValueOperator;
     }
@@ -246,23 +304,27 @@ abstract class AbstractAction
     /**
      * Show this action only on the values defined.
      *
-     * @param Column\AbstractColumn $col
-     * @param string                $value
-     * @param string                $comparison
+     * @param Column\AbstractColumn        $col
+     * @param Column\AbstractColumn|string $value
+     * @param string                       $comparison
+     *
+     * @return $this
      */
-    public function addShowOnValue(Column\AbstractColumn $col, $value = null, $comparison = Filter::EQUAL)
+    public function addShowOnValue(Column\AbstractColumn $col, $value = null, string $comparison = Filter::EQUAL): self
     {
         $this->showOnValues[] = [
-            'column' => $col,
-            'value' => $value,
+            'column'     => $col,
+            'value'      => $value,
             'comparison' => $comparison,
         ];
+
+        return $this;
     }
 
     /**
      * @return array
      */
-    public function getShowOnValues()
+    public function getShowOnValues(): array
     {
         return $this->showOnValues;
     }
@@ -270,7 +332,7 @@ abstract class AbstractAction
     /**
      * @return bool
      */
-    public function hasShowOnValues()
+    public function hasShowOnValues(): bool
     {
         return !empty($this->showOnValues);
     }
@@ -282,25 +344,18 @@ abstract class AbstractAction
      *
      * @return bool
      */
-    public function isDisplayed(array $row)
+    public function isDisplayed(array $row): bool
     {
-        if ($this->hasShowOnValues() === false) {
+        if (false === $this->hasShowOnValues()) {
             return true;
         }
 
         $isDisplayed = false;
         foreach ($this->getShowOnValues() as $rule) {
-            $value = '';
-            if (isset($row[$rule['column']->getUniqueId()])) {
-                $value = $row[$rule['column']->getUniqueId()];
-            }
+            $value = $row[$rule['column']->getUniqueId()] ?? '';
 
-            if ($rule['value'] instanceof AbstractColumn) {
-                if (isset($row[$rule['value']->getUniqueId()])) {
-                    $ruleValue = $row[$rule['value']->getUniqueId()];
-                } else {
-                    $ruleValue = '';
-                }
+            if ($rule['value'] instanceof Column\AbstractColumn) {
+                $ruleValue = $row[$rule['value']->getUniqueId()] ?? '';
             } else {
                 $ruleValue = $rule['value'];
             }
@@ -324,15 +379,15 @@ abstract class AbstractAction
      *
      * @return string
      */
-    abstract protected function getHtmlType();
+    abstract protected function getHtmlType(): string;
 
     /**
      * @param array $row
      *
      * @return string
      */
-    public function toHtml(array $row)
+    public function toHtml(array $row): string
     {
-        return '<a '.$this->getAttributesString($row).'>'.$this->getHtmlType().'</a>';
+        return '<a ' . $this->getAttributesString($row) . '>' . $this->getHtmlType() . '</a>';
     }
 }

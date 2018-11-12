@@ -2,15 +2,22 @@
 /**
  * Methods which can be used in (all) export renderer.
  */
+
 namespace ZfcDatagrid\Renderer;
 
 use ZfcDatagrid\Column;
+use function in_array;
+use function get_class;
+use function substr;
+use function floor;
+use function date;
+use function implode;
+use function str_replace;
+use function preg_replace;
 
 abstract class AbstractExport extends AbstractRenderer
 {
-    /**
-     * @var array
-     */
+    /** @var string[] */
     protected $allowedColumnTypes = [
         Column\Type\DateTime::class,
         Column\Type\Number::class,
@@ -18,10 +25,8 @@ abstract class AbstractExport extends AbstractRenderer
         Column\Type\PhpString::class,
     ];
 
-    /**
-     * @var Column\AbstractColumn[]|null
-     */
-    protected $columnsToExport;
+    /** @var Column\AbstractColumn[] */
+    protected $columnsToExport = [];
 
     /**
      * Decide which columns we want to display.
@@ -30,9 +35,9 @@ abstract class AbstractExport extends AbstractRenderer
      *
      * @throws \Exception
      */
-    protected function getColumnsToExport()
+    protected function getColumnsToExport(): array
     {
-        if (is_array($this->columnsToExport)) {
+        if (!empty($this->columnsToExport)) {
             return $this->columnsToExport;
         }
 
@@ -63,11 +68,11 @@ abstract class AbstractExport extends AbstractRenderer
      *
      * @throws \Exception
      */
-    protected function getPaperWidth()
+    protected function getPaperWidth(): float
     {
         $optionsRenderer = $this->getOptionsRenderer();
 
-        $papersize = $optionsRenderer['papersize'];
+        $papersize   = $optionsRenderer['papersize'];
         $orientation = $optionsRenderer['orientation'];
 
         if (substr($papersize, 0, 1) != 'A') {
@@ -88,11 +93,7 @@ abstract class AbstractExport extends AbstractRenderer
             $currentY = $tempY;
         }
 
-        if ('landscape' == $orientation) {
-            return $currentY;
-        } else {
-            return $currentX;
-        }
+        return 'landscape' === $orientation ? $currentY : $currentX;
     }
 
     /**
@@ -101,9 +102,9 @@ abstract class AbstractExport extends AbstractRenderer
      *
      * @return string
      */
-    protected function getFilename()
+    protected function getFilename(): string
     {
-        $filenameParts = [];
+        $filenameParts   = [];
         $filenameParts[] = date('Y-m-d_H-i-s');
 
         if ($this->getTitle() != '') {

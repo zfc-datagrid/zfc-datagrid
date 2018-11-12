@@ -1,5 +1,4 @@
 <?php
-
 namespace ZfcDatagrid\Column\DataPopulation;
 
 use ZfcDatagrid\Column;
@@ -9,30 +8,30 @@ use ZfcDatagrid\Column;
  */
 class DataObject implements DataPopulationInterface
 {
-    /**
-     * @var ObjectAwareInterface
-     */
+    /** @var null|ObjectAwareInterface */
     private $object;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     private $objectParameters = [];
 
     /**
-     * @param ObjectAwareInterface $object
+     * @param null|ObjectAwareInterface $object
+     *
+     * @return $this
      *
      * @throws \Exception
      */
-    public function setObject(ObjectAwareInterface $object)
+    public function setObject(?ObjectAwareInterface $object): self
     {
         $this->object = $object;
+
+        return $this;
     }
 
     /**
-     * @return ObjectAwareInterface
+     * @return null|ObjectAwareInterface
      */
-    public function getObject()
+    public function getObject(): ?ObjectAwareInterface
     {
         return $this->object;
     }
@@ -42,19 +41,23 @@ class DataObject implements DataPopulationInterface
      *
      * @param string                $objectParameterName
      * @param Column\AbstractColumn $column
+     *
+     * @return $this
      */
-    public function addObjectParameterColumn($objectParameterName, Column\AbstractColumn $column)
+    public function addObjectParameterColumn(string $objectParameterName, Column\AbstractColumn $column): self
     {
         $this->objectParameters[] = [
             'objectParameterName' => $objectParameterName,
-            'column' => $column,
+            'column'              => $column,
         ];
+
+        return $this;
     }
 
     /**
      * @return array
      */
-    public function getObjectParametersColumn()
+    public function getObjectParametersColumn(): array
     {
         return $this->objectParameters;
     }
@@ -64,17 +67,28 @@ class DataObject implements DataPopulationInterface
      *
      * @param string $name
      * @param mixed  $value
+     *
+     * @return $this
      */
-    public function setObjectParameter($name, $value)
+    public function setObjectParameter(string $name, $value): DataPopulationInterface
     {
-        $this->getObject()->setParameterFromColumn($name, $value);
+        if ($this->getObject()) {
+            $this->getObject()->setParameterFromColumn($name, $value);   
+        }
+
+        return $this;
     }
 
     /**
      * @return string
      */
-    public function toString()
+    public function toString(): string
     {
-        return $this->getObject()->toString();
+        $return = '';
+        if ($this->getObject()) {
+            $return = $this->getObject()->toString();
+        }
+
+        return $return;
     }
 }

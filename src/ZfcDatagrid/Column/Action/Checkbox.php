@@ -1,15 +1,22 @@
 <?php
-
 namespace ZfcDatagrid\Column\Action;
+
+use function sprintf;
 
 /**
  * @todo Checkbox for multi row actions...
  */
 class Checkbox extends AbstractAction
 {
-    private $name;
+    /** @var string */
+    protected $name = 'rowSelections';
 
-    public function __construct($name = 'rowSelections')
+    /**
+     * Checkbox constructor.
+     *
+     * @param string $name
+     */
+    public function __construct(string $name = 'rowSelections')
     {
         parent::__construct();
 
@@ -17,17 +24,9 @@ class Checkbox extends AbstractAction
     }
 
     /**
-     * @return string
+     * @inheritdoc
      */
-    protected function getHtmlType()
-    {
-        return '';
-    }
-
-    /**
-     * @see \ZfcDatagrid\Column\Action\AbstractAction::toHtml()
-     */
-    public function toHtml(array $row)
+    public function toHtml(array $row): string
     {
         $this->removeAttribute('name');
         $this->removeAttribute('value');
@@ -38,5 +37,13 @@ class Checkbox extends AbstractAction
             $row['idConcated'],
             $this->getAttributesString($row)
         );
+    }
+
+    /**
+     * @return string
+     */
+    protected function getHtmlType(): string
+    {
+        return '';
     }
 }

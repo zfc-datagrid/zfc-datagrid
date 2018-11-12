@@ -1,32 +1,33 @@
 <?php
-
 namespace ZfcDatagrid;
 
 use Zend\I18n\Translator\TranslatorInterface;
+use Zend\Router\RouteStackInterface;
+use function is_array;
+use function array_walk_recursive;
+use function is_object;
+use function trim;
+use function implode;
 
 class PrepareData
 {
-    /**
-     * @var array
-     */
+    /** @var array */
     private $columns = [];
 
-    /**
-     * @var array
-     */
+    /** @var array */
     private $data = [];
 
-    /**
-     * @var array|null
-     */
+    /** @var array|null */
     private $dataPrepared;
 
+    /** @var null|string */
     private $rendererName;
 
-    /**
-     * @var TranslatorInterface|null
-     */
+    /** @var TranslatorInterface|null */
     private $translator;
+
+    /** @var \Zend\Router\RouteStackInterface */
+    private $router;
 
     /**
      * @param array $data
@@ -40,26 +41,34 @@ class PrepareData
 
     /**
      * @param array $columns
+     *
+     * @return $this
      */
-    public function setColumns(array $columns)
+    public function setColumns(array $columns): self
     {
         $this->columns = $columns;
+
+        return $this;
     }
 
     /**
      * @return array
      */
-    public function getColumns()
+    public function getColumns(): array
     {
         return $this->columns;
     }
 
     /**
      * @param array $data
+     *
+     * @return $this
      */
-    public function setData(array $data)
+    public function setData(array $data): self
     {
         $this->data = $data;
+
+        return $this;
     }
 
     /**
@@ -67,7 +76,7 @@ class PrepareData
      *
      * @return array
      */
-    public function getData($raw = false)
+    public function getData(bool $raw = false): array
     {
         if (true === $raw) {
             return $this->data;
@@ -80,16 +89,20 @@ class PrepareData
 
     /**
      * @param string $name
+     *
+     * @return $this
      */
-    public function setRendererName($name = null)
+    public function setRendererName(?string $name = null): self
     {
         $this->rendererName = $name;
+
+        return $this;
     }
 
     /**
      * @return string
      */
-    public function getRendererName()
+    public function getRendererName(): ?string
     {
         return $this->rendererName;
     }
@@ -97,19 +110,41 @@ class PrepareData
     /**
      * @param TranslatorInterface $translator
      *
-     * @throws \InvalidArgumentException
+     * @return $this
      */
-    public function setTranslator(TranslatorInterface $translator)
+    public function setTranslator(TranslatorInterface $translator): self
     {
         $this->translator = $translator;
+
+        return $this;
     }
 
     /**
-     * @return \Zend\I18n\Translator\Translator
+     * @return TranslatorInterface
      */
-    public function getTranslator()
+    public function getTranslator(): ?TranslatorInterface
     {
         return $this->translator;
+    }
+
+    /**
+     * @param RouteStackInterface $router
+     *
+     * @return $this
+     */
+    public function setRouter(RouteStackInterface $router): self
+    {
+        $this->router = $router;
+
+        return $this;
+    }
+
+    /**
+     * @return RouteStackInterface
+     */
+    public function getRouter(): ?RouteStackInterface
+    {
+        return $this->router;
     }
 
     /**
@@ -119,9 +154,9 @@ class PrepareData
      *
      * @return bool
      */
-    public function prepare()
+    public function prepare(): bool
     {
-        if (is_array($this->dataPrepared)) {
+        if (null !== $this->dataPrepared) {
             return false;
         }
 
@@ -224,6 +259,12 @@ class PrepareData
                  */
                 if ($col->hasFormatters() === true) {
                     foreach ($col->getFormatters() as $formatter) {
+                        if ($formatter instanceof Column\Formatter\RouterInterface
+                            && $this->getRouter() instanceof RouteStackInterface
+                        ) {
+                            /** @var Column\Formatter\RouterInterface */
+                            $formatter->setRouter($this->getRouter());
+                        }
                         $formatter->setRowData($row);
                         $formatter->setRendererName($this->getRendererName());
 

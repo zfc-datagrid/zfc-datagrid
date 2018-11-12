@@ -2,32 +2,51 @@
 /**
  * Render datagrid as CSV.
  */
+
 namespace ZfcDatagrid\Renderer\Csv;
 
 use Zend\Http\Headers;
 use Zend\Http\Response\Stream as ResponseStream;
+use Zend\View\Model\ViewModel;
 use ZfcDatagrid\Column\Type;
 use ZfcDatagrid\Renderer\AbstractExport;
+use function date;
+use function fopen;
+use function fprintf;
+use function chr;
+use function fputcsv;
+use function implode;
+use function fclose;
+use function filesize;
 
 class Renderer extends AbstractExport
 {
-    public function getName()
+    /**
+     * @return string
+     */
+    public function getName(): string
     {
         return 'csv';
     }
 
-    public function isExport()
+    /**
+     * @return bool
+     */
+    public function isExport(): bool
     {
         return true;
     }
 
-    public function isHtml()
+    /**
+     * @return bool
+     */
+    public function isHtml(): bool
     {
         return false;
     }
 
     /**
-     * @return \Zend\View\Model\ViewModel
+     * @return ViewModel
      */
     public function execute()
     {
@@ -42,15 +61,15 @@ class Renderer extends AbstractExport
             $enclosure = $optionsRenderer['enclosure'];
         }
 
-        $options = $this->getOptions();
+        $options       = $this->getOptions();
         $optionsExport = $options['settings']['export'];
 
-        $path = $optionsExport['path'];
-        $saveFilename = date('Y-m-d_H-i-s').$this->getCacheId().'.csv';
+        $path         = $optionsExport['path'];
+        $saveFilename = date('Y-m-d_H-i-s') . $this->getCacheId() . '.csv';
 
-        $fp = fopen($path.'/'.$saveFilename, 'w');
+        $fp = fopen($path . '/' . $saveFilename, 'w');
         // Force UTF-8 for CSV rendering in EXCEL.
-        fprintf($fp, chr(0xEF).chr(0xBB).chr(0xBF));
+        fprintf($fp, chr(0xEF) . chr(0xBB) . chr(0xBF));
 
         /*
          * Save the file
@@ -84,7 +103,7 @@ class Renderer extends AbstractExport
          * Return the file
          */
         $response = new ResponseStream();
-        $response->setStream(fopen($path.'/'.$saveFilename, 'r'));
+        $response->setStream(fopen($path . '/' . $saveFilename, 'r'));
 
         $headers = new Headers();
         $headers->addHeaders([
@@ -94,11 +113,11 @@ class Renderer extends AbstractExport
                 'application/download',
                 'text/csv; charset=utf-8',
             ],
-            'Content-Length' => filesize($path.'/'.$saveFilename),
-            'Content-Disposition' => 'attachment;filename='.$this->getFilename().'.csv',
-            'Cache-Control' => 'must-revalidate',
-            'Pragma' => 'no-cache',
-            'Expires' => 'Thu, 1 Jan 1970 00:00:00 GMT',
+            'Content-Length'      => filesize($path . '/' . $saveFilename),
+            'Content-Disposition' => 'attachment;filename=' . $this->getFilename() . '.csv',
+            'Cache-Control'       => 'must-revalidate',
+            'Pragma'              => 'no-cache',
+            'Expires'             => 'Thu, 1 Jan 1970 00:00:00 GMT',
         ]);
 
         $response->setHeaders($headers);

@@ -1,48 +1,78 @@
 <?php
-
 namespace ZfcDatagrid\Column\Formatter;
 
+use Zend\Router\RouteStackInterface;
 use ZfcDatagrid\Column\AbstractColumn;
+use function implode;
+use function strpos;
+use function sprintf;
+use function str_replace;
+use function rawurlencode;
 
-class HtmlTag extends AbstractFormatter
+class HtmlTag extends AbstractFormatter implements RouterInterface
 {
     const ROW_ID_PLACEHOLDER = ':rowId:';
 
-    /**
-     * @var array
-     */
+    /** @var string[] */
     protected $validRenderers = [
         'jqGrid',
         'bootstrapTable',
     ];
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $name = 'span';
 
-    /**
-     * @var AbstractColumn[]
-     */
+    /** @var AbstractColumn[] */
     protected $linkColumnPlaceholders = [];
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $attributes = [];
 
+    /** @var string */
+    protected $route = '';
+
+    /** @var array */
+    protected $routeParams = [];
+
+    /** @var RouteStackInterface */
+    public $router;
+
     /**
-     * @param $name
+     * @param RouteStackInterface $router
+     *
+     * @return $this
      */
-    public function setName($name)
+    public function setRouter(RouteStackInterface $router): RouterInterface
+    {
+        $this->router = $router;
+
+        return $this;
+    }
+
+    /**
+     * @return null|RouteStackInterface
+     */
+    public function getRouter(): ?RouteStackInterface
+    {
+        return $this->router;
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return $this
+     */
+    public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
     }
 
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -52,10 +82,14 @@ class HtmlTag extends AbstractFormatter
      *
      * @param string $name
      * @param string $value
+     *
+     * @return $this
      */
-    public function setAttribute($name, $value)
+    public function setAttribute(string $name, string $value): self
     {
-        $this->attributes[$name] = (string) $value;
+        $this->attributes[$name] = $value;
+
+        return $this;
     }
 
     /**
@@ -65,25 +99,23 @@ class HtmlTag extends AbstractFormatter
      *
      * @return string
      */
-    public function getAttribute($name)
+    public function getAttribute(string $name): string
     {
-        if (isset($this->attributes[$name])) {
-            return $this->attributes[$name];
-        }
-
-        return '';
+        return $this->attributes[$name] ?? '';
     }
 
     /**
      * Removes an HTML attribute.
      *
      * @param string $name
+     *
+     * @return $this
      */
-    public function removeAttribute($name)
+    public function removeAttribute(string $name): self
     {
-        if (isset($this->attributes[$name])) {
-            unset($this->attributes[$name]);
-        }
+        unset($this->attributes[$name]);
+
+        return $this;
     }
 
     /**
@@ -91,7 +123,7 @@ class HtmlTag extends AbstractFormatter
      *
      * @return array
      */
-    public function getAttributes()
+    public function getAttributes(): array
     {
         return $this->attributes;
     }
@@ -100,18 +132,62 @@ class HtmlTag extends AbstractFormatter
      * Set the link.
      *
      * @param string $href
+     *
+     * @return $this
      */
-    public function setLink($href)
+    public function setLink(string $href): self
     {
         $this->setAttribute('href', $href);
+
+        return $this;
     }
 
     /**
      * @return string
      */
-    public function getLink()
+    public function getLink(): string
     {
         return $this->getAttribute('href');
+    }
+
+    /**
+     * @param string $route
+     *
+     * @return $this
+     */
+    public function setRoute(string $route): self
+    {
+        $this->route = $route;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRoute(): string
+    {
+        return $this->route;
+    }
+
+    /**
+     * @param array $params
+     *
+     * @return $this
+     */
+    public function setRouteParams(array $params): self
+    {
+        $this->routeParams = $params;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getRouteParams(): array
+    {
+        return $this->routeParams;
     }
 
     /**
@@ -126,13 +202,13 @@ class HtmlTag extends AbstractFormatter
     {
         $this->linkColumnPlaceholders[] = $col;
 
-        return ':'.$col->getUniqueId().':';
+        return ':' . $col->getUniqueId() . ':';
     }
 
     /**
      * @return AbstractColumn[]
      */
-    public function getLinkColumnPlaceholders()
+    public function getLinkColumnPlaceholders(): array
     {
         return $this->linkColumnPlaceholders;
     }
@@ -142,7 +218,7 @@ class HtmlTag extends AbstractFormatter
      *
      * @return string
      */
-    public function getRowIdPlaceholder()
+    public function getRowIdPlaceholder(): string
     {
         return self::ROW_ID_PLACEHOLDER;
     }
@@ -152,7 +228,7 @@ class HtmlTag extends AbstractFormatter
      *
      * @return string
      */
-    public function getFormattedValue(AbstractColumn $col)
+    public function getFormattedValue(AbstractColumn $col): string
     {
         $row = $this->getRowData();
 
@@ -172,14 +248,22 @@ class HtmlTag extends AbstractFormatter
      *
      * @return string
      */
-    protected function getAttributesString(AbstractColumn $col)
+    protected function getAttributesString(AbstractColumn $col): string
     {
         $attributes = [];
+
+        if ($this->getRoute() && $this->getRouter() instanceof RouteStackInterface) {
+            $this->setLink($this->getRouter()->assemble(
+                $this->getRouteParams(),
+                ['name' => $this->getRoute()]
+            ));
+        }
+
         foreach ($this->getAttributes() as $attrKey => $attrValue) {
             if ('href' === $attrKey) {
                 $attrValue = $this->getLinkReplaced($col);
             }
-            $attributes[] = $attrKey.'="'.$attrValue.'"';
+            $attributes[] = $attrKey . '="' . $attrValue . '"';
         }
 
         return implode(' ', $attributes);
@@ -192,7 +276,7 @@ class HtmlTag extends AbstractFormatter
      *
      * @return string
      */
-    protected function getLinkReplaced(AbstractColumn $col)
+    protected function getLinkReplaced(AbstractColumn $col): string
     {
         $row = $this->getRowData();
 
@@ -203,15 +287,11 @@ class HtmlTag extends AbstractFormatter
 
         // Replace placeholders
         if (strpos($link, self::ROW_ID_PLACEHOLDER) !== false) {
-            $id = '';
-            if (isset($row['idConcated'])) {
-                $id = $row['idConcated'];
-            }
-            $link = str_replace(self::ROW_ID_PLACEHOLDER, rawurlencode($id), $link);
+            $link = str_replace(self::ROW_ID_PLACEHOLDER, rawurlencode($row['idConcated'] ?? ''), $link);
         }
 
         foreach ($this->getLinkColumnPlaceholders() as $col) {
-            $link = str_replace(':'.$col->getUniqueId().':', rawurlencode($row[$col->getUniqueId()]), $link);
+            $link = str_replace(':' . $col->getUniqueId() . ':', rawurlencode($row[$col->getUniqueId()]), $link);
         }
 
         return $link;

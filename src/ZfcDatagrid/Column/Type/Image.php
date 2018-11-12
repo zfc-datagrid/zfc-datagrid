@@ -2,26 +2,23 @@
 /**
  * Image type.
  */
+
 namespace ZfcDatagrid\Column\Type;
 
 use InvalidArgumentException;
 
 class Image extends AbstractType
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $resizeType = 'fixed';
 
-    /**
-     * @var float
-     */
+    /** @var float */
     protected $resizeHeight = 20.5;
 
     /**
      * @return string
      */
-    public function getTypeName()
+    public function getTypeName(): string
     {
         return 'image';
     }
@@ -32,36 +29,43 @@ class Image extends AbstractType
      * @param string $type
      *
      * @throws InvalidArgumentException
+     * @return $this
      */
-    public function setResizeType($type)
+    public function setResizeType(string $type): self
     {
         if ($type != 'fixed' && $type != 'dynamic') {
             throw new InvalidArgumentException('Only dynamic or fixed is allowed as Type');
         }
 
         $this->resizeType = $type;
+
+        return $this;
     }
 
     /**
      * @return string
      */
-    public function getResizeType()
+    public function getResizeType(): string
     {
         return $this->resizeType;
     }
 
     /**
      * @param float $height
+     *
+     * @return $this
      */
-    public function setResizeHeight($height)
+    public function setResizeHeight(float $height): self
     {
         $this->resizeHeight = $height;
+
+        return $this;
     }
 
     /**
      * @return float
      */
-    public function getResizeHeight()
+    public function getResizeHeight(): float
     {
         return $this->resizeHeight;
     }

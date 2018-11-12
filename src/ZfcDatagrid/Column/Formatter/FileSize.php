@@ -1,8 +1,8 @@
 <?php
-
 namespace ZfcDatagrid\Column\Formatter;
 
 use ZfcDatagrid\Column\AbstractColumn;
+use function sprintf;
 
 class FileSize extends AbstractFormatter
 {
@@ -29,7 +29,7 @@ class FileSize extends AbstractFormatter
     /**
      * @return bool
      */
-    public function isApply()
+    public function isApply(): bool
     {
         return true;
     }
@@ -39,10 +39,10 @@ class FileSize extends AbstractFormatter
      *
      * @see \ZfcDatagrid\Column\Formatter\AbstractFormatter::getFormattedValue()
      */
-    public function getFormattedValue(AbstractColumn $column)
+    public function getFormattedValue(AbstractColumn $column): string
     {
-        $row = $this->getRowData();
-        $value = $row[$column->getUniqueId()];
+        $row   = $this->getRowData();
+        $value = (string)$row[$column->getUniqueId()];
 
         if ('' == $value) {
             return $value;

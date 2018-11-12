@@ -1,22 +1,15 @@
 <?php
-
 namespace ZfcDatagrid\Action;
 
 class Mass
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $title = '';
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $link = '';
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $confirm = false;
 
     /**
@@ -24,7 +17,7 @@ class Mass
      * @param string $link
      * @param bool   $confirm
      */
-    public function __construct($title = '', $link = '', $confirm = false)
+    public function __construct(string $title = '', string $link = '', bool $confirm = false)
     {
         $this->setTitle($title);
         $this->setLink($link);
@@ -33,48 +26,60 @@ class Mass
 
     /**
      * @param string $title
+     *
+     * @return $this
      */
-    public function setTitle($title)
+    public function setTitle(string $title): self
     {
         $this->title = $title;
+
+        return $this;
     }
 
     /**
      * @return string
      */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->title;
     }
 
     /**
      * @param string $link
+     *
+     * @return $this
      */
-    public function setLink($link)
+    public function setLink(string $link): self
     {
         $this->link = $link;
+
+        return $this;
     }
 
     /**
      * @return string
      */
-    public function getLink()
+    public function getLink(): string
     {
         return $this->link;
     }
 
     /**
      * @param bool $mode
+     *
+     * @return $this
      */
-    public function setConfirm($mode = true)
+    public function setConfirm(bool $mode = true): self
     {
-        $this->confirm = (bool) $mode;
+        $this->confirm = $mode;
+
+        return $this;
     }
 
     /**
      * @return bool
      */
-    public function getConfirm()
+    public function getConfirm(): bool
     {
         return $this->confirm;
     }

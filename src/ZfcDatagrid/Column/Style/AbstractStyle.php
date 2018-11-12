@@ -1,5 +1,4 @@
 <?php
-
 namespace ZfcDatagrid\Column\Style;
 
 use ZfcDatagrid\Column\AbstractColumn;
@@ -7,25 +6,28 @@ use ZfcDatagrid\Filter;
 
 abstract class AbstractStyle
 {
+    /** @var string */
     protected $byValueOperator = 'OR';
 
-    /**
-     * @var array
-     */
+    /** @var array */
     private $byValues = [];
 
     /**
      * Display the values with AND or OR (if multiple showOnValues are defined).
      *
      * @param string $operator
+     *
+     * @return $this
      */
-    public function setByValueOperator($operator = 'OR')
+    public function setByValueOperator(string $operator = 'OR'): self
     {
         if ($operator != 'AND' && $operator != 'OR') {
-            throw new \InvalidArgumentException('not allowed operator: "'.$operator.'" (AND / OR is allowed)');
+            throw new \InvalidArgumentException('not allowed operator: "' . $operator . '" (AND / OR is allowed)');
         }
 
-        $this->byValueOperator = (string) $operator;
+        $this->byValueOperator = $operator;
+
+        return $this;
     }
 
     /**
@@ -34,7 +36,7 @@ abstract class AbstractStyle
      *
      * @return string
      */
-    public function getByValueOperator()
+    public function getByValueOperator(): string
     {
         return $this->byValueOperator;
     }
@@ -45,20 +47,24 @@ abstract class AbstractStyle
      * @param AbstractColumn $column
      * @param mixed          $value
      * @param string         $operator
+     *
+     * @return $this
      */
-    public function addByValue(AbstractColumn $column, $value, $operator = Filter::EQUAL)
+    public function addByValue(AbstractColumn $column, $value, $operator = Filter::EQUAL): self
     {
         $this->byValues[] = [
-            'column' => $column,
-            'value' => $value,
+            'column'   => $column,
+            'value'    => $value,
             'operator' => $operator,
         ];
+
+        return $this;
     }
 
     /**
      * @return array
      */
-    public function getByValues()
+    public function getByValues(): array
     {
         return $this->byValues;
     }
@@ -66,7 +72,7 @@ abstract class AbstractStyle
     /**
      * @return bool
      */
-    public function hasByValues()
+    public function hasByValues(): bool
     {
         return !empty($this->byValues);
     }
@@ -76,7 +82,7 @@ abstract class AbstractStyle
      *
      * @return bool
      */
-    public function isApply(array $row)
+    public function isApply(array $row): bool
     {
         if (false === $this->hasByValues()) {
             return true;

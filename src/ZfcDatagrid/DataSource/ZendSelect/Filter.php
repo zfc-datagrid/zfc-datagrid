@@ -1,5 +1,4 @@
 <?php
-
 namespace ZfcDatagrid\DataSource\ZendSelect;
 
 use Zend\Db\Sql\Predicate\PredicateSet;
@@ -8,6 +7,7 @@ use Zend\Db\Sql\Sql;
 use Zend\Db\Sql\Where;
 use ZfcDatagrid\Column;
 use ZfcDatagrid\Filter as DatagridFilter;
+use function sprintf;
 
 class Filter
 {
@@ -21,24 +21,29 @@ class Filter
      */
     private $select;
 
+    /**
+     * Filter constructor.
+     * @param Sql $sql
+     * @param Select $select
+     */
     public function __construct(Sql $sql, Select $select)
     {
-        $this->sql = $sql;
+        $this->sql    = $sql;
         $this->select = $select;
     }
 
     /**
-     * @return \Zend\Db\Sql\Sql
+     * @return Sql
      */
-    public function getSql()
+    public function getSql(): Sql
     {
         return $this->sql;
     }
 
     /**
-     * @return \Zend\Db\Sql\Select
+     * @return Select
      */
-    public function getSelect()
+    public function getSelect(): Select
     {
         return $this->select;
     }
@@ -46,25 +51,26 @@ class Filter
     /**
      * @param DatagridFilter $filter
      *
+     * @return $this
      * @throws \Exception
      */
-    public function applyFilter(DatagridFilter $filter)
+    public function applyFilter(DatagridFilter $filter): self
     {
         $select = $this->getSelect();
 
         $adapter = $this->getSql()->getAdapter();
-        $qi = function ($name) use ($adapter) {
+        $qi      = function ($name) use ($adapter) {
             return $adapter->getPlatform()->quoteIdentifier($name);
         };
 
         $col = $filter->getColumn();
         if (! $col instanceof Column\Select) {
-            throw new \Exception('This column cannot be filtered: '.$col->getUniqueId());
+            throw new \Exception('This column cannot be filtered: ' . $col->getUniqueId());
         }
 
         $colString = $col->getSelectPart1();
         if ($col->getSelectPart2() != '') {
-            $colString .= '.'.$col->getSelectPart2();
+            $colString .= '.' . $col->getSelectPart2();
         }
         if ($col instanceof Column\Select && $col->hasFilterSelectExpression()) {
             $colString = sprintf($col->getFilterSelectExpression(), $colString);
@@ -77,32 +83,32 @@ class Filter
 
             switch ($filter->getOperator()) {
                 case DatagridFilter::LIKE:
-                    $wheres[] = $where->like($colString, '%'.$value.'%');
+                    $wheres[] = $where->like($colString, '%' . $value . '%');
                     break;
 
                 case DatagridFilter::LIKE_LEFT:
-                    $wheres[] = $where->like($colString, '%'.$value);
+                    $wheres[] = $where->like($colString, '%' . $value);
                     break;
 
                 case DatagridFilter::LIKE_RIGHT:
-                    $wheres[] = $where->like($colString, $value.'%');
+                    $wheres[] = $where->like($colString, $value . '%');
                     break;
 
                 case DatagridFilter::NOT_LIKE:
-                    $wheres[] = $where->literal($qi($colString).'NOT LIKE ?', [
-                        '%'.$value.'%',
+                    $wheres[] = $where->literal($qi($colString) . 'NOT LIKE ?', [
+                        '%' . $value . '%',
                     ]);
                     break;
 
                 case DatagridFilter::NOT_LIKE_LEFT:
-                    $wheres[] = $where->literal($qi($colString).'NOT LIKE ?', [
-                        '%'.$value,
+                    $wheres[] = $where->literal($qi($colString) . 'NOT LIKE ?', [
+                        '%' . $value,
                     ]);
                     break;
 
                 case DatagridFilter::NOT_LIKE_RIGHT:
-                    $wheres[] = $where->literal($qi($colString).'NOT LIKE ?', [
-                        $value.'%',
+                    $wheres[] = $where->literal($qi($colString) . 'NOT LIKE ?', [
+                        $value . '%',
                     ]);
                     break;
 
@@ -146,5 +152,7 @@ class Filter
             $set = new PredicateSet($wheres, PredicateSet::OP_OR);
             $select->where->andPredicate($set);
         }
+
+        return $this;
     }
 }

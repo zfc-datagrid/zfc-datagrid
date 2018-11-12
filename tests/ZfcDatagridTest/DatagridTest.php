@@ -3,32 +3,39 @@ namespace ZfcDatagridTest;
 
 use Exception;
 use InvalidArgumentException;
-use PHPUnit\Framework\TestCase;
 use Throwable;
 use Zend\Http\PhpEnvironment\Request;
 use Zend\I18n\Translator\Translator;
 use Zend\Mvc\MvcEvent;
+use Zend\Paginator\Paginator;
+use Zend\Router\Http\HttpRouterFactory;
+use Zend\Router\Http\Segment;
+use Zend\Router\RoutePluginManagerFactory;
 use Zend\Session\Container;
+use Zend\Stdlib\ResponseInterface;
+use Zend\View\Model\JsonModel;
+use Zend\View\Model\ViewModel;
+use ZfcDatagrid\Action\Mass;
 use ZfcDatagrid\Column;
 use ZfcDatagrid\Datagrid;
 use ZfcDatagrid\DataSource\PhpArray;
+use ZfcDatagrid\Renderer\AbstractRenderer;
+use ZfcDatagridTest\Util\ServiceManagerFactory;
+use ZfcDatagridTest\Util\TestBase;
 
 /**
  * @group Datagrid
  * @covers \ZfcDatagrid\Datagrid
  */
-class DatagridTest extends TestCase
+class DatagridTest extends TestBase
 {
-    /**
-     *
-     * @var Datagrid
-     */
+    /** @var string */
+    protected $className = Datagrid::class;
+
+    /** @var Datagrid */
     private $grid;
 
-    /**
-     *
-     * @var array
-     */
+    /** @var array */
     private $config;
 
     public function setUp()
@@ -256,7 +263,7 @@ class DatagridTest extends TestCase
 
     public function testUrl()
     {
-        $this->assertEquals(null, $this->grid->getUrl());
+        $this->assertSame('', $this->grid->getUrl());
 
         $this->grid->setUrl('/module/controller/action');
         $this->assertEquals('/module/controller/action', $this->grid->getUrl());
@@ -614,6 +621,45 @@ class DatagridTest extends TestCase
         $grid->setViewModel($customView);
     }
 
+    public function getRouter()
+    {
+        $config = [
+            'router' => [
+                'routes' => [
+                    'myTestRoute' => [
+                        'type'    => Segment::class,
+                        'options' => [
+                            'route'    => '/foo[/:bar]',
+                            'defaults' => [
+                                'controller' => 'MyController',
+                                'action'     => 'index',
+                                'bar'        => 'baz',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        // Setup service manager, we need that for the route
+        ServiceManagerFactory::setConfig($config);
+        $serviceLocator = ServiceManagerFactory::getServiceManager();
+
+        $routePluginManager = new RoutePluginManagerFactory();
+        $serviceLocator->setService('RoutePluginManager', $routePluginManager->createService($serviceLocator));
+        $routerFactory = new HttpRouterFactory();
+
+        return $routerFactory->createService($serviceLocator);
+    }
+
+    public function testGetAndSetRouter()
+    {
+        $router = $this->getRouter();
+        $grid   = new Datagrid();
+        $grid->setRouter($router);
+        $this->assertSame($router, $grid->getRouter());
+    }
+
     public function testColumnsPositions()
     {
         $grid = new Datagrid();
@@ -659,5 +705,190 @@ class DatagridTest extends TestCase
         $this->assertEquals(array_search('myTable_myCol4', array_keys($gridColumns)), 2);
         $this->assertEquals(array_search('myTable_myCol2', array_keys($gridColumns)), 3);
         $this->assertEquals(array_search('myTable_myCol5', array_keys($gridColumns)), 4);
+    }
+
+    public function testMassAction(): void
+    {
+        $dg = new Datagrid();
+        $this->assertFalse($dg->hasMassAction());
+        $this->assertSame([], $dg->getMassActions());
+
+        $mass = new Mass();
+        $dg->addMassAction($mass);
+
+        $this->assertTrue($dg->hasMassAction());
+        $this->assertSame([$mass], $dg->getMassActions());
+    }
+
+    public function testIsDataLoaded(): void
+    {
+        $this->assertFalse($this->getMethod('isDataLoaded')->invoke($this->getClass()));
+        $this->setProperty('isDataLoaded', true);
+        $this->assertTrue($this->getMethod('isDataLoaded')->invoke($this->getClass()));
+    }
+
+    public function testSetRendererService(): void
+    {
+        $this->assertNull($this->getProperty('rendererService'));
+
+        $rendererService = $this->getMockForAbstractClass(AbstractRenderer::class);
+        $this->getMethod('setRendererService')->invokeArgs($this->getClass(), [$rendererService]);
+
+        $this->assertSame($rendererService, $this->getProperty('rendererService'));
+    }
+
+    public function testToolbarTemplateVariables(): void
+    {
+        $this->assertSame([], $this->getProperty('toolbarTemplateVariables'));
+
+        $params = [
+            'variables',
+            'foobar',
+        ];
+        $this->getMethod('setToolbarTemplateVariables')->invokeArgs($this->getClass(), [$params]);
+
+        $this->assertSame($params, $this->getMethod('getToolbarTemplateVariables')->invoke($this->getClass()));
+        $this->assertSame($params, $this->getProperty('toolbarTemplateVariables'));
+    }
+
+    public function testIsRendered()
+    {
+        $this->assertFalse($this->getMethod('isRendered')->invoke($this->getClass()));
+        $this->setProperty('isRendered', true);
+        $this->assertTrue($this->getMethod('isRendered')->invoke($this->getClass()));
+    }
+
+    public function testGetPaginatorException(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Paginator is only available after calling "loadData()"');
+        (new Datagrid())->getPaginator();
+    }
+
+    public function testGetPaginator(): void
+    {
+        $paginator = $this->getMockBuilder(Paginator::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->setProperty('paginator', $paginator);
+        $this->assertSame($paginator, $this->getMethod('getPaginator')->invoke($this->getClass()));
+    }
+
+    public function testGetPreparedData(): void
+    {
+        $this->assertSame([], $this->getMethod('getPreparedData')->invoke($this->getClass()));
+
+        $params = [
+            'variables',
+            'foobar',
+        ];
+        $this->setProperty('preparedData', $params);
+        $this->assertSame($params, $this->getMethod('getPreparedData')->invoke($this->getClass()));
+    }
+
+    public function testGetResponse(): void
+    {
+        $this->mockedMethodList = [
+            'isRendered',
+            'render',
+        ];
+
+        $class = $this->getClass();
+        $class->expects($this->once())
+            ->method('isRendered')
+            ->willReturn(false);
+        $class->expects($this->once())
+            ->method('render')
+            ->willReturn(false);
+
+        $response = $this->getMockForAbstractClass(ResponseInterface::class);
+        $this->setProperty('response', $response);
+
+        $this->assertSame($response, $this->getMethod('getResponse')->invoke($this->getClass()));
+    }
+
+    public function testGetResponseWithNoRenderer(): void
+    {
+        $this->mockedMethodList = [
+            'isRendered',
+            'render',
+        ];
+
+        $class = $this->getClass();
+        $class->expects($this->once())
+            ->method('isRendered')
+            ->willReturn(true);
+        $class->expects($this->never())
+            ->method('render')
+            ->willReturn(false);
+
+        $response = $this->getMockForAbstractClass(ResponseInterface::class);
+        $this->setProperty('response', $response);
+
+        $this->assertSame($response, $this->getMethod('getResponse')->invoke($this->getClass()));
+    }
+
+    public function testIsHtmlInitResponseFalse(): void
+    {
+        $this->mockedMethodList = [
+            'getResponse',
+        ];
+        $this->assertTrue($this->getMethod('isHtmlInitReponse')->invoke($this->getClass()));
+    }
+
+    public function testIsHtmlInitResponseJsonModel(): void
+    {
+        $this->mockedMethodList = [
+            'getResponse',
+        ];
+        $class = $this->getClass();
+        $class->expects($this->once())
+            ->method('getResponse')
+            ->willReturn(new JsonModel());
+
+        $this->assertFalse($this->getMethod('isHtmlInitReponse')->invoke($this->getClass()));
+    }
+
+    public function testIsHtmlInitResponseResponseInterface(): void
+    {
+        $this->mockedMethodList = [
+            'getResponse',
+        ];
+        $class = $this->getClass();
+        $class->expects($this->exactly(2))
+            ->method('getResponse')
+            ->willReturn(new ViewModel(), $this->getMockForAbstractClass(ResponseInterface::class));
+
+        $this->assertFalse($this->getMethod('isHtmlInitReponse')->invoke($this->getClass()));
+    }
+
+    public function testLoadDataWithProperty(): void
+    {
+        $this->setProperty('isDataLoaded', true);
+        $this->assertTrue($this->getMethod('loadData')->invoke($this->getClass()));
+    }
+
+    public function testLoadDataInitException(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('The init() method has to be called, before you can call loadData()!');
+        $this->getMethod('loadData')->invoke($this->getClass());
+    }
+
+    public function testLoadDataDataSourceException(): void
+    {
+        $this->mockedMethodList = [
+            'isInit',
+        ];
+
+        $class = $this->getClass();
+        $class->expects($this->once())
+            ->method('isInit')
+            ->willReturn(true);
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('No datasource defined! Please call "setDataSource()" first"');
+        $this->getMethod('loadData')->invoke($this->getClass());
     }
 }

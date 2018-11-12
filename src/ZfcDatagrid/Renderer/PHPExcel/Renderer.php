@@ -17,24 +17,46 @@ use Zend\Http\Headers;
 use Zend\Http\Response\Stream as ResponseStream;
 use ZfcDatagrid\Column;
 use ZfcDatagrid\Renderer\AbstractExport;
+use function is_array;
+use function implode;
+use function get_class;
+use function is_scalar;
+use function array_merge;
+use function fopen;
+use function filesize;
+use function date;
 
 class Renderer extends AbstractExport
 {
-    public function getName()
+    /**
+     * @return string
+     */
+    public function getName(): string
     {
         return 'PHPExcel';
     }
 
-    public function isExport()
+    /**
+     * @return bool
+     */
+    public function isExport(): bool
     {
         return true;
     }
 
-    public function isHtml()
+    /**
+     * @return bool
+     */
+    public function isHtml(): bool
     {
         return false;
     }
 
+    /**
+     * @return ResponseStream|\Zend\View\Model\ViewModel
+     * @throws \PHPExcel_Exception
+     * @throws \PHPExcel_Writer_Exception
+     */
     public function execute()
     {
         $options       = $this->getOptions();

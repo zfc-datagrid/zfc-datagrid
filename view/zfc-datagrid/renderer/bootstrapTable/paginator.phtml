@@ -9,7 +9,7 @@ $paginatorOnclick.= 'document.forms[\'form_'.$this->gridId.'\'].submit(); return
     
         <!-- to first page -->
         <?php if($this->current > 1):?>
-            <li><a href="<?php echo 
+            <li><a href="<?=
                     $this->url(null, 
                         [],
                         [
@@ -20,7 +20,7 @@ $paginatorOnclick.= 'document.forms[\'form_'.$this->gridId.'\'].submit(); return
                         ],
                         true
                     );?>
-                "  onclick="<?php echo sprintf($paginatorOnclick, 1);?>">
+                "  onclick="<?= sprintf($paginatorOnclick, 1);?>">
                     &laquo;
                 </a>
             </li>
@@ -32,7 +32,7 @@ $paginatorOnclick.= 'document.forms[\'form_'.$this->gridId.'\'].submit(); return
         
         <!-- one page left -->
         <?php if($this->current > 1): ?>
-            <li><a href="<?php echo 
+            <li><a href="<?=
                     $this->url(null, 
                         [],
                         [
@@ -43,7 +43,7 @@ $paginatorOnclick.= 'document.forms[\'form_'.$this->gridId.'\'].submit(); return
                         ],
                         true
                     );?>
-                "  onclick="<?php echo sprintf($paginatorOnclick, $this->current - 1);?>">
+                "  onclick="<?= sprintf($paginatorOnclick, $this->current - 1);?>">
                     &lt;
                 </a>
             </li>
@@ -76,9 +76,9 @@ $paginatorOnclick.= 'document.forms[\'form_'.$this->gridId.'\'].submit(); return
                 $url = '#';
             }
             ?>
-            <li <?php echo $add; ?>>
-                <a href="<?php echo $url; ?>" onclick="<?php echo sprintf($paginatorOnclick, $page);?>">
-                    <?php echo $page; ?>
+            <li <?= $add; ?>>
+                <a href="<?= $url; ?>" onclick="<?= sprintf($paginatorOnclick, $page);?>">
+                    <?= $page; ?>
                 </a>
             </li>
         <?php endforeach; ?>
@@ -86,7 +86,7 @@ $paginatorOnclick.= 'document.forms[\'form_'.$this->gridId.'\'].submit(); return
         <!-- one page right -->
         <?php if($this->current < $this->pageCount): ?>
             <li>
-                <a href="<?php echo 
+                <a href="<?=
                     $this->url($this->matchedRouteName, 
                         [],
                         [
@@ -97,7 +97,7 @@ $paginatorOnclick.= 'document.forms[\'form_'.$this->gridId.'\'].submit(); return
                         ],
                         true
                     );?>
-                " onclick="<?php echo sprintf($paginatorOnclick, $this->current + 1);?>">
+                " onclick="<?= sprintf($paginatorOnclick, $this->current + 1);?>">
                     &gt;
                 </a>
             </li>
@@ -111,7 +111,7 @@ $paginatorOnclick.= 'document.forms[\'form_'.$this->gridId.'\'].submit(); return
         <!-- to last page -->
         <?php if($this->current < $this->pageCount): ?>
             <li>
-                <a href="<?php echo 
+                <a href="<?=
                     $this->url($this->matchedRouteName, 
                         [],
                         [
@@ -122,7 +122,7 @@ $paginatorOnclick.= 'document.forms[\'form_'.$this->gridId.'\'].submit(); return
                         ],
                         true
                     );?>
-                " onclick="<?php echo sprintf($paginatorOnclick, $this->pageCount);?>">
+                " onclick="<?= sprintf($paginatorOnclick, $this->pageCount);?>">
                     &raquo;
                 </a>
             </li>

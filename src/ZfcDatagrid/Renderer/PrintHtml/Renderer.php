@@ -1,5 +1,4 @@
 <?php
-
 namespace ZfcDatagrid\Renderer\PrintHtml;
 
 use Zend\View\Model\ViewModel;
@@ -7,17 +6,26 @@ use ZfcDatagrid\Renderer\AbstractRenderer;
 
 class Renderer extends AbstractRenderer
 {
-    public function getName()
+    /**
+     * @return string
+     */
+    public function getName(): string
     {
         return 'printHtml';
     }
 
-    public function isExport()
+    /**
+     * @return bool
+     */
+    public function isExport(): bool
     {
         return true;
     }
 
-    public function isHtml()
+    /**
+     * @return bool
+     */
+    public function isHtml(): bool
     {
         return true;
     }

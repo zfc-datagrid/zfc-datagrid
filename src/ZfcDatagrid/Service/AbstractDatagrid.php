@@ -1,11 +1,9 @@
 <?php
-
 namespace ZfcDatagrid\Service;
 
 use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 use ZfcDatagrid\Datagrid;
 
 abstract class AbstractDatagrid extends Datagrid implements FactoryInterface
@@ -19,7 +17,6 @@ abstract class AbstractDatagrid extends Datagrid implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $this->setServiceLocator($container);
         $config = $container->get('config');
 
         if (! isset($config['ZfcDatagrid'])) {
@@ -40,16 +37,6 @@ abstract class AbstractDatagrid extends Datagrid implements FactoryInterface
         $this->init();
 
         return $this;
-    }
-
-    /**
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return Datagrid
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator)
-    {
-        return $this($serviceLocator, Datagrid::class);
     }
 
     /**

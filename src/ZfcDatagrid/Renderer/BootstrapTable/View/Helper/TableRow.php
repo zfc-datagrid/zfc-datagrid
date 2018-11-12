@@ -1,25 +1,29 @@
 <?php
-
 namespace ZfcDatagrid\Renderer\BootstrapTable\View\Helper;
 
+use Zend\I18n\Translator\TranslatorInterface;
 use Zend\View\Helper\AbstractHelper;
 use ZfcDatagrid\Column;
 use ZfcDatagrid\Column\Action\AbstractAction;
+use function implode;
+use function get_class;
+use function print_r;
+use function array_merge;
 
 /**
  * View Helper.
  */
 class TableRow extends AbstractHelper
 {
-    /** @var \Zend\I18n\Translator\TranslatorInterface|null */
+    /** @var TranslatorInterface|null */
     private $translator;
 
     /**
-     * @param null|\Zend\I18n\Translator\TranslatorInterface $translator
+     * @param null|TranslatorInterface $translator
      *
      * @return self
      */
-    public function setTranslator($translator)
+    public function setTranslator(?TranslatorInterface $translator)
     {
         $this->translator = $translator;
 
@@ -31,7 +35,7 @@ class TableRow extends AbstractHelper
      *
      * @return string
      */
-    private function translate($message)
+    private function translate(string $message): string
     {
         if (null === $this->translator) {
             return $message;
@@ -41,18 +45,18 @@ class TableRow extends AbstractHelper
     }
 
     /**
-     * @param $row
-     * @param bool|true $open
+     * @param array $row
+     * @param bool  $open
      *
      * @return string
      */
-    private function getTr($row, $open = true)
+    private function getTr(array $row, bool $open = true): string
     {
         if ($open !== true) {
             return '</tr>';
         } else {
             if (isset($row['idConcated'])) {
-                return '<tr id="'.$row['idConcated'].'">';
+                return '<tr id="' . $row['idConcated'] . '">';
             } else {
                 return '<tr>';
             }
@@ -60,23 +64,23 @@ class TableRow extends AbstractHelper
     }
 
     /**
-     * @param $dataValue
+     * @param string $dataValue
      * @param array $attributes
      *
      * @return string
      */
-    private function getTd($dataValue, $attributes = [])
+    private function getTd(string $dataValue, array $attributes = []): string
     {
         $attr = [];
         foreach ($attributes as $name => $value) {
             if ($value != '') {
-                $attr[] = $name.'="'.$value.'"';
+                $attr[] = $name . '="' . $value . '"';
             }
         }
 
         $attr = implode(' ', $attr);
 
-        return '<td '.$attr.'>'.$dataValue.'</td>';
+        return '<td ' . $attr . '>' . $dataValue . '</td>';
     }
 
     /**
@@ -84,33 +88,33 @@ class TableRow extends AbstractHelper
      * @param array          $cols
      * @param AbstractAction $rowClickAction
      * @param array          $rowStyles
+     * @param bool           $hasMassActions
      *
      * @throws \Exception
      *
      * @return string
      */
     public function __invoke(
-        $row,
+        array $row,
         array $cols,
         AbstractAction $rowClickAction = null,
         array $rowStyles = [],
-        $hasMassActions = false
-    ) {
+        bool $hasMassActions = false
+    ): string {
         $return = $this->getTr($row);
 
         if (true === $hasMassActions) {
-            $return .= '<td><input type="checkbox" name="massActionSelected[]" value="'.$row['idConcated'].'" /></td>';
+            $return .= '<td><input type="checkbox" name="massActionSelected[]" value="' . $row['idConcated'] . '" /></td>';
         }
 
         foreach ($cols as $col) {
             /* @var $col Column\AbstractColumn */
-
             $value = $row[$col->getUniqueId()];
 
             $cssStyles = [];
-            $classes = [];
+            $classes   = [];
 
-            if ($col->isHidden() === true) {
+            if (true === $col->isHidden()) {
                 $classes[] = 'hidden';
             }
 
@@ -120,7 +124,7 @@ class TableRow extends AbstractHelper
                     break;
 
                 case Column\Type\PhpArray::class:
-                    $value = '<pre>'.print_r($value, true).'</pre>';
+                    $value = '<pre>' . print_r($value, true) . '</pre>';
                     break;
             }
 
@@ -138,19 +142,19 @@ class TableRow extends AbstractHelper
                             break;
 
                         case Column\Style\Color::class:
-                            $cssStyles[] = 'color: #'.$style->getRgbHexString();
+                            $cssStyles[] = 'color: #' . $style->getRgbHexString();
                             break;
 
                         case Column\Style\BackgroundColor::class:
-                            $cssStyles[] = 'background-color: #'.$style->getRgbHexString();
+                            $cssStyles[] = 'background-color: #' . $style->getRgbHexString();
                             break;
 
                         case Column\Style\Align::class:
-                            $cssStyles[] = 'text-align: '.$style->getAlignment();
+                            $cssStyles[] = 'text-align: ' . $style->getAlignment();
                             break;
 
                         case Column\Style\Strikethrough::class:
-                            $value = '<s>'.$value.'</s>';
+                            $value = '<s>' . $value . '</s>';
                             break;
 
                         case Column\Style\CSSClass::class:
@@ -162,7 +166,7 @@ class TableRow extends AbstractHelper
                             break;
 
                         default:
-                            throw new \InvalidArgumentException('Not defined style: "'.get_class($style).'"');
+                            throw new \InvalidArgumentException('Not defined style: "' . get_class($style) . '"');
                             break;
                     }
                 }
@@ -175,6 +179,11 @@ class TableRow extends AbstractHelper
                     /* @var $action Column\Action\AbstractAction */
                     if ($action->isDisplayed($row) === true) {
                         $action->setTitle($this->translate($action->getTitle()));
+
+                        if ($action->getRoute()) {
+                            $action->setLink($this->view->url($action->getRoute(), $action->getRouteParams()));
+                        }
+
                         $actions[] = $action->toHtml($row);
                     }
                 }
@@ -183,14 +192,16 @@ class TableRow extends AbstractHelper
             }
 
             // "rowClick" action
-            if ($col instanceof Column\Select && $rowClickAction instanceof AbstractAction
-                    && $col->isRowClickEnabled()) {
-                $value = '<a href="'.$rowClickAction->getLinkReplaced($row).'">'.$value.'</a>';
+            if ($col instanceof Column\Select
+                && $rowClickAction instanceof AbstractAction
+                && $col->isRowClickEnabled()
+            ) {
+                $value = '<a href="' . $rowClickAction->getLinkReplaced($row) . '">' . $value . '</a>';
             }
 
             $attributes = [
-                'class' => implode(' ', $classes),
-                'style' => implode(';', $cssStyles),
+                'class'               => implode(' ', $classes),
+                'style'               => implode(';', $cssStyles),
                 'data-columnUniqueId' => $col->getUniqueId(),
             ];
 

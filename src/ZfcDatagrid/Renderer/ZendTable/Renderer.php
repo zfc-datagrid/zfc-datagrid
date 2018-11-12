@@ -1,5 +1,4 @@
 <?php
-
 namespace ZfcDatagrid\Renderer\ZendTable;
 
 use Zend\Console\Adapter\AdapterInterface as ConsoleAdapter;
@@ -10,26 +9,32 @@ use Zend\Text\Table\Table as TextTable;
 use ZfcDatagrid\Column;
 use ZfcDataGrid\Column\Type;
 use ZfcDatagrid\Renderer\AbstractRenderer;
+use function explode;
+use function strtoupper;
+use function count;
+use function function_exists;
+use function mb_strtoupper;
+use function is_array;
+use function implode;
+use function sprintf;
+use function floor;
+use function array_sum;
 
 /**
  * For CLI.
  */
 class Renderer extends AbstractRenderer
 {
-    /**
-     * @var ConsoleAdapter
-     */
+    /** @var ConsoleAdapter */
     private $consoleAdapter;
 
-    /**
-     * @var Column\AbstractColumn[]
-     */
-    private $columnsToDisplay;
+    /** @var Column\AbstractColumn[] */
+    private $columnsToDisplay = [];
 
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return 'zendTable';
     }
@@ -37,7 +42,7 @@ class Renderer extends AbstractRenderer
     /**
      * @return bool
      */
-    public function isExport()
+    public function isExport(): bool
     {
         return false;
     }
@@ -45,7 +50,7 @@ class Renderer extends AbstractRenderer
     /**
      * @return bool
      */
-    public function isHtml()
+    public function isHtml(): bool
     {
         return false;
     }
@@ -55,7 +60,7 @@ class Renderer extends AbstractRenderer
      *
      * @throws \Exception
      */
-    public function getRequest()
+    public function getRequest(): ConsoleRequest
     {
         $request = parent::getRequest();
         if (! $request instanceof ConsoleRequest) {
@@ -67,16 +72,20 @@ class Renderer extends AbstractRenderer
 
     /**
      * @param ConsoleAdapter $adapter
+     *
+     * @return $this
      */
-    public function setConsoleAdapter(ConsoleAdapter $adapter)
+    public function setConsoleAdapter(ConsoleAdapter $adapter): self
     {
         $this->consoleAdapter = $adapter;
+
+        return $this;
     }
 
     /**
      * @return ConsoleAdapter
      */
-    public function getConsoleAdapter()
+    public function getConsoleAdapter(): ConsoleAdapter
     {
         if (null === $this->consoleAdapter) {
             $this->consoleAdapter = Console::getInstance();
@@ -90,23 +99,23 @@ class Renderer extends AbstractRenderer
      *
      * @return array
      */
-    public function getSortConditions()
+    public function getSortConditions(): array
     {
-        if (is_array($this->sortConditions)) {
+        if (!empty($this->sortConditions)) {
             return $this->sortConditions;
         }
 
         $request = $this->getRequest();
 
         $optionsRenderer = $this->getOptionsRenderer();
-        $parameterNames = $optionsRenderer['parameterNames'];
+        $parameterNames  = $optionsRenderer['parameterNames'];
 
         $sortConditions = [];
 
-        $sortColumns = $request->getParam($parameterNames['sortColumns']);
+        $sortColumns    = $request->getParam($parameterNames['sortColumns']);
         $sortDirections = $request->getParam($parameterNames['sortDirections']);
         if ($sortColumns != '') {
-            $sortColumns = explode(',', $sortColumns);
+            $sortColumns    = explode(',', $sortColumns);
             $sortDirections = explode(',', $sortDirections);
 
             foreach ($sortColumns as $key => $sortColumn) {
@@ -125,7 +134,7 @@ class Renderer extends AbstractRenderer
                     if ($column->getUniqueId() == $sortColumn) {
                         $sortConditions[] = [
                             'sortDirection' => $sortDirection,
-                            'column' => $column,
+                            'column'        => $column,
                         ];
 
                         $column->setSortActive($sortDirection);
@@ -149,7 +158,7 @@ class Renderer extends AbstractRenderer
      *
      * @return array
      */
-    public function getFilters()
+    public function getFilters(): array
     {
         return [];
     }
@@ -159,12 +168,12 @@ class Renderer extends AbstractRenderer
      *
      * @return int
      */
-    public function getCurrentPageNumber()
+    public function getCurrentPageNumber(): int
     {
         $request = $this->getRequest();
 
         $optionsRenderer = $this->getOptionsRenderer();
-        $parameterNames = $optionsRenderer['parameterNames'];
+        $parameterNames  = $optionsRenderer['parameterNames'];
         if ($request->getParam($parameterNames['currentPage']) != '') {
             return (int) $request->getParam($parameterNames['currentPage']);
         }
@@ -179,12 +188,12 @@ class Renderer extends AbstractRenderer
      *
      * @throws \Exception
      */
-    public function getItemsPerPage($defaultItems = 25)
+    public function getItemsPerPage($defaultItems = 25): int
     {
         $request = $this->getRequest();
 
         $optionsRenderer = $this->getOptionsRenderer();
-        $parameterNames = $optionsRenderer['parameterNames'];
+        $parameterNames  = $optionsRenderer['parameterNames'];
         if ($request->getParam($parameterNames['itemsPerPage']) != '') {
             return (int) $request->getParam($parameterNames['itemsPerPage']);
         }
@@ -208,7 +217,7 @@ class Renderer extends AbstractRenderer
     /**
      * @return TextTable
      */
-    private function getTable()
+    private function getTable(): TextTable
     {
         $paginator = $this->getPaginator();
 
@@ -237,20 +246,12 @@ class Renderer extends AbstractRenderer
         $tableRow = new Table\Row();
         foreach ($this->getColumnsToDisplay() as $column) {
             $label = $this->translate($column->getLabel());
-
-            if (function_exists('mb_strtoupper')) {
-                $label = mb_strtoupper($label);
-            } else {
-                $label = strtoupper($label);
-            }
+            $label = function_exists('mb_strtoupper') ? mb_strtoupper($label) : strtoupper($label);
 
             $tableColumn = new Table\Column($label);
-            if ($column->getType() instanceof Type\Number) {
-                $tableColumn->setAlign(Table\Column::ALIGN_RIGHT);
-            } else {
-                $tableColumn->setAlign(Table\Column::ALIGN_LEFT);
-            }
-
+            $tableColumn->setAlign(
+                $column->getType() instanceof Type\Number ? Table\Column::ALIGN_RIGHT : Table\Column::ALIGN_LEFT
+            );
             $tableRow->appendColumn($tableColumn);
         }
         $table->appendRow($tableRow);
@@ -271,11 +272,9 @@ class Renderer extends AbstractRenderer
                 }
 
                 $tableColumn = new Table\Column($value);
-                if ($column->getType() instanceof Type\Number) {
-                    $tableColumn->setAlign(Table\Column::ALIGN_RIGHT);
-                } else {
-                    $tableColumn->setAlign(Table\Column::ALIGN_LEFT);
-                }
+                $tableColumn->setAlign(
+                    $column->getType() instanceof Type\Number ? Table\Column::ALIGN_RIGHT : Table\Column::ALIGN_LEFT
+                );
                 $tableRow->appendColumn($tableColumn);
             }
 
@@ -287,7 +286,7 @@ class Renderer extends AbstractRenderer
          */
         $tableRow = new Table\Row();
 
-        $footer = $this->translate('Page').' ';
+        $footer = $this->translate('Page') . ' ';
         $footer .= sprintf('%s %s %s', $paginator->getCurrentPageNumber(), $this->translate('of'), $paginator->count());
 
         $footer .= ' / ';
@@ -318,9 +317,9 @@ class Renderer extends AbstractRenderer
      *
      * @throws \Exception
      */
-    private function getColumnsToDisplay()
+    private function getColumnsToDisplay(): array
     {
-        if (is_array($this->columnsToDisplay)) {
+        if (!empty($this->columnsToDisplay)) {
             return $this->columnsToDisplay;
         }
 
@@ -344,7 +343,7 @@ class Renderer extends AbstractRenderer
     /**
      * @return array
      */
-    private function getColumnWidths()
+    private function getColumnWidths(): array
     {
         $cols = $this->getColumnsToDisplay();
 
@@ -353,7 +352,7 @@ class Renderer extends AbstractRenderer
         $border = count($cols) + 1;
 
         $widthAvailable = $this->getConsoleAdapter()->getWidth() - $border;
-        $onePercent = $widthAvailable / 100;
+        $onePercent     = $widthAvailable / 100;
 
         $colWidths = [];
         foreach ($cols as $col) {

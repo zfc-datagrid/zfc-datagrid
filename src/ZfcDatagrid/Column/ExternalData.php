@@ -1,5 +1,4 @@
 <?php
-
 namespace ZfcDatagrid\Column;
 
 class ExternalData extends AbstractColumn
@@ -9,7 +8,11 @@ class ExternalData extends AbstractColumn
      */
     protected $dataPopulation;
 
-    public function __construct($uniqueId = 'external')
+    /**
+     * ExternalData constructor.
+     * @param string $uniqueId
+     */
+    public function __construct(string $uniqueId = 'external')
     {
         $this->setUniqueId($uniqueId);
 
@@ -21,14 +24,18 @@ class ExternalData extends AbstractColumn
      * @param DataPopulation\DataPopulationInterface $dataPopulation
      *
      * @throws \Exception
+     *
+     * @return $this
      */
-    public function setDataPopulation(DataPopulation\DataPopulationInterface $dataPopulation)
+    public function setDataPopulation(DataPopulation\DataPopulationInterface $dataPopulation): self
     {
         if ($dataPopulation instanceof DataPopulation\DataObject && $dataPopulation->getObject() === null) {
             throw new \Exception('object is missing in DataPopulation\DataObject!');
         }
 
         $this->dataPopulation = $dataPopulation;
+
+        return $this;
     }
 
     /**
@@ -36,7 +43,7 @@ class ExternalData extends AbstractColumn
      *
      * @throws \InvalidArgumentException
      */
-    public function getDataPopulation()
+    public function getDataPopulation(): DataPopulation\DataPopulationInterface
     {
         if (null === $this->dataPopulation) {
             throw new \InvalidArgumentException('no data population set for Column\ExternalData');
@@ -48,7 +55,7 @@ class ExternalData extends AbstractColumn
     /**
      * @return bool
      */
-    public function hasDataPopulation()
+    public function hasDataPopulation(): bool
     {
         return null !== $this->dataPopulation;
     }

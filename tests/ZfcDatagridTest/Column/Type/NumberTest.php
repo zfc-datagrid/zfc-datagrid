@@ -3,26 +3,23 @@ namespace ZfcDatagridTest\Column\Type;
 
 use Locale;
 use NumberFormatter;
-use PHPUnit\Framework\TestCase;
 use ZfcDatagrid\Column\Type;
 use ZfcDatagrid\Filter;
+use ZfcDatagridTest\Util\TestBase;
 
 /**
  * @group Column
  * @covers \ZfcDatagrid\Column\Type\Number
  */
-class NumberTest extends TestCase
+class NumberTest extends TestBase
 {
-    /**
-     *
-     * @var Type\Number
-     */
+    /** @var string */
+    protected $className = Type\Number::class;
+
+    /** @var Type\Number */
     private $numberFormatterAT;
 
-    /**
-     *
-     * @var Type\Number
-     */
+    /** @var Type\Number */
     private $numberFormatterEN;
 
     public function setUp()
@@ -133,6 +130,29 @@ class NumberTest extends TestCase
         $this->assertEquals('23.15', $type->getFilterValue('€23.15#'));
     }
 
+    public function testFilterValueException(): void
+    {
+        $formatter = $this->getMockBuilder(\NumberFormatter::class)
+            ->setMethods(['parse'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $formatter->expects($this->once())
+            ->method('parse')
+            ->willThrowException(new \Exception('test parse exception'));
+
+        $this->mockedMethodList = ['getFormatter'];
+        $class = $this->getClass();
+        $class->expects($this->once())
+            ->method('getFormatter')
+            ->willReturn($formatter);
+
+        $this->assertSame(
+            'dfsdf',
+            $this->getMethod('getFilterValue')->invokeArgs($this->getClass(), ['dfsdf'])
+        );
+    }
+
     /**
      * Convert the database value to a display value
      */
@@ -158,5 +178,31 @@ class NumberTest extends TestCase
 
         // Filtering converting is dangerous, so keep the value...
         $this->assertEquals('myString', $type->getFilterValue('myString'));
+    }
+
+    public function testPattern(): void
+    {
+        $type = $this->numberFormatterEN;
+        
+        $this->assertNull($type->getPattern());
+
+        $type->setPattern('foobar');
+        $this->assertSame('foobar', $type->getPattern());
+
+        $type->setPattern(null);
+        $this->assertNull($type->getPattern());
+    }
+
+    public function testGetFormatter(): void
+    {
+        $this->setProperty('pattern', 'pattern');
+        $this->setProperty('attributes', [[
+            'attribute' => 5,
+            'value'     => 3,
+        ]]);
+        $actual = $this->getMethod('getFormatter')->invoke($this->getClass());
+
+        $this->assertSame('pattern#000', $actual->getPattern());
+        $this->assertSame(3, $actual->getAttribute(5));
     }
 }

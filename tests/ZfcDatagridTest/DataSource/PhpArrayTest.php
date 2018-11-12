@@ -31,7 +31,7 @@ class PhpArrayTest extends DataSourceTestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \TypeError
      */
     public function testConstruct()
     {

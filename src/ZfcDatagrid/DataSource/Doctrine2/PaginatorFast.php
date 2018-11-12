@@ -1,23 +1,23 @@
 <?php
-
 namespace ZfcDatagrid\DataSource\Doctrine2;
 
 use Doctrine\ORM\QueryBuilder;
 use Zend\Paginator\Adapter\AdapterInterface;
+use function count;
+use function implode;
+use function array_unique;
 
 class PaginatorFast implements AdapterInterface
 {
-    /**
-     * @var QueryBuilder
-     */
-    protected $qb = null;
+    /** @var QueryBuilder */
+    protected $qb;
 
     /**
      * Total item count.
      *
-     * @var int
+     * @var int|null
      */
-    protected $rowCount = null;
+    protected $rowCount;
 
     /**
      * @param QueryBuilder $qb
@@ -67,12 +67,12 @@ class PaginatorFast implements AdapterInterface
         }
 
         $qbOriginal = $this->getQueryBuilder();
-        $qb = clone $qbOriginal;
+        $qb         = clone $qbOriginal;
 
-        $dqlParts = $qb->getDQLParts();
+        $dqlParts   = $qb->getDQLParts();
         $groupParts = $dqlParts['groupBy'];
 
-        /*
+        /**
          * Reset things
          */
         $qb->setFirstResult(null)
@@ -89,9 +89,9 @@ class PaginatorFast implements AdapterInterface
             // more than one group part...tricky!
             // @todo finde something better...
             $qb->resetDQLPart('groupBy');
-            $qb->select('CONCAT('.implode(',', $groupParts).') as uniqueParts');
+            $qb->select('CONCAT(' . implode(',', $groupParts) . ') as uniqueParts');
 
-            $items = [];
+            $items  = [];
             $result = $qb->getQuery()->getResult();
             foreach ($result as $row) {
                 $items[] = $row['uniqueParts'];
@@ -103,7 +103,7 @@ class PaginatorFast implements AdapterInterface
             $groupPart = $groupParts[0];
 
             $qb->resetDQLPart('groupBy');
-            $qb->select('COUNT(DISTINCT '.$groupPart.')');
+            $qb->select('COUNT(DISTINCT ' . $groupPart . ')');
 
             $this->rowCount = $qb->getQuery()->getSingleScalarResult();
         } else {
@@ -115,7 +115,7 @@ class PaginatorFast implements AdapterInterface
                 $qb->select('COUNT_ONE() AS rowCount');
             } else {
                 $fromPart = $dqlParts['from'];
-                $qb->select('COUNT('.$fromPart[0]->getAlias().')');
+                $qb->select('COUNT(' . $fromPart[0]->getAlias() . ')');
             }
 
             $this->rowCount = $qb->getQuery()->getSingleScalarResult();

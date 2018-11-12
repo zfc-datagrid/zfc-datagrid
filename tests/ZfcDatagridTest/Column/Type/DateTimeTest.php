@@ -66,6 +66,19 @@ class DateTimeTest extends TestCase
         $this->assertEquals('dateTime', $type->getTypeName());
     }
 
+    public function testDaterangePickerEnabled()
+    {
+        $type = new Type\DateTime();
+
+        $this->assertFalse($type->isDaterangePickerEnabled());
+        $type->setDaterangePickerEnabled(true);
+        $this->assertTrue($type->isDaterangePickerEnabled());
+        $type->setDaterangePickerEnabled(false);
+        $this->assertFalse($type->isDaterangePickerEnabled());
+        $type->setDaterangePickerEnabled();
+        $this->assertTrue($type->isDaterangePickerEnabled());
+    }
+
     public function testSourceDateTimeFormat()
     {
         $type = new Type\DateTime();

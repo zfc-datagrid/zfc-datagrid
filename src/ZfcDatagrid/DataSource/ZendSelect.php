@@ -1,44 +1,34 @@
 <?php
-
 namespace ZfcDatagrid\DataSource;
 
 use Zend\Db\Sql;
 use Zend\Db\Sql\Expression;
 use Zend\Paginator\Adapter\DbSelect as PaginatorAdapter;
 use ZfcDatagrid\Column;
+use function sprintf;
 
 class ZendSelect extends AbstractDataSource
 {
-    /**
-     * @var Sql\Select
-     */
+    /** @var Sql\Select */
     private $select;
 
-    /**
-     * @var \Zend\Db\Sql\Sql
-     */
+    /** @var Sql\Sql|null*/
     private $sqlObject;
 
     /**
      * Data source.
      *
      * @param Sql\Select $data
-     *
-     * @throws \InvalidArgumentException
      */
-    public function __construct($data)
+    public function __construct(Sql\Select $data)
     {
-        if ($data instanceof Sql\Select) {
-            $this->select = $data;
-        } else {
-            throw new \InvalidArgumentException('A instance of Zend\Db\SqlSelect is needed to use this dataSource!');
-        }
+        $this->select = $data;
     }
 
     /**
      * @return Sql\Select
      */
-    public function getData()
+    public function getData(): Sql\Select
     {
         return $this->select;
     }
@@ -50,19 +40,19 @@ class ZendSelect extends AbstractDataSource
      */
     public function setAdapter($adapterOrSqlObject)
     {
-        if ($adapterOrSqlObject instanceof \Zend\Db\Sql\Sql) {
+        if ($adapterOrSqlObject instanceof Sql\Sql) {
             $this->sqlObject = $adapterOrSqlObject;
         } elseif ($adapterOrSqlObject instanceof \Zend\Db\Adapter\Adapter) {
-            $this->sqlObject = new \Zend\Db\Sql\Sql($adapterOrSqlObject);
+            $this->sqlObject = new Sql\Sql($adapterOrSqlObject);
         } else {
             throw new \InvalidArgumentException('Object of "Zend\Db\Sql\Sql" or "Zend\Db\Adapter\Adapter" needed.');
         }
     }
 
     /**
-     * @return \Zend\Db\Sql\Sql
+     * @return Sql\Sql
      */
-    public function getAdapter()
+    public function getAdapter(): ?Sql\Sql
     {
         return $this->sqlObject;
     }
@@ -123,7 +113,7 @@ class ZendSelect extends AbstractDataSource
             foreach ($this->getSortConditions() as $sortCondition) {
                 /** @var \ZfcDataGrid\Column\AbstractColumn $col */
                 $col = $sortCondition['column'];
-                $select->order($col->getUniqueId().' '.$sortCondition['sortDirection']);
+                $select->order($col->getUniqueId() . ' ' . $sortCondition['sortDirection']);
             }
         }
 

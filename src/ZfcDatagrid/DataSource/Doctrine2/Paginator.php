@@ -3,6 +3,7 @@
  * This is just a proxy to detect if we can use the "fast" Pagination
  * or if we use the "safe" variant by Doctrine2.
  */
+
 namespace ZfcDatagrid\DataSource\Doctrine2;
 
 use Doctrine\ORM\QueryBuilder;
@@ -12,22 +13,18 @@ use ZfcDatagrid\DataSource\Doctrine2\PaginatorFast as ZfcDatagridPaginator;
 
 class Paginator implements AdapterInterface
 {
-    /**
-     * @var QueryBuilder
-     */
-    protected $qb = null;
+    /** @var QueryBuilder */
+    protected $qb;
 
     /**
      * Total item count.
      *
-     * @var int
+     * @var int|null
      */
-    protected $rowCount = null;
+    protected $rowCount;
 
-    /**
-     * @var \Doctrine\ORM\Tools\Pagination\Paginator
-     */
-    private $paginator;
+    /** @var ZfcDatagridPaginator|Doctrine2Paginator|null */
+    protected $paginator;
 
     /**
      * @param QueryBuilder $qb
@@ -38,11 +35,43 @@ class Paginator implements AdapterInterface
     }
 
     /**
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
-    public function getQueryBuilder()
+    public function getQueryBuilder(): QueryBuilder
     {
         return $this->qb;
+    }
+
+    /**
+     * Returns an array of items for a page.
+     *
+     * @param int $offset
+     * @param int $itemCountPerPage
+     *
+     * @return array
+     */
+    public function getItems($offset, $itemCountPerPage): array
+    {
+        $paginator = $this->getPaginator();
+        if ($paginator instanceof Doctrine2Paginator) {
+            $this->getQueryBuilder()
+                ->setFirstResult($offset)
+                ->setMaxResults($itemCountPerPage);
+
+            return $paginator->getIterator()->getArrayCopy();
+        }
+
+        return $paginator->getItems($offset, $itemCountPerPage);
+    }
+
+    /**
+     * Returns the total number of rows in the result set.
+     *
+     * @return int
+     */
+    public function count(): int
+    {
+        return $this->getPaginator()->count();
     }
 
     /**
@@ -50,12 +79,12 @@ class Paginator implements AdapterInterface
      *
      * @return bool
      */
-    private function useCustomPaginator()
+    protected function useCustomPaginator(): bool
     {
-        $qb = $this->getQueryBuilder();
+        $qb    = $this->getQueryBuilder();
         $parts = $qb->getDQLParts();
 
-        if ($parts['having'] !== null || true === $parts['distinct']) {
+        if (null !== $parts['having'] || true === $parts['distinct']) {
             // never tried having in such queries...
             return false;
         }
@@ -67,9 +96,9 @@ class Paginator implements AdapterInterface
     /**
      * @return Doctrine2Paginator|ZfcDatagridPaginator
      */
-    private function getPaginator()
+    protected function getPaginator()
     {
-        if ($this->paginator !== null) {
+        if (null !== $this->paginator) {
             return $this->paginator;
         }
 
@@ -81,37 +110,5 @@ class Paginator implements AdapterInterface
         }
 
         return $this->paginator;
-    }
-
-    /**
-     * Returns an array of items for a page.
-     *
-     * @param int $offset
-     * @param int $itemCountPerPage
-     *
-     * @return array
-     */
-    public function getItems($offset, $itemCountPerPage)
-    {
-        $paginator = $this->getPaginator();
-        if ($paginator instanceof Doctrine2Paginator) {
-            $this->getQueryBuilder()
-                ->setFirstResult($offset)
-                ->setMaxResults($itemCountPerPage);
-
-            return $paginator->getIterator()->getArrayCopy();
-        } else {
-            return $paginator->getItems($offset, $itemCountPerPage);
-        }
-    }
-
-    /**
-     * Returns the total number of rows in the result set.
-     *
-     * @return int
-     */
-    public function count()
-    {
-        return $this->getPaginator()->count();
     }
 }

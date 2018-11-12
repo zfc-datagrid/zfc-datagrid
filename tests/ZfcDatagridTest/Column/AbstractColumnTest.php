@@ -64,6 +64,11 @@ class AbstractColumnTest extends TestCase
         $style = array_pop($style);
         $this->assertInstanceOf(\ZfcDatagrid\Column\Style\Bold::class, $style);
         $this->assertInstanceOf(\ZfcDatagrid\Column\Style\AbstractStyle::class, $style);
+
+        $col->setStyles([new Style\Bold()]);
+        $style = $col->getStyles();
+        $style = array_pop($style);
+        $this->assertInstanceOf(\ZfcDatagrid\Column\Style\Bold::class, $style);
     }
 
     public function testType()
@@ -129,7 +134,7 @@ class AbstractColumnTest extends TestCase
         $this->assertEquals('', $col->getFilterDefaultValue());
 
         $this->assertEquals(false, $col->hasFilterSelectOptions());
-        $this->assertEquals(null, $col->getFilterSelectOptions());
+        $this->assertEquals([], $col->getFilterSelectOptions());
 
         $this->assertEquals(false, $col->isFilterActive());
         $this->assertEquals('', $col->getFilterActiveValue());
@@ -160,8 +165,8 @@ class AbstractColumnTest extends TestCase
         $this->assertEquals(2, count($col->getFilterSelectOptions()));
         $this->assertEquals(true, $col->hasFilterSelectOptions());
 
-        $col->unsetFilterSelectOptions();
-        $this->assertEquals(null, $col->getFilterSelectOptions());
+        $col->setFilterSelectOptions([], false);
+        $this->assertEquals([], $col->getFilterSelectOptions());
         $this->assertEquals(false, $col->hasFilterSelectOptions());
 
         $col->setFilterActive('asdf');
@@ -261,5 +266,15 @@ class AbstractColumnTest extends TestCase
 
         $col->setRowClickDisabled(false);
         $this->assertTrue($col->isRowClickEnabled());
+    }
+
+    public function testPosition(): void
+    {
+        /* @var $col \ZfcDatagrid\Column\AbstractColumn */
+        $col = $this->getMockForAbstractClass(\ZfcDatagrid\Column\AbstractColumn::class);
+        $this->assertNull($col->getPosition());
+        $col->setPosition(null);
+        $col->setPosition(1);
+        $this->assertSame(1, $col->getPosition());
     }
 }

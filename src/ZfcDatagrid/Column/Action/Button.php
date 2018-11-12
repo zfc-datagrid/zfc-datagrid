@@ -1,13 +1,18 @@
 <?php
-
 namespace ZfcDatagrid\Column\Action;
 
+use Exception;
+use InvalidArgumentException;
 use ZfcDatagrid\Column\AbstractColumn;
 
 class Button extends AbstractAction
 {
+    /** @var string|AbstractColumn */
     protected $label = '';
 
+    /**
+     * Button constructor.
+     */
     public function __construct()
     {
         parent::__construct();
@@ -18,10 +23,14 @@ class Button extends AbstractAction
 
     /**
      * @param string|AbstractColumn $name
+     *
+     * @return $this
      */
-    public function setLabel($name)
+    public function setLabel($name): self
     {
         $this->label = $name;
+
+        return $this;
     }
 
     /**
@@ -35,11 +44,11 @@ class Button extends AbstractAction
     /**
      * @return string
      *
-     * @throws \Exception
+     * @throws Exception
      */
-    protected function getHtmlType()
+    protected function getHtmlType(): string
     {
-        throw new \Exception('not needed...since we have toHtml() here directly!');
+        throw new Exception('not needed...since we have toHtml() here directly!');
     }
 
     /**
@@ -47,10 +56,10 @@ class Button extends AbstractAction
      *
      * @return string
      */
-    public function toHtml(array $row)
+    public function toHtml(array $row): string
     {
-        if ($this->getLabel() == '') {
-            throw new \InvalidArgumentException(
+        if ('' === $this->getLabel()) {
+            throw new InvalidArgumentException(
                 'A label is required for this action type, please call $action->setLabel()!'
             );
         }
@@ -60,6 +69,6 @@ class Button extends AbstractAction
             $label = $row[$label->getUniqueId()];
         }
 
-        return '<a '.$this->getAttributesString($row).'>'.$label.'</a>';
+        return '<a ' . $this->getAttributesString($row) . '>' . $label . '</a>';
     }
 }

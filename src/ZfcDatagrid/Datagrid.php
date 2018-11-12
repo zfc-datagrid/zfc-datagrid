@@ -1,11 +1,9 @@
 <?php
-
 namespace ZfcDatagrid;
 
 use ArrayIterator;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\QueryBuilder;
-use Interop\Container\ContainerInterface;
 use Zend\Cache;
 use Zend\Console\Request as ConsoleRequest;
 use Zend\Db\Sql\Select as ZendSelect;
@@ -14,55 +12,56 @@ use Zend\Stdlib\RequestInterface;
 use Zend\I18n\Translator\TranslatorInterface;
 use Zend\Mvc\MvcEvent;
 use Zend\Paginator\Paginator;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\Router\RouteStackInterface;
 use Zend\Session\Container as SessionContainer;
 use Zend\Stdlib\ResponseInterface;
 use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
 use ZfcDatagrid\Column\Style;
+use ZfcDatagrid\DataSource\DataSourceInterface;
+use function md5;
+use function preg_replace;
+use function is_array;
+use function func_get_args;
+use function count;
+use function class_exists;
+use function ucfirst;
+use function method_exists;
+use function in_array;
+use function call_user_func_array;
+use function call_user_func;
+use function ksort;
+use function is_object;
+use function sprintf;
+use function get_class;
+
 
 class Datagrid
 {
     const DEFAULT_POSITION = 1;
-    
-    /**
-     * @var array
-     */
+
+    /** @var array */
     protected $options = [];
 
-    /**
-     * @var SessionContainer
-     */
+    /** @var SessionContainer|null */
     protected $session;
 
-    /**
-     * @var Cache\Storage\StorageInterface
-     */
+    /** @var Cache\Storage\StorageInterface|null */
     protected $cache;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $cacheId;
 
-    /**
-     * @var MvcEvent
-     */
+    /** @var MvcEvent */
     protected $mvcEvent;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $parameters = [];
 
-    /**
-     * @var mixed
-     */
-    protected $url;
+    /** @var string */
+    protected $url = '';
 
-    /**
-     * @var RequestInterface
-     */
+    /** @var RequestInterface */
     protected $request;
 
     /**
@@ -72,19 +71,16 @@ class Datagrid
      */
     protected $response;
 
-    /**
-     * @var Renderer\AbstractRenderer
-     */
-    private $renderer;
+    /** @var Renderer\AbstractRenderer */
+    protected $renderer;
 
-    /**
-     * @var TranslatorInterface|null
-     */
+    /** @var TranslatorInterface|null */
     protected $translator;
 
-    /**
-     * @var string
-     */
+    /** @var RouteStackInterface */
+    protected $router;
+
+    /** @var string */
     protected $id;
 
     /**
@@ -94,39 +90,25 @@ class Datagrid
      */
     protected $title = '';
 
-    /**
-     * @var DataSource\DataSourceInterface
-     */
+    /** @var DataSource\DataSourceInterface */
     protected $dataSource = null;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     protected $defaulItemsPerPage = 25;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $columns = [];
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $positions = [];
 
-    /**
-     * @var Style\AbstractStyle[]
-     */
+    /** @var Style\AbstractStyle[] */
     protected $rowStyles = [];
 
-    /**
-     * @var Column\Action\AbstractAction
-     */
+    /** @var Column\Action\AbstractAction */
     protected $rowClickAction;
 
-    /**
-     * @var Action\Mass[]
-     */
+    /** @var Action\Mass[] */
     protected $massActions = [];
 
     /**
@@ -136,65 +118,41 @@ class Datagrid
      */
     protected $preparedData = [];
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     protected $isUserFilterEnabled = true;
 
-    /**
-     * @var Paginator
-     */
+    /** @var Paginator */
     protected $paginator = null;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $exportRenderers;
 
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     protected $toolbarTemplate;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $toolbarTemplateVariables = [];
 
-    /**
-     * @var ViewModel
-     */
+    /** @var ViewModel */
     protected $viewModel;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     protected $isInit = false;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     protected $isDataLoaded = false;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     protected $isRendered = false;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $forceRenderer;
 
-    /**
-     * @var Renderer\AbstractRenderer
-     */
-    private $rendererService;
+    /** @var Renderer\AbstractRenderer|null */
+    protected $rendererService;
 
-    /**
-     * @var array
-     */
-    private $specialMethods = [
+    /** @var string[] */
+    protected $specialMethods = [
         'filterSelectOptions',
         'rendererParameter',
         'replaceValues',
@@ -203,39 +161,42 @@ class Datagrid
     ];
 
     /**
-     * @var ServiceLocatorInterface
-     */
-    protected $serviceLocator = null;
-
-    /**
      * Init method is called automatically with the service creation.
+     *
+     * @return $this
      */
-    public function init()
+    public function init(): self
     {
-        if ($this->getCache() === null) {
+        if (null === $this->getCache()) {
             $options = $this->getOptions();
             $this->setCache(Cache\StorageFactory::factory($options['cache']));
         }
 
         $this->isInit = true;
+
+        return $this;
     }
 
     /**
      * @return bool
      */
-    public function isInit()
+    public function isInit(): bool
     {
-        return (bool) $this->isInit;
+        return $this->isInit;
     }
 
     /**
      * Set the options from config.
      *
      * @param array $config
+     *
+     * @return $this
      */
-    public function setOptions(array $config)
+    public function setOptions(array $config): self
     {
         $this->options = $config;
+
+        return $this;
     }
 
     /**
@@ -243,7 +204,7 @@ class Datagrid
      *
      * @return array
      */
-    public function getOptions()
+    public function getOptions(): array
     {
         return $this->options;
     }
@@ -252,14 +213,18 @@ class Datagrid
      * Set the grid id.
      *
      * @param string $id
+     *
+     * @return $this
      */
-    public function setId($id = null)
+    public function setId(?string $id = null): self
     {
         if ($id !== null) {
             $id = preg_replace("/[^a-z0-9_\\\d]/i", '_', $id);
 
             $this->id = (string) $id;
         }
+
+        return $this;
     }
 
     /**
@@ -267,7 +232,7 @@ class Datagrid
      *
      * @return string
      */
-    public function getId()
+    public function getId(): string
     {
         if (null === $this->id) {
             $this->id = 'defaultGrid';
@@ -279,11 +244,15 @@ class Datagrid
     /**
      * Set the session.
      *
-     * @param \Zend\Session\Container $session
+     * @param SessionContainer $session
+     *
+     * @return $this
      */
-    public function setSession(SessionContainer $session)
+    public function setSession(SessionContainer $session): self
     {
         $this->session = $session;
+
+        return $this;
     }
 
     /**
@@ -293,7 +262,7 @@ class Datagrid
      *
      * @return SessionContainer
      */
-    public function getSession()
+    public function getSession(): SessionContainer
     {
         if (null === $this->session) {
             // Using fully qualified name, to ensure polyfill class alias is used
@@ -305,16 +274,20 @@ class Datagrid
 
     /**
      * @param Cache\Storage\StorageInterface $cache
+     *
+     * @return $this
      */
-    public function setCache(Cache\Storage\StorageInterface $cache)
+    public function setCache(Cache\Storage\StorageInterface $cache): self
     {
         $this->cache = $cache;
+
+        return $this;
     }
 
     /**
      * @return Cache\Storage\StorageInterface
      */
-    public function getCache()
+    public function getCache(): ?Cache\Storage\StorageInterface
     {
         return $this->cache;
     }
@@ -323,10 +296,14 @@ class Datagrid
      * Set the cache id.
      *
      * @param string $id
+     *
+     * @return $this
      */
-    public function setCacheId($id)
+    public function setCacheId(string $id): self
     {
-        $this->cacheId = (string) $id;
+        $this->cacheId = $id;
+
+        return $this;
     }
 
     /**
@@ -334,12 +311,12 @@ class Datagrid
      *
      * @return string
      */
-    public function getCacheId()
+    public function getCacheId(): string
     {
         if (null === $this->cacheId) {
             $this->cacheId = md5($this->getSession()
                 ->getManager()
-                ->getId().'_'.$this->getId());
+                ->getId() . '_' . $this->getId());
         }
 
         return $this->cacheId;
@@ -347,32 +324,35 @@ class Datagrid
 
     /**
      * @param MvcEvent $mvcEvent
+     * @return $this
      * @deprecated
      */
     public function setMvcEvent(MvcEvent $mvcEvent)
     {
         $this->mvcEvent = $mvcEvent;
-        $this->request = $mvcEvent->getRequest();
+        $this->request  = $mvcEvent->getRequest();
+
+        return $this;
     }
 
     /**
-     * @return MvcEvent
+     * @return MvcEvent|null
      * @deprecated
      */
-    public function getMvcEvent()
+    public function getMvcEvent(): ?MvcEvent
     {
         return $this->mvcEvent;
     }
 
     /**
-     * @return RequestInterface
+     * @return RequestInterface|null
      */
-    public function getRequest()
+    public function getRequest(): ?RequestInterface
     {
         return $this->request;
     }
 
-    public function setRequest($request)
+    public function setRequest(RequestInterface $request): self
     {
         $this->request = $request;
 
@@ -383,16 +363,20 @@ class Datagrid
      * Set the translator.
      *
      * @param TranslatorInterface $translator
+     *
+     * @return $this
      */
-    public function setTranslator(TranslatorInterface $translator)
+    public function setTranslator(TranslatorInterface $translator): self
     {
         $this->translator = $translator;
+
+        return $this;
     }
 
     /**
      * @return TranslatorInterface|null
      */
-    public function getTranslator()
+    public function getTranslator(): ?TranslatorInterface
     {
         return $this->translator;
     }
@@ -400,9 +384,37 @@ class Datagrid
     /**
      * @return bool
      */
-    public function hasTranslator()
+    public function hasTranslator(): bool
     {
         return null !== $this->translator;
+    }
+
+    /**
+     * @param RouteStackInterface $router
+     *
+     * @return $this
+     */
+    public function setRouter(RouteStackInterface $router): self
+    {
+        $this->router = $router;
+
+        return $this;
+    }
+
+    /**
+     * @return RouteStackInterface
+     */
+    public function getRouter(): RouteStackInterface
+    {
+        return $this->router;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasRouter()
+    {
+        return null !== $this->router;
     }
 
     /**
@@ -411,8 +423,10 @@ class Datagrid
      * @param mixed $data
      *
      * @throws \Exception
+     *
+     * @return $this
      */
-    public function setDataSource($data)
+    public function setDataSource($data): self
     {
         if ($data instanceof DataSource\DataSourceInterface) {
             $this->dataSource = $data;
@@ -445,12 +459,14 @@ class Datagrid
                 '$data must implement the interface ZfcDatagrid\DataSource\DataSourceInterface'
             );
         }
+
+        return $this;
     }
 
     /**
-     * @return \ZfcDatagrid\DataSource\DataSourceInterface
+     * @return DataSourceInterface
      */
-    public function getDataSource()
+    public function getDataSource(): ?DataSourceInterface
     {
         return $this->dataSource;
     }
@@ -460,7 +476,7 @@ class Datagrid
      *
      * @return bool
      */
-    public function hasDataSource()
+    public function hasDataSource(): bool
     {
         return null !== $this->dataSource;
     }
@@ -469,34 +485,42 @@ class Datagrid
      * Set default items per page (-1 for unlimited).
      *
      * @param int $count
+     *
+     * @return $this
      */
-    public function setDefaultItemsPerPage($count = 25)
+    public function setDefaultItemsPerPage(int $count = 25): self
     {
-        $this->defaulItemsPerPage = (int) $count;
+        $this->defaulItemsPerPage = $count;
+
+        return $this;
     }
 
     /**
      * @return int
      */
-    public function getDefaultItemsPerPage()
+    public function getDefaultItemsPerPage(): int
     {
-        return (int) $this->defaulItemsPerPage;
+        return $this->defaulItemsPerPage;
     }
 
     /**
      * Set the title.
      *
      * @param string $title
+     *
+     * @return $this
      */
-    public function setTitle($title)
+    public function setTitle(string $title): self
     {
-        $this->title = (string) $title;
+        $this->title = $title;
+
+        return $this;
     }
 
     /**
      * @return string
      */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->title;
     }
@@ -506,26 +530,34 @@ class Datagrid
      *
      * @param string $name
      * @param mixed  $value
+     *
+     * @return $this
      */
-    public function addParameter($name, $value)
+    public function addParameter(string $name, $value): self
     {
         $this->parameters[$name] = $value;
+
+        return $this;
     }
 
     /**
      * These parameters are handled to the view + over all grid actions.
      *
      * @param array $parameters
+     *
+     * @return $this
      */
-    public function setParameters(array $parameters)
+    public function setParameters(array $parameters): self
     {
         $this->parameters = $parameters;
+
+        return $this;
     }
 
     /**
      * @return array
      */
-    public function getParameters()
+    public function getParameters(): array
     {
         return $this->parameters;
     }
@@ -535,7 +567,7 @@ class Datagrid
      *
      * @return bool
      */
-    public function hasParameters()
+    public function hasParameters(): bool
     {
         return (bool) $this->getParameters();
     }
@@ -544,16 +576,20 @@ class Datagrid
      * Set the base url.
      *
      * @param string $url
+     *
+     * @return $this
      */
-    public function setUrl($url)
+    public function setUrl(string $url)
     {
         $this->url = $url;
+
+        return $this;
     }
 
     /**
      * @return string
      */
-    public function getUrl()
+    public function getUrl(): string
     {
         return $this->url;
     }
@@ -562,10 +598,14 @@ class Datagrid
      * Set the export renderers (overwrite the config).
      *
      * @param array $renderers
+     *
+     * @return $this
      */
-    public function setExportRenderers(array $renderers = [])
+    public function setExportRenderers(array $renderers = []): self
     {
         $this->exportRenderers = $renderers;
+
+        return $this;
     }
 
     /**
@@ -573,10 +613,10 @@ class Datagrid
      *
      * @return array
      */
-    public function getExportRenderers()
+    public function getExportRenderers(): array
     {
         if (null === $this->exportRenderers) {
-            $options = $this->getOptions();
+            $options               = $this->getOptions();
             $this->exportRenderers = $options['settings']['export']['formats'];
         }
 
@@ -590,13 +630,13 @@ class Datagrid
      *
      * @return Column\AbstractColumn
      */
-    private function createColumn(array $config)
+    private function createColumn(array $config): Column\AbstractColumn
     {
         $colType = isset($config['colType']) ? $config['colType'] : 'Select';
         if (class_exists($colType, true)) {
             $class = $colType;
-        } elseif (class_exists('ZfcDatagrid\\Column\\'.$colType, true)) {
-            $class = 'ZfcDatagrid\\Column\\'.$colType;
+        } elseif (class_exists('ZfcDatagrid\\Column\\' . $colType, true)) {
+            $class = 'ZfcDatagrid\\Column\\' . $colType;
         } else {
             throw new \InvalidArgumentException(sprintf('Column type: "%s" not found!', $colType));
         }
@@ -615,7 +655,7 @@ class Datagrid
         }
 
         foreach ($config as $key => $value) {
-            $method = 'set'.ucfirst($key);
+            $method = 'set' . ucfirst($key);
             if (method_exists($instance, $method)) {
                 if (in_array($key, $this->specialMethods)) {
                     if (! is_array($value)) {
@@ -643,8 +683,10 @@ class Datagrid
      * Set multiple columns by array (willoverwrite all existing).
      *
      * @param array $columns
+     *
+     * @return $this
      */
-    public function setColumns(array $columns)
+    public function setColumns(array $columns): self
     {
         $useColumns = [];
 
@@ -656,14 +698,18 @@ class Datagrid
         }
 
         $this->columns = $useColumns;
+
+        return $this;
     }
 
     /**
      * Add a column by array config or instanceof Column\AbstractColumn.
      *
      * @param array|Column\AbstractColumn $col
+     *
+     * @return $this
      */
-    public function addColumn($col)
+    public function addColumn($col): self
     {
         if (!$col instanceof Column\AbstractColumn) {
             $col = $this->createColumn($col);
@@ -675,12 +721,14 @@ class Datagrid
 
         $this->columns[$col->getUniqueId()] = $col;
         $this->positions[$col->getPosition()][$col->getUniqueId()] = $col;
+
+        return $this;
     }
 
     /**
      * @return \ZfcDatagrid\Column\AbstractColumn[]
      */
-    public function sortColumns()
+    public function sortColumns(): array
     {
         ksort($this->positions);
 
@@ -703,29 +751,29 @@ class Datagrid
     /**
      * @param string $id
      *
-     * @return Column\AbstractColumn null
+     * @return Column\AbstractColumn|null
      */
     public function getColumnByUniqueId($id)
     {
-        if (isset($this->columns[$id])) {
-            return $this->columns[$id];
-        }
-
-        return;
+        return $this->columns[$id] ?? null;
     }
 
     /**
      * @param Style\AbstractStyle $style
+     *
+     * @return $this
      */
-    public function addRowStyle(Style\AbstractStyle $style)
+    public function addRowStyle(Style\AbstractStyle $style): self
     {
         $this->rowStyles[] = $style;
+
+        return $this;
     }
 
     /**
      * @return Style\AbstractStyle[]
      */
-    public function getRowStyles()
+    public function getRowStyles(): array
     {
         return $this->rowStyles;
     }
@@ -733,7 +781,7 @@ class Datagrid
     /**
      * @return bool
      */
-    public function hasRowStyles()
+    public function hasRowStyles(): bool
     {
         return (bool) $this->rowStyles;
     }
@@ -742,16 +790,20 @@ class Datagrid
      * If disabled, the toolbar filter will not be shown to the user.
      *
      * @param bool $mode
+     *
+     * @return $this
      */
-    public function setUserFilterDisabled($mode = true)
+    public function setUserFilterDisabled(bool $mode = true): self
     {
-        $this->isUserFilterEnabled = (bool) ! $mode;
+        $this->isUserFilterEnabled = ! $mode;
+
+        return $this;
     }
 
     /**
      * @return bool
      */
-    public function isUserFilterEnabled()
+    public function isUserFilterEnabled(): bool
     {
         return (bool) $this->isUserFilterEnabled;
     }
@@ -760,13 +812,20 @@ class Datagrid
      * Set the row click action - identity will be automatically appended!
      *
      * @param Column\Action\AbstractAction $action
+     *
+     * @return $this
      */
-    public function setRowClickAction(Column\Action\AbstractAction $action)
+    public function setRowClickAction(Column\Action\AbstractAction $action): self
     {
         $this->rowClickAction = $action;
+
+        return $this;
     }
 
-    public function getRowClickAction()
+    /**
+     * @return null|Column\Action\AbstractAction
+     */
+    public function getRowClickAction(): ?Column\Action\AbstractAction
     {
         return $this->rowClickAction;
     }
@@ -774,29 +833,29 @@ class Datagrid
     /**
      * @return bool
      */
-    public function hasRowClickAction()
+    public function hasRowClickAction(): bool
     {
-        if (is_object($this->rowClickAction)) {
-            return true;
-        }
-
-        return false;
+        return is_object($this->rowClickAction);
     }
 
     /**
      * Add a mass action.
      *
      * @param Action\Mass $action
+     *
+     * @return $this
      */
-    public function addMassAction(Action\Mass $action)
+    public function addMassAction(Action\Mass $action): self
     {
         $this->massActions[] = $action;
+
+        return $this;
     }
 
     /**
      * @return Action\Mass[]
      */
-    public function getMassActions()
+    public function getMassActions(): array
     {
         return $this->massActions;
     }
@@ -804,7 +863,7 @@ class Datagrid
     /**
      * @return bool
      */
-    public function hasMassAction()
+    public function hasMassAction(): bool
     {
         return (bool) $this->massActions;
     }
@@ -815,10 +874,14 @@ class Datagrid
      * if you want to directly render a PDF.
      *
      * @param string $name
+     *
+     * @return $this
      */
-    public function setRendererName($name = null)
+    public function setRendererName(?string $name = null): self
     {
         $this->forceRenderer = $name;
+
+        return $this;
     }
 
     /**
@@ -826,9 +889,9 @@ class Datagrid
      *
      * @return string
      */
-    public function getRendererName()
+    public function getRendererName(): string
     {
-        $options = $this->getOptions();
+        $options       = $this->getOptions();
         $parameterName = $options['generalParameterNames']['rendererType'];
 
         if ($this->forceRenderer !== null) {
@@ -856,12 +919,12 @@ class Datagrid
      *
      * @throws \Exception
      *
-     * @return \ZfcDatagrid\Renderer\AbstractRenderer
+     * @return Renderer\AbstractRenderer
      */
-    public function getRenderer()
+    public function getRenderer(): Renderer\AbstractRenderer
     {
         if (null === $this->renderer) {
-            if (isset($this->rendererService)) {
+            if (null !== $this->rendererService) {
                 $renderer = $this->rendererService;
                 if (! $renderer instanceof Renderer\AbstractRenderer) {
                     throw new \Exception(
@@ -902,7 +965,7 @@ class Datagrid
     /**
      * @return bool
      */
-    public function isDataLoaded()
+    public function isDataLoaded(): bool
     {
         return (bool) $this->isDataLoaded;
     }
@@ -945,16 +1008,16 @@ class Datagrid
             /*
              * Step 1.2) Sorting
              */
-        foreach ($renderer->getSortConditions() as $condition) {
-            $this->getDataSource()->addSortCondition($condition['column'], $condition['sortDirection']);
-        }
+            foreach ($renderer->getSortConditions() as $condition) {
+                $this->getDataSource()->addSortCondition($condition['column'], $condition['sortDirection']);
+            }
 
-            /*
-             * Step 1.3) Filtering
-             */
-        foreach ($renderer->getFilters() as $filter) {
-            $this->getDataSource()->addFilter($filter);
-        }
+                /*
+                 * Step 1.3) Filtering
+                 */
+            foreach ($renderer->getFilters() as $filter) {
+                $this->getDataSource()->addFilter($filter);
+            }
         }
 
         /*
@@ -1001,8 +1064,8 @@ class Datagrid
         if ($this->getOptions()['settings']['export']['enabled'] && $renderer->isExport() === false) {
             $cacheData = [
                 'sortConditions' => $renderer->getSortConditions(),
-                'filters' => $renderer->getFilters(),
-                'currentPage' => $this->getPaginator()->getCurrentPageNumber(),
+                'filters'        => $renderer->getFilters(),
+                'currentPage'    => $this->getPaginator()->getCurrentPageNumber(),
             ];
             $success = $this->getCache()->setItem($this->getCacheId(), $cacheData);
             if ($success !== true) {
@@ -1023,6 +1086,10 @@ class Datagrid
          * Step 3) Format the data - Translate - Replace - Date / time / datetime - Numbers - ...
          */
         $prepareData = new PrepareData($data, $this->getColumns());
+        if ($this->getRouter() instanceof RouteStackInterface) {
+            $prepareData->setRouter($this->getRouter());
+        }
+
         $prepareData->setRendererName($this->getRendererName());
         if ($this->hasTranslator()) {
             $prepareData->setTranslator($this->getTranslator());
@@ -1038,7 +1105,7 @@ class Datagrid
      */
     public function render()
     {
-        if ($this->isDataLoaded() === false) {
+        if (false === $this->isDataLoaded()) {
             $this->loadData();
         }
 
@@ -1062,9 +1129,9 @@ class Datagrid
      *
      * @return bool
      */
-    public function isRendered()
+    public function isRendered(): bool
     {
-        return (bool) $this->isRendered;
+        return $this->isRendered;
     }
 
     /**
@@ -1072,7 +1139,7 @@ class Datagrid
      *
      * @return Paginator
      */
-    public function getPaginator()
+    public function getPaginator(): Paginator
     {
         if (null === $this->paginator) {
             throw new \Exception('Paginator is only available after calling "loadData()"');
@@ -1084,7 +1151,7 @@ class Datagrid
     /**
      * @return array
      */
-    private function getPreparedData()
+    protected function getPreparedData(): array
     {
         return $this->preparedData;
     }
@@ -1092,20 +1159,24 @@ class Datagrid
     /**
      * Set the toolbar view template.
      *
-     * @param string $name
+     * @param null|string $name
+     *
+     * @return $this
      */
-    public function setToolbarTemplate($name)
+    public function setToolbarTemplate(?string $name): self
     {
-        $this->toolbarTemplate = (string) $name;
+        $this->toolbarTemplate = $name;
+
+        return $this;
     }
 
     /**
      * Get the toolbar template name
      * Return null if nothing custom set.
      *
-     * @return string|null
+     * @return null|string
      */
-    public function getToolbarTemplate()
+    public function getToolbarTemplate(): ?string
     {
         return $this->toolbarTemplate;
     }
@@ -1114,10 +1185,14 @@ class Datagrid
      * Set the toolbar view template variables.
      *
      * @param array $variables
+     *
+     * @return $this
      */
-    public function setToolbarTemplateVariables(array $variables)
+    public function setToolbarTemplateVariables(array $variables): self
     {
         $this->toolbarTemplateVariables = $variables;
+
+        return $this;
     }
 
     /**
@@ -1125,7 +1200,7 @@ class Datagrid
      *
      * @return array
      */
-    public function getToolbarTemplateVariables()
+    public function getToolbarTemplateVariables(): array
     {
         return $this->toolbarTemplateVariables;
     }
@@ -1136,10 +1211,12 @@ class Datagrid
      * @param ViewModel $viewModel
      *
      * @throws \Exception
+     *
+     * @return $this
      */
-    public function setViewModel(ViewModel $viewModel)
+    public function setViewModel(ViewModel $viewModel): self
     {
-        if ($this->viewModel !== null) {
+        if (null !== $this->viewModel) {
             throw new \Exception(
                 'A viewModel is already set. Did you already called ' .
                 '$grid->render() or $grid->getViewModel() before?'
@@ -1147,12 +1224,14 @@ class Datagrid
         }
 
         $this->viewModel = $viewModel;
+
+        return $this;
     }
 
     /**
      * @return ViewModel
      */
-    public function getViewModel()
+    public function getViewModel(): ViewModel
     {
         if (null === $this->viewModel) {
             $this->viewModel = new ViewModel();
@@ -1180,13 +1259,9 @@ class Datagrid
      *
      * @return bool
      */
-    public function isHtmlInitReponse()
+    public function isHtmlInitReponse(): bool
     {
-        if (! $this->getResponse() instanceof JsonModel && ! $this->getResponse() instanceof ResponseInterface) {
-            return true;
-        }
-
-        return false;
+        return ! $this->getResponse() instanceof JsonModel && ! $this->getResponse() instanceof ResponseInterface;
     }
 
     /**
@@ -1199,29 +1274,5 @@ class Datagrid
         $this->rendererService = $rendererService;
 
         return $this;
-    }
-
-    /**
-     * Set service locator.
-     *
-     * @param ContainerInterface $serviceLocator
-     *
-     * @return mixed
-     */
-    public function setServiceLocator(ContainerInterface $serviceLocator)
-    {
-        $this->serviceLocator = $serviceLocator;
-
-        return $this;
-    }
-
-    /**
-     * Get service locator.
-     *
-     * @return ContainerInterface
-     */
-    public function getServiceLocator()
-    {
-        return $this->serviceLocator;
     }
 }

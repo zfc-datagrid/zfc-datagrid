@@ -1,5 +1,4 @@
 <?php
-
 namespace ZfcDatagrid\Column\DataPopulation;
 
 interface DataPopulationInterface
@@ -9,18 +8,20 @@ interface DataPopulationInterface
      *
      * @return string
      */
-    public function toString();
+    public function toString(): string;
 
     /**
      * Directy set a parameter for the object.
      *
      * @param string $name
      * @param mixed  $value
+     *
+     * @return $this
      */
-    public function setObjectParameter($name, $value);
+    public function setObjectParameter(string $name, $value): self;
 
     /**
      * @return array
      */
-    public function getObjectParametersColumn();
+    public function getObjectParametersColumn(): array;
 }

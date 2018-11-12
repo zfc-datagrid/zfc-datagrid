@@ -1,13 +1,13 @@
 <?php
-
 namespace ZfcDatagrid\Column\DataPopulation\Object;
 
 use ZfcDatagrid\Column\DataPopulation\ObjectAwareInterface;
+use function md5;
 
 class Gravatar implements ObjectAwareInterface
 {
     /** @var string */
-    protected $email;
+    protected $email = '';
 
     /**
      * @param string $name
@@ -15,7 +15,7 @@ class Gravatar implements ObjectAwareInterface
      *
      * @throws \Exception
      */
-    private function setParameter($name, $value)
+    private function setParameter(string $name, $value)
     {
         switch ($name) {
             case 'email':
@@ -23,7 +23,7 @@ class Gravatar implements ObjectAwareInterface
                 break;
 
             default:
-                throw new \InvalidArgumentException('Not allowed parameter: '.$name);
+                throw new \InvalidArgumentException('Not allowed parameter: ' . $name);
         }
     }
 
@@ -32,9 +32,11 @@ class Gravatar implements ObjectAwareInterface
      *
      * @see \ZfcDatagrid\Column\DataPopulation\ObjectAwareInterface::setParameterFromColumn()
      */
-    public function setParameterFromColumn($name, $value)
+    public function setParameterFromColumn(string $name, $value): ObjectAwareInterface
     {
         $this->setParameter($name, $value);
+
+        return $this;
     }
 
     /**
@@ -42,13 +44,13 @@ class Gravatar implements ObjectAwareInterface
      *
      * @see \ZfcDatagrid\Column\DataPopulation\ObjectAwareInterface::toString()
      */
-    public function toString()
+    public function toString(): string
     {
         $hash = '';
-        if ($this->email != '') {
+        if ('' !== $this->email) {
             $hash = md5($this->email);
         }
 
-        return 'http://www.gravatar.com/avatar/'.$hash;
+        return 'http://www.gravatar.com/avatar/' . $hash;
     }
 }

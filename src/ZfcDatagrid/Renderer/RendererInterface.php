@@ -1,5 +1,4 @@
 <?php
-
 namespace ZfcDatagrid\Renderer;
 
 use Zend\Http\Response;
@@ -10,26 +9,26 @@ interface RendererInterface
     /**
      * @return array
      */
-    public function getSortConditions();
+    public function getSortConditions(): array;
 
     /**
      * @return array
      */
-    public function getFilters();
+    public function getFilters(): array;
 
     /**
      * Return the name of the renderer.
      *
      * @return string
      */
-    public function getName();
+    public function getName(): string;
 
     /**
      * Determine if the renderer is for export.
      *
      * @return bool
      */
-    public function isExport();
+    public function isExport(): bool;
 
     /**
      * Determin if the renderer is HTML
@@ -38,7 +37,7 @@ interface RendererInterface
      *
      * @return bool
      */
-    public function isHtml();
+    public function isHtml(): bool;
 
     /**
      * Execute all...

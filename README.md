@@ -13,7 +13,7 @@
 
 A datagrid for ZF where the data input and output can be whatever you want...:-)
 
-Over ***330 tests and 1000 assertions*** testing the stability currently! 
+Over ***400 tests and 1000 assertions*** testing the stability currently! 
 
 If you need help, please use following ressources
 - [Installation](https://github.com/zfc-datagrid/zfc-datagrid#installation) 
@@ -89,4 +89,5 @@ You can also use the [zfc-data-grid-plugin](https://github.com/agerecompany/zfc-
 ## Screenshots
 ![ScreenShot](https://raw.github.com/zfc-datagrid/zfc-datagrid/master/docs/screenshots/ZfcDatagrid_bootstrap.jpg)
 ![ScreenShot](https://raw.github.com/zfc-datagrid/zfc-datagrid/master/docs/screenshots/ZfcDatagrid_console.jpg)
+
 

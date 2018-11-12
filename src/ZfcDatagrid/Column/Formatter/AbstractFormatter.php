@@ -1,8 +1,8 @@
 <?php
-
 namespace ZfcDatagrid\Column\Formatter;
 
 use ZfcDatagrid\Column\AbstractColumn;
+use function in_array;
 
 abstract class AbstractFormatter
 {
@@ -17,48 +17,60 @@ abstract class AbstractFormatter
 
     /**
      * @param array $data
+     *
+     * @return $this
      */
-    public function setRowData(array $data)
+    public function setRowData(array $data): self
     {
         $this->data = $data;
+
+        return $this;
     }
 
     /**
      * @return array
      */
-    public function getRowData()
+    public function getRowData(): array
     {
         return $this->data;
     }
 
     /**
      * @param string $name
+     *
+     * @return $this
      */
-    public function setRendererName($name = null)
+    public function setRendererName(?string $name = null): self
     {
         $this->rendererName = $name;
+
+        return $this;
     }
 
     /**
      * @return string null
      */
-    public function getRendererName()
+    public function getRendererName(): ?string
     {
         return $this->rendererName;
     }
 
     /**
-     * @param array $validRendrerers
+     * @param array $validRenderers
+     *
+     * @return $this
      */
-    public function setValidRendererNames(array $validRendrerers)
+    public function setValidRendererNames(array $validRenderers): self
     {
-        $this->validRenderers = $validRendrerers;
+        $this->validRenderers = $validRenderers;
+
+        return $this;
     }
 
     /**
      * @return array
      */
-    public function getValidRendererNames()
+    public function getValidRendererNames(): array
     {
         return $this->validRenderers;
     }
@@ -66,7 +78,7 @@ abstract class AbstractFormatter
     /**
      * @return bool
      */
-    public function isApply()
+    public function isApply(): bool
     {
         return in_array($this->getRendererName(), $this->validRenderers);
     }
@@ -76,14 +88,11 @@ abstract class AbstractFormatter
      *
      * @return string
      */
-    public function format(AbstractColumn $column)
+    public function format(AbstractColumn $column): string
     {
         $data = $this->getRowData();
-        if ($this->isApply() === true) {
-            return $this->getFormattedValue($column);
-        }
 
-        return $data[$column->getUniqueId()];
+        return true === $this->isApply() ? $this->getFormattedValue($column) : $data[$column->getUniqueId()];
     }
 
     /**
@@ -91,5 +100,5 @@ abstract class AbstractFormatter
      *
      * @return string
      */
-    abstract public function getFormattedValue(AbstractColumn $column);
+    abstract public function getFormattedValue(AbstractColumn $column): string;
 }

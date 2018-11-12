@@ -1,17 +1,20 @@
 <?php
-
 namespace ZfcDatagrid\Renderer\BootstrapTable;
 
 use Zend\Http\PhpEnvironment\Request as HttpRequest;
+use Zend\View\Model\ViewModel;
 use ZfcDatagrid\Datagrid;
 use ZfcDatagrid\Renderer\AbstractRenderer;
+use function explode;
+use function count;
+use function strtoupper;
 
 class Renderer extends AbstractRenderer
 {
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return 'bootstrapTable';
     }
@@ -19,7 +22,7 @@ class Renderer extends AbstractRenderer
     /**
      * @return bool
      */
-    public function isExport()
+    public function isExport(): bool
     {
         return false;
     }
@@ -27,7 +30,7 @@ class Renderer extends AbstractRenderer
     /**
      * @return bool
      */
-    public function isHtml()
+    public function isHtml(): bool
     {
         return true;
     }
@@ -37,7 +40,7 @@ class Renderer extends AbstractRenderer
      *
      * @throws \Exception
      */
-    public function getRequest()
+    public function getRequest(): HttpRequest
     {
         $request = parent::getRequest();
         if (! $request instanceof HttpRequest) {
@@ -56,9 +59,9 @@ class Renderer extends AbstractRenderer
      *
      * @throws \Exception
      */
-    public function getSortConditions()
+    public function getSortConditions(): array
     {
-        if (is_array($this->sortConditions)) {
+        if (!empty($this->sortConditions)) {
             // set from cache! (for export)
             return $this->sortConditions;
         }
@@ -66,10 +69,10 @@ class Renderer extends AbstractRenderer
         $request = $this->getRequest();
 
         $optionsRenderer = $this->getOptionsRenderer();
-        $parameterNames = $optionsRenderer['parameterNames'];
+        $parameterNames  = $optionsRenderer['parameterNames'];
 
         $sortConditions = [];
-        $sortColumns = $request->getPost(
+        $sortColumns    = $request->getPost(
             $parameterNames['sortColumns'],
             $request->getQuery($parameterNames['sortColumns'])
         );
@@ -78,7 +81,7 @@ class Renderer extends AbstractRenderer
             $request->getQuery($parameterNames['sortDirections'])
         );
         if ($sortColumns != '') {
-            $sortColumns = explode(',', $sortColumns);
+            $sortColumns    = explode(',', $sortColumns);
             $sortDirections = explode(',', $sortDirections);
 
             if (count($sortColumns) !== count($sortDirections)) {
@@ -97,7 +100,7 @@ class Renderer extends AbstractRenderer
                     if ($column->getUniqueId() == $sortColumn) {
                         $sortConditions[] = [
                             'sortDirection' => $sortDirection,
-                            'column' => $column,
+                            'column'        => $column,
                         ];
 
                         $column->setSortActive($sortDirection);
@@ -121,9 +124,9 @@ class Renderer extends AbstractRenderer
      *
      * @see \ZfcDatagrid\Renderer\AbstractRenderer::getFilters()
      */
-    public function getFilters()
+    public function getFilters(): array
     {
-        if (is_array($this->filters)) {
+        if (!empty($this->filters)) {
             return $this->filters;
         }
 
@@ -165,10 +168,10 @@ class Renderer extends AbstractRenderer
      *
      * @throws \Exception
      */
-    public function getCurrentPageNumber()
+    public function getCurrentPageNumber(): int
     {
         $optionsRenderer = $this->getOptionsRenderer();
-        $parameterNames = $optionsRenderer['parameterNames'];
+        $parameterNames  = $optionsRenderer['parameterNames'];
 
         $request = $this->getRequest();
         if ($request instanceof HttpRequest) {
@@ -204,9 +207,9 @@ class Renderer extends AbstractRenderer
     }
 
     /**
-     * @return \Zend\View\Model\ViewModel
+     * @return ViewModel
      */
-    public function execute()
+    public function execute(): ViewModel
     {
         $viewModel = $this->getViewModel();
         $viewModel->setTemplate($this->getTemplate());
