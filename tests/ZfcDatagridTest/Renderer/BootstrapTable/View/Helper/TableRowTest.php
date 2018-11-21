@@ -132,7 +132,7 @@ class TableRowTest extends TestCase
 
         // color
         $myCol = clone $this->myCol;
-        $myCol->addStyle(new Style\Color(AbstractColor::$RED));
+        $myCol->addStyle(new Style\Color(AbstractColor::RED));
 
         $cols = [
             $myCol,
@@ -142,7 +142,7 @@ class TableRowTest extends TestCase
 
         // background color
         $myCol = clone $this->myCol;
-        $myCol->addStyle(new Style\BackgroundColor(AbstractColor::$GREEN));
+        $myCol->addStyle(new Style\BackgroundColor(AbstractColor::GREEN));
 
         $cols = [
             $myCol,

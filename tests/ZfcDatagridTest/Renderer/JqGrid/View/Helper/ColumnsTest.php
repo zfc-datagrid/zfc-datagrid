@@ -92,7 +92,7 @@ class ColumnsTest extends TestCase
         $helper = new Helper\Columns();
 
         $col1 = clone $this->myCol;
-        $col1->addStyle(new Style\Color(Style\Color::$RED));
+        $col1->addStyle(new Style\Color(Style\Color::RED));
         $cols = [
             $col1,
         ];
@@ -112,7 +112,7 @@ class ColumnsTest extends TestCase
         $helper = new Helper\Columns();
 
         $col1 = clone $this->myCol;
-        $col1->addStyle(new Style\BackgroundColor(Style\BackgroundColor::$RED));
+        $col1->addStyle(new Style\BackgroundColor(Style\BackgroundColor::RED));
         $cols = [
             $col1,
         ];
