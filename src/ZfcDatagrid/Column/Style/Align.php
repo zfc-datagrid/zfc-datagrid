@@ -6,22 +6,22 @@ class Align extends AbstractStyle
     /**
      * @var string
      */
-    public static $LEFT = 'left';
+    const LEFT = 'left';
 
     /**
      * @var string
      */
-    public static $RIGHT = 'right';
+    const RIGHT = 'right';
 
     /**
      * @var string
      */
-    public static $CENTER = 'center';
+    const CENTER = 'center';
 
     /**
      * @var string
      */
-    public static $JUSTIFY = 'justify';
+    const JUSTIFY = 'justify';
 
     /**
      * @var string
@@ -34,7 +34,7 @@ class Align extends AbstractStyle
     public function __construct($alignment = null)
     {
         if (null === $alignment) {
-            $alignment = self::$LEFT;
+            $alignment = self::LEFT;
         }
 
         $this->setAlignment($alignment);

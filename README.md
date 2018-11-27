@@ -63,9 +63,9 @@ You can continue
 > Attention! Only PhpArray works out of the box!
 > For Zend\Db\Sql\Select and Doctrine2 you need to install DoctrineORMModule (Doctrin2 creates the database for Zend\Db\Sql\Select)
 
-**PhpArray** http://YOUR-PROJECT/zfcDatagrid/person/bootstrap
-**Doctrine2** http://YOUR-PROJECT/zfcDatagrid/personDoctrine2/bootstrap
-**Zend\Db\Sql\Select** http://YOUR-PROJECT/zfcDatagrid/personZend/bootstrap
+- **PhpArray** http://YOUR-PROJECT/zfcDatagrid/person/bootstrap
+- **Doctrine2** http://YOUR-PROJECT/zfcDatagrid/personDoctrine2/bootstrap
+- **Zend\Db\Sql\Select** http://YOUR-PROJECT/zfcDatagrid/personZend/bootstrap
 
 
 ####Console####
