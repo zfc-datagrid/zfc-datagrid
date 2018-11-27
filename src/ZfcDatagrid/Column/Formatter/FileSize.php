@@ -13,8 +13,8 @@ class FileSize extends AbstractFormatter
      */
     protected $validRenderers = [];
 
-    /** @var array */
-    protected static $prefixes = [
+    /** @var string[] */
+    const PREFIXES = [
         '',
         'K',
         'M',
@@ -49,11 +49,11 @@ class FileSize extends AbstractFormatter
         }
 
         $index = 0;
-        while ($value >= 1024 && $index < count(self::$prefixes)) {
+        while ($value >= 1024 && $index < count(self::PREFIXES)) {
             $value = $value / 1024;
             ++$index;
         }
 
-        return sprintf('%1.2f %sB', $value, self::$prefixes[$index]);
+        return sprintf('%1.2f %sB', $value, self::PREFIXES[$index]);
     }
 }
