@@ -4,18 +4,17 @@ namespace ZfcDatagrid;
 
 class ConfigProvider
 {
-    public function __invoke()
+    /**
+     * @return array
+     */
+    public function __invoke(): array
     {
-        $config = include __DIR__.'/../../config/module.config.php';
-        if ($config['ZfcDatagrid']['renderer']['bootstrapTable']['daterange']['enabled'] === true) {
-            $configNoCache = include __DIR__.'/../../config/daterange.config.php';
+        $module = new Module();
+        $config = $module->getConfig();
 
-            $config = array_merge_recursive($config, $configNoCache);
-        }
-        $config['dependencies'] = $config['service_manager'];
-        unset($config['service_manager']);
-        //unset($config['controller_plugins']);
-
-        return $config;
+        return [
+            'dependencies'  => $config['service_manager'],
+            'ZfcDatagrid'      => $config['ZfcDatagrid'],
+        ];
     }
 }

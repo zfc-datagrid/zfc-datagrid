@@ -52,9 +52,6 @@ class Datagrid
     /** @var string */
     protected $cacheId;
 
-    /** @var MvcEvent */
-    protected $mvcEvent;
-
     /** @var array */
     protected $parameters = [];
 
@@ -323,28 +320,6 @@ class Datagrid
     }
 
     /**
-     * @param MvcEvent $mvcEvent
-     * @return $this
-     * @deprecated
-     */
-    public function setMvcEvent(MvcEvent $mvcEvent)
-    {
-        $this->mvcEvent = $mvcEvent;
-        $this->request  = $mvcEvent->getRequest();
-
-        return $this;
-    }
-
-    /**
-     * @return MvcEvent|null
-     * @deprecated
-     */
-    public function getMvcEvent(): ?MvcEvent
-    {
-        return $this->mvcEvent;
-    }
-
-    /**
      * @return RequestInterface|null
      */
     public function getRequest(): ?RequestInterface
@@ -352,6 +327,10 @@ class Datagrid
         return $this->request;
     }
 
+    /**
+     * @param RequestInterface $request
+     * @return $this
+     */
     public function setRequest(RequestInterface $request): self
     {
         $this->request = $request;
@@ -932,7 +911,6 @@ class Datagrid
                     );
                 }
                 $renderer->setOptions($this->getOptions());
-                #$renderer->setMvcEvent($this->getMvcEvent());
                 $renderer->setRequest($this->getRequest());
                 if ($this->getToolbarTemplate() !== null) {
                     $renderer->setToolbarTemplate($this->getToolbarTemplate());

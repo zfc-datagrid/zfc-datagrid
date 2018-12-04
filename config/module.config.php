@@ -4,7 +4,8 @@ use ZfcDatagrid\Datagrid;
 use ZfcDatagrid\Renderer;
 use ZfcDatagrid\Service;
 use Zend\Cache\Storage;
-use ZfcDatagrid\Middleware;use Zend\ServiceManager\Factory\InvokableFactory;
+use ZfcDatagrid\Middleware;
+use Zend\ServiceManager\Factory\InvokableFactory;
 
 return [
     'ZfcDatagrid' => [

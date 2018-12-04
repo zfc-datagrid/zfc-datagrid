@@ -5,6 +5,7 @@ use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
 use Zend\ServiceManager\Factory\FactoryInterface;
 use ZfcDatagrid\Datagrid;
+use ZfcDatagrid\Middleware\RequestHelper;
 
 abstract class AbstractDatagrid extends Datagrid implements FactoryInterface
 {
@@ -23,11 +24,11 @@ abstract class AbstractDatagrid extends Datagrid implements FactoryInterface
             throw new InvalidArgumentException('Config key "ZfcDatagrid" is missing');
         }
 
-        /* @var $application \Zend\Mvc\Application */
-        $application = $container->get('application');
+        /** @var RequestHelper $requestHelper */
+        $requestHelper = $container->get(RequestHelper::class);
 
         $this->setOptions($config['ZfcDatagrid']);
-        $this->setMvcEvent($application->getMvcEvent());
+        $this->setRequest($requestHelper->getRequest());
 
         if ($container->has('translator') === true) {
             $this->setTranslator($container->get('translator'));

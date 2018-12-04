@@ -56,7 +56,6 @@ class DatagridTest extends TestBase
 
         $this->grid = new Datagrid();
         $this->grid->setOptions($this->config);
-        $this->grid->setMvcEvent($mvcEvent);
     }
 
     public function testInit()

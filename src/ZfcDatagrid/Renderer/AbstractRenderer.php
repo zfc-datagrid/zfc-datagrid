@@ -49,9 +49,6 @@ abstract class AbstractRenderer implements RendererInterface
     /** @var array */
     protected $data = [];
 
-    /** @var MvcEvent|null */
-    protected $mvcEvent;
-
     /** @var ViewModel|null */
     protected $viewModel;
 
@@ -374,36 +371,18 @@ abstract class AbstractRenderer implements RendererInterface
     }
 
     /**
-     * @param MvcEvent $mvcEvent
-     *
-     * @return $this
-     * @deprecated
-     */
-    public function setMvcEvent(MvcEvent $mvcEvent): self
-    {
-        $this->mvcEvent = $mvcEvent;
-
-        return $this;
-    }
-
-    /**
-     * @return MvcEvent
-     * @deprecated
-     */
-    public function getMvcEvent(): ?MvcEvent
-    {
-        return $this->mvcEvent;
-    }
-
-    /**
      * @return RequestInterface
      */
-    public function getRequest()
+    public function getRequest(): ?RequestInterface
     {
         return $this->request;
     }
 
-    public function setRequest($request)
+    /**
+     * @param RequestInterface $request
+     * @return $this
+     */
+    public function setRequest(RequestInterface $request): self
     {
         $this->request = $request;
 

@@ -2,6 +2,7 @@
 namespace ZfcDatagrid\Renderer\JqGrid;
 
 use Zend\Http\PhpEnvironment\Request as HttpRequest;
+use Zend\Stdlib\RequestInterface;
 use Zend\View\Model\JsonModel;
 use ZfcDatagrid\Column;
 use ZfcDatagrid\Renderer\AbstractRenderer;
@@ -41,7 +42,7 @@ class Renderer extends AbstractRenderer
      *
      * @throws \Exception
      */
-    public function getRequest(): HttpRequest
+    public function getRequest(): ?RequestInterface
     {
         $request = parent::getRequest();
         if (! $request instanceof HttpRequest) {

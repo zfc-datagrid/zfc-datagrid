@@ -11,17 +11,26 @@ namespace ZfcDatagrid\Middleware;
 
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Psr7Bridge\Psr7ServerRequest;
+use Zend\Stdlib\RequestInterface;
 
 class RequestHelper
 {
+    /** @var null|RequestInterface */
     protected $request;
 
-    public function __construct($request = null)
+    /**
+     * RequestHelper constructor.
+     * @param null|RequestInterface $request
+     */
+    public function __construct(?RequestInterface $request = null)
     {
         $this->request = $request;
     }
 
-    public function setRequest($request) : void
+    /**
+     * @param RequestInterface|null $request
+     */
+    public function setRequest(?RequestInterface $request) : void
     {
         if ($request instanceof ServerRequestInterface) {
             $request = Psr7ServerRequest::toZend($request);
@@ -30,7 +39,10 @@ class RequestHelper
         $this->request = $request;
     }
 
-    public function getRequest()
+    /**
+     * @return RequestInterface|null
+     */
+    public function getRequest(): ?RequestInterface
     {
         return $this->request;
     }

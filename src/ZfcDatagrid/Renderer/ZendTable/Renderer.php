@@ -1,9 +1,11 @@
 <?php
+
 namespace ZfcDatagrid\Renderer\ZendTable;
 
 use Zend\Console\Adapter\AdapterInterface as ConsoleAdapter;
 use Zend\Console\Console;
 use Zend\Console\Request as ConsoleRequest;
+use Zend\Stdlib\RequestInterface;
 use Zend\Text\Table;
 use Zend\Text\Table\Table as TextTable;
 use ZfcDatagrid\Column;
@@ -60,7 +62,7 @@ class Renderer extends AbstractRenderer
      *
      * @throws \Exception
      */
-    public function getRequest(): ConsoleRequest
+    public function getRequest(): ?RequestInterface
     {
         $request = parent::getRequest();
         if (! $request instanceof ConsoleRequest) {
@@ -208,7 +210,7 @@ class Renderer extends AbstractRenderer
     {
         $textTable = clone $this->getTable();
 
-        $response = $this->getMvcEvent()->getResponse();
+        $response = $this->getRequest()->getResponse();
         $response->setContent($textTable);
 
         return $response;

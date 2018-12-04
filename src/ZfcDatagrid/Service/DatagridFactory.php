@@ -3,8 +3,7 @@ namespace ZfcDatagrid\Service;
 
 use InvalidArgumentException;
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 use ZfcDatagrid\Datagrid;
 use ZfcDatagrid\Middleware\RequestHelper;
 
@@ -25,9 +24,6 @@ class DatagridFactory implements FactoryInterface
             throw new InvalidArgumentException('Config key "ZfcDatagrid" is missing');
         }
 
-        /* @var $application \Zend\Mvc\Application */
-        //$application = $container->get('application');
-
         /** @var RequestHelper $requestHelper */
         $requestHelper = $container->get(RequestHelper::class);
 
@@ -46,13 +42,4 @@ class DatagridFactory implements FactoryInterface
         return $grid;
     }
 
-    /**
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return Datagrid
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator)
-    {
-        return $this($serviceLocator, Datagrid::class);
-    }
 }
