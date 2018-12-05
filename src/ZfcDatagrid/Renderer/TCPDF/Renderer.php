@@ -416,16 +416,16 @@ class Renderer extends AbstractExport
 
                         case Style\Align::class:
                             switch ($style->getAlignment()) {
-                                case Style\Align::$RIGHT:
+                                case Style\Align::RIGHT:
                                     $this->setTextAlignment('R');
                                     break;
-                                case Style\Align::$LEFT:
+                                case Style\Align::LEFT:
                                     $this->setTextAlignment('L');
                                     break;
-                                case Style\Align::$CENTER:
+                                case Style\Align::CENTER:
                                     $this->setTextAlignment('C');
                                     break;
-                                case Style\Align::$JUSTIFY:
+                                case Style\Align::JUSTIFY:
                                     $this->setTextAlignment('J');
                                     break;
                                 default:

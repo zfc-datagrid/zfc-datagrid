@@ -99,7 +99,7 @@ class Columns extends AbstractHelper
             }
 
             if (! $alignAlreadyDefined && $column->getType() instanceof Type\Number) {
-                $options['align'] = Column\Style\Align::$RIGHT;
+                $options['align'] = Column\Style\Align::RIGHT;
             }
 
             /*
