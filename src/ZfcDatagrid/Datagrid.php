@@ -328,10 +328,10 @@ class Datagrid
     }
 
     /**
-     * @param RequestInterface $request
+     * @param null|RequestInterface $request
      * @return $this
      */
-    public function setRequest(RequestInterface $request): self
+    public function setRequest(?RequestInterface $request): self
     {
         $this->request = $request;
 

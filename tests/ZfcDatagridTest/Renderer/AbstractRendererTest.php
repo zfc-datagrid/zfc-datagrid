@@ -244,18 +244,8 @@ class AbstractRendererTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $mvcEvent = $this->getMockBuilder(\Zend\Mvc\MvcEvent::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $mvcEvent->expects($this->any())
-            ->method('getRequest')
-            ->will($this->returnValue($request));
-
-        $this->assertNull($renderer->getMvcEvent());
-        $renderer->setMvcEvent($mvcEvent);
-        $this->assertSame($mvcEvent, $renderer->getMvcEvent());
-
-        // request
+        $this->assertNull($renderer->getRequest());
+        $renderer->setRequest($request);
         $this->assertSame($request, $renderer->getRequest());
     }
 
@@ -358,16 +348,9 @@ class AbstractRendererTest extends TestCase
             ->method('isPost')
             ->will($this->returnValue(false));
 
-        $mvcEvent = $this->getMockBuilder(\Zend\Mvc\MvcEvent::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $mvcEvent->expects($this->any())
-            ->method('getRequest')
-            ->will($this->returnValue($request));
-
         /* @var $renderer \ZfcDatagrid\Renderer\AbstractRenderer */
         $renderer = $this->getMockForAbstractClass(\ZfcDatagrid\Renderer\AbstractRenderer::class);
-        $renderer->setMvcEvent($mvcEvent);
+        $renderer->setRequest($request);
 
         $col1 = clone $this->colMock;
         $col1->setUniqueId('myCol');

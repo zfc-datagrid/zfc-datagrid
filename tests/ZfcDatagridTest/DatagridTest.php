@@ -49,13 +49,9 @@ class DatagridTest extends TestBase
 
         $this->config = $config;
 
-        $mvcEvent = $this->getMockBuilder(MvcEvent::class)->getMock();
-        $mvcEvent->expects($this->any())
-            ->method('getRequest')
-            ->will($this->returnValue($this->getMockBuilder(Request::class)->getMock()));
-
         $this->grid = new Datagrid();
         $this->grid->setOptions($this->config);
+        $this->grid->setRequest($this->getMockBuilder(Request::class)->getMock());
     }
 
     public function testInit()
@@ -103,16 +99,6 @@ class DatagridTest extends TestBase
 
         $this->grid->setCacheId('myCacheId');
         $this->assertEquals('myCacheId', $this->grid->getCacheId());
-    }
-
-    public function testMvcEvent()
-    {
-        $this->assertInstanceOf(MvcEvent::class, $this->grid->getMvcEvent());
-
-        $mvcEvent = $this->getMockBuilder(MvcEvent::class)->getMock();
-        $this->grid->setMvcEvent($mvcEvent);
-        $this->assertInstanceOf(MvcEvent::class, $this->grid->getMvcEvent());
-        $this->assertEquals($mvcEvent, $this->grid->getMvcEvent());
     }
 
     public function testRequest()
@@ -556,11 +542,7 @@ class DatagridTest extends TestBase
         $_ENV["FOO_VAR"] = "bar";
 
         $request  = new \Zend\Console\Request();
-        $mvcEvent = $this->getMockBuilder(\Zend\Mvc\MvcEvent::class)->getMock();
-        $mvcEvent->expects($this->any())
-            ->method('getRequest')
-            ->will($this->returnValue($request));
-        $this->grid->setMvcEvent($mvcEvent);
+        $this->grid->setRequest($request);
         $this->assertEquals('zendTable', $this->grid->getRendererName());
 
         // change default
@@ -570,11 +552,7 @@ class DatagridTest extends TestBase
         // by HTTP request
         $_GET['rendererType'] = 'jqGrid';
         $request              = new \Zend\Http\PhpEnvironment\Request();
-        $mvcEvent             = $this->getMockBuilder(\Zend\Mvc\MvcEvent::class)->getMock();
-        $mvcEvent->expects($this->any())
-            ->method('getRequest')
-            ->will($this->returnValue($request));
-        $this->grid->setMvcEvent($mvcEvent);
+        $this->grid->setRequest($request);
         $this->assertEquals('jqGrid', $this->grid->getRendererName());
     }
 
