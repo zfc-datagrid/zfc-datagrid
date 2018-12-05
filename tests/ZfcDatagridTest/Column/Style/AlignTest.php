@@ -16,14 +16,14 @@ class AlignTest extends TestBase
 
         $this->assertInstanceOf(Style\AbstractStyle::class, new Style\Align());
         $this->assertInstanceOf(Style\Align::class, new Style\Align());
-        $this->assertSame(Style\Align::$LEFT, $this->getProperty('alignment'));
+        $this->assertSame(Style\Align::LEFT, $this->getProperty('alignment'));
     }
 
     public function testAlignment(): void
     {
         $this->mockedConstructorArgList = [null];
 
-        $this->assertSame(Style\Align::$LEFT, $this->getMethod('getAlignment')->invoke($this->getClass()));
+        $this->assertSame(Style\Align::LEFT, $this->getMethod('getAlignment')->invoke($this->getClass()));
         $this->getMethod('setAlignment')->invokeArgs($this->getClass(), ['foobar']);
         $this->assertSame('foobar', $this->getMethod('getAlignment')->invoke($this->getClass()));
     }

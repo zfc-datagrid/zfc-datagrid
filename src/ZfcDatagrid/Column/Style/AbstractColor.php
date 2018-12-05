@@ -16,7 +16,7 @@ class AbstractColor extends AbstractStyle
      *
      * @var array
      */
-    public static $RED = [
+    const RED = [
         255,
         0,
         0,
@@ -25,7 +25,7 @@ class AbstractColor extends AbstractStyle
     /**
      * @var array
      */
-    public static $GREEN = [
+    const GREEN = [
         0,
         255,
         0,
@@ -34,7 +34,7 @@ class AbstractColor extends AbstractStyle
     /**
      * @var array
      */
-    public static $BLUE = [
+    const BLUE = [
         0,
         0,
         255,
