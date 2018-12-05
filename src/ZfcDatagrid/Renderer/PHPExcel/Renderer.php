@@ -194,22 +194,22 @@ class Renderer extends AbstractExport
 
                             case Column\Style\Align::class:
                                 switch ($style->getAlignment()) {
-                                    case Column\Style\Align::$RIGHT:
+                                    case Column\Style\Align::RIGHT:
                                         $columnStyle->getAlignment()->setHorizontal(
                                             PHPExcel_Style_Alignment::HORIZONTAL_RIGHT
                                         );
                                         break;
-                                    case Column\Style\Align::$LEFT:
+                                    case Column\Style\Align::LEFT:
                                         $columnStyle->getAlignment()->setHorizontal(
                                             PHPExcel_Style_Alignment::HORIZONTAL_LEFT
                                         );
                                         break;
-                                    case Column\Style\Align::$CENTER:
+                                    case Column\Style\Align::CENTER:
                                         $columnStyle->getAlignment()->setHorizontal(
                                             PHPExcel_Style_Alignment::HORIZONTAL_CENTER
                                         );
                                         break;
-                                    case Column\Style\Align::$JUSTIFY:
+                                    case Column\Style\Align::JUSTIFY:
                                         $columnStyle->getAlignment()->setHorizontal(
                                             PHPExcel_Style_Alignment::HORIZONTAL_JUSTIFY
                                         );
