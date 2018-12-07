@@ -210,6 +210,7 @@ return [
 
             'zfcDatagrid_dbAdapter' => Service\ZendDbAdapterFactory::class,
             Middleware\RequestHelper::class => Middleware\RequestHelperFactory::class,
+            Middleware\RequestHelperMiddleware::class => Middleware\RequestHelperMiddlewareFactory::class,
 
             // HTML renderer
             Renderer\BootstrapTable\Renderer::class => InvokableFactory::class,
