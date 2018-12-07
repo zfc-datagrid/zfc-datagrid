@@ -2,8 +2,11 @@
 namespace ZfcDatagridTest\Service;
 
 use PHPUnit\Framework\TestCase;
+use Zend\Mvc\Application;
 use Zend\Router\RouteStackInterface;
 use Zend\ServiceManager\ServiceManager;
+use ZfcDatagrid\Middleware\RequestHelper;
+use ZfcDatagrid\Renderer\BootstrapTable\Renderer;
 use ZfcDatagrid\Service\DatagridFactory;
 
 /**
@@ -32,28 +35,31 @@ class DatagridFactoryTest extends TestCase
         ],
     ];
 
+    /** @var Application */
     private $applicationMock;
 
+    /** @var Renderer */
     private $rendererServiceMock;
 
+    /** @var RouteStackInterface */
     private $router;
+
+    /** @var RequestHelper */
+    private $requestHelper;
 
     public function setUp()
     {
-        $mvcEventMock = $this->getMockBuilder(\Zend\Mvc\MvcEvent::class)
-            ->getMock();
-
-        $this->applicationMock = $this->getMockBuilder(\Zend\Mvc\Application::class)
+        $this->applicationMock = $this->getMockBuilder(Application::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->applicationMock->expects($this->any())
-            ->method('getMvcEvent')
-            ->will($this->returnValue($mvcEventMock));
 
-        $this->rendererServiceMock = $this->getMockBuilder(\ZfcDatagrid\Renderer\BootstrapTable\Renderer::class)
+        $this->rendererServiceMock = $this->getMockBuilder(Renderer::class)
             ->getMock();
 
         $this->router = $this->getMockBuilder(RouteStackInterface::class)
+            ->getMock();
+
+        $this->requestHelper = $this->getMockBuilder(RequestHelper::class)
             ->getMock();
     }
 
@@ -67,7 +73,7 @@ class DatagridFactoryTest extends TestCase
         $sm->setService('config', []);
 
         $factory = new DatagridFactory();
-        $grid    = $factory->__invoke($sm, \ZfcDatagrid\Datagrid::class);
+        $factory->__invoke($sm, \ZfcDatagrid\Datagrid::class);
     }
 
     public function testCanCreateService()
@@ -77,6 +83,7 @@ class DatagridFactoryTest extends TestCase
         $sm->setService('application', $this->applicationMock);
         $sm->setService('zfcDatagrid.renderer.bootstrapTable', $this->rendererServiceMock);
         $sm->setService('Router', $this->router);
+        $sm->setService(RequestHelper::class, $this->requestHelper);
 
         $factory = new DatagridFactory();
         $grid    = $factory->__invoke($sm, \ZfcDatagrid\Datagrid::class);
@@ -96,6 +103,7 @@ class DatagridFactoryTest extends TestCase
         $sm->setService('zfcDatagrid.renderer.bootstrapTable', $this->rendererServiceMock);
         $sm->setService('translator', $translatorMock);
         $sm->setService('Router', $this->router);
+        $sm->setService(RequestHelper::class, $this->requestHelper);
 
         $factory = new DatagridFactory();
         $grid    = $factory->__invoke($sm, \ZfcDatagrid\Datagrid::class);
@@ -116,6 +124,7 @@ class DatagridFactoryTest extends TestCase
         $sm->setService('zfcDatagrid.renderer.bootstrapTable', $this->rendererServiceMock);
         $sm->setService('translator', $mvcTranslatorMock);
         $sm->setService('Router', $this->router);
+        $sm->setService(RequestHelper::class, $this->requestHelper);
 
         $factory = new DatagridFactory();
         $grid    = $factory->__invoke($sm, \ZfcDatagrid\Datagrid::class);

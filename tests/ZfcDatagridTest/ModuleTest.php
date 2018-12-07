@@ -14,7 +14,7 @@ class ModuleTest extends TestCase
         $module = new Module();
 
         $this->assertInternalType('array', $module->getConfig());
-        $this->assertCount(4, $module->getConfig());
+        $this->assertCount(5, $module->getConfig());
         $this->assertArrayHasKey('ZfcDatagrid', $module->getConfig());
     }
 }

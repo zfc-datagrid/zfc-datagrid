@@ -34,12 +34,6 @@ class RendererTest extends TestCase
 
     /**
      *
-     * @var \Zend\Mvc\MvcEvent
-     */
-    private $mvcEventMock;
-
-    /**
-     *
      * @var \ZfcDatagrid\Column\AbstractColumn
      */
     private $colMock;
@@ -47,10 +41,6 @@ class RendererTest extends TestCase
     public function setUp()
     {
         $this->requestMock  = $this->getMockBuilder(\Zend\Console\Request::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->mvcEventMock = $this->getMockBuilder(\Zend\Mvc\MvcEvent::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -88,13 +78,8 @@ class RendererTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $mvcEvent = clone $this->mvcEventMock;
-        $mvcEvent->expects($this->any())
-            ->method('getRequest')
-            ->will($this->returnValue($request));
-
         $renderer = new ZendTable\Renderer();
-        $renderer->setMvcEvent($mvcEvent);
+        $renderer->setRequest($request);
 
         $renderer->getRequest();
     }
@@ -103,13 +88,8 @@ class RendererTest extends TestCase
     {
         $request = clone $this->requestMock;
 
-        $mvcEvent = clone $this->mvcEventMock;
-        $mvcEvent->expects($this->any())
-            ->method('getRequest')
-            ->will($this->returnValue($request));
-
         $renderer = new ZendTable\Renderer();
-        $renderer->setMvcEvent($mvcEvent);
+        $renderer->setRequest($request);
 
         $this->assertEquals($request, $renderer->getRequest());
     }
@@ -131,14 +111,9 @@ class RendererTest extends TestCase
     {
         $request = clone $this->requestMock;
 
-        $mvcEvent = clone $this->mvcEventMock;
-        $mvcEvent->expects($this->any())
-            ->method('getRequest')
-            ->will($this->returnValue($request));
-
         $renderer = new ZendTable\Renderer();
         $renderer->setOptions($this->options);
-        $renderer->setMvcEvent($mvcEvent);
+        $renderer->setRequest($request);
 
         $sortConditions = $renderer->getSortConditions();
         $this->assertEquals([], $sortConditions);
@@ -162,14 +137,9 @@ class RendererTest extends TestCase
                 }
             }));
 
-        $mvcEvent = clone $this->mvcEventMock;
-        $mvcEvent->expects($this->any())
-            ->method('getRequest')
-            ->will($this->returnValue($request));
-
         $renderer = new ZendTable\Renderer();
         $renderer->setOptions($this->options);
-        $renderer->setMvcEvent($mvcEvent);
+        $renderer->setRequest($request);
 
         $col1 = clone $this->colMock;
         $col1->setUniqueId('myCol1');
@@ -214,14 +184,9 @@ class RendererTest extends TestCase
                 }
             }));
 
-        $mvcEvent = clone $this->mvcEventMock;
-        $mvcEvent->expects($this->any())
-            ->method('getRequest')
-            ->will($this->returnValue($request));
-
         $renderer = new ZendTable\Renderer();
         $renderer->setOptions($this->options);
-        $renderer->setMvcEvent($mvcEvent);
+        $renderer->setRequest($request);
 
         $col1 = clone $this->colMock;
         $col1->setUniqueId('myCol1');
@@ -251,14 +216,9 @@ class RendererTest extends TestCase
     {
         $request = clone $this->requestMock;
 
-        $mvcEvent = clone $this->mvcEventMock;
-        $mvcEvent->expects($this->any())
-            ->method('getRequest')
-            ->will($this->returnValue($request));
-
         $renderer = new ZendTable\Renderer();
         $renderer->setOptions($this->options);
-        $renderer->setMvcEvent($mvcEvent);
+        $renderer->setRequest($request);
 
         $this->assertEquals(1, $renderer->getCurrentPageNumber());
     }
@@ -270,14 +230,9 @@ class RendererTest extends TestCase
             ->method('getParam')
             ->will($this->returnValue(3));
 
-        $mvcEvent = clone $this->mvcEventMock;
-        $mvcEvent->expects($this->any())
-            ->method('getRequest')
-            ->will($this->returnValue($request));
-
         $renderer = new ZendTable\Renderer();
         $renderer->setOptions($this->options);
-        $renderer->setMvcEvent($mvcEvent);
+        $renderer->setRequest($request);
 
         $this->assertEquals(3, $renderer->getCurrentPageNumber());
     }
@@ -286,14 +241,9 @@ class RendererTest extends TestCase
     {
         $request = clone $this->requestMock;
 
-        $mvcEvent = clone $this->mvcEventMock;
-        $mvcEvent->expects($this->any())
-            ->method('getRequest')
-            ->will($this->returnValue($request));
-
         $renderer = new ZendTable\Renderer();
         $renderer->setOptions($this->options);
-        $renderer->setMvcEvent($mvcEvent);
+        $renderer->setRequest($request);
 
         $this->assertEquals(25, $renderer->getItemsPerPage());
     }
@@ -305,14 +255,9 @@ class RendererTest extends TestCase
             ->method('getParam')
             ->will($this->returnValue(99));
 
-        $mvcEvent = clone $this->mvcEventMock;
-        $mvcEvent->expects($this->any())
-            ->method('getRequest')
-            ->will($this->returnValue($request));
-
         $renderer = new ZendTable\Renderer();
         $renderer->setOptions($this->options);
-        $renderer->setMvcEvent($mvcEvent);
+        $renderer->setRequest($request);
 
         $this->assertEquals(99, $renderer->getItemsPerPage());
     }

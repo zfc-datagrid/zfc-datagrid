@@ -8,12 +8,12 @@ use Zend\Cache;
 use Zend\Console\Request as ConsoleRequest;
 use Zend\Db\Sql\Select as ZendSelect;
 use Zend\Http\PhpEnvironment\Request as HttpRequest;
+use Zend\Stdlib\RequestInterface;
 use Zend\I18n\Translator\TranslatorInterface;
 use Zend\Mvc\MvcEvent;
 use Zend\Paginator\Paginator;
 use Zend\Router\RouteStackInterface;
 use Zend\Session\Container as SessionContainer;
-use Zend\Stdlib\RequestInterface;
 use Zend\Stdlib\ResponseInterface;
 use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
@@ -51,9 +51,6 @@ class Datagrid
 
     /** @var string */
     protected $cacheId;
-
-    /** @var MvcEvent */
-    protected $mvcEvent;
 
     /** @var array */
     protected $parameters = [];
@@ -323,32 +320,22 @@ class Datagrid
     }
 
     /**
-     * @param MvcEvent $mvcEvent
-     *
-     * @return $this
-     */
-    public function setMvcEvent(MvcEvent $mvcEvent)
-    {
-        $this->mvcEvent = $mvcEvent;
-        $this->request  = $mvcEvent->getRequest();
-
-        return $this;
-    }
-
-    /**
-     * @return MvcEvent|null
-     */
-    public function getMvcEvent(): ?MvcEvent
-    {
-        return $this->mvcEvent;
-    }
-
-    /**
      * @return RequestInterface|null
      */
     public function getRequest(): ?RequestInterface
     {
         return $this->request;
+    }
+
+    /**
+     * @param null|RequestInterface $request
+     * @return $this
+     */
+    public function setRequest(?RequestInterface $request): self
+    {
+        $this->request = $request;
+
+        return $this;
     }
 
     /**
@@ -924,7 +911,7 @@ class Datagrid
                     );
                 }
                 $renderer->setOptions($this->getOptions());
-                $renderer->setMvcEvent($this->getMvcEvent());
+                $renderer->setRequest($this->getRequest());
                 if ($this->getToolbarTemplate() !== null) {
                     $renderer->setToolbarTemplate($this->getToolbarTemplate());
                 }
@@ -999,16 +986,16 @@ class Datagrid
             /*
              * Step 1.2) Sorting
              */
-        foreach ($renderer->getSortConditions() as $condition) {
-            $this->getDataSource()->addSortCondition($condition['column'], $condition['sortDirection']);
-        }
+            foreach ($renderer->getSortConditions() as $condition) {
+                $this->getDataSource()->addSortCondition($condition['column'], $condition['sortDirection']);
+            }
 
-            /*
-             * Step 1.3) Filtering
-             */
-        foreach ($renderer->getFilters() as $filter) {
-            $this->getDataSource()->addFilter($filter);
-        }
+                /*
+                 * Step 1.3) Filtering
+                 */
+            foreach ($renderer->getFilters() as $filter) {
+                $this->getDataSource()->addFilter($filter);
+            }
         }
 
         /*
@@ -1266,5 +1253,4 @@ class Datagrid
 
         return $this;
     }
-
 }

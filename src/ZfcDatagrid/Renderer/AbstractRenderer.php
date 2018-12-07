@@ -7,6 +7,7 @@ use Zend\I18n\Translator\TranslatorInterface;
 use Zend\Mvc\MvcEvent;
 use Zend\Paginator\Paginator;
 use Zend\View\Model\ViewModel;
+use Zend\Stdlib\RequestInterface;
 use ZfcDatagrid\Datagrid;
 use ZfcDatagrid\Filter;
 use function implode;
@@ -48,9 +49,6 @@ abstract class AbstractRenderer implements RendererInterface
     /** @var array */
     protected $data = [];
 
-    /** @var MvcEvent|null */
-    protected $mvcEvent;
-
     /** @var ViewModel|null */
     protected $viewModel;
 
@@ -65,6 +63,9 @@ abstract class AbstractRenderer implements RendererInterface
 
     /** @var TranslatorInterface|null */
     protected $translator;
+
+    /** var RequestInterface */
+    protected $request;
 
     /**
      * @param array $options
@@ -370,31 +371,22 @@ abstract class AbstractRenderer implements RendererInterface
     }
 
     /**
-     * @param MvcEvent $mvcEvent
-     *
+     * @return RequestInterface
+     */
+    public function getRequest(): ?RequestInterface
+    {
+        return $this->request;
+    }
+
+    /**
+     * @param RequestInterface $request
      * @return $this
      */
-    public function setMvcEvent(MvcEvent $mvcEvent): self
+    public function setRequest(RequestInterface $request): self
     {
-        $this->mvcEvent = $mvcEvent;
+        $this->request = $request;
 
         return $this;
-    }
-
-    /**
-     * @return MvcEvent
-     */
-    public function getMvcEvent(): ?MvcEvent
-    {
-        return $this->mvcEvent;
-    }
-
-    /**
-     * @return \Zend\Stdlib\RequestInterface
-     */
-    public function getRequest()
-    {
-        return $this->getMvcEvent()->getRequest();
     }
 
     /**

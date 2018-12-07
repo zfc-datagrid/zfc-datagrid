@@ -46,15 +46,8 @@ class RendererTest extends TestBase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $mvcEvent = $this->getMockBuilder(\Zend\Mvc\MvcEvent::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $mvcEvent->expects($this->any())
-        ->method('getRequest')
-        ->will($this->returnValue($request));
-
         $renderer = new BootstrapTable\Renderer();
-        $renderer->setMvcEvent($mvcEvent);
+        $renderer->setRequest($request);
 
         $renderer->getRequest();
     }
@@ -65,16 +58,8 @@ class RendererTest extends TestBase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $mvcEvent = $this->getMockBuilder(\Zend\Mvc\MvcEvent::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $mvcEvent->expects($this->any())
-        ->method('getRequest')
-        ->will($this->returnValue($request));
-
         $renderer = new BootstrapTable\Renderer();
-        $renderer->setMvcEvent($mvcEvent);
+        $renderer->setRequest($request);
 
         $this->assertEquals($request, $renderer->getRequest());
     }

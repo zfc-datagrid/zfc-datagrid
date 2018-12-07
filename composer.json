@@ -34,7 +34,8 @@
         "zendframework/zend-http": "^2.8",
         "zendframework/zend-paginator": "^2.5",
         "zendframework/zend-cache": "^2.5",
-        "zendframework/zend-servicemanager": "^3.0"
+        "zendframework/zend-servicemanager": "^3.0",
+        "zendframework/zend-psr7bridge": "^1.1.0"
     },
     
     "require-dev": {
@@ -67,7 +68,8 @@
 
     "extra": {
         "zf": {
-            "module": "ZfcDatagrid"
+          "component": "ZfcDatagrid",
+          "config-provider": "ZfcDatagrid\\ConfigProvider"
         },
         "branch-alias": {
             "dev-master": "1.4-dev",
