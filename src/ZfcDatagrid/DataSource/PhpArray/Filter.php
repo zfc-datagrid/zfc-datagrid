@@ -43,7 +43,12 @@ class Filter
 
         foreach ($this->getFilter()->getValues() as $filterValue) {
             $filter = $this->getFilter();
-            $col = $filter->getColumn();
+            
+            if ($filter->isColumnFilter() === true) {
+                $col = $filter->getColumn();
+            } else if($filter->isFormFilter() === true) {
+                $col = $filter->getFormFilter();
+            }
 
             $value = $row[$col->getUniqueId()];
             $value = $col->getType()->getFilterValue($value);

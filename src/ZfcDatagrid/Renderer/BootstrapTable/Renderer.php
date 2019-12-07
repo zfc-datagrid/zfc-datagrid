@@ -141,15 +141,14 @@ class Renderer extends AbstractRenderer
                             if ($column->getUniqueId() == $uniqueId) {
                                 $filter = new \ZfcDatagrid\Filter();
                                 $filter->setFromColumn($column, $value);
-
                                 $filters[] = $filter;
-
                                 $column->setFilterActive($filter->getDisplayColumnValue());
                             }
                         }
                     }
                 }
             }
+            
             if($formFilters !== null) {
                 foreach ($formFilters as $uniqueId => $value) {
                     if ($value != '') {
