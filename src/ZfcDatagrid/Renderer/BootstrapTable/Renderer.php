@@ -129,21 +129,36 @@ class Renderer extends AbstractRenderer
 
         $request = $this->getRequest();
         $toolbarFilters = $request->getPost('toolbarFilters', $request->getQuery('toolbarFilters'));
+        $formFilters = $request->getPost('formFilters', $request->getQuery('formFilters'));
+        
         $filters = [];
-        if (($request->isPost() === true || $request->isGet() === true) &&
-            null !== $toolbarFilters
-        ) {
-            foreach ($toolbarFilters as $uniqueId => $value) {
-                if ($value != '') {
-                    foreach ($this->getColumns() as $column) {
-                        /* @var $column \ZfcDatagrid\Column\AbstractColumn */
-                        if ($column->getUniqueId() == $uniqueId) {
-                            $filter = new \ZfcDatagrid\Filter();
-                            $filter->setFromColumn($column, $value);
-
-                            $filters[] = $filter;
-
-                            $column->setFilterActive($filter->getDisplayColumnValue());
+        if (($request->isPost() === true || $request->isGet() === true)) {
+            if($toolbarFilters !== null) {
+                foreach ($toolbarFilters as $uniqueId => $value) {
+                    if ($value != '') {
+                        foreach ($this->getColumns() as $column) {
+                            /* @var $column \ZfcDatagrid\Column\AbstractColumn */
+                            if ($column->getUniqueId() == $uniqueId) {
+                                $filter = new \ZfcDatagrid\Filter();
+                                $filter->setFromColumn($column, $value);
+                                $filters[] = $filter;
+                                $column->setFilterActive($filter->getDisplayColumnValue());
+                            }
+                        }
+                    }
+                }
+            }
+            
+            if($formFilters !== null) {
+                foreach ($formFilters as $uniqueId => $value) {
+                    if ($value != '') {
+                        foreach($this->getFormFilters() as $formFilter) {
+                            if ($formFilter->getUniqueId() == $uniqueId) {
+                                $filter = new \ZfcDatagrid\Filter();
+                                $filter->setFormFilter($formFilter, $value);
+                                $filters[] = $filter;
+                                $formFilter->setFilterActive($filter->getDisplayColumnValue());
+                            }
                         }
                     }
                 }

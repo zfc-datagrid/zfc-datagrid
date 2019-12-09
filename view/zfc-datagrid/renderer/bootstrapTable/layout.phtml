@@ -2,7 +2,7 @@
 use ZfcDatagrid\Column\Type;
 
 $hasMassActions = false;
-if(count($this->massActions) > 0){
+if(count($this->massActions) > 0) {
     $hasMassActions = true;
 }
 ?>
@@ -27,7 +27,20 @@ if(count($this->massActions) > 0){
     <input type="hidden" name="<?php echo $this->parameterNames['sortColumns']; ?>" value="<?php echo $this->activeParameters[$this->parameterNames['sortColumns']]; ?>" />
     <input type="hidden" name="<?php echo $this->parameterNames['sortDirections']; ?>" value="<?php echo $this->activeParameters[$this->parameterNames['sortDirections']]; ?>" />
 
+	<?php 
+	foreach($this->formFilters as $formFilter) {
+	    $classes = [];
+	    $htmlFilter = '';
+	    $htmlFilter = sprintf(
+	        '%s<input type="text" name="formFilters[%s]" style="width: 80%%"  value="%s" class="form-control" />',
+	        $formFilter->getLabel(), $formFilter->getUniqueId() , $formFilter->getFilterActiveValue()
+        );
+	    ?>
+        <td class="<?php echo implode(' ', $classes); ?>">
+            <?php echo $htmlFilter; ?>
+        </td>
     <?php
+    }
     foreach($this->parameters as $name => $value){
         echo '<input type="hidden" name="' . $name . '" value="' . $value . '" />';
     }

@@ -19,6 +19,7 @@ use Zend\Stdlib\ResponseInterface;
 use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
 use ZfcDatagrid\Column\Style;
+use ZfcDatagrid\FormFilter\AbstractFilter;	
 
 class Datagrid
 {
@@ -184,6 +185,11 @@ class Datagrid
      * @var string
      */
     protected $forceRenderer;
+    
+    /**
+     * @var array
+     */
+    protected $formFilters = [];
 
     /**
      * @var Renderer\AbstractRenderer
@@ -703,6 +709,43 @@ class Datagrid
 
         return;
     }
+    
+    /**
+     * @return \ZfcDatagrid\Column\AbstractColumn[]
+     */
+    public function getFormFilters()
+    {
+        return $this->formFilters;
+    }
+    
+    /**
+     * Set multiple columns by array (willoverwrite all existing).
+     *
+     * @param array $formFilters
+     */
+    public function setFormFilters(array $formFilters)
+    {
+        $useFilters = [];
+        
+        foreach ($formFilters as $fil) {
+            if (!$fil instanceof ZfcDatagrid\FormFilter\AbstractFilter) {
+                $fil = $this->createFormFilter($fil);
+            }
+            $useFilters[$fil->getLabel()] = $fil;
+        }
+        
+        $this->formFilters = $useFilters;
+    }
+    
+    /**
+     * Add a formFilter by array config or instanceof Column\AbstractColumn.
+     *
+     * @param array|ZfcDatagrid\FormFilter\AbstractFilter $filter
+     */
+    public function addFilter($filter)
+    {
+        $this->formFilters[$filter->getLabel()] = $filter;
+    }
 
     /**
      * @param Style\AbstractStyle $style
@@ -870,6 +913,7 @@ class Datagrid
                 }
                 $renderer->setTitle($this->getTitle());
                 $renderer->setColumns($this->getColumns());
+                $renderer->setFormFilters($this->getFormFilters());
                 $renderer->setRowStyles($this->getRowStyles());
                 $renderer->setCache($this->getCache());
                 $renderer->setCacheId($this->getCacheId());
@@ -1011,7 +1055,7 @@ class Datagrid
         /*
          * Step 3) Format the data - Translate - Replace - Date / time / datetime - Numbers - ...
          */
-        $prepareData = new PrepareData($data, $this->getColumns());
+        $prepareData = new PrepareData($data, $this->getColumns(), $this->getFormFilters());
         $prepareData->setRendererName($this->getRendererName());
         if ($this->hasTranslator()) {
             $prepareData->setTranslator($this->getTranslator());

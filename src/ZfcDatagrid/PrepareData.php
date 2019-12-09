@@ -10,6 +10,11 @@ class PrepareData
      * @var array
      */
     private $columns = [];
+    
+    /**
+     * @var array
+     */
+    private $formFilters = [];
 
     /**
      * @var array
@@ -31,11 +36,13 @@ class PrepareData
     /**
      * @param array $data
      * @param array $columns
+     * @param array $formFilters
      */
-    public function __construct(array $data, array $columns)
+    public function __construct(array $data, array $columns, array $formFilters = [])
     {
         $this->setData($data);
         $this->setColumns($columns);
+        $this->setFormFilters($formFilters);
     }
 
     /**
@@ -54,6 +61,15 @@ class PrepareData
         return $this->columns;
     }
 
+    /**
+     *
+     * @param array $formFilters
+     */
+    public function setFormFilters(array $formFilters)
+    {
+        $this->formFilters = $formFilters;
+    }
+    
     /**
      * @param array $data
      */

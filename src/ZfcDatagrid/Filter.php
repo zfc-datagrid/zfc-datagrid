@@ -3,6 +3,7 @@
 namespace ZfcDatagrid;
 
 use InvalidArgumentException;
+use ZfcDatagrid\FormFilter\AbstractFilter;
 
 class Filter
 {
@@ -82,6 +83,8 @@ class Filter
      * @var Column\AbstractColumn|null
      */
     private $column;
+    
+    private $formFilter;
 
     private $operator = self::LIKE;
 
@@ -100,6 +103,35 @@ class Filter
         $this->column = $column;
         $this->setColumnOperator($inputFilterValue, $column->getFilterDefaultOperation());
     }
+    
+    /**
+     *
+     * @param FormFilter\AbstractFilter $formFilter
+     * @param string $inputFilterValue
+     */
+    public function setFormFilter(FormFilter\AbstractFilter $formFilter, $inputFilterValue)
+    {
+        $this->formFilter = $formFilter;
+        $this->setFormFilterOperator($inputFilterValue);
+    }
+    
+    
+    /**
+     * Convert the input filter to operator + filter + display filter value.
+     *
+     * Partly idea taken from ZfDatagrid
+     *
+     * @see https://github.com/zfdatagrid/grid/blob/master/library/Bvb/Grid.php#L1438
+     *
+     * @param string $inputFilterValue
+     * @param mixed  $defaultOperator
+     *
+     * @return array
+     */
+    private function setFormFilterOperator($inputFilterValue, $defaultOperator = self::LIKE)
+    {
+        $this->operateValue($inputFilterValue, $this->getFormFilter()->getType(), $defaultOperator);
+    }
 
     /**
      * Convert the input filter to operator + filter + display filter value.
@@ -115,14 +147,25 @@ class Filter
      */
     private function setColumnOperator($inputFilterValue, $defaultOperator = self::LIKE)
     {
+        $this->operateValue($inputFilterValue, $this->getColumn()->getType(), $defaultOperator);
+    }
+    
+    /**
+     *
+     * @param string $inputFilterValue
+     * @param mixed  $defaultOperator
+     * @return string
+     */
+    private function operateValue($inputFilterValue, $type, $defaultOperator = self::LIKE)
+    {
         $inputFilterValue = (string) $inputFilterValue;
         $inputFilterValue = trim($inputFilterValue);
-
+        
         $this->displayColumnValue = $inputFilterValue;
-
+        
         $operator = $defaultOperator;
         $value = $inputFilterValue;
-
+        
         if (substr($inputFilterValue, 0, 2) == '=(') {
             $operator = self::IN;
             $value = substr($inputFilterValue, 2);
@@ -137,74 +180,74 @@ class Filter
             }
         } elseif (substr($inputFilterValue, 0, 2) == '!=' ||
             substr($inputFilterValue, 0, 2) == '<>'
-        ) {
-            $operator = self::NOT_EQUAL;
-            $value = substr($inputFilterValue, 2);
+            ) {
+                $operator = self::NOT_EQUAL;
+                $value = substr($inputFilterValue, 2);
         } elseif (substr($inputFilterValue, 0, 2) == '!~' ||
             substr($inputFilterValue, 0, 1) == '!'
-        ) {
-            // NOT LIKE or NOT EQUAL
-            if (substr($inputFilterValue, 0, 2) == '!~') {
-                $value = trim(substr($inputFilterValue, 2));
-            } else {
-                $value = trim(substr($inputFilterValue, 1));
-            }
-
-            if (substr($inputFilterValue, 0, 2) == '!~' ||
-                (
-                    substr($value, 0, 1) == '%' ||
-                    substr($value, -1) == '%' ||
-                    substr($value, 0, 1) == '*' ||
-                    substr($value, -1) == '*'
-                )
             ) {
-                // NOT LIKE
-                if ((substr($value, 0, 1) == '*' && substr($value, -1) == '*') ||
-                    (substr($value, 0, 1) == '%' && substr($value, -1) == '%')
-                ) {
-                    $operator = self::NOT_LIKE;
-                    $value = substr($value, 1);
-                    $value = substr($value, 0, -1);
-                } elseif (substr($value, 0, 1) == '*' || substr($value, 0, 1) == '%') {
-                    $operator = self::NOT_LIKE_LEFT;
-                    $value = substr($value, 1);
-                } elseif (substr($value, -1) == '*' || substr($value, -1) == '%') {
-                    $operator = self::NOT_LIKE_RIGHT;
-                    $value = substr($value, 0, -1);
+                // NOT LIKE or NOT EQUAL
+                if (substr($inputFilterValue, 0, 2) == '!~') {
+                    $value = trim(substr($inputFilterValue, 2));
                 } else {
-                    $operator = self::NOT_LIKE;
+                    $value = trim(substr($inputFilterValue, 1));
                 }
-            } else {
-                // NOT EQUAL
-                $operator = self::NOT_EQUAL;
-            }
+                
+                if (substr($inputFilterValue, 0, 2) == '!~' ||
+                    (
+                        substr($value, 0, 1) == '%' ||
+                        substr($value, -1) == '%' ||
+                        substr($value, 0, 1) == '*' ||
+                        substr($value, -1) == '*'
+                        )
+                    ) {
+                        // NOT LIKE
+                        if ((substr($value, 0, 1) == '*' && substr($value, -1) == '*') ||
+                            (substr($value, 0, 1) == '%' && substr($value, -1) == '%')
+                            ) {
+                                $operator = self::NOT_LIKE;
+                                $value = substr($value, 1);
+                                $value = substr($value, 0, -1);
+                            } elseif (substr($value, 0, 1) == '*' || substr($value, 0, 1) == '%') {
+                                $operator = self::NOT_LIKE_LEFT;
+                                $value = substr($value, 1);
+                            } elseif (substr($value, -1) == '*' || substr($value, -1) == '%') {
+                                $operator = self::NOT_LIKE_RIGHT;
+                                $value = substr($value, 0, -1);
+                            } else {
+                                $operator = self::NOT_LIKE;
+                            }
+                    } else {
+                        // NOT EQUAL
+                        $operator = self::NOT_EQUAL;
+                    }
         } elseif (substr($inputFilterValue, 0, 1) == '~' ||
             substr($inputFilterValue, 0, 1) == '%' ||
             substr($inputFilterValue, -1) == '%' ||
             substr($inputFilterValue, 0, 1) == '*' ||
             substr($inputFilterValue, -1) == '*'
-        ) {
-            // LIKE
-            if (substr($inputFilterValue, 0, 1) == '~') {
-                $value = substr($inputFilterValue, 1);
-            }
-            $value = trim($value);
-
-            if ((substr($value, 0, 1) == '*' && substr($value, -1) == '*') ||
-                (substr($value, 0, 1) == '%' && substr($value, -1) == '%')
             ) {
-                $operator = self::LIKE;
-                $value = substr($value, 1);
-                $value = substr($value, 0, -1);
-            } elseif (substr($value, 0, 1) == '*' || substr($value, 0, 1) == '%') {
-                $operator = self::LIKE_LEFT;
-                $value = substr($value, 1);
-            } elseif (substr($value, -1) == '*' || substr($value, -1) == '%') {
-                $operator = self::LIKE_RIGHT;
-                $value = substr($value, 0, -1);
-            } else {
-                $operator = self::LIKE;
-            }
+                // LIKE
+                if (substr($inputFilterValue, 0, 1) == '~') {
+                    $value = substr($inputFilterValue, 1);
+                }
+                $value = trim($value);
+                
+                if ((substr($value, 0, 1) == '*' && substr($value, -1) == '*') ||
+                    (substr($value, 0, 1) == '%' && substr($value, -1) == '%')
+                    ) {
+                        $operator = self::LIKE;
+                        $value = substr($value, 1);
+                        $value = substr($value, 0, -1);
+                    } elseif (substr($value, 0, 1) == '*' || substr($value, 0, 1) == '%') {
+                        $operator = self::LIKE_LEFT;
+                        $value = substr($value, 1);
+                    } elseif (substr($value, -1) == '*' || substr($value, -1) == '%') {
+                        $operator = self::LIKE_RIGHT;
+                        $value = substr($value, 0, -1);
+                    } else {
+                        $operator = self::LIKE;
+                    }
         } elseif (substr($inputFilterValue, 0, 2) == '==') {
             $operator = self::EQUAL;
             $value = substr($inputFilterValue, 2);
@@ -228,47 +271,46 @@ class Filter
             $value = explode('<>', $inputFilterValue);
         }
         $this->operator = $operator;
-
+        
         if (false === $value) {
             // NO VALUE applied...maybe only "="
             $value = '';
         }
-
+        
         /*
          * Handle multiple values
          */
-        $columnType = $this->getColumn()->getType();
-        if ($columnType instanceof Column\Type\DateTime && $columnType->isDaterangePickerEnabled() === true) {
+        if ($type instanceof Column\Type\DateTime && $type->isDaterangePickerEnabled() === true) {
             $value = explode(' - ', $value);
-        } elseif (! $columnType instanceof Column\Type\Number && ! is_array($value)) {
+        } elseif (! $type instanceof Column\Type\Number && ! is_array($value)) {
             $value = explode(',', $value);
         } elseif (! is_array($value)) {
             $value = [$value];
         }
-
+        
         foreach ($value as &$val) {
             $val = trim($val);
         }
-
-        if (self::BETWEEN == $operator) {
-            if (! $this->getColumn()->getType() instanceof Column\Type\DateTime) {
+        
+        if (self::BETWEEN == $this->operator) {
+            if (! $type instanceof Column\Type\DateTime) {
                 $value = [
                     min($value),
                     max($value),
                 ];
             }
         }
-
+        
         /*
          * The searched value must be converted maybe.... - Translation - Replace - DateTime - ...
          */
         foreach ($value as &$val) {
             $type = $this->getColumn()->getType();
             $val = $type->getFilterValue($val);
-
+            
             // @TODO Translation + Replace
         }
-
+        
         $this->value = $value;
     }
 
@@ -290,6 +332,25 @@ class Filter
     public function getColumn()
     {
         return $this->column;
+    }
+    
+    /**
+     * Is this a formFilter.
+     *
+     * @return bool
+     */
+    public function isFormFilter()
+    {
+        return $this->getFormFilter() instanceof FormFilter\AbstractFilter;
+    }
+    
+    /**
+     * 
+     * @return AbstractFilter
+     */
+    public function getFormFilter()
+    {
+        return $this->formFilter;
     }
 
     /**

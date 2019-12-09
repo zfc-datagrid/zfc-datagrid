@@ -42,6 +42,11 @@ abstract class AbstractRenderer implements RendererInterface
      * @var \ZfcDatagrid\Column\AbstractColumn[]
      */
     protected $columns = [];
+    
+    /**
+     * @var \ZfcDatagrid\FormFilter\AbstractFilter[]
+     */
+    protected $formFilters = [];
 
     /**
      * @var \ZfcDataGrid\Column\Style\AbstractStyle[]
@@ -270,6 +275,26 @@ abstract class AbstractRenderer implements RendererInterface
     public function getColumns()
     {
         return $this->columns;
+    }
+    
+    /**
+     * Set the FormFilters.
+     *
+     * @param array $formFilters
+     */
+    public function setFormFilters(array $formFilters)
+    {
+        $this->formFilters = $formFilters;
+    }
+    
+    
+    /**
+     * Get all filters
+     * @return \ZfcDatagrid\FormFilter\AbstractFilter[]
+     */
+    public function getFormFilters()
+    {
+        return $this->formFilters;
     }
 
     /**
@@ -666,6 +691,8 @@ abstract class AbstractRenderer implements RendererInterface
         $viewModel->setVariable('generalParameterNames', $generalParameterNames);
 
         $viewModel->setVariable('columns', $this->getColumns());
+        
+        $viewModel->setVariable('formFilters', $this->getFormFilters());
 
         $viewModel->setVariable('rowStyles', $grid->getRowStyles());
 
