@@ -3,6 +3,7 @@
 namespace ZfcDatagrid;
 
 use InvalidArgumentException;
+use ZfcDatagrid\FormFilter\AbstractFilter;
 
 class Filter
 {
@@ -129,45 +130,7 @@ class Filter
      */
     private function setFormFilterOperator($inputFilterValue, $defaultOperator = self::LIKE)
     {
-        $value = $this->operateValue($inputFilterValue, $defaultOperator);
-        
-        /*
-         * Handle multiple values
-         */
-        $formFilterType = $this->getFormFilter()->getType();
-        
-        if ($formFilterType instanceof FormFilter\Type\DateTime && $formFilterType->isDaterangePickerEnabled() === true) {
-            $value = explode(' - ', $value);
-        } elseif (! $formFilterType instanceof FormFilter\Type\Number && ! is_array($value)) {
-            $value = explode(',', $value);
-        } elseif (! is_array($value)) {
-            $value = [$value];
-        }
-        
-        foreach ($value as &$val) {
-            $val = trim($val);
-        }
-        
-        if (self::BETWEEN == $this->operator) {
-            if (! $formFilterType instanceof FormFilter\Type\DateTime) {
-                $value = [
-                    min($value),
-                    max($value),
-                ];
-            }
-        }
-        
-        /*
-         * The searched value must be converted maybe.... - Translation - Replace - DateTime - ...
-         */
-        foreach ($value as &$val) {
-            $type = $this->getFormFilter()->getType();
-            $val = $type->getFilterValue($val);
-            
-            // @TODO Translation + Replace
-        }
-        
-        $this->value = $value;
+        $this->operateValue($inputFilterValue, $this->getFormFilter()->getType(), $defaultOperator);
     }
 
     /**
@@ -184,44 +147,7 @@ class Filter
      */
     private function setColumnOperator($inputFilterValue, $defaultOperator = self::LIKE)
     {
-        $value = $this->operateValue($inputFilterValue, $defaultOperator);
-        
-        /*
-         * Handle multiple values
-         */
-        $columnType = $this->getColumn()->getType();
-        if ($columnType instanceof Column\Type\DateTime && $columnType->isDaterangePickerEnabled() === true) {
-            $value = explode(' - ', $value);
-        } elseif (! $columnType instanceof Column\Type\Number && ! is_array($value)) {
-            $value = explode(',', $value);
-        } elseif (! is_array($value)) {
-            $value = [$value];
-        }
-
-        foreach ($value as &$val) {
-            $val = trim($val);
-        }
-
-        if (self::BETWEEN == $operator) {
-            if (! $this->getColumn()->getType() instanceof Column\Type\DateTime) {
-                $value = [
-                    min($value),
-                    max($value),
-                ];
-            }
-        }
-
-        /*
-         * The searched value must be converted maybe.... - Translation - Replace - DateTime - ...
-         */
-        foreach ($value as &$val) {
-            $type = $this->getColumn()->getType();
-            $val = $type->getFilterValue($val);
-
-            // @TODO Translation + Replace
-        }
-
-        $this->value = $value;
+        $this->operateValue($inputFilterValue, $this->getColumn()->getType(), $defaultOperator);
     }
     
     /**
@@ -230,7 +156,7 @@ class Filter
      * @param mixed  $defaultOperator
      * @return string
      */
-    private function operateValue($inputFilterValue, $defaultOperator = self::LIKE)
+    private function operateValue($inputFilterValue, $type, $defaultOperator = self::LIKE)
     {
         $inputFilterValue = (string) $inputFilterValue;
         $inputFilterValue = trim($inputFilterValue);
@@ -351,7 +277,41 @@ class Filter
             $value = '';
         }
         
-        return $value;
+        /*
+         * Handle multiple values
+         */
+        if ($type instanceof Column\Type\DateTime && $type->isDaterangePickerEnabled() === true) {
+            $value = explode(' - ', $value);
+        } elseif (! $type instanceof Column\Type\Number && ! is_array($value)) {
+            $value = explode(',', $value);
+        } elseif (! is_array($value)) {
+            $value = [$value];
+        }
+        
+        foreach ($value as &$val) {
+            $val = trim($val);
+        }
+        
+        if (self::BETWEEN == $this->operator) {
+            if (! $type instanceof Column\Type\DateTime) {
+                $value = [
+                    min($value),
+                    max($value),
+                ];
+            }
+        }
+        
+        /*
+         * The searched value must be converted maybe.... - Translation - Replace - DateTime - ...
+         */
+        foreach ($value as &$val) {
+            $type = $this->getColumn()->getType();
+            $val = $type->getFilterValue($val);
+            
+            // @TODO Translation + Replace
+        }
+        
+        $this->value = $value;
     }
 
     /**
@@ -385,8 +345,8 @@ class Filter
     }
     
     /**
-     *
-     * @return \FormFilter\AbstractFilter
+     * 
+     * @return AbstractFilter
      */
     public function getFormFilter()
     {

@@ -9,8 +9,13 @@ abstract class AbstractFilter
     protected $label = '';
 
     protected $width = 5;
+    
+    /** @var int|null */
+    protected $position;
 
     protected $uniqueId;
+    
+    protected $filterActive = null;
     
     protected $filterActiveValue;
     
@@ -46,8 +51,9 @@ abstract class AbstractFilter
     }
 
     /**
+     * 
      * @param int|null $position
-     * @return AbstractColumn
+     * @return \ZfcDatagrid\FormFilter\AbstractFilter
      */
     public function setPosition($position)
     {
@@ -104,21 +110,6 @@ abstract class AbstractFilter
     public function getFilterActiveValue()
     {
         return $this->filterActiveValue;
-    }
-    
-    /**
-     * Set the formFilter type.
-     *
-     * @param Type\AbstractType $type
-     */
-    public function setType(Type\AbstractType $type)
-    {
-        if ($type instanceof Type\Image && $this->hasFormatters() === false) {
-            $this->addFormatter(new Formatter\Image());
-            $this->setRowClickDisabled(true);
-        }
-        
-        $this->type = $type;
     }
     
     /**

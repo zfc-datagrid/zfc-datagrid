@@ -38,7 +38,7 @@ class PrepareData
      * @param array $columns
      * @param array $formFilters
      */
-    public function __construct(array $data, array $columns, array $formFilters)
+    public function __construct(array $data, array $columns, array $formFilters = [])
     {
         $this->setData($data);
         $this->setColumns($columns);

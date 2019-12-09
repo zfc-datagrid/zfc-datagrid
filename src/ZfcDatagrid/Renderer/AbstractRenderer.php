@@ -287,10 +287,10 @@ abstract class AbstractRenderer implements RendererInterface
         $this->formFilters = $formFilters;
     }
     
+    
     /**
-     * Get all columns.
-     *
-     * @return \ZfcDatagrid\Column\AbstractColumn[]
+     * Get all filters
+     * @return \ZfcDatagrid\FormFilter\AbstractFilter[]
      */
     public function getFormFilters()
     {

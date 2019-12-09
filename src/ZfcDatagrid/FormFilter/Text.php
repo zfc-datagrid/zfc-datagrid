@@ -45,8 +45,7 @@ class Text extends AbstractFilter
             $this->setUniqueId($columnOrIndexOrObject);
             $this->setSelect($columnOrIndexOrObject);
         } elseif (is_object($columnOrIndexOrObject) &&
-            null !== $tableOrAliasOrUniqueId &&
-            is_string($tableOrAliasOrUniqueId)
+            null !== $tableOrAliasOrUniqueId
         ) {
            $this->setUniqueId($tableOrAliasOrUniqueId);
             $this->setSelect($columnOrIndexOrObject);
