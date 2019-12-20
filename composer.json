@@ -38,7 +38,7 @@
     },
     
     "require-dev": {
-        "phpunit/phpunit": "^7.4.3",
+        "phpunit/phpunit": "^7.5.18",
         "doctrine/doctrine-orm-module": "^1.1.4 || ^2.1.2",
         "doctrine/orm": "^2.6.3",
         "zendframework/zend-stdlib": "^3.2.1",
