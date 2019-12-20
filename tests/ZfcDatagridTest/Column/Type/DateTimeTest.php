@@ -180,7 +180,7 @@ class DateTimeTest extends TestCase
         );
 
         $type->setOutputTimeType(IntlDateFormatter::SHORT);
-        $this->assertEquals('10.01.2013 10:00', $type->getUserValue('2013-01-10 10:00:00'));
+        $this->assertEquals('10.01.2013, 10:00', $type->getUserValue('2013-01-10 10:00:00'));
     }
 
     /**
