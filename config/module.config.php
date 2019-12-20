@@ -4,7 +4,7 @@ use ZfcDatagrid\Datagrid;
 use ZfcDatagrid\Renderer;
 use ZfcDatagrid\Service;
 use Zend\Cache\Storage;
-use Zend\ServiceManager\Factory\InvokableFactory;
+use ZfcDatagrid\Middleware;use Zend\ServiceManager\Factory\InvokableFactory;
 
 return [
     'ZfcDatagrid' => [
@@ -208,6 +208,7 @@ return [
             Datagrid::class => Service\DatagridFactory::class,
 
             'zfcDatagrid_dbAdapter' => Service\ZendDbAdapterFactory::class,
+            Middleware\RequestHelper::class => Middleware\RequestHelperFactory::class,
 
             // HTML renderer
             Renderer\BootstrapTable\Renderer::class => InvokableFactory::class,
@@ -229,6 +230,7 @@ return [
             // HTML renderer
             'zfcDatagrid.renderer.bootstrapTable' => Renderer\BootstrapTable\Renderer::class,
             'zfcDatagrid.renderer.jqgrid'         => Renderer\JqGrid\Renderer::class,
+            'zfcDatagrid.renderer.jqGrid'         => Renderer\JqGrid\Renderer::class,
 
             // CLI renderer
             'zfcDatagrid.renderer.zendTable' => Renderer\ZendTable\Renderer::class,
@@ -255,11 +257,9 @@ return [
     ],
 
     'view_manager' => [
-
         'strategies' => [
             'ViewJsonStrategy',
         ],
-
         'template_map' => [
             'zfc-datagrid/renderer/bootstrapTable/layout' =>
                 __DIR__ . '/../view/zfc-datagrid/renderer/bootstrapTable/layout.phtml',
@@ -275,8 +275,24 @@ return [
             'zfc-datagrid/renderer/jqGrid/layout'         =>
                 __DIR__ . '/../view/zfc-datagrid/renderer/jqGrid/layout.phtml',
         ],
-
         'template_path_stack' => [
+            'ZfcDatagrid' => __DIR__ . '/../view',
+        ],
+    ],
+
+    // middleware
+    'templates' => [
+        'map' => [
+            'zfc-datagrid/renderer/bootstrapTable/layout' =>
+                __DIR__ . '/../view/zfc-datagrid/renderer/bootstrapTable/layout.phtml',
+            'zfc-datagrid/renderer/printHtml/layout' =>
+                __DIR__ . '/../view/zfc-datagrid/renderer/printHtml/layout.phtml',
+            'zfc-datagrid/renderer/printHtml/table' =>
+                __DIR__ . '/../view/zfc-datagrid/renderer/printHtml/table.phtml',
+            'zfc-datagrid/renderer/jqGrid/layout' =>
+                __DIR__ . '/../view/zfc-datagrid/renderer/jqGrid/layout.phtml',
+        ],
+        'paths' => [
             'ZfcDatagrid' => __DIR__ . '/../view',
         ],
     ],
