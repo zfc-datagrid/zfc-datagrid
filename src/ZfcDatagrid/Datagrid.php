@@ -728,9 +728,6 @@ class Datagrid
         $useFilters = [];
         
         foreach ($formFilters as $fil) {
-            if (!$fil instanceof ZfcDatagrid\FormFilter\AbstractFilter) {
-                $fil = $this->createFormFilter($fil);
-            }
             $useFilters[$fil->getLabel()] = $fil;
         }
         
@@ -740,7 +737,7 @@ class Datagrid
     /**
      * Add a formFilter by array config or instanceof Column\AbstractColumn.
      *
-     * @param array|ZfcDatagrid\FormFilter\AbstractFilter $filter
+     * @param array|FormFilter\AbstractFilter $filter
      */
     public function addFilter($filter)
     {
