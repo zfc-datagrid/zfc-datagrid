@@ -48,7 +48,7 @@ class PhpArrayTest extends DataSourceTestCase
 
         $source->execute();
 
-        $this->assertInstanceOf(\Zend\Paginator\Adapter\ArrayAdapter::class, $source->getPaginatorAdapter());
+        $this->assertInstanceOf(\Laminas\Paginator\Adapter\ArrayAdapter::class, $source->getPaginatorAdapter());
     }
 
     public function testFilter()

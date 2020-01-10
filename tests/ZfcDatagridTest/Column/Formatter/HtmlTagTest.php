@@ -2,7 +2,7 @@
 
 namespace ZfcDatagridTest\Column\Formatter;
 
-use Zend\Router\RouteStackInterface;
+use Laminas\Router\RouteStackInterface;
 use ZfcDatagrid\Column\AbstractColumn;
 use ZfcDatagrid\Column\Formatter;
 use ZfcDatagridTest\Util\TestBase;

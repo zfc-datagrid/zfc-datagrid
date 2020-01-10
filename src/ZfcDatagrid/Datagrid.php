@@ -4,19 +4,19 @@ namespace ZfcDatagrid;
 use ArrayIterator;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\QueryBuilder;
-use Zend\Cache;
-use Zend\Console\Request as ConsoleRequest;
-use Zend\Db\Sql\Select as ZendSelect;
-use Zend\Http\PhpEnvironment\Request as HttpRequest;
-use Zend\I18n\Translator\TranslatorInterface;
-use Zend\Mvc\MvcEvent;
-use Zend\Paginator\Paginator;
-use Zend\Router\RouteStackInterface;
-use Zend\Session\Container as SessionContainer;
-use Zend\Stdlib\RequestInterface;
-use Zend\Stdlib\ResponseInterface;
-use Zend\View\Model\JsonModel;
-use Zend\View\Model\ViewModel;
+use Laminas\Cache;
+use Laminas\Console\Request as ConsoleRequest;
+use Laminas\Db\Sql\Select as LaminasSelect;
+use Laminas\Http\PhpEnvironment\Request as HttpRequest;
+use Laminas\I18n\Translator\TranslatorInterface;
+use Laminas\Mvc\MvcEvent;
+use Laminas\Paginator\Paginator;
+use Laminas\Router\RouteStackInterface;
+use Laminas\Session\Container as SessionContainer;
+use Laminas\Stdlib\RequestInterface;
+use Laminas\Stdlib\ResponseInterface;
+use Laminas\View\Model\JsonModel;
+use Laminas\View\Model\ViewModel;
 use ZfcDatagrid\Column\Style;
 use ZfcDatagrid\DataSource\DataSourceInterface;
 use function md5;
@@ -67,7 +67,7 @@ class Datagrid
     /**
      * View or Response.
      *
-     * @var \Zend\Http\Response\Stream|\Zend\View\Model\ViewModel
+     * @var \Laminas\Http\Response\Stream|\Laminas\View\Model\ViewModel
      */
     protected $response;
 
@@ -426,16 +426,16 @@ class Datagrid
             $this->dataSource = new DataSource\PhpArray($data);
         } elseif ($data instanceof QueryBuilder) {
             $this->dataSource = new DataSource\Doctrine2($data);
-        } elseif ($data instanceof ZendSelect) {
+        } elseif ($data instanceof LaminasSelect) {
             $args = func_get_args();
             if (count($args) === 1 ||
-                (! $args[1] instanceof \Zend\Db\Adapter\Adapter && ! $args[1] instanceof \Zend\Db\Sql\Sql)
+                (! $args[1] instanceof \Laminas\Db\Adapter\Adapter && ! $args[1] instanceof \Laminas\Db\Sql\Sql)
             ) {
                 throw new \InvalidArgumentException(
-                    'For "Zend\Db\Sql\Select" also a "Zend\Db\Adapter\Sql" or "Zend\Db\Sql\Sql" is needed.'
+                    'For "Laminas\Db\Sql\Select" also a "Laminas\Db\Adapter\Sql" or "Laminas\Db\Sql\Sql" is needed.'
                 );
             }
-            $this->dataSource = new DataSource\ZendSelect($data);
+            $this->dataSource = new DataSource\LaminasSelect($data);
             $this->dataSource->setAdapter($args[1]);
         } elseif ($data instanceof Collection) {
             $args = func_get_args();
@@ -1018,7 +1018,7 @@ class Datagrid
             $this->getDataSource()->execute();
             $paginatorAdapter = $this->getDataSource()->getPaginatorAdapter();
 
-            \Zend\Paginator\Paginator::setDefaultScrollingStyle('Sliding');
+            \Laminas\Paginator\Paginator::setDefaultScrollingStyle('Sliding');
 
             $this->paginator = new Paginator($paginatorAdapter);
             $this->paginator->setCurrentPageNumber($renderer->getCurrentPageNumber());
@@ -1027,7 +1027,7 @@ class Datagrid
             /* @var $currentItems \ArrayIterator */
             $data = $this->paginator->getCurrentItems();
         if (! is_array($data)) {
-            if ($data instanceof \Zend\Db\ResultSet\ResultSet) {
+            if ($data instanceof \Laminas\Db\ResultSet\ResultSet) {
                 $data = $data->toArray();
             } elseif ($data instanceof ArrayIterator) {
                 $data = $data->getArrayCopy();
@@ -1060,7 +1060,7 @@ class Datagrid
             ];
             $success = $this->getCache()->setItem($this->getCacheId(), $cacheData);
             if ($success !== true) {
-                /** @var \Zend\Cache\Storage\Adapter\FilesystemOptions $options */
+                /** @var \Laminas\Cache\Storage\Adapter\FilesystemOptions $options */
                 $options = $this->getCache()->getOptions();
                 throw new \Exception(
                     sprintf(
@@ -1232,7 +1232,7 @@ class Datagrid
     }
 
     /**
-     * @return \Zend\Stdlib\ResponseInterface|\Zend\Http\Response\Stream|\Zend\View\Model\ViewModel
+     * @return \Laminas\Stdlib\ResponseInterface|\Laminas\Http\Response\Stream|\Laminas\View\Model\ViewModel
      */
     public function getResponse()
     {

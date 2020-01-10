@@ -1,8 +1,8 @@
 <?php
 namespace ZfcDatagrid;
 
-use Zend\I18n\Translator\TranslatorInterface;
-use Zend\Router\RouteStackInterface;
+use Laminas\I18n\Translator\TranslatorInterface;
+use Laminas\Router\RouteStackInterface;
 use function is_array;
 use function array_walk_recursive;
 use function is_object;
@@ -26,7 +26,7 @@ class PrepareData
     /** @var TranslatorInterface|null */
     private $translator;
 
-    /** @var \Zend\Router\RouteStackInterface */
+    /** @var \Laminas\Router\RouteStackInterface */
     private $router;
 
     /**

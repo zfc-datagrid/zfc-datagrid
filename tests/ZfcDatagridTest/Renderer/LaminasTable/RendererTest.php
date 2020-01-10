@@ -1,19 +1,19 @@
 <?php
-namespace ZfcDatagridTest\Renderer\ZendTable;
+namespace ZfcDatagridTest\Renderer\LaminasTable;
 
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
-use ZfcDatagrid\Renderer\ZendTable;
+use ZfcDatagrid\Renderer\LaminasTable;
 
 /**
  * @group Renderer
- * @covers \ZfcDatagrid\Renderer\ZendTable\Renderer
+ * @covers \ZfcDatagrid\Renderer\LaminasTable\Renderer
  */
 class RendererTest extends TestCase
 {
     private $options = [
         'renderer' => [
-            'zendTable' => [
+            'laminasTable' => [
                 'parameterNames' => [
                     'sortColumns'    => 'cols',
                     'sortDirections' => 'dirs',
@@ -28,13 +28,13 @@ class RendererTest extends TestCase
 
     /**
      *
-     * @var \Zend\Http\PhpEnvironment\Request
+     * @var \Laminas\Http\PhpEnvironment\Request
      */
     private $requestMock;
 
     /**
      *
-     * @var \Zend\Mvc\MvcEvent
+     * @var \Laminas\Mvc\MvcEvent
      */
     private $mvcEventMock;
 
@@ -46,11 +46,11 @@ class RendererTest extends TestCase
 
     public function setUp()
     {
-        $this->requestMock  = $this->getMockBuilder(\Zend\Console\Request::class)
+        $this->requestMock  = $this->getMockBuilder(\Laminas\Console\Request::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->mvcEventMock = $this->getMockBuilder(\Zend\Mvc\MvcEvent::class)
+        $this->mvcEventMock = $this->getMockBuilder(\Laminas\Mvc\MvcEvent::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -59,32 +59,32 @@ class RendererTest extends TestCase
 
     public function testGetName()
     {
-        $renderer = new ZendTable\Renderer();
+        $renderer = new LaminasTable\Renderer();
 
-        $this->assertEquals('zendTable', $renderer->getName());
+        $this->assertEquals('laminasTable', $renderer->getName());
     }
 
     public function testIsExport()
     {
-        $renderer = new ZendTable\Renderer();
+        $renderer = new LaminasTable\Renderer();
 
         $this->assertFalse($renderer->isExport());
     }
 
     public function testIsHtml()
     {
-        $renderer = new ZendTable\Renderer();
+        $renderer = new LaminasTable\Renderer();
 
         $this->assertFalse($renderer->isHtml());
     }
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage Request must be an instance of Zend\Console\Request for console rendering
+     * @expectedExceptionMessage Request must be an instance of Laminas\Console\Request for console rendering
      */
     public function testGetRequestException()
     {
-        $request = $this->getMockBuilder(\Zend\Http\PhpEnvironment\Request::class)
+        $request = $this->getMockBuilder(\Laminas\Http\PhpEnvironment\Request::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -93,7 +93,7 @@ class RendererTest extends TestCase
             ->method('getRequest')
             ->will($this->returnValue($request));
 
-        $renderer = new ZendTable\Renderer();
+        $renderer = new LaminasTable\Renderer();
         $renderer->setMvcEvent($mvcEvent);
 
         $renderer->getRequest();
@@ -108,7 +108,7 @@ class RendererTest extends TestCase
             ->method('getRequest')
             ->will($this->returnValue($request));
 
-        $renderer = new ZendTable\Renderer();
+        $renderer = new LaminasTable\Renderer();
         $renderer->setMvcEvent($mvcEvent);
 
         $this->assertEquals($request, $renderer->getRequest());
@@ -116,11 +116,11 @@ class RendererTest extends TestCase
 
     public function testConsoleAdapter()
     {
-        $renderer = new ZendTable\Renderer();
+        $renderer = new LaminasTable\Renderer();
 
-        $this->assertInstanceOf(\Zend\Console\Adapter\AdapterInterface::class, $renderer->getConsoleAdapter());
+        $this->assertInstanceOf(\Laminas\Console\Adapter\AdapterInterface::class, $renderer->getConsoleAdapter());
 
-        $adapter = $this->getMockForAbstractClass(\Zend\Console\Adapter\AbstractAdapter::class);
+        $adapter = $this->getMockForAbstractClass(\Laminas\Console\Adapter\AbstractAdapter::class);
 
         $this->assertNotSame($adapter, $renderer->getConsoleAdapter());
         $renderer->setConsoleAdapter($adapter);
@@ -136,7 +136,7 @@ class RendererTest extends TestCase
             ->method('getRequest')
             ->will($this->returnValue($request));
 
-        $renderer = new ZendTable\Renderer();
+        $renderer = new LaminasTable\Renderer();
         $renderer->setOptions($this->options);
         $renderer->setMvcEvent($mvcEvent);
 
@@ -167,7 +167,7 @@ class RendererTest extends TestCase
             ->method('getRequest')
             ->will($this->returnValue($request));
 
-        $renderer = new ZendTable\Renderer();
+        $renderer = new LaminasTable\Renderer();
         $renderer->setOptions($this->options);
         $renderer->setMvcEvent($mvcEvent);
 
@@ -219,7 +219,7 @@ class RendererTest extends TestCase
             ->method('getRequest')
             ->will($this->returnValue($request));
 
-        $renderer = new ZendTable\Renderer();
+        $renderer = new LaminasTable\Renderer();
         $renderer->setOptions($this->options);
         $renderer->setMvcEvent($mvcEvent);
 
@@ -256,7 +256,7 @@ class RendererTest extends TestCase
             ->method('getRequest')
             ->will($this->returnValue($request));
 
-        $renderer = new ZendTable\Renderer();
+        $renderer = new LaminasTable\Renderer();
         $renderer->setOptions($this->options);
         $renderer->setMvcEvent($mvcEvent);
 
@@ -275,7 +275,7 @@ class RendererTest extends TestCase
             ->method('getRequest')
             ->will($this->returnValue($request));
 
-        $renderer = new ZendTable\Renderer();
+        $renderer = new LaminasTable\Renderer();
         $renderer->setOptions($this->options);
         $renderer->setMvcEvent($mvcEvent);
 
@@ -291,7 +291,7 @@ class RendererTest extends TestCase
             ->method('getRequest')
             ->will($this->returnValue($request));
 
-        $renderer = new ZendTable\Renderer();
+        $renderer = new LaminasTable\Renderer();
         $renderer->setOptions($this->options);
         $renderer->setMvcEvent($mvcEvent);
 
@@ -310,7 +310,7 @@ class RendererTest extends TestCase
             ->method('getRequest')
             ->will($this->returnValue($request));
 
-        $renderer = new ZendTable\Renderer();
+        $renderer = new LaminasTable\Renderer();
         $renderer->setOptions($this->options);
         $renderer->setMvcEvent($mvcEvent);
 
@@ -323,7 +323,7 @@ class RendererTest extends TestCase
      */
     public function testGetColumnsToDisplay()
     {
-        $reflection = new ReflectionClass(\ZfcDatagrid\Renderer\ZendTable\Renderer::class);
+        $reflection = new ReflectionClass(\ZfcDatagrid\Renderer\LaminasTable\Renderer::class);
         $method     = $reflection->getMethod('getColumnsToDisplay');
         $method->setAccessible(true);
 
@@ -338,7 +338,7 @@ class RendererTest extends TestCase
             ->getMock();
         $col3->setWidth(20);
 
-        $renderer = new ZendTable\Renderer();
+        $renderer = new LaminasTable\Renderer();
         $renderer->setColumns([
             $col1,
             $col2,
@@ -360,13 +360,13 @@ class RendererTest extends TestCase
             $col2,
         ], $result);
 
-        $renderer = new ZendTable\Renderer();
+        $renderer = new LaminasTable\Renderer();
         $method->invoke($renderer);
     }
 
     public function testGetColumnWidthsSmaller()
     {
-        $reflection = new ReflectionClass(\ZfcDatagrid\Renderer\ZendTable\Renderer::class);
+        $reflection = new ReflectionClass(\ZfcDatagrid\Renderer\LaminasTable\Renderer::class);
         $method     = $reflection->getMethod('getColumnWidths');
         $method->setAccessible(true);
 
@@ -376,8 +376,8 @@ class RendererTest extends TestCase
         $col2 = $this->getMockForAbstractClass(\ZfcDatagrid\Column\AbstractColumn::class);
         $col2->setWidth(20);
 
-        $consoleAdapter = $this->getMockForAbstractClass(\Zend\Console\Adapter\AbstractAdapter::class);
-        $renderer       = new ZendTable\Renderer();
+        $consoleAdapter = $this->getMockForAbstractClass(\Laminas\Console\Adapter\AbstractAdapter::class);
+        $renderer       = new LaminasTable\Renderer();
         $renderer->setConsoleAdapter($consoleAdapter);
         $renderer->setColumns([
             $col1,
@@ -395,7 +395,7 @@ class RendererTest extends TestCase
 
     public function testGetColumnWidthsLarger()
     {
-        $reflection = new ReflectionClass(\ZfcDatagrid\Renderer\ZendTable\Renderer::class);
+        $reflection = new ReflectionClass(\ZfcDatagrid\Renderer\LaminasTable\Renderer::class);
         $method     = $reflection->getMethod('getColumnWidths');
         $method->setAccessible(true);
 
@@ -405,8 +405,8 @@ class RendererTest extends TestCase
         $col2 = $this->getMockForAbstractClass(\ZfcDatagrid\Column\AbstractColumn::class);
         $col2->setWidth(40);
 
-        $consoleAdapter = $this->getMockForAbstractClass(\Zend\Console\Adapter\AbstractAdapter::class);
-        $renderer       = new ZendTable\Renderer();
+        $consoleAdapter = $this->getMockForAbstractClass(\Laminas\Console\Adapter\AbstractAdapter::class);
+        $renderer       = new LaminasTable\Renderer();
         $renderer->setConsoleAdapter($consoleAdapter);
         $renderer->setColumns([
             $col1,
@@ -424,7 +424,7 @@ class RendererTest extends TestCase
 
     public function testGetColumnWidthsRoundNecessary()
     {
-        $reflection = new ReflectionClass(\ZfcDatagrid\Renderer\ZendTable\Renderer::class);
+        $reflection = new ReflectionClass(\ZfcDatagrid\Renderer\LaminasTable\Renderer::class);
         $method     = $reflection->getMethod('getColumnWidths');
         $method->setAccessible(true);
 
@@ -434,8 +434,8 @@ class RendererTest extends TestCase
         $col2 = $this->getMockForAbstractClass(\ZfcDatagrid\Column\AbstractColumn::class);
         $col2->setWidth(5);
 
-        $consoleAdapter = $this->getMockForAbstractClass(\Zend\Console\Adapter\AbstractAdapter::class);
-        $renderer       = new ZendTable\Renderer();
+        $consoleAdapter = $this->getMockForAbstractClass(\Laminas\Console\Adapter\AbstractAdapter::class);
+        $renderer       = new LaminasTable\Renderer();
         $renderer->setConsoleAdapter($consoleAdapter);
         $renderer->setColumns([
             $col1,

@@ -1,8 +1,8 @@
 <?php
 namespace ZfcDatagridTest\Util;
 
-use Zend\Mvc\Service\ServiceListenerFactory;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\Mvc\Service\ServiceListenerFactory;
+use Laminas\ServiceManager\ServiceManager;
 
 /**
  * Class ServiceManagerFactory
@@ -24,7 +24,7 @@ class ServiceManagerFactory
     }
 
     /**
-     * @return \Zend\ServiceManager\ServiceManager
+     * @return \Laminas\ServiceManager\ServiceManager
      */
     public static function getServiceManager()
     {

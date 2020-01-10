@@ -2,7 +2,7 @@
 namespace ZfcDatagrid\DataSource\Doctrine2;
 
 use Doctrine\ORM\QueryBuilder;
-use Zend\Paginator\Adapter\AdapterInterface;
+use Laminas\Paginator\Adapter\AdapterInterface;
 use function count;
 use function implode;
 use function array_unique;
@@ -54,7 +54,7 @@ class PaginatorFast implements AdapterInterface
     /**
      * Returns the total number of rows in the result set.
      *
-     * Partly adapted from Zend
+     * Partly adapted from ZF1
      *
      * @see https://github.com/zendframework/zf1/blob/master/library/Zend/Paginator/Adapter/DbSelect.php#L198
      *

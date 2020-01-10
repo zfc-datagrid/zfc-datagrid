@@ -5,9 +5,9 @@
 
 namespace ZfcDatagrid\Renderer\Csv;
 
-use Zend\Http\Headers;
-use Zend\Http\Response\Stream as ResponseStream;
-use Zend\View\Model\ViewModel;
+use Laminas\Http\Headers;
+use Laminas\Http\Response\Stream as ResponseStream;
+use Laminas\View\Model\ViewModel;
 use ZfcDatagrid\Column\Type;
 use ZfcDatagrid\Renderer\AbstractExport;
 use function date;

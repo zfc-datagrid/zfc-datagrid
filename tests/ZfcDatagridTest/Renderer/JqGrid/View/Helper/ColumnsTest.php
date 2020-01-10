@@ -12,7 +12,7 @@ use ZfcDatagrid\Renderer\JqGrid\View\Helper;
  */
 class ColumnsTest extends TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Zend\View\HelperPluginManager */
+    /** @var \PHPUnit_Framework_MockObject_MockObject|\Laminas\View\HelperPluginManager */
     private $sm;
 
     /**
@@ -23,7 +23,7 @@ class ColumnsTest extends TestCase
 
     public function setUp()
     {
-        $this->sm = $this->getMockBuilder(\Zend\View\HelperPluginManager::class)
+        $this->sm = $this->getMockBuilder(\Laminas\View\HelperPluginManager::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -231,8 +231,8 @@ class ColumnsTest extends TestCase
 
     public function testTranslate()
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Zend\ServiceManager\ServiceManager $sm */
-        $sm = $this->getMockBuilder(\Zend\ServiceManager\ServiceManager::class)
+        /** @var \PHPUnit_Framework_MockObject_MockObject|\Laminas\ServiceManager\ServiceManager $sm */
+        $sm = $this->getMockBuilder(\Laminas\ServiceManager\ServiceManager::class)
             ->setMethods(null)
             ->getMock();
 
@@ -249,8 +249,8 @@ class ColumnsTest extends TestCase
 
     public function testTranslateWithMockedTranslator()
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Zend\I18n\Translator\Translator $translator */
-        $translator = $this->getMockBuilder(\Zend\I18n\Translator\Translator::class)
+        /** @var \PHPUnit_Framework_MockObject_MockObject|\Laminas\I18n\Translator\Translator $translator */
+        $translator = $this->getMockBuilder(\Laminas\I18n\Translator\Translator::class)
             ->disableOriginalConstructor()
             ->setMethods(['translate'])
             ->getMock();

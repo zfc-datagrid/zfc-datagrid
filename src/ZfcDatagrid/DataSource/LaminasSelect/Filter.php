@@ -1,10 +1,10 @@
 <?php
-namespace ZfcDatagrid\DataSource\ZendSelect;
+namespace ZfcDatagrid\DataSource\LaminasSelect;
 
-use Zend\Db\Sql\Predicate\PredicateSet;
-use Zend\Db\Sql\Select;
-use Zend\Db\Sql\Sql;
-use Zend\Db\Sql\Where;
+use Laminas\Db\Sql\Predicate\PredicateSet;
+use Laminas\Db\Sql\Select;
+use Laminas\Db\Sql\Sql;
+use Laminas\Db\Sql\Where;
 use ZfcDatagrid\Column;
 use ZfcDatagrid\Filter as DatagridFilter;
 use function sprintf;

@@ -1,7 +1,7 @@
 <?php
 namespace ZfcDatagrid\DataSource;
 
-use Zend\Paginator\Adapter\AdapterInterface;
+use Laminas\Paginator\Adapter\AdapterInterface;
 use ZfcDatagrid\Column;
 use ZfcDatagrid\Filter;
 

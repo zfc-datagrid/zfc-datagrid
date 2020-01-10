@@ -3,8 +3,8 @@
 use ZfcDatagrid\Datagrid;
 use ZfcDatagrid\Renderer;
 use ZfcDatagrid\Service;
-use Zend\Cache\Storage;
-use Zend\ServiceManager\Factory\InvokableFactory;
+use Laminas\Cache\Storage;
+use Laminas\ServiceManager\Factory\InvokableFactory;
 
 return [
     'ZfcDatagrid' => [
@@ -15,7 +15,7 @@ return [
                 // If no specific rendere given, use this renderes for HTTP / console
                 'renderer' => [
                     'http'    => 'bootstrapTable',
-                    'console' => 'zendTable',
+                    'console' => 'laminasTable',
                 ],
             ],
 
@@ -90,9 +90,9 @@ return [
                 ],
             ],
 
-            'zendTable' => [
+            'laminasTable' => [
                 'parameterNames' => [
-                    // Internal => ZendTable (console)
+                    // Internal => LaminasTable (console)
                     'currentPage'    => 'page',
                     'itemsPerPage'   => 'items',
                     'sortColumns'    => 'sortBys',
@@ -207,14 +207,14 @@ return [
         'factories' => [
             Datagrid::class => Service\DatagridFactory::class,
 
-            'zfcDatagrid_dbAdapter' => Service\ZendDbAdapterFactory::class,
+            'zfcDatagrid_dbAdapter' => Service\LaminasDbAdapterFactory::class,
 
             // HTML renderer
             Renderer\BootstrapTable\Renderer::class => InvokableFactory::class,
             Renderer\JqGrid\Renderer::class => InvokableFactory::class,
 
             // CLI renderer
-            Renderer\ZendTable\Renderer::class => InvokableFactory::class,
+            Renderer\LaminasTable\Renderer::class => InvokableFactory::class,
 
             // Export renderer
             Renderer\PrintHtml\Renderer::class => InvokableFactory::class,
@@ -231,7 +231,7 @@ return [
             'zfcDatagrid.renderer.jqgrid'         => Renderer\JqGrid\Renderer::class,
 
             // CLI renderer
-            'zfcDatagrid.renderer.zendTable' => Renderer\ZendTable\Renderer::class,
+            'zfcDatagrid.renderer.laminasTable' => Renderer\LaminasTable\Renderer::class,
 
             // Export renderer
             'zfcDatagrid.renderer.printHtml' => Renderer\PrintHtml\Renderer::class,

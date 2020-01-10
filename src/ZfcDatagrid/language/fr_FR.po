@@ -15,19 +15,19 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: /mnt/DATAS/www/ZfcDatagrid\n"
 
-#: /mnt/DATAS/www/ZfcDatagrid/src/ZfcDatagrid/Renderer/Text/ZendTable.php:250
+#: /mnt/DATAS/www/ZfcDatagrid/src/ZfcDatagrid/Renderer/Text/LaminasTable.php:250
 msgid "Page"
 msgstr ""
 
-#: /mnt/DATAS/www/ZfcDatagrid/src/ZfcDatagrid/Renderer/Text/ZendTable.php:251
-#: /mnt/DATAS/www/ZfcDatagrid/src/ZfcDatagrid/Renderer/Text/ZendTable.php:255
+#: /mnt/DATAS/www/ZfcDatagrid/src/ZfcDatagrid/Renderer/Text/LaminasTable.php:251
+#: /mnt/DATAS/www/ZfcDatagrid/src/ZfcDatagrid/Renderer/Text/LaminasTable.php:255
 msgid "of"
 msgstr "sur"
 
-#: /mnt/DATAS/www/ZfcDatagrid/src/ZfcDatagrid/Renderer/Text/ZendTable.php:255
+#: /mnt/DATAS/www/ZfcDatagrid/src/ZfcDatagrid/Renderer/Text/LaminasTable.php:255
 msgid "Showing"
 msgstr "Affichage de"
 
-#: /mnt/DATAS/www/ZfcDatagrid/src/ZfcDatagrid/Renderer/Text/ZendTable.php:255
+#: /mnt/DATAS/www/ZfcDatagrid/src/ZfcDatagrid/Renderer/Text/LaminasTable.php:255
 msgid "items"
 msgstr "lignes"
