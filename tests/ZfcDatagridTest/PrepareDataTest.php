@@ -45,7 +45,7 @@ class PrepareDataTest extends TestCase
      */
     private $col3;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->colId = $this->getMockForAbstractClass(\ZfcDatagrid\Column\AbstractColumn::class);
         $this->colId->setUniqueId('id');

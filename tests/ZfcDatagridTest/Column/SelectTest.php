@@ -1,6 +1,7 @@
 <?php
 namespace ZfcDatagridTest\Column;
 
+use Exception;
 use PHPUnit\Framework\TestCase;
 use ZfcDatagrid\Column;
 
@@ -45,21 +46,19 @@ class SelectTest extends TestCase
         $this->assertEquals('myAlias', $col->getUniqueId());
     }
 
-    /**
-     * @expectedException \Exception
-     */
     public function testException()
     {
         $expr = new \Laminas\Db\Sql\Expression('Something...');
+
+        $this->expectException(Exception::class);
         $col  = new Column\Select($expr);
     }
 
-    /**
-     * @expectedException \Exception
-     */
     public function testExceptionNotString()
     {
         $expr = new \Laminas\Db\Sql\Expression('Something...');
+
+        $this->expectException(Exception::class);
         $col  = new Column\Select($expr, new \stdClass());
     }
 

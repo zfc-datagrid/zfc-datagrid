@@ -2,6 +2,7 @@
 namespace ZfcDatagridTest\Column\Action;
 
 use Exception;
+use InvalidArgumentException;
 use ZfcDatagrid\Column\Action\Button;
 use ZfcDatagridTest\Util\TestBase;
 
@@ -49,13 +50,11 @@ class ButtonTest extends TestBase
         $this->assertEquals($html, $button->toHtml(['myCol' => 'Blubb']));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testHtmlException()
     {
         $button = new Button();
 
+        $this->expectException(InvalidArgumentException::class);
         $button->toHtml([]);
     }
 

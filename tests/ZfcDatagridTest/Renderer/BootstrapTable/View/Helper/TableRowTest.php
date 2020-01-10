@@ -1,6 +1,7 @@
 <?php
 namespace ZfcDatagridTest\Renderer\BootstrapTable\View\Helper;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use ZfcDatagrid\Column;
 use ZfcDatagrid\Column\Style;
@@ -29,7 +30,7 @@ class TableRowTest extends TestCase
      */
     private $myCol;
 
-    public function setUp()
+    public function setUp(): void
     {
         $myCol = $this->getMockForAbstractClass(\ZfcDatagrid\Column\AbstractColumn::class);
         $myCol->setUniqueId('myCol');
@@ -76,7 +77,7 @@ class TableRowTest extends TestCase
 
         $html = $helper($this->rowWithId, $cols);
 
-        $this->assertContains('<td class="hidden"', $html);
+        $this->assertStringContainsString('<td class="hidden"', $html);
     }
 
     public function testType()
@@ -95,16 +96,13 @@ class TableRowTest extends TestCase
         ];
 
         $html = $helper($this->rowWithId, $cols);
-        $this->assertContains('<td style="text-align: right"', $html);
+        $this->assertStringContainsString('<td style="text-align: right"', $html);
 
         $myCol->setType(new Type\PhpArray());
         $html = $helper($this->rowWithId, $cols);
-        $this->assertContains('<pre>First value</pre>', $html);
+        $this->assertStringContainsString('<pre>First value</pre>', $html);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testStyle()
     {
         $helper = new TableRow();
@@ -118,7 +116,7 @@ class TableRowTest extends TestCase
         ];
 
         $html = $helper($this->rowWithId, $cols);
-        $this->assertContains('<td style="font-weight: bold"', $html);
+        $this->assertStringContainsString('<td style="font-weight: bold"', $html);
 
         // italic
         $myCol = clone $this->myCol;
@@ -128,7 +126,7 @@ class TableRowTest extends TestCase
             $myCol,
         ];
         $html = $helper($this->rowWithId, $cols);
-        $this->assertContains('<td style="font-style: italic"', $html);
+        $this->assertStringContainsString('<td style="font-style: italic"', $html);
 
         // color
         $myCol = clone $this->myCol;
@@ -138,7 +136,7 @@ class TableRowTest extends TestCase
             $myCol,
         ];
         $html = $helper($this->rowWithId, $cols);
-        $this->assertContains('<td style="color: #ff0000"', $html);
+        $this->assertStringContainsString('<td style="color: #ff0000"', $html);
 
         // background color
         $myCol = clone $this->myCol;
@@ -148,7 +146,7 @@ class TableRowTest extends TestCase
             $myCol,
         ];
         $html = $helper($this->rowWithId, $cols);
-        $this->assertContains('<td style="background-color: #00ff00"', $html);
+        $this->assertStringContainsString('<td style="background-color: #00ff00"', $html);
 
         // css class for cell
         $myCol = clone $this->myCol;
@@ -158,7 +156,7 @@ class TableRowTest extends TestCase
             $myCol,
         ];
         $html = $helper($this->rowWithId, $cols);
-        $this->assertContains('<td class="test-class"', $html);
+        $this->assertStringContainsString('<td class="test-class"', $html);
 
         // exception
         $style = $this->getMockForAbstractClass(\ZfcDatagrid\Column\Style\AbstractStyle::class);
@@ -170,6 +168,7 @@ class TableRowTest extends TestCase
             $myCol,
         ];
 
+        $this->expectException(InvalidArgumentException::class);
         $html = $helper($this->rowWithId, $cols);
     }
 
@@ -195,7 +194,7 @@ class TableRowTest extends TestCase
         ];
 
         $html = $helper($rowData, $cols);
-        $this->assertContains('<input type="checkbox"', $html);
+        $this->assertStringContainsString('<input type="checkbox"', $html);
 
         // row action
         $cols = [
@@ -203,6 +202,6 @@ class TableRowTest extends TestCase
             $colAction,
         ];
         $html = $helper($rowData, $cols, $action);
-        $this->assertContains('<a href="http://example.com', $html);
+        $this->assertStringContainsString('<a href="http://example.com', $html);
     }
 }

@@ -1,6 +1,7 @@
 <?php
 namespace ZfcDatagridTest\Column\Style;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use ZfcDatagrid\Filter;
 
@@ -16,7 +17,7 @@ class AbstractStyleTest extends TestCase
      */
     private $column;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->column = $this->getMockForAbstractClass(\ZfcDatagrid\Column\AbstractColumn::class);
         $this->column->setUniqueId('colName');
@@ -158,14 +159,12 @@ class AbstractStyleTest extends TestCase
         ]));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testSetByValueOperatorException()
     {
         /* @var $style \ZfcDatagrid\Column\Style\AbstractStyle */
         $style = $this->getMockForAbstractClass(\ZfcDatagrid\Column\Style\AbstractStyle::class);
 
+        $this->expectException(InvalidArgumentException::class);
         $style->setByValueOperator('XOR');
     }
 

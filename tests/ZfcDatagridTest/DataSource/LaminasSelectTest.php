@@ -6,9 +6,13 @@ namespace ZfcDatagridTest\DataSource;
  *
  * Copied from: https://github.com/doctrine/doctrine2/blob/master/tests/Doctrine/Tests/OrmTestCase.php
  */
+
+use Exception;
+use InvalidArgumentException;
 use Laminas\Db\Adapter\Adapter;
 use Laminas\Db\Sql\Select;
 use Laminas\Db\Sql\Sql;
+use TypeError;
 use ZfcDatagrid\Column;
 use ZfcDatagrid\DataSource\LaminasSelect;
 use ZfcDatagrid\Filter;
@@ -38,7 +42,7 @@ class LaminasSelectTest extends DataSourceTestCase
      */
     protected $source;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -74,10 +78,6 @@ class LaminasSelectTest extends DataSourceTestCase
         ]);
     }
 
-    /**
-     * @expectedException \TypeError
-     * @expectedExceptionMessage Argument 1 passed to ZfcDatagrid\DataSource\LaminasSelect::__construct() must be an instance of Laminas\Db\Sql\Select, array given, called in
-     */
     public function testConstruct()
     {
         $select = $this->getMockBuilder(\Laminas\Db\Sql\Select::class)->getMock();
@@ -87,25 +87,21 @@ class LaminasSelectTest extends DataSourceTestCase
         $this->assertInstanceOf(\Laminas\Db\Sql\Select::class, $source->getData());
         $this->assertEquals($select, $source->getData());
 
+        $this->expectException(TypeError::class);
         $source = new LaminasSelect([]);
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Object "Laminas\Db\Sql\Sql" is missing, please call setAdapter() first!
-     */
     public function testExecuteException()
     {
         $select = $this->getMockBuilder(\Laminas\Db\Sql\Select::class)->getMock();
 
         $source = new LaminasSelect($select);
 
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Object "Laminas\Db\Sql\Sql" is missing, please call setAdapter() first!');
         $source->execute();
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testAdapter()
     {
         $source = clone $this->source;
@@ -116,6 +112,7 @@ class LaminasSelectTest extends DataSourceTestCase
         $source->setAdapter($this->adapter);
         $this->assertInstanceOf(\Laminas\Db\Sql\Sql::class, $source->getAdapter());
 
+        $this->expectException(InvalidArgumentException::class);
         $source->setAdapter('something');
     }
 

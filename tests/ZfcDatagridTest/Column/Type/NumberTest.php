@@ -22,7 +22,7 @@ class NumberTest extends TestBase
     /** @var Type\Number */
     private $numberFormatterEN;
 
-    public function setUp()
+    public function setUp(): void
     {
         if (! extension_loaded('intl')) {
             $this->markTestSkipped('ext/intl not enabled');

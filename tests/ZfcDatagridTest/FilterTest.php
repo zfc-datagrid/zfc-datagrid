@@ -1,6 +1,7 @@
 <?php
 namespace ZfcDatagridTest;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use ZfcDatagrid\Column\Type\Number;
 use ZfcDatagrid\Filter;
@@ -13,12 +14,12 @@ class FilterTest extends TestCase
     /** @var \ZfcDatagrid\Column\AbstractColumn|\PHPUnit_Framework_MockObject_MockObject  */
     private $column;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->column = $this->getMockForAbstractClass(\ZfcDatagrid\Column\AbstractColumn::class);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->column = null;
     }
@@ -631,23 +632,19 @@ class FilterTest extends TestCase
         ], Filter::BETWEEN));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testIsApplyBetweenInvalidArgumentException()
     {
         $filter = new Filter();
 
+        $this->expectException(InvalidArgumentException::class);
         $filter->isApply(123, 100, Filter::BETWEEN);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testIsApplyInvalidArgumentException()
     {
         $filter = new Filter();
 
+        $this->expectException(InvalidArgumentException::class);
         $filter->isApply(123, 100, 'UndefinedFilter');
     }
 }

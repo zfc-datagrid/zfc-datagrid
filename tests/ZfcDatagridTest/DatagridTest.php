@@ -38,7 +38,7 @@ class DatagridTest extends TestBase
     /** @var array */
     private $config;
 
-    public function setUp()
+    public function setUp(): void
     {
         $config = include './config/module.config.php';
         $config = $config['ZfcDatagrid'];
@@ -131,9 +131,6 @@ class DatagridTest extends TestBase
         $this->assertInstanceOf(Translator::class, $this->grid->getTranslator());
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testDataSourceArray()
     {
         $grid = new Datagrid();
@@ -150,13 +147,10 @@ class DatagridTest extends TestBase
         $grid->setDataSource($source);
         $this->assertTrue($grid->hasDataSource());
 
+        $this->expectException(InvalidArgumentException::class);
         $grid->setDataSource(null);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage For "Laminas\Db\Sql\Select" also a "Laminas\Db\Adapter\Sql" or "Laminas\Db\Sql\Sql" is needed.
-     */
     public function testDataSourceLaminasSelect()
     {
         $grid = new Datagrid();
@@ -183,6 +177,9 @@ class DatagridTest extends TestBase
         $grid->setDataSource($select, $adapter);
         $this->assertTrue($grid->hasDataSource());
         $this->assertInstanceOf(\ZfcDatagrid\Datasource\LaminasSelect::class, $grid->getDataSource());
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectDeprecationMessage('For "Laminas\Db\Sql\Select" also a "Laminas\Db\Adapter\Sql" or "Laminas\Db\Sql\Sql" is needed.');
         $grid->setDataSource($select);
     }
 
@@ -340,10 +337,6 @@ class DatagridTest extends TestBase
         $this->assertEquals('My label', $col->getLabel());
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Column type: "ZfcDatagrid\Column\Unknown" not found!
-     */
     public function testAddColumnArrayInvalidColType()
     {
         $grid = new Datagrid();
@@ -354,6 +347,8 @@ class DatagridTest extends TestBase
             'label'   => 'My label',
         ];
 
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Column type: "ZfcDatagrid\Column\Unknown" not found!');
         $grid->addColumn($column);
     }
 
@@ -378,10 +373,6 @@ class DatagridTest extends TestBase
         $this->assertEquals('My label', $col->getLabel());
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage For "ZfcDatagrid\Column\Select" the option select[column] must be defined!
-     */
     public function testAddColumnArraySelectInvalidArgumentException()
     {
         $grid = new Datagrid();
@@ -391,6 +382,8 @@ class DatagridTest extends TestBase
             'label' => 'My label',
         ];
 
+        $this->expectExceptionMessage('For "ZfcDatagrid\Column\Select" the option select[column] must be defined!');
+        $this->expectException(InvalidArgumentException::class);
         $grid->addColumn($column);
     }
 

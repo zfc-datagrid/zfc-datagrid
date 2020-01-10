@@ -17,7 +17,7 @@ class AbstractRendererTest extends TestCase
      */
     private $colMock;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->colMock = $this->getMockForAbstractClass(\ZfcDatagrid\Column\AbstractColumn::class);
     }

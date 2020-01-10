@@ -1,6 +1,7 @@
 <?php
 namespace ZfcDatagridTest\Renderer\LaminasTable;
 
+use Exception;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use ZfcDatagrid\Renderer\LaminasTable;
@@ -44,7 +45,7 @@ class RendererTest extends TestCase
      */
     private $colMock;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->requestMock  = $this->getMockBuilder(\Laminas\Console\Request::class)
             ->disableOriginalConstructor()
@@ -78,10 +79,6 @@ class RendererTest extends TestCase
         $this->assertFalse($renderer->isHtml());
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Request must be an instance of Laminas\Console\Request for console rendering
-     */
     public function testGetRequestException()
     {
         $request = $this->getMockBuilder(\Laminas\Http\PhpEnvironment\Request::class)
@@ -96,6 +93,8 @@ class RendererTest extends TestCase
         $renderer = new LaminasTable\Renderer();
         $renderer->setMvcEvent($mvcEvent);
 
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Request must be an instance of Laminas\Console\Request for console rendering');
         $renderer->getRequest();
     }
 
@@ -317,10 +316,6 @@ class RendererTest extends TestCase
         $this->assertEquals(99, $renderer->getItemsPerPage());
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage No columns to display available
-     */
     public function testGetColumnsToDisplay()
     {
         $reflection = new ReflectionClass(\ZfcDatagrid\Renderer\LaminasTable\Renderer::class);
@@ -360,6 +355,8 @@ class RendererTest extends TestCase
             $col2,
         ], $result);
 
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('No columns to display available');
         $renderer = new LaminasTable\Renderer();
         $method->invoke($renderer);
     }

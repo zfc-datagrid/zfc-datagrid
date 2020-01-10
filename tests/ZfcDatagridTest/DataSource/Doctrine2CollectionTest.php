@@ -2,6 +2,7 @@
 namespace ZfcDatagridTest\DataSource;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use TypeError;
 use ZfcDatagrid\Column;
 use ZfcDatagrid\DataSource\Doctrine2Collection;
 use ZfcDatagridTest\DataSource\Doctrine2\Assets\Entity\Category;
@@ -25,7 +26,7 @@ class Doctrine2CollectionTest extends TestBase
 
     private $collection;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -47,12 +48,10 @@ class Doctrine2CollectionTest extends TestBase
         $this->source = $source;
     }
 
-    /**
-     * @expectedException \TypeError
-     * @expectedExceptionMessage Argument 1 passed to ZfcDatagrid\DataSource\Doctrine2Collection::__construct() must implement interface Doctrine\Common\Collections\Collection, null given,
-     */
     public function testConstructExceptionClass()
     {
+        $this->expectException(TypeError::class);
+        $this->expectExceptionMessage('Argument 1 passed to ZfcDatagrid\DataSource\Doctrine2Collection::__construct() must implement interface Doctrine\Common\Collections\Collection, null given,');
         new Doctrine2Collection(null);
     }
 

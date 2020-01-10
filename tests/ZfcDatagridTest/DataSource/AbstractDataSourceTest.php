@@ -13,7 +13,7 @@ class AbstractDataSourceTest extends TestCase
      */
     private $dsMock;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->dsMock = $this->getMockForAbstractClass(\ZfcDatagrid\DataSource\AbstractDataSource::class, [
             [],

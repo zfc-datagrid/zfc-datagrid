@@ -1,6 +1,7 @@
 <?php
 namespace ZfcDatagridTest\Renderer\JqGrid\View\Helper;
 
+use Exception;
 use PHPUnit\Framework\TestCase;
 use ZfcDatagrid\Column\Style;
 use ZfcDatagrid\Filter;
@@ -21,7 +22,7 @@ class ColumnsTest extends TestCase
      */
     private $myCol;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->sm = $this->getMockBuilder(\Laminas\View\HelperPluginManager::class)
             ->disableOriginalConstructor()
@@ -123,10 +124,6 @@ class ColumnsTest extends TestCase
         $this->assertStringEndsWith('search: true,searchoptions: {"clearSearch":false}}]', $result);
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessageRegExp  /Not defined style: \"[a-zA-Z0-9_]+\"/
-     */
     public function testStyleException()
     {
         $styleMock = $this->getMockForAbstractClass(\ZfcDatagrid\Column\Style\AbstractStyle::class);
@@ -138,10 +135,10 @@ class ColumnsTest extends TestCase
             $col1,
         ];
 
-        $result = $helper($cols);
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessageMatches('/Not defined style: \"[a-zA-Z0-9_]+\"/');
 
-        $this->assertStringStartsWith('[{name:', $result);
-        $this->assertStringEndsWith('search: true}]', $result);
+        $helper($cols);
     }
 
     public function testStyleByValueEqual()
@@ -181,7 +178,7 @@ class ColumnsTest extends TestCase
         $result = $helper($cols);
 
         $this->assertStringStartsWith('[{name:', $result);
-        $this->assertContains('<span class="test-class">\' + cellvalue + \'</span>\';', $result);
+        $this->assertStringContainsString('<span class="test-class">\' + cellvalue + \'</span>\';', $result);
     }
 
     public function testStyleByValueNotEqual()
@@ -208,10 +205,6 @@ class ColumnsTest extends TestCase
         );
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Currently not supported filter operation: "=(%s)"
-     */
     public function testStyleByValueNotSupported()
     {
         $helper = new Helper\Columns();
@@ -226,6 +219,8 @@ class ColumnsTest extends TestCase
             $col1,
         ];
 
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Currently not supported filter operation: "=(%s)"');
         $result = $helper($cols);
     }
 

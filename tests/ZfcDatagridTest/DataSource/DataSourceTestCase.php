@@ -30,7 +30,7 @@ class DataSourceTestCase extends TestCase
      */
     protected $colUserDisplayName;
 
-    public function setUp()
+    public function setUp(): void
     {
         $data   = [];
         $data[] = [

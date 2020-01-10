@@ -25,7 +25,7 @@ class DateTimeTest extends TestCase
      */
     private $datetimeEN;
 
-    public function setUp()
+    public function setUp(): void
     {
         if (! extension_loaded('intl')) {
             $this->markTestSkipped('ext/intl not enabled');
