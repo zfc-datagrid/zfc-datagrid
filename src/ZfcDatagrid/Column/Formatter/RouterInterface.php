@@ -1,7 +1,7 @@
 <?php
 namespace ZfcDatagrid\Column\Formatter;
 
-use Zend\Router\RouteStackInterface;
+use Laminas\Router\RouteStackInterface;
 
 /**
  * Interface RouterInterface
@@ -10,7 +10,7 @@ use Zend\Router\RouteStackInterface;
 interface RouterInterface
 {
     /**
-     * @param \Zend\Router\RouteStackInterface $router
+     * @param \Laminas\Router\RouteStackInterface $router
      *
      * @return $this
      */

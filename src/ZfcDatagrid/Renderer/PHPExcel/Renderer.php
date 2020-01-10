@@ -13,8 +13,8 @@ use PHPExcel_Style_Border;
 use PHPExcel_Style_Color;
 use PHPExcel_Style_Fill;
 use PHPExcel_Worksheet_PageSetup;
-use Zend\Http\Headers;
-use Zend\Http\Response\Stream as ResponseStream;
+use Laminas\Http\Headers;
+use Laminas\Http\Response\Stream as ResponseStream;
 use ZfcDatagrid\Column;
 use ZfcDatagrid\Renderer\AbstractExport;
 use function is_array;
@@ -53,7 +53,7 @@ class Renderer extends AbstractExport
     }
 
     /**
-     * @return ResponseStream|\Zend\View\Model\ViewModel
+     * @return ResponseStream|\Laminas\View\Model\ViewModel
      * @throws \PHPExcel_Exception
      * @throws \PHPExcel_Writer_Exception
      */

@@ -3,7 +3,7 @@ namespace ZfcDatagrid\Service;
 
 use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
-use Zend\ServiceManager\Factory\FactoryInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use ZfcDatagrid\Datagrid;
 
 abstract class AbstractDatagrid extends Datagrid implements FactoryInterface
@@ -23,7 +23,7 @@ abstract class AbstractDatagrid extends Datagrid implements FactoryInterface
             throw new InvalidArgumentException('Config key "ZfcDatagrid" is missing');
         }
 
-        /* @var $application \Zend\Mvc\Application */
+        /* @var $application \Laminas\Mvc\Application */
         $application = $container->get('application');
 
         $this->setOptions($config['ZfcDatagrid']);

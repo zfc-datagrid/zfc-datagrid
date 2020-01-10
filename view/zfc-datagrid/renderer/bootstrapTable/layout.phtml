@@ -12,7 +12,7 @@ if(count($this->massActions) > 0){
     $(function(){
         <?php //If daterange bootstrapTable filter is enable show it ?>
             $('input.daterange').daterangepicker(
-            <?= Zend\Json\Json::encode($this->daterangeParameters, false, ['enableJsonExprFinder' => true]); ?>
+            <?= Laminas\Json\Json::encode($this->daterangeParameters, false, ['enableJsonExprFinder' => true]); ?>
             ).on('apply.daterangepicker', function(ev,picker){
                 this.form.submit();
             });

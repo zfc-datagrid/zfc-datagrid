@@ -1,13 +1,13 @@
 <?php
 namespace ZfcDatagrid\DataSource;
 
-use Zend\Db\Sql;
-use Zend\Db\Sql\Expression;
-use Zend\Paginator\Adapter\DbSelect as PaginatorAdapter;
+use Laminas\Db\Sql;
+use Laminas\Db\Sql\Expression;
+use Laminas\Paginator\Adapter\DbSelect as PaginatorAdapter;
 use ZfcDatagrid\Column;
 use function sprintf;
 
-class ZendSelect extends AbstractDataSource
+class LaminasSelect extends AbstractDataSource
 {
     /** @var Sql\Select */
     private $select;
@@ -42,10 +42,10 @@ class ZendSelect extends AbstractDataSource
     {
         if ($adapterOrSqlObject instanceof Sql\Sql) {
             $this->sqlObject = $adapterOrSqlObject;
-        } elseif ($adapterOrSqlObject instanceof \Zend\Db\Adapter\Adapter) {
+        } elseif ($adapterOrSqlObject instanceof \Laminas\Db\Adapter\Adapter) {
             $this->sqlObject = new Sql\Sql($adapterOrSqlObject);
         } else {
-            throw new \InvalidArgumentException('Object of "Zend\Db\Sql\Sql" or "Zend\Db\Adapter\Adapter" needed.');
+            throw new \InvalidArgumentException('Object of "Laminas\Db\Sql\Sql" or "Laminas\Db\Adapter\Adapter" needed.');
         }
     }
 
@@ -62,8 +62,8 @@ class ZendSelect extends AbstractDataSource
      */
     public function execute()
     {
-        if ($this->getAdapter() === null || ! $this->getAdapter() instanceof \Zend\Db\Sql\Sql) {
-            throw new \Exception('Object "Zend\Db\Sql\Sql" is missing, please call setAdapter() first!');
+        if ($this->getAdapter() === null || ! $this->getAdapter() instanceof \Laminas\Db\Sql\Sql) {
+            throw new \Exception('Object "Laminas\Db\Sql\Sql" is missing, please call setAdapter() first!');
         }
 
         $platform = $this->getAdapter()
@@ -120,7 +120,7 @@ class ZendSelect extends AbstractDataSource
         /*
          * Step 3) Apply filters
          */
-        $filterColumn = new ZendSelect\Filter($this->getAdapter(), $select);
+        $filterColumn = new LaminasSelect\Filter($this->getAdapter(), $select);
         foreach ($this->getFilters() as $filter) {
             /* @var $filter \ZfcDatagrid\Filter */
             if ($filter->isColumnFilter() === true) {

@@ -6,8 +6,8 @@
 namespace ZfcDatagrid\Renderer\TCPDF;
 
 use TCPDF;
-use Zend\Http\Headers;
-use Zend\Http\Response\Stream as ResponseStream;
+use Laminas\Http\Headers;
+use Laminas\Http\Response\Stream as ResponseStream;
 use ZfcDatagrid\Column\Style;
 use ZfcDatagrid\Column\Type;
 use ZfcDatagrid\Library\ImageResize;

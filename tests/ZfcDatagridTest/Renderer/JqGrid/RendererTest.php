@@ -46,15 +46,15 @@ class RendererTest extends TestCase
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage Request must be an instance of Zend\Http\PhpEnvironment\Request for HTML rendering
+     * @expectedExceptionMessage Request must be an instance of Laminas\Http\PhpEnvironment\Request for HTML rendering
      */
     public function testGetRequestException()
     {
-        $request = $this->getMockBuilder(\Zend\Console\Request::class)
+        $request = $this->getMockBuilder(\Laminas\Console\Request::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $mvcEvent = $this->getMockBuilder(\Zend\Mvc\MvcEvent::class)
+        $mvcEvent = $this->getMockBuilder(\Laminas\Mvc\MvcEvent::class)
             ->disableOriginalConstructor()
             ->getMock();
         $mvcEvent->expects($this->any())
@@ -69,11 +69,11 @@ class RendererTest extends TestCase
 
     public function testGetRequest()
     {
-        $request = $this->getMockBuilder(\Zend\Http\PhpEnvironment\Request::class)
+        $request = $this->getMockBuilder(\Laminas\Http\PhpEnvironment\Request::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $mvcEvent = $this->getMockBuilder(\Zend\Mvc\MvcEvent::class)
+        $mvcEvent = $this->getMockBuilder(\Laminas\Mvc\MvcEvent::class)
             ->disableOriginalConstructor()
             ->getMock();
         $mvcEvent->expects($this->any())

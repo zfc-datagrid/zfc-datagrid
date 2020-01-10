@@ -38,7 +38,7 @@ class SelectTest extends TestCase
 
     public function testObject()
     {
-        $expr = new \Zend\Db\Sql\Expression('Something...');
+        $expr = new \Laminas\Db\Sql\Expression('Something...');
         $col  = new Column\Select($expr, 'myAlias');
 
         $this->assertEquals($expr, $col->getSelectPart1());
@@ -50,7 +50,7 @@ class SelectTest extends TestCase
      */
     public function testException()
     {
-        $expr = new \Zend\Db\Sql\Expression('Something...');
+        $expr = new \Laminas\Db\Sql\Expression('Something...');
         $col  = new Column\Select($expr);
     }
 
@@ -59,7 +59,7 @@ class SelectTest extends TestCase
      */
     public function testExceptionNotString()
     {
-        $expr = new \Zend\Db\Sql\Expression('Something...');
+        $expr = new \Laminas\Db\Sql\Expression('Something...');
         $col  = new Column\Select($expr, new \stdClass());
     }
 

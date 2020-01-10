@@ -36,7 +36,7 @@ class TableRowTest extends TestCase
 
         $this->myCol = $myCol;
 
-        $this->serviceLocator = $this->getMockBuilder(\Zend\ServiceManager\ServiceManager::class)
+        $this->serviceLocator = $this->getMockBuilder(\Laminas\ServiceManager\ServiceManager::class)
             ->getMock();
     }
 

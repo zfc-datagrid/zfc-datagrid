@@ -2,8 +2,8 @@
 namespace ZfcDatagridTest\Service;
 
 use PHPUnit\Framework\TestCase;
-use Zend\Router\RouteStackInterface;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\Router\RouteStackInterface;
+use Laminas\ServiceManager\ServiceManager;
 use ZfcDatagrid\Service\DatagridFactory;
 
 /**
@@ -40,10 +40,10 @@ class DatagridFactoryTest extends TestCase
 
     public function setUp()
     {
-        $mvcEventMock = $this->getMockBuilder(\Zend\Mvc\MvcEvent::class)
+        $mvcEventMock = $this->getMockBuilder(\Laminas\Mvc\MvcEvent::class)
             ->getMock();
 
-        $this->applicationMock = $this->getMockBuilder(\Zend\Mvc\Application::class)
+        $this->applicationMock = $this->getMockBuilder(\Laminas\Mvc\Application::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->applicationMock->expects($this->any())
@@ -86,7 +86,7 @@ class DatagridFactoryTest extends TestCase
 
     public function testCanCreateServiceWithTranslator()
     {
-        $translatorMock = $this->getMockBuilder(\Zend\I18n\Translator\Translator::class)
+        $translatorMock = $this->getMockBuilder(\Laminas\I18n\Translator\Translator::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -106,7 +106,7 @@ class DatagridFactoryTest extends TestCase
 
     public function testCanCreateServiceWithMvcTranslator()
     {
-        $mvcTranslatorMock = $this->getMockBuilder(\Zend\I18n\Translator\Translator::class)
+        $mvcTranslatorMock = $this->getMockBuilder(\Laminas\I18n\Translator\Translator::class)
             ->disableOriginalConstructor()
             ->getMock();
 
