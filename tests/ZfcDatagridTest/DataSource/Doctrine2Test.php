@@ -1,6 +1,7 @@
 <?php
 namespace ZfcDatagridTest\DataSource;
 
+use TypeError;
 use ZfcDatagrid\DataSource\Doctrine2;
 use ZfcDatagrid\Filter;
 use ZfcDatagridTest\DataSource\Doctrine2\AbstractDoctrine2Test;
@@ -19,7 +20,7 @@ class Doctrine2Test extends AbstractDoctrine2Test
 
     protected $qb;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -33,9 +34,6 @@ class Doctrine2Test extends AbstractDoctrine2Test
         ]);
     }
 
-    /**
-     * @expectedException \TypeError
-     */
     public function testConstruct()
     {
         $source = clone $this->source;
@@ -43,6 +41,7 @@ class Doctrine2Test extends AbstractDoctrine2Test
         $this->assertInstanceOf(\Doctrine\ORM\QueryBuilder::class, $source->getData());
         $this->assertSame($this->qb, $source->getData());
 
+        $this->expectException(TypeError::class);
         $source = new Doctrine2(new \stdClass('something'));
     }
 

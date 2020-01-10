@@ -11,7 +11,7 @@
 [![Total Downloads](https://poser.pugx.org/zfc-datagrid/zfc-datagrid/downloads.png)](https://packagist.org/packages/zfc-datagrid/zfc-datagrid)
 [![Monthly Downloads](https://poser.pugx.org/zfc-datagrid/zfc-datagrid/d/monthly)](https://packagist.org/packages/zfc-datagrid/zfc-datagrid)
 
-A datagrid for ZF where the data input and output can be whatever you want...:-)
+A datagrid for Laminas where the data input and output can be whatever you want...:-)
 
 Over ***400 tests and 1000 assertions*** testing the stability currently! 
 

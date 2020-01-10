@@ -1,6 +1,7 @@
 <?php
 namespace ZfcDatagridTest\Column\Action;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use ZfcDatagrid\Filter;
 
@@ -16,7 +17,7 @@ class AbstractActionTest extends TestCase
      */
     private $column;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->column = $this->getMockForAbstractClass(\ZfcDatagrid\Column\AbstractColumn::class);
         $this->column->setUniqueId('colName');
@@ -225,26 +226,23 @@ class AbstractActionTest extends TestCase
         ]));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testSetShowOnValueOperatorException()
     {
         /* @var $action \ZfcDatagrid\Column\Action\AbstractAction */
         $action = $this->getMockForAbstractClass(\ZfcDatagrid\Column\Action\AbstractAction::class);
 
+        $this->expectException(InvalidArgumentException::class);
         $action->setShowOnValueOperator('XOR');
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testIsDisplayedException()
     {
         /* @var $action \ZfcDatagrid\Column\Action\AbstractAction */
         $action = $this->getMockForAbstractClass(\ZfcDatagrid\Column\Action\AbstractAction::class);
 
         $action->addShowOnValue($this->column, '23', 'UNknownFilter');
+
+        $this->expectException(InvalidArgumentException::class);
         $action->isDisplayed([
             $this->column->getUniqueId() => '32',
         ]);

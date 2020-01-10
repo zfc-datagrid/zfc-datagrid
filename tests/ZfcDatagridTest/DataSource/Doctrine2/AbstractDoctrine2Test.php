@@ -158,7 +158,7 @@ abstract class AbstractDoctrine2Test extends DataSourceTestCase
         return self::$queryCacheImpl;
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->em = $this->getTestEntityManager();
 

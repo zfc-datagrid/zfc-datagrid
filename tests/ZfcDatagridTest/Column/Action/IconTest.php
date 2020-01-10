@@ -1,6 +1,7 @@
 <?php
 namespace ZfcDatagridTest\Column\Action;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use ZfcDatagrid\Column\Action\Icon;
 
@@ -45,13 +46,11 @@ class IconTest extends TestCase
         $this->assertEquals('<a href="#"><img src="/images/21/add.png" /></a>', $icon->toHtml([]));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testException()
     {
         $icon = new Icon();
 
+        $this->expectException(InvalidArgumentException::class);
         $icon->toHtml([]);
     }
 }

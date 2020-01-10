@@ -1,6 +1,7 @@
 <?php
 namespace ZfcDatagridTest\Service;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Laminas\Router\RouteStackInterface;
 use Laminas\ServiceManager\ServiceManager;
@@ -38,7 +39,7 @@ class DatagridFactoryTest extends TestCase
 
     private $router;
 
-    public function setUp()
+    public function setUp(): void
     {
         $mvcEventMock = $this->getMockBuilder(\Laminas\Mvc\MvcEvent::class)
             ->getMock();
@@ -57,14 +58,13 @@ class DatagridFactoryTest extends TestCase
             ->getMock();
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Config key "ZfcDatagrid" is missing
-     */
     public function testCreateServiceException()
     {
         $sm = new ServiceManager();
         $sm->setService('config', []);
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Config key "ZfcDatagrid" is missing');
 
         $factory = new DatagridFactory();
         $grid    = $factory->__invoke($sm, \ZfcDatagrid\Datagrid::class);

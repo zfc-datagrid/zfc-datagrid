@@ -1,6 +1,7 @@
 <?php
 namespace ZfcDatagridTest\Renderer\BootstrapTable;
 
+use Exception;
 use PHPUnit\Framework\TestCase;
 use Laminas\View\Model\ViewModel;
 use ZfcDatagrid\Renderer\BootstrapTable;
@@ -36,10 +37,6 @@ class RendererTest extends TestBase
         $this->assertTrue($renderer->isHtml());
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Request must be an instance of Laminas\Http\PhpEnvironment\Request for HTML rendering
-     */
     public function testGetRequestException()
     {
         $request = $this->getMockBuilder(\Laminas\Console\Request::class)
@@ -56,6 +53,8 @@ class RendererTest extends TestBase
         $renderer = new BootstrapTable\Renderer();
         $renderer->setMvcEvent($mvcEvent);
 
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Request must be an instance of Laminas\Http\PhpEnvironment\Request for HTML rendering');
         $renderer->getRequest();
     }
 

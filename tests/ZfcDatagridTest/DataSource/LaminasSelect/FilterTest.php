@@ -1,6 +1,7 @@
 <?php
 namespace ZfcDatagridTest\DataSource\LaminasSelect;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Laminas\Db\Adapter\Adapter;
 use Laminas\Db\Sql\Predicate\Operator;
@@ -33,7 +34,7 @@ class FilterTest extends TestCase
      */
     private $filterSelect;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->column = $this->getMockBuilder(Column\Select::class)->disableOriginalConstructor()->getMock();
         $this->column->method('getSelectPart1')
@@ -413,9 +414,6 @@ class FilterTest extends TestCase
         $this->assertEquals('myValue', $operator->getMaxValue());
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testException()
     {
         $filter = $this->getMockBuilder(\ZfcDatagrid\Filter::class)
@@ -432,6 +430,7 @@ class FilterTest extends TestCase
             ->method('getOperator')
             ->will($this->returnValue(' () '));
 
+        $this->expectException(InvalidArgumentException::class);
         $filterSelect = clone $this->filterSelect;
         $filterSelect->applyFilter($filter);
     }

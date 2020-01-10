@@ -1,6 +1,8 @@
 <?php
 namespace ZfcDatagridTest\Column;
 
+use Exception;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use ZfcDatagrid\Column;
 use ZfcDatagrid\Column\DataPopulation;
@@ -21,13 +23,11 @@ class ExternalDataTest extends TestCase
         $this->assertFalse($col->isUserSortEnabled());
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testGetDataPopulationException()
     {
         $col = new Column\ExternalData('myData');
 
+        $this->expectException(InvalidArgumentException::class);
         $col->getDataPopulation();
     }
 
@@ -45,14 +45,13 @@ class ExternalDataTest extends TestCase
         $this->assertInstanceOf(\ZfcDatagrid\Column\DataPopulation\DataObject::class, $col->getDataPopulation());
     }
 
-    /**
-     * @expectedException \Exception
-     */
     public function testException()
     {
         $col = new Column\ExternalData('myData');
 
         $object = new DataPopulation\DataObject();
+
+        $this->expectException(Exception::class);
         $col->setDataPopulation($object);
     }
 }

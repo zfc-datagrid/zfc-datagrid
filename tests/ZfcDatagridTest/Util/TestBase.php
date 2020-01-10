@@ -19,7 +19,7 @@ class TestBase extends TestCase
     /** @var array */
     protected $mockedConstructorArgList = [];
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
     }
@@ -65,9 +65,9 @@ class TestBase extends TestCase
     }
 
     /**
-     * @return MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
-    protected function getClass(): MockObject
+    protected function getClass(): \PHPUnit\Framework\MockObject\MockObject
     {
         if (!$this->class) {
             $class = $this->getMockBuilder($this->className);
