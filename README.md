@@ -1,4 +1,4 @@
-# Datagrid/Datatable module for Zend Framework
+# Datagrid/Datatable module for Laminas Framework
 [![Master Branch Build Status](https://secure.travis-ci.org/zfc-datagrid/zfc-datagrid.png?branch=master)](http://travis-ci.org/zfc-datagrid/zfc-datagrid)
 [![Coverage Status](https://coveralls.io/repos/github/zfc-datagrid/zfc-datagrid/badge.svg?branch=master)](https://coveralls.io/github/zfc-datagrid/zfc-datagrid?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/zfc-datagrid/zfc-datagrid/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/zfc-datagrid/zfc-datagrid/?branch=master)
@@ -28,7 +28,7 @@ If you want to help out on this project:
 - ...any other help
 
 ## Features
-* Datasources: Doctrine2 (QueryBuilder + Collections), Zend\Db, PhpArray, ... (others possible)
+* Datasources: Doctrine2 (QueryBuilder + Collections), Laminas\Db, PhpArray, ... (others possible)
 * Output types: jqGrid, Bootstrap table, PDF, Excel, CSV, console, ... (others possible)
   * Bootstrap table with Daterange Filter need to load manually js and css
 * different column types
@@ -61,11 +61,11 @@ You can continue
 ####Browser####
 
 > Attention! Only PhpArray works out of the box!
-> For Zend\Db\Sql\Select and Doctrine2 you need to install DoctrineORMModule (Doctrin2 creates the database for Zend\Db\Sql\Select)
+> For Laminas\Db\Sql\Select and Doctrine2 you need to install DoctrineORMModule (Doctrin2 creates the database for Laminas\Db\Sql\Select)
 
 - **PhpArray** http://YOUR-PROJECT/zfcDatagrid/person/bootstrap
 - **Doctrine2** http://YOUR-PROJECT/zfcDatagrid/personDoctrine2/bootstrap
-- **Zend\Db\Sql\Select** http://YOUR-PROJECT/zfcDatagrid/personZend/bootstrap
+- **Laminas\Db\Sql\Select** http://YOUR-PROJECT/zfcDatagrid/personLaminas/bootstrap
 
 
 ####Console####
