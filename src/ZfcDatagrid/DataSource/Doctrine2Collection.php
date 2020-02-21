@@ -3,7 +3,7 @@ namespace ZfcDatagrid\DataSource;
 
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
-use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
+use Doctrine\Laminas\Hydrator\DoctrineObject as DoctrineHydrator;
 use ZfcDatagrid\Column;
 use ZfcDatagrid\DataSource\PhpArray as SourceArray;
 
