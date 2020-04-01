@@ -264,16 +264,16 @@ class Renderer extends AbstractExport
             ],
 
             'borders' => [
-                'allborders' => [
-                    'style' => Style\Border::BORDER_MEDIUM,
+                'allBorders' => [
+                    'borderStyle' => Style\Border::BORDER_MEDIUM,
                     'color' => [
                         'argb' => Style\Color::COLOR_BLACK,
                     ],
                 ],
             ],
             'fill' => [
-                'type'       => Style\Fill::FILL_SOLID,
-                'startcolor' => [
+                'fillType'       => Style\Fill::FILL_SOLID,
+                'startColor' => [
                     'argb' => Style\Color::COLOR_YELLOW,
                 ],
             ],
@@ -285,8 +285,8 @@ class Renderer extends AbstractExport
         $range = 'A' . $freezeRow . ':' . $highest['column'] . $highest['row'];
         $sheet->getStyle($range)->applyFromArray([
             'borders' => [
-                'allborders' => [
-                    'style' => Style\Border::BORDER_THIN,
+                'allBorders' => [
+                    'borderStyle' => Style\Border::BORDER_THIN,
                 ],
             ],
         ]);
