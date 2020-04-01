@@ -52,7 +52,7 @@
         "laminas/laminas-json": "^2.5",
         "laminas/laminas-coding-standard": "~1.0",
 
-        "phpoffice/phpexcel": "^1.8",
+        "phpoffice/phpspreadsheet": "^1.11",
         "tecnickcom/tcpdf": "^6.2"
     },
     
@@ -60,7 +60,7 @@
         "ext-intl": "*",
         "doctrine/doctrine-orm-module": "for doctrine support",
         
-        "phpoffice/phpexcel": "^1.8",
+        "phpoffice/phpspreadsheet": "^1.11 for spreadsheet support",
         "tecnickcom/tcpdf": "^6.2",
 
         "laminas/laminas-text": "~2.5",
