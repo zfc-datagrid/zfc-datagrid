@@ -5,26 +5,22 @@
 
 namespace ZfcDatagrid\Renderer\PHPExcel;
 
-use \PhpOffice\PhpSpreadsheet\Spreadsheet;
-use \PhpOffice\PhpSpreadsheet\Cell\Cell;
-use \PhpOffice\PhpSpreadsheet\Cell\DataType;
-use \PhpOffice\PhpSpreadsheet\Style\Alignment;
-use \PhpOffice\PhpSpreadsheet\Style\Border;
-use \PhpOffice\PhpSpreadsheet\Style\Color;
-use \PhpOffice\PhpSpreadsheet\Style\Fill;
-use \PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 use Laminas\Http\Headers;
 use Laminas\Http\Response\Stream as ResponseStream;
+use PhpOffice\PhpSpreadsheet\Cell;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Style;
+use PhpOffice\PhpSpreadsheet\Worksheet;
 use ZfcDatagrid\Column;
 use ZfcDatagrid\Renderer\AbstractExport;
-use function is_array;
-use function implode;
-use function get_class;
-use function is_scalar;
 use function array_merge;
-use function fopen;
-use function filesize;
 use function date;
+use function filesize;
+use function fopen;
+use function get_class;
+use function implode;
+use function is_array;
+use function is_scalar;
 
 class Renderer extends AbstractExport
 {
@@ -64,7 +60,7 @@ class Renderer extends AbstractExport
 
         $optionsRenderer = $this->getOptionsRenderer();
 
-        $phpExcel = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        $phpExcel = new Spreadsheet();
 
         // Sheet 1
         $phpExcel->setActiveSheetIndex(0);
@@ -97,7 +93,7 @@ class Renderer extends AbstractExport
             /* @var $column Column\AbstractColumn */
             $sheet->setCellValueByColumnAndRow($xColumn, $yRow, $this->translate($col->getLabel()));
 
-            $sheet->getColumnDimension(\PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($xColumn))->setWidth($col->getWidth());
+            $sheet->getColumnDimension(Cell\Coordinate::stringFromColumnIndex($xColumn))->setWidth($col->getWidth());
 
             ++$xColumn;
         }
@@ -117,12 +113,12 @@ class Renderer extends AbstractExport
                 }
 
                 /* @var $column Column\AbstractColumn */
-                $currentColumn = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($xColumn);
+                $currentColumn = Cell\Coordinate::stringFromColumnIndex($xColumn);
                 $cell          = $sheet->getCell($currentColumn . $yRow);
 
                 switch (get_class($col->getType())) {
                     case Column\Type\Number::class:
-                        $cell->setValueExplicit($value, \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC);
+                        $cell->setValueExplicit($value, Cell\DataType::TYPE_NUMERIC);
                         break;
 
                     case Column\Type\DateTime::class:
@@ -144,7 +140,7 @@ class Renderer extends AbstractExport
                             if ($dateType->getOutputPattern()) {
                                 $outputPattern = $dateType->getOutputPattern();
                             } else {
-                                $outputPattern = \PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_DATE_DATETIME;
+                                $outputPattern = Style\NumberFormat::FORMAT_DATE_DATETIME;
                             }
 
                             $cell->getStyle()
@@ -154,7 +150,7 @@ class Renderer extends AbstractExport
                         break;
 
                     default:
-                        $cell->setValueExplicit($value, \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+                        $cell->setValueExplicit($value, Cell\DataType::TYPE_STRING);
                         break;
                 }
 
@@ -185,7 +181,7 @@ class Renderer extends AbstractExport
 
                             case Column\Style\BackgroundColor::class:
                                 $columnStyle->getFill()->applyFromArray([
-                                    'type'  => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                                    'type'  => Style\Fill::FILL_SOLID,
                                     'color' => [
                                         'rgb' => $style->getRgbHexString(),
                                     ],
@@ -196,22 +192,22 @@ class Renderer extends AbstractExport
                                 switch ($style->getAlignment()) {
                                     case Column\Style\Align::RIGHT:
                                         $columnStyle->getAlignment()->setHorizontal(
-                                            \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT
+                                            Style\Alignment::HORIZONTAL_RIGHT
                                         );
                                         break;
                                     case Column\Style\Align::LEFT:
                                         $columnStyle->getAlignment()->setHorizontal(
-                                            \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT
+                                            Style\Alignment::HORIZONTAL_LEFT
                                         );
                                         break;
                                     case Column\Style\Align::CENTER:
                                         $columnStyle->getAlignment()->setHorizontal(
-                                            \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER
+                                            Style\Alignment::HORIZONTAL_CENTER
                                         );
                                         break;
                                     case Column\Style\Align::JUSTIFY:
                                         $columnStyle->getAlignment()->setHorizontal(
-                                            \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_JUSTIFY
+                                            Style\Alignment::HORIZONTAL_JUSTIFY
                                         );
                                         break;
                                     default:
@@ -269,16 +265,16 @@ class Renderer extends AbstractExport
 
             'borders' => [
                 'allborders' => [
-                    'style' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_MEDIUM,
+                    'style' => Style\Border::BORDER_MEDIUM,
                     'color' => [
-                        'argb' => \PhpOffice\PhpSpreadsheet\Style\Color::COLOR_BLACK,
+                        'argb' => Style\Color::COLOR_BLACK,
                     ],
                 ],
             ],
             'fill' => [
-                'type'       => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'type'       => Style\Fill::FILL_SOLID,
                 'startcolor' => [
-                    'argb' => \PhpOffice\PhpSpreadsheet\Style\Color::COLOR_YELLOW,
+                    'argb' => Style\Color::COLOR_YELLOW,
                 ],
             ],
         ];
@@ -290,7 +286,7 @@ class Renderer extends AbstractExport
         $sheet->getStyle($range)->applyFromArray([
             'borders' => [
                 'allborders' => [
-                    'style' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    'style' => Style\Border::BORDER_THIN,
                 ],
             ],
         ]);
@@ -301,7 +297,7 @@ class Renderer extends AbstractExport
         $path         = $optionsExport['path'];
         $saveFilename = date('Y-m-d_H-i-s') . $this->getCacheId() . '.xlsx';
 
-        $excelWriter = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($phpExcel);
+        $excelWriter = new Writer\Xlsx($phpExcel);
         $excelWriter->setPreCalculateFormulas(false);
         $excelWriter->save($path . '/' . $saveFilename);
 
@@ -333,10 +329,10 @@ class Renderer extends AbstractExport
     /**
      * Calculates the column width, based on the papersize and orientation.
      *
-     * @param \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet $sheet
+     * @param Worksheet\Worksheet $sheet
      * @param array               $columns
      */
-    protected function calculateColumnWidth(\PhpOffice\PhpSpreadsheet\Worksheet\Worksheet $sheet, array $columns)
+    protected function calculateColumnWidth(Worksheet\Worksheet $sheet, array $columns)
     {
         // First make sure the columns width is 100 "percent"
         $this->calculateColumnWidthPercent($columns);
@@ -360,9 +356,9 @@ class Renderer extends AbstractExport
     /**
      * Set the printing options.
      *
-     * @param \PhpOffice\PhpSpreadsheet\Spreadsheet $phpExcel
+     * @param Spreadsheet $phpExcel
      */
-    protected function setPrinting(\PhpOffice\PhpSpreadsheet\Spreadsheet $phpExcel)
+    protected function setPrinting(Spreadsheet $phpExcel)
     {
         $optionsRenderer = $this->getOptionsRenderer();
 
@@ -376,28 +372,28 @@ class Renderer extends AbstractExport
         $papersize   = $optionsRenderer['papersize'];
         $orientation = $optionsRenderer['orientation'];
         foreach ($phpExcel->getAllSheets() as $sheet) {
-            /* @var $sheet \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet */
+            /* @var $sheet Worksheet\Worksheet */
             if ('landscape' == $orientation) {
-                $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
+                $sheet->getPageSetup()->setOrientation(Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
             } else {
-                $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_PORTRAIT);
+                $sheet->getPageSetup()->setOrientation(Worksheet\PageSetup::ORIENTATION_PORTRAIT);
             }
 
             switch ($papersize) {
                 case 'A5':
-                    $sheet->getPageSetup()->setPaperSize(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::PAPERSIZE_A5);
+                    $sheet->getPageSetup()->setPaperSize(Worksheet\PageSetup::PAPERSIZE_A5);
                     break;
 
                 case 'A4':
-                    $sheet->getPageSetup()->setPaperSize(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::PAPERSIZE_A4);
+                    $sheet->getPageSetup()->setPaperSize(Worksheet\PageSetup::PAPERSIZE_A4);
                     break;
 
                 case 'A3':
-                    $sheet->getPageSetup()->setPaperSize(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::PAPERSIZE_A3);
+                    $sheet->getPageSetup()->setPaperSize(Worksheet\PageSetup::PAPERSIZE_A3);
                     break;
 
                 case 'A2':
-                    $sheet->getPageSetup()->setPaperSize(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::PAPERSIZE_A2_PAPER);
+                    $sheet->getPageSetup()->setPaperSize(Worksheet\PageSetup::PAPERSIZE_A2_PAPER);
                     break;
             }
 
@@ -414,9 +410,9 @@ class Renderer extends AbstractExport
     }
 
     /**
-     * @param \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet $sheet
+     * @param Worksheet\Worksheet $sheet
      */
-    protected function setHeaderFooter(\PhpOffice\PhpSpreadsheet\Worksheet\Worksheet $sheet)
+    protected function setHeaderFooter(Worksheet\Worksheet $sheet)
     {
         $textRight = $this->translate('Page') . ' &P / &N';
 
