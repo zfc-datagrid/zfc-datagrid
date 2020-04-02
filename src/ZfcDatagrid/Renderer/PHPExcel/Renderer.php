@@ -11,6 +11,7 @@ use PhpOffice\PhpSpreadsheet\Cell;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Style;
 use PhpOffice\PhpSpreadsheet\Worksheet;
+use PhpOffice\PhpSpreadsheet\Writer;
 use ZfcDatagrid\Column;
 use ZfcDatagrid\Renderer\AbstractExport;
 use function array_merge;
