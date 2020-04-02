@@ -1,4 +1,4 @@
-# Datagrid/Datatable module for Laminas Framework
+# Datagrid/Datatable module for Laminas Framework (formerly Zend Framework)
 [![Master Branch Build Status](https://secure.travis-ci.org/zfc-datagrid/zfc-datagrid.png?branch=master)](http://travis-ci.org/zfc-datagrid/zfc-datagrid)
 [![Coverage Status](https://coveralls.io/repos/github/zfc-datagrid/zfc-datagrid/badge.svg?branch=master)](https://coveralls.io/github/zfc-datagrid/zfc-datagrid?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/zfc-datagrid/zfc-datagrid/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/zfc-datagrid/zfc-datagrid/?branch=master)
