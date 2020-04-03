@@ -5,26 +5,23 @@
 
 namespace ZfcDatagrid\Renderer\PHPExcel;
 
-use PHPExcel;
-use PHPExcel_Cell;
-use PHPExcel_Cell_DataType;
-use PHPExcel_Style_Alignment;
-use PHPExcel_Style_Border;
-use PHPExcel_Style_Color;
-use PHPExcel_Style_Fill;
-use PHPExcel_Worksheet_PageSetup;
 use Laminas\Http\Headers;
 use Laminas\Http\Response\Stream as ResponseStream;
+use PhpOffice\PhpSpreadsheet\Cell;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Style;
+use PhpOffice\PhpSpreadsheet\Worksheet;
+use PhpOffice\PhpSpreadsheet\Writer;
 use ZfcDatagrid\Column;
 use ZfcDatagrid\Renderer\AbstractExport;
-use function is_array;
-use function implode;
-use function get_class;
-use function is_scalar;
 use function array_merge;
-use function fopen;
-use function filesize;
 use function date;
+use function filesize;
+use function fopen;
+use function get_class;
+use function implode;
+use function is_array;
+use function is_scalar;
 
 class Renderer extends AbstractExport
 {
@@ -54,8 +51,8 @@ class Renderer extends AbstractExport
 
     /**
      * @return ResponseStream|\Laminas\View\Model\ViewModel
-     * @throws \PHPExcel_Exception
-     * @throws \PHPExcel_Writer_Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
      */
     public function execute()
     {
@@ -64,7 +61,7 @@ class Renderer extends AbstractExport
 
         $optionsRenderer = $this->getOptionsRenderer();
 
-        $phpExcel = new PHPExcel();
+        $phpExcel = new Spreadsheet();
 
         // Sheet 1
         $phpExcel->setActiveSheetIndex(0);
@@ -72,7 +69,7 @@ class Renderer extends AbstractExport
         $sheet->setTitle($this->translate($optionsRenderer['sheetName']));
 
         if (true === $optionsRenderer['displayTitle']) {
-            $sheet->setCellValue('A' . $optionsRenderer['rowTitle'], $this->getTitle());
+            $sheet->getCell('A' . $optionsRenderer['rowTitle'])->setValue($this->getTitle());
             $sheet->getStyle('A' . $optionsRenderer['rowTitle'])
                 ->getFont()
                 ->setSize(15);
@@ -91,13 +88,13 @@ class Renderer extends AbstractExport
         /*
          * Header
          */
-        $xColumn = 0;
+        $xColumn = 1;
         $yRow    = $optionsRenderer['startRowData'];
         foreach ($this->getColumnsToExport() as $col) {
             /* @var $column Column\AbstractColumn */
             $sheet->setCellValueByColumnAndRow($xColumn, $yRow, $this->translate($col->getLabel()));
 
-            $sheet->getColumnDimension(PHPExcel_Cell::stringFromColumnIndex($xColumn))->setWidth($col->getWidth());
+            $sheet->getColumnDimension(Cell\Coordinate::stringFromColumnIndex($xColumn))->setWidth($col->getWidth());
 
             ++$xColumn;
         }
@@ -107,7 +104,7 @@ class Renderer extends AbstractExport
          */
         $yRow = $optionsRenderer['startRowData'] + 1;
         foreach ($this->getData() as $row) {
-            $xColumn = 0;
+            $xColumn = 1;
             foreach ($this->getColumnsToExport() as $col) {
                 /* @var $col Column\AbstractColumn */
 
@@ -117,12 +114,12 @@ class Renderer extends AbstractExport
                 }
 
                 /* @var $column Column\AbstractColumn */
-                $currentColumn = PHPExcel_Cell::stringFromColumnIndex($xColumn);
+                $currentColumn = Cell\Coordinate::stringFromColumnIndex($xColumn);
                 $cell          = $sheet->getCell($currentColumn . $yRow);
 
                 switch (get_class($col->getType())) {
                     case Column\Type\Number::class:
-                        $cell->setValueExplicit($value, PHPExcel_Cell_DataType::TYPE_NUMERIC);
+                        $cell->setValueExplicit($value, Cell\DataType::TYPE_NUMERIC);
                         break;
 
                     case Column\Type\DateTime::class:
@@ -139,12 +136,12 @@ class Renderer extends AbstractExport
                         if ($value instanceof \DateTime) {
                             // only apply this if we have a date object (else leave it blank)
                             $value->setTimezone(new \DateTimeZone($dateType->getOutputTimezone()));
-                            $cell->setValue(\PHPExcel_Shared_Date::PHPToExcel($value));
+                            $cell->setValue(\PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel($value));
 
                             if ($dateType->getOutputPattern()) {
                                 $outputPattern = $dateType->getOutputPattern();
                             } else {
-                                $outputPattern = \PHPExcel_Style_NumberFormat::FORMAT_DATE_DATETIME;
+                                $outputPattern = Style\NumberFormat::FORMAT_DATE_DATETIME;
                             }
 
                             $cell->getStyle()
@@ -154,7 +151,7 @@ class Renderer extends AbstractExport
                         break;
 
                     default:
-                        $cell->setValueExplicit($value, PHPExcel_Cell_DataType::TYPE_STRING);
+                        $cell->setValueExplicit($value, Cell\DataType::TYPE_STRING);
                         break;
                 }
 
@@ -185,7 +182,7 @@ class Renderer extends AbstractExport
 
                             case Column\Style\BackgroundColor::class:
                                 $columnStyle->getFill()->applyFromArray([
-                                    'type'  => \PHPExcel_Style_Fill::FILL_SOLID,
+                                    'type'  => Style\Fill::FILL_SOLID,
                                     'color' => [
                                         'rgb' => $style->getRgbHexString(),
                                     ],
@@ -196,22 +193,22 @@ class Renderer extends AbstractExport
                                 switch ($style->getAlignment()) {
                                     case Column\Style\Align::RIGHT:
                                         $columnStyle->getAlignment()->setHorizontal(
-                                            PHPExcel_Style_Alignment::HORIZONTAL_RIGHT
+                                            Style\Alignment::HORIZONTAL_RIGHT
                                         );
                                         break;
                                     case Column\Style\Align::LEFT:
                                         $columnStyle->getAlignment()->setHorizontal(
-                                            PHPExcel_Style_Alignment::HORIZONTAL_LEFT
+                                            Style\Alignment::HORIZONTAL_LEFT
                                         );
                                         break;
                                     case Column\Style\Align::CENTER:
                                         $columnStyle->getAlignment()->setHorizontal(
-                                            PHPExcel_Style_Alignment::HORIZONTAL_CENTER
+                                            Style\Alignment::HORIZONTAL_CENTER
                                         );
                                         break;
                                     case Column\Style\Align::JUSTIFY:
                                         $columnStyle->getAlignment()->setHorizontal(
-                                            PHPExcel_Style_Alignment::HORIZONTAL_JUSTIFY
+                                            Style\Alignment::HORIZONTAL_JUSTIFY
                                         );
                                         break;
                                     default:
@@ -268,17 +265,17 @@ class Renderer extends AbstractExport
             ],
 
             'borders' => [
-                'allborders' => [
-                    'style' => PHPExcel_Style_Border::BORDER_MEDIUM,
+                'allBorders' => [
+                    'borderStyle' => Style\Border::BORDER_MEDIUM,
                     'color' => [
-                        'argb' => PHPExcel_Style_Color::COLOR_BLACK,
+                        'argb' => Style\Color::COLOR_BLACK,
                     ],
                 ],
             ],
             'fill' => [
-                'type'       => PHPExcel_Style_Fill::FILL_SOLID,
-                'startcolor' => [
-                    'argb' => PHPExcel_Style_Color::COLOR_YELLOW,
+                'fillType'       => Style\Fill::FILL_SOLID,
+                'startColor' => [
+                    'argb' => Style\Color::COLOR_YELLOW,
                 ],
             ],
         ];
@@ -289,8 +286,8 @@ class Renderer extends AbstractExport
         $range = 'A' . $freezeRow . ':' . $highest['column'] . $highest['row'];
         $sheet->getStyle($range)->applyFromArray([
             'borders' => [
-                'allborders' => [
-                    'style' => PHPExcel_Style_Border::BORDER_THIN,
+                'allBorders' => [
+                    'borderStyle' => Style\Border::BORDER_THIN,
                 ],
             ],
         ]);
@@ -301,7 +298,7 @@ class Renderer extends AbstractExport
         $path         = $optionsExport['path'];
         $saveFilename = date('Y-m-d_H-i-s') . $this->getCacheId() . '.xlsx';
 
-        $excelWriter = new \PHPExcel_Writer_Excel2007($phpExcel);
+        $excelWriter = new Writer\Xlsx($phpExcel);
         $excelWriter->setPreCalculateFormulas(false);
         $excelWriter->save($path . '/' . $saveFilename);
 
@@ -333,10 +330,10 @@ class Renderer extends AbstractExport
     /**
      * Calculates the column width, based on the papersize and orientation.
      *
-     * @param \PHPExcel_Worksheet $sheet
+     * @param Worksheet\Worksheet $sheet
      * @param array               $columns
      */
-    protected function calculateColumnWidth(\PHPExcel_Worksheet $sheet, array $columns)
+    protected function calculateColumnWidth(Worksheet\Worksheet $sheet, array $columns)
     {
         // First make sure the columns width is 100 "percent"
         $this->calculateColumnWidthPercent($columns);
@@ -360,9 +357,9 @@ class Renderer extends AbstractExport
     /**
      * Set the printing options.
      *
-     * @param PHPExcel $phpExcel
+     * @param Spreadsheet $phpExcel
      */
-    protected function setPrinting(PHPExcel $phpExcel)
+    protected function setPrinting(Spreadsheet $phpExcel)
     {
         $optionsRenderer = $this->getOptionsRenderer();
 
@@ -376,28 +373,28 @@ class Renderer extends AbstractExport
         $papersize   = $optionsRenderer['papersize'];
         $orientation = $optionsRenderer['orientation'];
         foreach ($phpExcel->getAllSheets() as $sheet) {
-            /* @var $sheet \PHPExcel_Worksheet */
+            /* @var $sheet Worksheet\Worksheet */
             if ('landscape' == $orientation) {
-                $sheet->getPageSetup()->setOrientation(PHPExcel_Worksheet_PageSetup::ORIENTATION_LANDSCAPE);
+                $sheet->getPageSetup()->setOrientation(Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
             } else {
-                $sheet->getPageSetup()->setOrientation(PHPExcel_Worksheet_PageSetup::ORIENTATION_PORTRAIT);
+                $sheet->getPageSetup()->setOrientation(Worksheet\PageSetup::ORIENTATION_PORTRAIT);
             }
 
             switch ($papersize) {
                 case 'A5':
-                    $sheet->getPageSetup()->setPaperSize(PHPExcel_Worksheet_PageSetup::PAPERSIZE_A5);
+                    $sheet->getPageSetup()->setPaperSize(Worksheet\PageSetup::PAPERSIZE_A5);
                     break;
 
                 case 'A4':
-                    $sheet->getPageSetup()->setPaperSize(PHPExcel_Worksheet_PageSetup::PAPERSIZE_A4);
+                    $sheet->getPageSetup()->setPaperSize(Worksheet\PageSetup::PAPERSIZE_A4);
                     break;
 
                 case 'A3':
-                    $sheet->getPageSetup()->setPaperSize(PHPExcel_Worksheet_PageSetup::PAPERSIZE_A3);
+                    $sheet->getPageSetup()->setPaperSize(Worksheet\PageSetup::PAPERSIZE_A3);
                     break;
 
                 case 'A2':
-                    $sheet->getPageSetup()->setPaperSize(PHPExcel_Worksheet_PageSetup::PAPERSIZE_A2_PAPER);
+                    $sheet->getPageSetup()->setPaperSize(Worksheet\PageSetup::PAPERSIZE_A2_PAPER);
                     break;
             }
 
@@ -414,9 +411,9 @@ class Renderer extends AbstractExport
     }
 
     /**
-     * @param \PHPExcel_Worksheet $sheet
+     * @param Worksheet\Worksheet $sheet
      */
-    protected function setHeaderFooter(\PHPExcel_Worksheet $sheet)
+    protected function setHeaderFooter(Worksheet\Worksheet $sheet)
     {
         $textRight = $this->translate('Page') . ' &P / &N';
 
