@@ -37,7 +37,7 @@ class AbstractRendererTest extends TestCase
     public function testRendererOptions()
     {
         $renderer = $this->getMockForAbstractClass(\ZfcDatagrid\Renderer\AbstractRenderer::class);
-        $renderer->expects($this->any())
+        $renderer->expects(self::any())
             ->method('getName')
             ->will($this->returnValue('abstract'));
 
@@ -71,7 +71,7 @@ class AbstractRendererTest extends TestCase
     public function testTemplate()
     {
         $renderer = $this->getMockForAbstractClass(\ZfcDatagrid\Renderer\AbstractRenderer::class);
-        $renderer->expects($this->any())
+        $renderer->expects(self::any())
             ->method('getName')
             ->will($this->returnValue('abstract'));
 
@@ -88,7 +88,7 @@ class AbstractRendererTest extends TestCase
     public function testTemplateConfig()
     {
         $renderer = $this->getMockForAbstractClass(\ZfcDatagrid\Renderer\AbstractRenderer::class);
-        $renderer->expects($this->any())
+        $renderer->expects(self::any())
             ->method('getName')
             ->will($this->returnValue('abstract'));
 
@@ -247,7 +247,7 @@ class AbstractRendererTest extends TestCase
         $mvcEvent = $this->getMockBuilder(\Laminas\Mvc\MvcEvent::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $mvcEvent->expects($this->any())
+        $mvcEvent->expects(self::any())
             ->method('getRequest')
             ->will($this->returnValue($request));
 
@@ -283,7 +283,7 @@ class AbstractRendererTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods(['translate'])
             ->getMock();
-        $translator->expects($this->any())
+        $translator->expects(self::any())
             ->method('translate')
             ->willReturn('barfoo');
 
@@ -354,14 +354,14 @@ class AbstractRendererTest extends TestCase
         $request = $this->getMockBuilder(\Laminas\Http\PhpEnvironment\Request::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $request->expects($this->any())
+        $request->expects(self::any())
             ->method('isPost')
             ->will($this->returnValue(false));
 
         $mvcEvent = $this->getMockBuilder(\Laminas\Mvc\MvcEvent::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $mvcEvent->expects($this->any())
+        $mvcEvent->expects(self::any())
             ->method('getRequest')
             ->will($this->returnValue($request));
 

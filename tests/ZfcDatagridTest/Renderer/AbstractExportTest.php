@@ -42,7 +42,7 @@ class AbstractExportTest extends TestCase
     public function testPaperWidth()
     {
         $exportMock = clone $this->exportMock;
-        $exportMock->expects($this->any())
+        $exportMock->expects(self::any())
             ->method('getName')
             ->will($this->returnValue('abstract'));
 

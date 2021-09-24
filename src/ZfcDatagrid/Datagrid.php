@@ -658,7 +658,7 @@ class Datagrid
                     call_user_func_array([
                         $instance,
                         $method,
-                    ], $value);
+                    ], array_values($value));
                 } else {
                     call_user_func([
                         $instance,

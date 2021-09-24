@@ -202,7 +202,7 @@ class NumberTest extends TestBase
         ]]);
         $actual = $this->getMethod('getFormatter')->invoke($this->getClass());
 
-        $this->assertSame('pattern#000', $actual->getPattern());
+        $this->assertSame('pattern000', $actual->getPattern());
         $this->assertSame(3, $actual->getAttribute(5));
     }
 }

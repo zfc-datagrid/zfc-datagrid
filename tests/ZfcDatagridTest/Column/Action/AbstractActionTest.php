@@ -82,7 +82,7 @@ class AbstractActionTest extends TestCase
     {
         /* @var $action \ZfcDatagrid\Column\Action\AbstractAction */
         $action = $this->getMockForAbstractClass(\ZfcDatagrid\Column\Action\AbstractAction::class);
-        $action->expects($this->any())
+        $action->expects(self::any())
             ->method('getHtmlType')
             ->will($this->returnValue(''));
 

@@ -51,7 +51,12 @@ class Doctrine2CollectionTest extends TestBase
     public function testConstructExceptionClass()
     {
         $this->expectException(TypeError::class);
-        $this->expectExceptionMessage('Argument 1 passed to ZfcDatagrid\DataSource\Doctrine2Collection::__construct() must implement interface Doctrine\Common\Collections\Collection, null given,');
+        if (PHP_VERSION_ID >= 80000) {
+            $this->expectExceptionMessage('ZfcDatagrid\DataSource\Doctrine2Collection::__construct(): Argument #1 ($data) must be of type Doctrine\Common\Collections\Collection, null given,');
+        } else {
+            $this->expectExceptionMessage('Argument 1 passed to ZfcDatagrid\DataSource\Doctrine2Collection::__construct() must implement interface Doctrine\Common\Collections\Collection, null given,');
+        }
+
         new Doctrine2Collection(null);
     }
 

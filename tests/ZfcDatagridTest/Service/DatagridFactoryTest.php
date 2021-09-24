@@ -47,7 +47,7 @@ class DatagridFactoryTest extends TestCase
         $this->applicationMock = $this->getMockBuilder(\Laminas\Mvc\Application::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->applicationMock->expects($this->any())
+        $this->applicationMock->expects(self::any())
             ->method('getMvcEvent')
             ->will($this->returnValue($mvcEventMock));
 

@@ -319,15 +319,15 @@ class FilterTest extends AbstractDoctrine2Test
     {
         $filter = $this->getMockBuilder(\ZfcDatagrid\Filter::class)
             ->getMock();
-        $filter->expects($this->any())
+        $filter->expects(self::any())
             ->method('getColumn')
             ->will($this->returnValue($this->colVolumne));
-        $filter->expects($this->any())
+        $filter->expects(self::any())
             ->method('getValues')
             ->will($this->returnValue([
             1,
             ]));
-        $filter->expects($this->any())
+        $filter->expects(self::any())
             ->method('getOperator')
             ->will($this->returnValue(' () '));
 
