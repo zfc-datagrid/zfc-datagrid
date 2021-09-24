@@ -278,7 +278,7 @@ class Number extends AbstractType
     {
         $formatter = $this->getFormatter();
 
-        $formattedValue = $formatter->format($val, $this->getFormatType());
+        $formattedValue = $formatter->format((float)$val, $this->getFormatType());
 
         return $this->getPrefix() . $formattedValue . $this->getSuffix();
     }
