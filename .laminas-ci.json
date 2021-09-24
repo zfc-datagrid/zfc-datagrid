@@ -2,19 +2,6 @@
  "extensions": [
   "gd"
  ],
- "ini": [
-  "php.ini directives"
- ],
- "checks": [
-  {
-   "name": "Codeception on all supported PHP versions",
-   "job": {
-    "php": "*",
-    "dependencies": "*",
-    "command": "vendor/bin/phpunit"
-   }
-  }
- ],
  "ignore_php_platform_requirements": {
   "8.0": true
  },
