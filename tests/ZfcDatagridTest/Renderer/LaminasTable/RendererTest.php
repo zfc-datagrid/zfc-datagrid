@@ -86,7 +86,7 @@ class RendererTest extends TestCase
             ->getMock();
 
         $mvcEvent = clone $this->mvcEventMock;
-        $mvcEvent->expects($this->any())
+        $mvcEvent->expects(self::any())
             ->method('getRequest')
             ->will($this->returnValue($request));
 
@@ -103,7 +103,7 @@ class RendererTest extends TestCase
         $request = clone $this->requestMock;
 
         $mvcEvent = clone $this->mvcEventMock;
-        $mvcEvent->expects($this->any())
+        $mvcEvent->expects(self::any())
             ->method('getRequest')
             ->will($this->returnValue($request));
 
@@ -131,7 +131,7 @@ class RendererTest extends TestCase
         $request = clone $this->requestMock;
 
         $mvcEvent = clone $this->mvcEventMock;
-        $mvcEvent->expects($this->any())
+        $mvcEvent->expects(self::any())
             ->method('getRequest')
             ->will($this->returnValue($request));
 
@@ -151,7 +151,7 @@ class RendererTest extends TestCase
     {
         $request = clone $this->requestMock;
 
-        $request->expects($this->any())
+        $request->expects(self::any())
             ->method('getParam')
             ->will($this->returnCallback(function ($name) {
                 if ('dirs' == $name) {
@@ -162,7 +162,7 @@ class RendererTest extends TestCase
             }));
 
         $mvcEvent = clone $this->mvcEventMock;
-        $mvcEvent->expects($this->any())
+        $mvcEvent->expects(self::any())
             ->method('getRequest')
             ->will($this->returnValue($request));
 
@@ -203,7 +203,7 @@ class RendererTest extends TestCase
     {
         $request = clone $this->requestMock;
 
-        $request->expects($this->any())
+        $request->expects(self::any())
             ->method('getParam')
             ->will($this->returnCallback(function ($name) {
                 if ('dirs' == $name) {
@@ -214,7 +214,7 @@ class RendererTest extends TestCase
             }));
 
         $mvcEvent = clone $this->mvcEventMock;
-        $mvcEvent->expects($this->any())
+        $mvcEvent->expects(self::any())
             ->method('getRequest')
             ->will($this->returnValue($request));
 
@@ -251,7 +251,7 @@ class RendererTest extends TestCase
         $request = clone $this->requestMock;
 
         $mvcEvent = clone $this->mvcEventMock;
-        $mvcEvent->expects($this->any())
+        $mvcEvent->expects(self::any())
             ->method('getRequest')
             ->will($this->returnValue($request));
 
@@ -265,12 +265,12 @@ class RendererTest extends TestCase
     public function testGetCurrentPageNumberUser()
     {
         $request = clone $this->requestMock;
-        $request->expects($this->any())
+        $request->expects(self::any())
             ->method('getParam')
             ->will($this->returnValue(3));
 
         $mvcEvent = clone $this->mvcEventMock;
-        $mvcEvent->expects($this->any())
+        $mvcEvent->expects(self::any())
             ->method('getRequest')
             ->will($this->returnValue($request));
 
@@ -286,7 +286,7 @@ class RendererTest extends TestCase
         $request = clone $this->requestMock;
 
         $mvcEvent = clone $this->mvcEventMock;
-        $mvcEvent->expects($this->any())
+        $mvcEvent->expects(self::any())
             ->method('getRequest')
             ->will($this->returnValue($request));
 
@@ -300,12 +300,12 @@ class RendererTest extends TestCase
     public function testGetItemsPerPageUser()
     {
         $request = clone $this->requestMock;
-        $request->expects($this->any())
+        $request->expects(self::any())
             ->method('getParam')
             ->will($this->returnValue(99));
 
         $mvcEvent = clone $this->mvcEventMock;
-        $mvcEvent->expects($this->any())
+        $mvcEvent->expects(self::any())
             ->method('getRequest')
             ->will($this->returnValue($request));
 

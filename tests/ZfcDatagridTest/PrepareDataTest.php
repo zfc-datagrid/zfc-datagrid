@@ -295,7 +295,7 @@ class PrepareDataTest extends TestCase
 
         $translator = $this->getMockBuilder(\Laminas\I18n\Translator\Translator::class)
             ->getMock();
-        $translator->expects($this->any())
+        $translator->expects(self::any())
             ->method('translate')
             ->will($this->returnCallback(function ($name) {
                 switch ($name) {
@@ -346,7 +346,7 @@ class PrepareDataTest extends TestCase
 
         $translator = $this->getMockBuilder(\Laminas\I18n\Translator\Translator::class)
             ->getMock();
-        $translator->expects($this->any())
+        $translator->expects(self::any())
             ->method('translate')
             ->will($this->returnCallback(function ($name) {
                 switch ($name) {
@@ -390,7 +390,7 @@ class PrepareDataTest extends TestCase
 
         $mock = $this->getMockBuilder(\ZfcDatagrid\Column\DataPopulation\Object\Gravatar::class)
             ->getMock();
-        $mock->expects($this->any())
+        $mock->expects(self::any())
             ->method('toString')
             ->will($this->returnValue('myReturn'));
 
@@ -400,13 +400,13 @@ class PrepareDataTest extends TestCase
 
         $col = $this->getMockBuilder(\ZfcDatagrid\Column\ExternalData::class)
             ->getMock();
-        $col->expects($this->any())
+        $col->expects(self::any())
             ->method('getUniqueId')
             ->will($this->returnValue('colPopulation'));
-        $col->expects($this->any())
+        $col->expects(self::any())
             ->method('getDataPopulation')
             ->will($this->returnValue($object));
-        $col->expects($this->any())
+        $col->expects(self::any())
             ->method('getType')
             ->will($this->returnValue(new Type\PhpString()));
 

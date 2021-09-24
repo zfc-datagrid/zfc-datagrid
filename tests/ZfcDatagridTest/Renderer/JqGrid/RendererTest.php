@@ -54,7 +54,7 @@ class RendererTest extends TestCase
         $mvcEvent = $this->getMockBuilder(\Laminas\Mvc\MvcEvent::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $mvcEvent->expects($this->any())
+        $mvcEvent->expects(self::any())
             ->method('getRequest')
             ->will($this->returnValue($request));
 
@@ -76,7 +76,7 @@ class RendererTest extends TestCase
         $mvcEvent = $this->getMockBuilder(\Laminas\Mvc\MvcEvent::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $mvcEvent->expects($this->any())
+        $mvcEvent->expects(self::any())
             ->method('getRequest')
             ->will($this->returnValue($request));
 

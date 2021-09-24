@@ -13,7 +13,7 @@ class DataObjectTest extends TestCase
     public function testObject()
     {
         $mock = $this->getMockBuilder(\ZfcDatagrid\Column\DataPopulation\Object\Gravatar::class)->getMock();
-        $mock->expects($this->any())
+        $mock->expects(self::any())
             ->method('toString')
             ->will($this->returnValue('myReturn'));
 
@@ -29,7 +29,7 @@ class DataObjectTest extends TestCase
     {
         $column = $this->getMockForAbstractClass(\ZfcDatagrid\Column\AbstractColumn::class);
         $mock   = $this->getMockBuilder(\ZfcDatagrid\Column\DataPopulation\Object\Gravatar::class)->getMock();
-        $mock->expects($this->any())
+        $mock->expects(self::any())
         ->method('toString')
         ->will($this->returnValue('myReturn'));
 

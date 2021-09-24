@@ -50,7 +50,7 @@ class DatagridTest extends TestBase
         $this->config = $config;
 
         $mvcEvent = $this->getMockBuilder(MvcEvent::class)->getMock();
-        $mvcEvent->expects($this->any())
+        $mvcEvent->expects(self::any())
             ->method('getRequest')
             ->will($this->returnValue($this->getMockBuilder(Request::class)->getMock()));
 
@@ -163,14 +163,14 @@ class DatagridTest extends TestBase
 
         $platform = $this->getMockBuilder(\Laminas\Db\Adapter\Platform\Sqlite::class)
             ->getMock();
-        $platform->expects($this->any())
+        $platform->expects(self::any())
             ->method('getName')
             ->will($this->returnValue('myPlatform'));
 
         $adapter = $this->getMockBuilder(\Laminas\Db\Adapter\Adapter::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $adapter->expects($this->any())
+        $adapter->expects(self::any())
             ->method('getPlatform')
             ->will($this->returnValue($platform));
 
@@ -290,7 +290,7 @@ class DatagridTest extends TestBase
             ->setMethods(['getUniqueId'])
             ->getMock();
 
-        $col->expects($this->any())
+        $col->expects(self::any())
             ->method('getUniqueId')
             ->will($this->returnValue('myUniqueId'));
 
@@ -551,7 +551,7 @@ class DatagridTest extends TestBase
 
         $request  = new \Laminas\Console\Request();
         $mvcEvent = $this->getMockBuilder(\Laminas\Mvc\MvcEvent::class)->getMock();
-        $mvcEvent->expects($this->any())
+        $mvcEvent->expects(self::any())
             ->method('getRequest')
             ->will($this->returnValue($request));
         $this->grid->setMvcEvent($mvcEvent);
@@ -565,7 +565,7 @@ class DatagridTest extends TestBase
         $_GET['rendererType'] = 'jqGrid';
         $request              = new \Laminas\Http\PhpEnvironment\Request();
         $mvcEvent             = $this->getMockBuilder(\Laminas\Mvc\MvcEvent::class)->getMock();
-        $mvcEvent->expects($this->any())
+        $mvcEvent->expects(self::any())
             ->method('getRequest')
             ->will($this->returnValue($request));
         $this->grid->setMvcEvent($mvcEvent);

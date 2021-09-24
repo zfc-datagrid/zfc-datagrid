@@ -422,15 +422,15 @@ class FilterTest extends TestCase
     {
         $filter = $this->getMockBuilder(\ZfcDatagrid\Filter::class)
             ->getMock();
-        $filter->expects($this->any())
+        $filter->expects(self::any())
             ->method('getColumn')
             ->will($this->returnValue($this->column));
-        $filter->expects($this->any())
+        $filter->expects(self::any())
             ->method('getValues')
             ->will($this->returnValue([
             1,
             ]));
-        $filter->expects($this->any())
+        $filter->expects(self::any())
             ->method('getOperator')
             ->will($this->returnValue(' () '));
 

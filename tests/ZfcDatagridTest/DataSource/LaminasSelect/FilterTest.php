@@ -58,17 +58,17 @@ class FilterTest extends TestCase
             ->getMock();
         $this->mockConnection = $this->getMockBuilder(\Laminas\Db\Adapter\Driver\ConnectionInterface::class)
             ->getMock();
-        $this->mockDriver->expects($this->any())
+        $this->mockDriver->expects(self::any())
             ->method('checkEnvironment')
             ->will($this->returnValue(true));
-        $this->mockDriver->expects($this->any())
+        $this->mockDriver->expects(self::any())
             ->method('getConnection')
             ->will($this->returnValue($this->mockConnection));
         $this->mockPlatform  = $this->getMockBuilder(\Laminas\Db\Adapter\Platform\PlatformInterface::class)
             ->getMock();
         $this->mockStatement = $this->getMockBuilder(\Laminas\Db\Adapter\Driver\StatementInterface::class)
             ->getMock();
-        $this->mockDriver->expects($this->any())
+        $this->mockDriver->expects(self::any())
             ->method('createStatement')
             ->will($this->returnValue($this->mockStatement));
 
@@ -418,15 +418,15 @@ class FilterTest extends TestCase
     {
         $filter = $this->getMockBuilder(\ZfcDatagrid\Filter::class)
             ->getMock();
-        $filter->expects($this->any())
+        $filter->expects(self::any())
             ->method('getColumn')
             ->will($this->returnValue($this->column));
-        $filter->expects($this->any())
+        $filter->expects(self::any())
             ->method('getValues')
             ->will($this->returnValue([
             1,
             ]));
-        $filter->expects($this->any())
+        $filter->expects(self::any())
             ->method('getOperator')
             ->will($this->returnValue(' () '));
 

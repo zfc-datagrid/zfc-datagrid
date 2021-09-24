@@ -48,19 +48,19 @@ class LaminasSelectTest extends DataSourceTestCase
 
         $this->mockDriver     = $this->getMockBuilder(\Laminas\Db\Adapter\Driver\DriverInterface::class)->getMock();
         $this->mockConnection = $this->getMockBuilder(\Laminas\Db\Adapter\Driver\ConnectionInterface::class)->getMock();
-        $this->mockDriver->expects($this->any())
+        $this->mockDriver->expects(self::any())
             ->method('checkEnvironment')
             ->will($this->returnValue(true));
-        $this->mockDriver->expects($this->any())
+        $this->mockDriver->expects(self::any())
             ->method('getConnection')
             ->will($this->returnValue($this->mockConnection));
         $this->mockPlatform = $this->getMockBuilder(\Laminas\Db\Adapter\Platform\PlatformInterface::class)->getMock();
-        $this->mockPlatform->expects($this->any())
+        $this->mockPlatform->expects(self::any())
             ->method('getIdentifierSeparator')
             ->will($this->returnValue('.'));
 
         $this->mockStatement = $this->getMockBuilder(\Laminas\Db\Adapter\Driver\StatementInterface::class)->getMock();
-        $this->mockDriver->expects($this->any())
+        $this->mockDriver->expects(self::any())
             ->method('createStatement')
             ->will($this->returnValue($this->mockStatement));
 
