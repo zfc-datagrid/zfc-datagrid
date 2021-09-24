@@ -11,7 +11,7 @@
    "job": {
     "php": "*",
     "dependencies": "*",
-    "command": "vendor/bin/codecept run"
+    "command": "vendor/bin/phpunit"
    }
   }
  ],
