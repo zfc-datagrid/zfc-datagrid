@@ -27,11 +27,11 @@
     }],
 
     "require": {
-        "php": "^7.2",
+        "php": "^7.2 || ~8.0.0",
         
         "laminas/laminas-mvc": "^3.0",
         "laminas/laminas-session": "^2.7.4",
-        "laminas/laminas-view": "^2.5",
+        "laminas/laminas-view": "^2.12",
         "laminas/laminas-http": "^2.8",
         "laminas/laminas-paginator": "^2.5",
         "laminas/laminas-cache": "^2.5",
@@ -41,15 +41,15 @@
     
     "require-dev": {
         "phpunit/phpunit": "^8.5.2",
-        "doctrine/doctrine-orm-module": "^3.0.2",
+        "doctrine/doctrine-orm-module": "^3.0.2 || ^4.0.1",
         "doctrine/orm": "^2.6.3",
         "laminas/laminas-stdlib": "^3.2.1",
-        
+
         "laminas/laminas-console": "^2.5",
         "laminas/laminas-db": "^2.5",
         "laminas/laminas-i18n": "^2.5",
         "laminas/laminas-text": "^2.5",
-        "laminas/laminas-json": "^2.5",
+        "laminas/laminas-json": "^2.5 || ^3.3.0",
         "laminas/laminas-coding-standard": "~1.0",
 
         "phpoffice/phpspreadsheet": "^1.11",
