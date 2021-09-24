@@ -15,14 +15,6 @@
    }
   }
  ],
- "additional_checks": [
-  {
-  }
- ],
- "exclude": [
-  {
-  }
- ],
  "ignore_php_platform_requirements": {
   "8.0": true
  },
