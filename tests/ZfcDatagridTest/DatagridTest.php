@@ -307,9 +307,15 @@ class DatagridTest extends TestBase
     public function testAddColumnInvalidArgumentException()
     {
         $this->expectException(Throwable::class);
-        $this->expectExceptionMessage(
-            'Argument 1 passed to ZfcDatagrid\Datagrid::createColumn() must be of the type array'
-        );
+        if (PHP_VERSION_ID >= 80000) {
+            $this->expectExceptionMessage(
+                'ZfcDatagrid\Datagrid::createColumn(): Argument #1 ($config) must be of type array, null given'
+            );
+        } else {
+            $this->expectExceptionMessage(
+                'Argument 1 passed to ZfcDatagrid\Datagrid::createColumn() must be of the type array'
+            );
+        }
         $grid = new Datagrid();
 
         $grid->addColumn(null);
