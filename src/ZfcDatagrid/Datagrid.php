@@ -324,8 +324,8 @@ class Datagrid
 
     /**
      * @param MvcEvent $mvcEvent
-     *
      * @return $this
+     * @deprecated
      */
     public function setMvcEvent(MvcEvent $mvcEvent)
     {
@@ -337,6 +337,7 @@ class Datagrid
 
     /**
      * @return MvcEvent|null
+     * @deprecated
      */
     public function getMvcEvent(): ?MvcEvent
     {
@@ -349,6 +350,13 @@ class Datagrid
     public function getRequest(): ?RequestInterface
     {
         return $this->request;
+    }
+
+    public function setRequest(RequestInterface $request): self
+    {
+        $this->request = $request;
+
+        return $this;
     }
 
     /**
@@ -924,7 +932,8 @@ class Datagrid
                     );
                 }
                 $renderer->setOptions($this->getOptions());
-                $renderer->setMvcEvent($this->getMvcEvent());
+                #$renderer->setMvcEvent($this->getMvcEvent());
+                $renderer->setRequest($this->getRequest());
                 if ($this->getToolbarTemplate() !== null) {
                     $renderer->setToolbarTemplate($this->getToolbarTemplate());
                 }
@@ -999,16 +1008,16 @@ class Datagrid
             /*
              * Step 1.2) Sorting
              */
-        foreach ($renderer->getSortConditions() as $condition) {
-            $this->getDataSource()->addSortCondition($condition['column'], $condition['sortDirection']);
-        }
+            foreach ($renderer->getSortConditions() as $condition) {
+                $this->getDataSource()->addSortCondition($condition['column'], $condition['sortDirection']);
+            }
 
-            /*
-             * Step 1.3) Filtering
-             */
-        foreach ($renderer->getFilters() as $filter) {
-            $this->getDataSource()->addFilter($filter);
-        }
+                /*
+                 * Step 1.3) Filtering
+                 */
+            foreach ($renderer->getFilters() as $filter) {
+                $this->getDataSource()->addFilter($filter);
+            }
         }
 
         /*
@@ -1266,5 +1275,4 @@ class Datagrid
 
         return $this;
     }
-
 }

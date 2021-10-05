@@ -66,6 +66,9 @@ abstract class AbstractRenderer implements RendererInterface
     /** @var TranslatorInterface|null */
     protected $translator;
 
+    /** var RequestInterface */
+    protected $request;
+
     /**
      * @param array $options
      *
@@ -373,6 +376,7 @@ abstract class AbstractRenderer implements RendererInterface
      * @param MvcEvent $mvcEvent
      *
      * @return $this
+     * @deprecated
      */
     public function setMvcEvent(MvcEvent $mvcEvent): self
     {
@@ -383,6 +387,7 @@ abstract class AbstractRenderer implements RendererInterface
 
     /**
      * @return MvcEvent
+     * @deprecated
      */
     public function getMvcEvent(): ?MvcEvent
     {
@@ -390,11 +395,22 @@ abstract class AbstractRenderer implements RendererInterface
     }
 
     /**
+<<<<<<< HEAD
+     * @return RequestInterface
+=======
      * @return \Laminas\Stdlib\RequestInterface
+>>>>>>> upstream/develop
      */
     public function getRequest()
     {
-        return $this->getMvcEvent()->getRequest();
+        return $this->request;
+    }
+
+    public function setRequest($request)
+    {
+        $this->request = $request;
+
+        return $this;
     }
 
     /**

@@ -5,6 +5,7 @@ use InvalidArgumentException;
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use ZfcDatagrid\Datagrid;
+use ZfcDatagrid\Middleware\RequestHelper;
 
 class DatagridFactory implements FactoryInterface
 {
@@ -23,12 +24,15 @@ class DatagridFactory implements FactoryInterface
             throw new InvalidArgumentException('Config key "ZfcDatagrid" is missing');
         }
 
-        /* @var $application \Laminas\Mvc\Application */
-        $application = $container->get('application');
+        /* @var $application \Zend\Mvc\Application */
+        //$application = $container->get('application');
+
+        /** @var RequestHelper $requestHelper */
+        $requestHelper = $container->get(RequestHelper::class);
 
         $grid = new Datagrid();
         $grid->setOptions($config['ZfcDatagrid']);
-        $grid->setMvcEvent($application->getMvcEvent());
+        $grid->setRequest($requestHelper->getRequest());
         $grid->setRouter($container->get('Router'));
 
         if (true === $container->has('translator')) {
@@ -39,5 +43,15 @@ class DatagridFactory implements FactoryInterface
         $grid->init();
 
         return $grid;
+    }
+
+    /**
+     * @param ServiceLocatorInterface $serviceLocator
+     *
+     * @return Datagrid
+     */
+    public function createService(ServiceLocatorInterface $serviceLocator)
+    {
+        return $this($serviceLocator, Datagrid::class);
     }
 }
