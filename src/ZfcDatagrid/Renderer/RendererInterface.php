@@ -1,8 +1,8 @@
 <?php
 namespace ZfcDatagrid\Renderer;
 
-use Zend\Http\Response;
-use Zend\View\Model\ViewModel;
+use Laminas\Http\Response;
+use Laminas\View\Model\ViewModel;
 
 interface RendererInterface
 {

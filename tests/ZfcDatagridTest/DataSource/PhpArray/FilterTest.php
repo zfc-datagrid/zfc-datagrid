@@ -1,6 +1,7 @@
 <?php
 namespace ZfcDatagridTest\DataSource\PhpArray;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use ZfcDatagrid\DataSource\PhpArray\Filter as FilterArray;
 use ZfcDatagrid\Filter;
@@ -17,7 +18,7 @@ class FilterTest extends TestCase
      */
     private $column;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->column = $this->getMockForAbstractClass(\ZfcDatagrid\Column\AbstractColumn::class);
         $this->column->setUniqueId('myCol');
@@ -417,9 +418,6 @@ class FilterTest extends TestCase
         ]));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testException()
     {
         $filter = $this->getMockBuilder(\ZfcDatagrid\Filter::class)
@@ -437,6 +435,8 @@ class FilterTest extends TestCase
             ->will($this->returnValue(' () '));
 
         $filterArray = new FilterArray($filter);
+
+        $this->expectException(InvalidArgumentException::class);
         $filterArray->applyFilter([
             'myCol' => '15',
         ]);

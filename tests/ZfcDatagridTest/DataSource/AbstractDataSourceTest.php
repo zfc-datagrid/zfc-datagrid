@@ -13,7 +13,7 @@ class AbstractDataSourceTest extends TestCase
      */
     private $dsMock;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->dsMock = $this->getMockForAbstractClass(\ZfcDatagrid\DataSource\AbstractDataSource::class, [
             [],
@@ -102,11 +102,11 @@ class AbstractDataSourceTest extends TestCase
     {
         $ds = clone $this->dsMock;
 
-        $adapter = $this->getMockBuilder(\Zend\Paginator\Adapter\ArrayAdapter::class)
+        $adapter = $this->getMockBuilder(\Laminas\Paginator\Adapter\ArrayAdapter::class)
             ->getMock();
         $ds->setPaginatorAdapter($adapter);
 
-        $this->assertInstanceOf(\Zend\Paginator\Adapter\AdapterInterface::class, $ds->getPaginatorAdapter());
+        $this->assertInstanceOf(\Laminas\Paginator\Adapter\AdapterInterface::class, $ds->getPaginatorAdapter());
         $this->assertEquals($adapter, $ds->getPaginatorAdapter());
     }
 }

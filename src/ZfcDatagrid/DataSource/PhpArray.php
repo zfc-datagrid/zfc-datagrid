@@ -1,7 +1,7 @@
 <?php
 namespace ZfcDatagrid\DataSource;
 
-use Zend\Paginator\Adapter\ArrayAdapter as PaginatorAdapter;
+use Laminas\Paginator\Adapter\ArrayAdapter as PaginatorAdapter;
 use ZfcDatagrid\Column;
 use function array_filter;
 use function in_array;

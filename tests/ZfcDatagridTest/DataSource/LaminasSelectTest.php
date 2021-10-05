@@ -6,18 +6,22 @@ namespace ZfcDatagridTest\DataSource;
  *
  * Copied from: https://github.com/doctrine/doctrine2/blob/master/tests/Doctrine/Tests/OrmTestCase.php
  */
-use Zend\Db\Adapter\Adapter;
-use Zend\Db\Sql\Select;
-use Zend\Db\Sql\Sql;
+
+use Exception;
+use InvalidArgumentException;
+use Laminas\Db\Adapter\Adapter;
+use Laminas\Db\Sql\Select;
+use Laminas\Db\Sql\Sql;
+use TypeError;
 use ZfcDatagrid\Column;
-use ZfcDatagrid\DataSource\ZendSelect;
+use ZfcDatagrid\DataSource\LaminasSelect;
 use ZfcDatagrid\Filter;
 
 /**
  * @group DataSource
- * @covers \ZfcDatagrid\DataSource\ZendSelect
+ * @covers \ZfcDatagrid\DataSource\LaminasSelect
  */
-class ZendSelectTest extends DataSourceTestCase
+class LaminasSelectTest extends DataSourceTestCase
 {
     /**
      *
@@ -34,32 +38,28 @@ class ZendSelectTest extends DataSourceTestCase
 
     /**
      *
-     * @var ZendSelect
+     * @var LaminasSelect
      */
     protected $source;
 
-    /**
-     * https://github.com/zendframework/zf2/blob/master/tests/ZendTest/Db/Adapter/AdapterTest.php#L43
-     * https://github.com/zendframework/zf2/blob/master/tests/ZendTest/Db/Sql/SqlTest.php#L26
-     */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
-        $this->mockDriver     = $this->getMockBuilder(\Zend\Db\Adapter\Driver\DriverInterface::class)->getMock();
-        $this->mockConnection = $this->getMockBuilder(\Zend\Db\Adapter\Driver\ConnectionInterface::class)->getMock();
+        $this->mockDriver     = $this->getMockBuilder(\Laminas\Db\Adapter\Driver\DriverInterface::class)->getMock();
+        $this->mockConnection = $this->getMockBuilder(\Laminas\Db\Adapter\Driver\ConnectionInterface::class)->getMock();
         $this->mockDriver->expects($this->any())
             ->method('checkEnvironment')
             ->will($this->returnValue(true));
         $this->mockDriver->expects($this->any())
             ->method('getConnection')
             ->will($this->returnValue($this->mockConnection));
-        $this->mockPlatform = $this->getMockBuilder(\Zend\Db\Adapter\Platform\PlatformInterface::class)->getMock();
+        $this->mockPlatform = $this->getMockBuilder(\Laminas\Db\Adapter\Platform\PlatformInterface::class)->getMock();
         $this->mockPlatform->expects($this->any())
             ->method('getIdentifierSeparator')
             ->will($this->returnValue('.'));
 
-        $this->mockStatement = $this->getMockBuilder(\Zend\Db\Adapter\Driver\StatementInterface::class)->getMock();
+        $this->mockStatement = $this->getMockBuilder(\Laminas\Db\Adapter\Driver\StatementInterface::class)->getMock();
         $this->mockDriver->expects($this->any())
             ->method('createStatement')
             ->will($this->returnValue($this->mockStatement));
@@ -70,7 +70,7 @@ class ZendSelectTest extends DataSourceTestCase
 
         $select = new Select();
 
-        $this->source = new ZendSelect($select);
+        $this->source = new LaminasSelect($select);
         $this->source->setAdapter($this->sql);
         $this->source->setColumns([
             $this->colVolumne,
@@ -78,48 +78,41 @@ class ZendSelectTest extends DataSourceTestCase
         ]);
     }
 
-    /**
-     * @expectedException \TypeError
-     * @expectedExceptionMessage Argument 1 passed to ZfcDatagrid\DataSource\ZendSelect::__construct() must be an instance of Zend\Db\Sql\Select, array given, called in
-     */
     public function testConstruct()
     {
-        $select = $this->getMockBuilder(\Zend\Db\Sql\Select::class)->getMock();
+        $select = $this->getMockBuilder(\Laminas\Db\Sql\Select::class)->getMock();
 
-        $source = new ZendSelect($select);
+        $source = new LaminasSelect($select);
 
-        $this->assertInstanceOf(\Zend\Db\Sql\Select::class, $source->getData());
+        $this->assertInstanceOf(\Laminas\Db\Sql\Select::class, $source->getData());
         $this->assertEquals($select, $source->getData());
 
-        $source = new ZendSelect([]);
+        $this->expectException(TypeError::class);
+        $source = new LaminasSelect([]);
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Object "Zend\Db\Sql\Sql" is missing, please call setAdapter() first!
-     */
     public function testExecuteException()
     {
-        $select = $this->getMockBuilder(\Zend\Db\Sql\Select::class)->getMock();
+        $select = $this->getMockBuilder(\Laminas\Db\Sql\Select::class)->getMock();
 
-        $source = new ZendSelect($select);
+        $source = new LaminasSelect($select);
 
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Object "Laminas\Db\Sql\Sql" is missing, please call setAdapter() first!');
         $source->execute();
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testAdapter()
     {
         $source = clone $this->source;
 
-        $this->assertInstanceOf(\Zend\Db\Sql\Sql::class, $source->getAdapter());
+        $this->assertInstanceOf(\Laminas\Db\Sql\Sql::class, $source->getAdapter());
         $this->assertEquals($this->sql, $source->getAdapter());
 
         $source->setAdapter($this->adapter);
-        $this->assertInstanceOf(\Zend\Db\Sql\Sql::class, $source->getAdapter());
+        $this->assertInstanceOf(\Laminas\Db\Sql\Sql::class, $source->getAdapter());
 
+        $this->expectException(InvalidArgumentException::class);
         $source->setAdapter('something');
     }
 
@@ -131,12 +124,12 @@ class ZendSelectTest extends DataSourceTestCase
         $source->addSortCondition($this->colEdition, 'DESC');
         $source->execute();
 
-        $this->assertInstanceOf(\Zend\Paginator\Adapter\DbSelect::class, $source->getPaginatorAdapter());
+        $this->assertInstanceOf(\Laminas\Paginator\Adapter\DbSelect::class, $source->getPaginatorAdapter());
     }
 
     public function testJoinTable()
     {
-        $this->markTestIncomplete('ZendSelect join table test');
+        $this->markTestIncomplete('LaminasSelect join table test');
 
         $col1 = new Column\Select('id', 'o');
         $col2 = new Column\Select('name', 'u');
@@ -149,7 +142,7 @@ class ZendSelectTest extends DataSourceTestCase
             'u' => 'user',
         ], 'u.order = o.id');
 
-        $source = new ZendSelect($select);
+        $source = new LaminasSelect($select);
         $source->setAdapter($this->sql);
         $source->setColumns([
             $col1,

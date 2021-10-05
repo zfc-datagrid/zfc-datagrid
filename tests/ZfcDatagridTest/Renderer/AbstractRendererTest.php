@@ -17,7 +17,7 @@ class AbstractRendererTest extends TestCase
      */
     private $colMock;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->colMock = $this->getMockForAbstractClass(\ZfcDatagrid\Column\AbstractColumn::class);
     }
@@ -62,7 +62,7 @@ class AbstractRendererTest extends TestCase
 
         $this->assertNull($renderer->getViewModel());
 
-        $viewModel = $this->getMockBuilder(\Zend\View\Model\ViewModel::class)
+        $viewModel = $this->getMockBuilder(\Laminas\View\Model\ViewModel::class)
             ->getMock();
         $renderer->setViewModel($viewModel);
         $this->assertSame($viewModel, $renderer->getViewModel());
@@ -114,7 +114,7 @@ class AbstractRendererTest extends TestCase
         $this->assertNull($renderer->getPaginator());
 
         $testCollection = range(1, 101);
-        $pagintorMock   = new \Zend\Paginator\Paginator(new \Zend\Paginator\Adapter\ArrayAdapter($testCollection));
+        $pagintorMock   = new \Laminas\Paginator\Paginator(new \Laminas\Paginator\Adapter\ArrayAdapter($testCollection));
         $renderer->setPaginator($pagintorMock);
 
         $this->assertSame($pagintorMock, $renderer->getPaginator());
@@ -213,7 +213,7 @@ class AbstractRendererTest extends TestCase
 
 //     public function testCacheData()
 //     {
-//         $cache = $this->getMockForAbstractClass(\Zend\Cache\Storage\Adapter\AbstractAdapter::class);
+//         $cache = $this->getMockForAbstractClass(\Laminas\Cache\Storage\Adapter\AbstractAdapter::class);
 
 //         /* @var $renderer \ZfcDatagrid\Renderer\AbstractRenderer */
 //         $renderer = $this->getMockForAbstractClass(\ZfcDatagrid\Renderer\AbstractRenderer::class);
@@ -240,11 +240,11 @@ class AbstractRendererTest extends TestCase
         /* @var $renderer \ZfcDatagrid\Renderer\AbstractRenderer */
         $renderer = $this->getMockForAbstractClass(\ZfcDatagrid\Renderer\AbstractRenderer::class);
 
-        $request = $this->getMockBuilder(\Zend\Http\Request::class)
+        $request = $this->getMockBuilder(\Laminas\Http\Request::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $mvcEvent = $this->getMockBuilder(\Zend\Mvc\MvcEvent::class)
+        $mvcEvent = $this->getMockBuilder(\Laminas\Mvc\MvcEvent::class)
             ->disableOriginalConstructor()
             ->getMock();
         $mvcEvent->expects($this->any())
@@ -264,7 +264,7 @@ class AbstractRendererTest extends TestCase
         /* @var $renderer \ZfcDatagrid\Renderer\AbstractRenderer */
         $renderer = $this->getMockForAbstractClass(\ZfcDatagrid\Renderer\AbstractRenderer::class);
 
-        $translator = $this->getMockBuilder(\Zend\I18n\Translator\Translator::class)
+        $translator = $this->getMockBuilder(\Laminas\I18n\Translator\Translator::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -279,7 +279,7 @@ class AbstractRendererTest extends TestCase
         $renderer = $this->getMockForAbstractClass(\ZfcDatagrid\Renderer\AbstractRenderer::class);
         $this->assertEquals('foobar', $renderer->translate('foobar'));
 
-        $translator = $this->getMockBuilder(\Zend\I18n\Translator\Translator::class)
+        $translator = $this->getMockBuilder(\Laminas\I18n\Translator\Translator::class)
             ->disableOriginalConstructor()
             ->setMethods(['translate'])
             ->getMock();
@@ -351,14 +351,14 @@ class AbstractRendererTest extends TestCase
 
     public function testGetFiltersDefault()
     {
-        $request = $this->getMockBuilder(\Zend\Http\PhpEnvironment\Request::class)
+        $request = $this->getMockBuilder(\Laminas\Http\PhpEnvironment\Request::class)
             ->disableOriginalConstructor()
             ->getMock();
         $request->expects($this->any())
             ->method('isPost')
             ->will($this->returnValue(false));
 
-        $mvcEvent = $this->getMockBuilder(\Zend\Mvc\MvcEvent::class)
+        $mvcEvent = $this->getMockBuilder(\Laminas\Mvc\MvcEvent::class)
             ->disableOriginalConstructor()
             ->getMock();
         $mvcEvent->expects($this->any())

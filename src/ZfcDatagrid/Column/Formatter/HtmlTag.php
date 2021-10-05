@@ -1,7 +1,7 @@
 <?php
 namespace ZfcDatagrid\Column\Formatter;
 
-use Zend\Router\RouteStackInterface;
+use Laminas\Router\RouteStackInterface;
 use ZfcDatagrid\Column\AbstractColumn;
 use function implode;
 use function strpos;

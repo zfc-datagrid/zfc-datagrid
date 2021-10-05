@@ -1,6 +1,7 @@
 <?php
 namespace ZfcDatagridTest\Renderer;
 
+use Exception;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
@@ -16,7 +17,7 @@ class AbstractExportTest extends TestCase
      */
     private $exportMock;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->exportMock = $this->getMockForAbstractClass(\ZfcDatagrid\Renderer\AbstractExport::class);
     }
@@ -38,10 +39,6 @@ class AbstractExportTest extends TestCase
         $this->assertEquals(date('Y-m-d_H-i-s') . '_My_title', $filename);
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Currently only "A" paper formats are supported!
-     */
     public function testPaperWidth()
     {
         $exportMock = clone $this->exportMock;
@@ -113,6 +110,9 @@ class AbstractExportTest extends TestCase
             ],
         ];
         $exportMock->setOptions($options);
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Currently only "A" paper formats are supported!');
 
         $width = $method->invoke($exportMock);
     }

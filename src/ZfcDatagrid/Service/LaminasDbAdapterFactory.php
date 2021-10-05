@@ -2,10 +2,10 @@
 namespace ZfcDatagrid\Service;
 
 use Interop\Container\ContainerInterface;
-use Zend\Db\Adapter\Adapter;
-use Zend\ServiceManager\Factory\FactoryInterface;
+use Laminas\Db\Adapter\Adapter;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
-class ZendDbAdapterFactory implements FactoryInterface
+class LaminasDbAdapterFactory implements FactoryInterface
 {
     /**
      * @param ContainerInterface $container

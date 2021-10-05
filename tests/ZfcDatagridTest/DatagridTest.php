@@ -4,17 +4,17 @@ namespace ZfcDatagridTest;
 use Exception;
 use InvalidArgumentException;
 use Throwable;
-use Zend\Http\PhpEnvironment\Request;
-use Zend\I18n\Translator\Translator;
-use Zend\Mvc\MvcEvent;
-use Zend\Paginator\Paginator;
-use Zend\Router\Http\HttpRouterFactory;
-use Zend\Router\Http\Segment;
-use Zend\Router\RoutePluginManagerFactory;
-use Zend\Session\Container;
-use Zend\Stdlib\ResponseInterface;
-use Zend\View\Model\JsonModel;
-use Zend\View\Model\ViewModel;
+use Laminas\Http\PhpEnvironment\Request;
+use Laminas\I18n\Translator\Translator;
+use Laminas\Mvc\MvcEvent;
+use Laminas\Paginator\Paginator;
+use Laminas\Router\Http\HttpRouterFactory;
+use Laminas\Router\Http\Segment;
+use Laminas\Router\RoutePluginManagerFactory;
+use Laminas\Session\Container;
+use Laminas\Stdlib\ResponseInterface;
+use Laminas\View\Model\JsonModel;
+use Laminas\View\Model\ViewModel;
 use ZfcDatagrid\Action\Mass;
 use ZfcDatagrid\Column;
 use ZfcDatagrid\Datagrid;
@@ -38,12 +38,12 @@ class DatagridTest extends TestBase
     /** @var array */
     private $config;
 
-    public function setUp()
+    public function setUp(): void
     {
         $config = include './config/module.config.php';
         $config = $config['ZfcDatagrid'];
 
-        $cacheOptions                          = new \Zend\Cache\Storage\Adapter\MemoryOptions();
+        $cacheOptions                          = new \Laminas\Cache\Storage\Adapter\MemoryOptions();
         $config['cache']['adapter']['name']    = 'Memory';
         $config['cache']['adapter']['options'] = $cacheOptions->toArray();
 
@@ -80,14 +80,14 @@ class DatagridTest extends TestBase
 
     public function testSession()
     {
-        $this->assertInstanceOf(\Zend\Session\Container::class, $this->grid->getSession());
+        $this->assertInstanceOf(\Laminas\Session\Container::class, $this->grid->getSession());
         $this->assertEquals('defaultGrid', $this->grid->getSession()
             ->getName());
 
         $session = new Container('myName');
 
         $this->grid->setSession($session);
-        $this->assertInstanceOf(\Zend\Session\Container::class, $this->grid->getSession());
+        $this->assertInstanceOf(\Laminas\Session\Container::class, $this->grid->getSession());
         $this->assertSame($session, $this->grid->getSession());
         $this->assertEquals('myName', $this->grid->getSession()
             ->getName());
@@ -131,9 +131,6 @@ class DatagridTest extends TestBase
         $this->assertInstanceOf(Translator::class, $this->grid->getTranslator());
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testDataSourceArray()
     {
         $grid = new Datagrid();
@@ -150,30 +147,27 @@ class DatagridTest extends TestBase
         $grid->setDataSource($source);
         $this->assertTrue($grid->hasDataSource());
 
+        $this->expectException(InvalidArgumentException::class);
         $grid->setDataSource(null);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage For "Zend\Db\Sql\Select" also a "Zend\Db\Adapter\Sql" or "Zend\Db\Sql\Sql" is needed.
-     */
-    public function testDataSourceZendSelect()
+    public function testDataSourceLaminasSelect()
     {
         $grid = new Datagrid();
 
         $this->assertFalse($grid->hasDataSource());
 
-        $select = $this->getMockBuilder(\Zend\Db\Sql\Select::class)
+        $select = $this->getMockBuilder(\Laminas\Db\Sql\Select::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $platform = $this->getMockBuilder(\Zend\Db\Adapter\Platform\Sqlite::class)
+        $platform = $this->getMockBuilder(\Laminas\Db\Adapter\Platform\Sqlite::class)
             ->getMock();
         $platform->expects($this->any())
             ->method('getName')
             ->will($this->returnValue('myPlatform'));
 
-        $adapter = $this->getMockBuilder(\Zend\Db\Adapter\Adapter::class)
+        $adapter = $this->getMockBuilder(\Laminas\Db\Adapter\Adapter::class)
             ->disableOriginalConstructor()
             ->getMock();
         $adapter->expects($this->any())
@@ -182,7 +176,10 @@ class DatagridTest extends TestBase
 
         $grid->setDataSource($select, $adapter);
         $this->assertTrue($grid->hasDataSource());
-        $this->assertInstanceOf(\ZfcDatagrid\Datasource\ZendSelect::class, $grid->getDataSource());
+        $this->assertInstanceOf(\ZfcDatagrid\Datasource\LaminasSelect::class, $grid->getDataSource());
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectDeprecationMessage('For "Laminas\Db\Sql\Select" also a "Laminas\Db\Adapter\Sql" or "Laminas\Db\Sql\Sql" is needed.');
         $grid->setDataSource($select);
     }
 
@@ -340,10 +337,6 @@ class DatagridTest extends TestBase
         $this->assertEquals('My label', $col->getLabel());
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Column type: "ZfcDatagrid\Column\Unknown" not found!
-     */
     public function testAddColumnArrayInvalidColType()
     {
         $grid = new Datagrid();
@@ -354,6 +347,8 @@ class DatagridTest extends TestBase
             'label'   => 'My label',
         ];
 
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Column type: "ZfcDatagrid\Column\Unknown" not found!');
         $grid->addColumn($column);
     }
 
@@ -378,10 +373,6 @@ class DatagridTest extends TestBase
         $this->assertEquals('My label', $col->getLabel());
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage For "ZfcDatagrid\Column\Select" the option select[column] must be defined!
-     */
     public function testAddColumnArraySelectInvalidArgumentException()
     {
         $grid = new Datagrid();
@@ -391,6 +382,8 @@ class DatagridTest extends TestBase
             'label' => 'My label',
         ];
 
+        $this->expectExceptionMessage('For "ZfcDatagrid\Column\Select" the option select[column] must be defined!');
+        $this->expectException(InvalidArgumentException::class);
         $grid->addColumn($column);
     }
 
@@ -556,13 +549,13 @@ class DatagridTest extends TestBase
         ];
         $_ENV["FOO_VAR"] = "bar";
 
-        $request  = new \Zend\Console\Request();
-        $mvcEvent = $this->getMockBuilder(\Zend\Mvc\MvcEvent::class)->getMock();
+        $request  = new \Laminas\Console\Request();
+        $mvcEvent = $this->getMockBuilder(\Laminas\Mvc\MvcEvent::class)->getMock();
         $mvcEvent->expects($this->any())
             ->method('getRequest')
             ->will($this->returnValue($request));
         $this->grid->setMvcEvent($mvcEvent);
-        $this->assertEquals('zendTable', $this->grid->getRendererName());
+        $this->assertEquals('laminasTable', $this->grid->getRendererName());
 
         // change default
         $this->grid->setRendererName('myRenderer');
@@ -570,8 +563,8 @@ class DatagridTest extends TestBase
 
         // by HTTP request
         $_GET['rendererType'] = 'jqGrid';
-        $request              = new \Zend\Http\PhpEnvironment\Request();
-        $mvcEvent             = $this->getMockBuilder(\Zend\Mvc\MvcEvent::class)->getMock();
+        $request              = new \Laminas\Http\PhpEnvironment\Request();
+        $mvcEvent             = $this->getMockBuilder(\Laminas\Mvc\MvcEvent::class)->getMock();
         $mvcEvent->expects($this->any())
             ->method('getRequest')
             ->will($this->returnValue($request));
@@ -594,7 +587,7 @@ class DatagridTest extends TestBase
         $grid = new Datagrid();
 
         $defaultView = $grid->getViewModel();
-        $this->assertInstanceOf(\Zend\View\Model\ViewModel::class, $defaultView);
+        $this->assertInstanceOf(\Laminas\View\Model\ViewModel::class, $defaultView);
         $this->assertSame($defaultView, $grid->getViewModel());
     }
 
@@ -602,7 +595,7 @@ class DatagridTest extends TestBase
     {
         $grid = new Datagrid();
 
-        $customView = $this->getMockBuilder(\Zend\View\Model\ViewModel::class)->getMock();
+        $customView = $this->getMockBuilder(\Laminas\View\Model\ViewModel::class)->getMock();
         $grid->setViewModel($customView);
         $this->assertSame($customView, $grid->getViewModel());
     }
@@ -616,7 +609,7 @@ class DatagridTest extends TestBase
         $grid = new Datagrid();
         $grid->getViewModel();
 
-        $customView = $this->getMockBuilder(\Zend\View\Model\ViewModel::class)->getMock();
+        $customView = $this->getMockBuilder(\Laminas\View\Model\ViewModel::class)->getMock();
 
         $grid->setViewModel($customView);
     }

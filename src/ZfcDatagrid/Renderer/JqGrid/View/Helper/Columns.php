@@ -1,8 +1,8 @@
 <?php
 namespace ZfcDatagrid\Renderer\JqGrid\View\Helper;
 
-use Zend\I18n\Translator\TranslatorInterface;
-use Zend\View\Helper\AbstractHelper;
+use Laminas\I18n\Translator\TranslatorInterface;
+use Laminas\View\Helper\AbstractHelper;
 use ZfcDatagrid\Column;
 use ZfcDatagrid\Column\Type;
 use ZfcDatagrid\Filter;
@@ -99,7 +99,7 @@ class Columns extends AbstractHelper
             }
 
             if (! $alignAlreadyDefined && $column->getType() instanceof Type\Number) {
-                $options['align'] = Column\Style\Align::$RIGHT;
+                $options['align'] = Column\Style\Align::RIGHT;
             }
 
             /*

@@ -12,7 +12,7 @@ return array(
                 'renderer' => array(
                     //http => jqGrid,
                     'http' => 'bootstrapTable',
-                    'console' => 'zendTable'
+                    'console' => 'laminasTable'
                 )
             ),
             

@@ -2,6 +2,7 @@
 namespace ZfcDatagridTest\DataSource\Doctrine2;
 
 use Doctrine\ORM\QueryBuilder;
+use InvalidArgumentException;
 use ZfcDatagrid\DataSource\Doctrine2\Filter as FilterDoctrine2;
 
 /**
@@ -16,7 +17,7 @@ class FilterTest extends AbstractDoctrine2Test
      */
     private $filterDoctrine2;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -314,9 +315,6 @@ class FilterTest extends AbstractDoctrine2Test
         $this->assertEquals('789', $parameters[1]->getValue());
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testException()
     {
         $filter = $this->getMockBuilder(\ZfcDatagrid\Filter::class)
@@ -333,6 +331,7 @@ class FilterTest extends AbstractDoctrine2Test
             ->method('getOperator')
             ->will($this->returnValue(' () '));
 
+        $this->expectException(InvalidArgumentException::class);
         $filterDoctrine2 = clone $this->filterDoctrine2;
         $filterDoctrine2->applyFilter($filter);
     }

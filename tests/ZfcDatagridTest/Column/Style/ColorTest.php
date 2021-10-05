@@ -12,20 +12,20 @@ class ColorTest extends TestCase
 {
     public function testConstruct()
     {
-        $style = new AbstractColor(AbstractColor::$RED);
+        $style = new AbstractColor(AbstractColor::RED);
 
         $this->assertEquals(255, $style->getRed());
         $this->assertEquals(0, $style->getGreen());
         $this->assertEquals(0, $style->getBlue());
         $this->assertEquals('ff0000', $style->getRgbHexString());
 
-        $style = new AbstractColor(AbstractColor::$GREEN);
+        $style = new AbstractColor(AbstractColor::GREEN);
         $this->assertEquals(0, $style->getRed());
         $this->assertEquals(255, $style->getGreen());
         $this->assertEquals(0, $style->getBlue());
         $this->assertEquals('00ff00', $style->getRgbHexString());
 
-        $style = new AbstractColor(AbstractColor::$BLUE);
+        $style = new AbstractColor(AbstractColor::BLUE);
         $this->assertEquals(0, $style->getRed());
         $this->assertEquals(0, $style->getGreen());
         $this->assertEquals(255, $style->getBlue());

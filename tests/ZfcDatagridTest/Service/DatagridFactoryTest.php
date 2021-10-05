@@ -1,9 +1,10 @@
 <?php
 namespace ZfcDatagridTest\Service;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use Zend\Router\RouteStackInterface;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\Router\RouteStackInterface;
+use Laminas\ServiceManager\ServiceManager;
 use ZfcDatagrid\Service\DatagridFactory;
 
 /**
@@ -38,12 +39,12 @@ class DatagridFactoryTest extends TestCase
 
     private $router;
 
-    public function setUp()
+    public function setUp(): void
     {
-        $mvcEventMock = $this->getMockBuilder(\Zend\Mvc\MvcEvent::class)
+        $mvcEventMock = $this->getMockBuilder(\Laminas\Mvc\MvcEvent::class)
             ->getMock();
 
-        $this->applicationMock = $this->getMockBuilder(\Zend\Mvc\Application::class)
+        $this->applicationMock = $this->getMockBuilder(\Laminas\Mvc\Application::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->applicationMock->expects($this->any())
@@ -57,14 +58,13 @@ class DatagridFactoryTest extends TestCase
             ->getMock();
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Config key "ZfcDatagrid" is missing
-     */
     public function testCreateServiceException()
     {
         $sm = new ServiceManager();
         $sm->setService('config', []);
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Config key "ZfcDatagrid" is missing');
 
         $factory = new DatagridFactory();
         $grid    = $factory->__invoke($sm, \ZfcDatagrid\Datagrid::class);
@@ -86,7 +86,7 @@ class DatagridFactoryTest extends TestCase
 
     public function testCanCreateServiceWithTranslator()
     {
-        $translatorMock = $this->getMockBuilder(\Zend\I18n\Translator\Translator::class)
+        $translatorMock = $this->getMockBuilder(\Laminas\I18n\Translator\Translator::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -106,7 +106,7 @@ class DatagridFactoryTest extends TestCase
 
     public function testCanCreateServiceWithMvcTranslator()
     {
-        $mvcTranslatorMock = $this->getMockBuilder(\Zend\I18n\Translator\Translator::class)
+        $mvcTranslatorMock = $this->getMockBuilder(\Laminas\I18n\Translator\Translator::class)
             ->disableOriginalConstructor()
             ->getMock();
 

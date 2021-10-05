@@ -1,7 +1,7 @@
 <?php
 namespace ZfcDatagrid\Renderer\PrintHtml;
 
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 use ZfcDatagrid\Renderer\AbstractRenderer;
 
 class Renderer extends AbstractRenderer
@@ -31,7 +31,7 @@ class Renderer extends AbstractRenderer
     }
 
     /**
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     public function execute()
     {

@@ -3,8 +3,7 @@ namespace ZfcDatagrid\Service;
 
 use InvalidArgumentException;
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use ZfcDatagrid\Datagrid;
 use ZfcDatagrid\Middleware\RequestHelper;
 

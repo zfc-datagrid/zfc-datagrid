@@ -1,5 +1,5 @@
 <?php 
-/* @var $paginator \Zend\Paginator\Paginator */
+/* @var $paginator \Laminas\Paginator\Paginator */
 $paginator = $this->paginator;
 ?>
 <!-- Start footer -->
@@ -90,7 +90,7 @@ function <?= $this->gridId; ?>_customPaginator(gridId){
     	html += '<li class="disabled"><a href="#">&lt;</a></li>';
     }
 
-    //ported from  Zend\Paginator\ScrollingStyle\Sliding
+    //ported from  Laminas\Paginator\ScrollingStyle\Sliding
     var pageRange = 10;
     if(pageRange > totalPages){
         pageRange = totalPages;

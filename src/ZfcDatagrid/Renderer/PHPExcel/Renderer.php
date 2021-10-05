@@ -13,8 +13,8 @@ use PHPExcel_Style_Border;
 use PHPExcel_Style_Color;
 use PHPExcel_Style_Fill;
 use PHPExcel_Worksheet_PageSetup;
-use Zend\Http\Headers;
-use Zend\Http\Response\Stream as ResponseStream;
+use Laminas\Http\Headers;
+use Laminas\Http\Response\Stream as ResponseStream;
 use ZfcDatagrid\Column;
 use ZfcDatagrid\Renderer\AbstractExport;
 use function is_array;
@@ -53,7 +53,7 @@ class Renderer extends AbstractExport
     }
 
     /**
-     * @return ResponseStream|\Zend\View\Model\ViewModel
+     * @return ResponseStream|\Laminas\View\Model\ViewModel
      * @throws \PHPExcel_Exception
      * @throws \PHPExcel_Writer_Exception
      */
@@ -194,22 +194,22 @@ class Renderer extends AbstractExport
 
                             case Column\Style\Align::class:
                                 switch ($style->getAlignment()) {
-                                    case Column\Style\Align::$RIGHT:
+                                    case Column\Style\Align::RIGHT:
                                         $columnStyle->getAlignment()->setHorizontal(
                                             PHPExcel_Style_Alignment::HORIZONTAL_RIGHT
                                         );
                                         break;
-                                    case Column\Style\Align::$LEFT:
+                                    case Column\Style\Align::LEFT:
                                         $columnStyle->getAlignment()->setHorizontal(
                                             PHPExcel_Style_Alignment::HORIZONTAL_LEFT
                                         );
                                         break;
-                                    case Column\Style\Align::$CENTER:
+                                    case Column\Style\Align::CENTER:
                                         $columnStyle->getAlignment()->setHorizontal(
                                             PHPExcel_Style_Alignment::HORIZONTAL_CENTER
                                         );
                                         break;
-                                    case Column\Style\Align::$JUSTIFY:
+                                    case Column\Style\Align::JUSTIFY:
                                         $columnStyle->getAlignment()->setHorizontal(
                                             PHPExcel_Style_Alignment::HORIZONTAL_JUSTIFY
                                         );

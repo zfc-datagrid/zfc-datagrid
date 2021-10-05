@@ -1,6 +1,7 @@
 <?php
 namespace ZfcDatagridTest\Renderer\JqGrid\View\Helper;
 
+use Exception;
 use PHPUnit\Framework\TestCase;
 use ZfcDatagrid\Column\Style;
 use ZfcDatagrid\Filter;
@@ -12,7 +13,7 @@ use ZfcDatagrid\Renderer\JqGrid\View\Helper;
  */
 class ColumnsTest extends TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Zend\View\HelperPluginManager */
+    /** @var \PHPUnit_Framework_MockObject_MockObject|\Laminas\View\HelperPluginManager */
     private $sm;
 
     /**
@@ -21,9 +22,9 @@ class ColumnsTest extends TestCase
      */
     private $myCol;
 
-    public function setUp()
+    public function setUp(): void
     {
-        $this->sm = $this->getMockBuilder(\Zend\View\HelperPluginManager::class)
+        $this->sm = $this->getMockBuilder(\Laminas\View\HelperPluginManager::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -92,7 +93,7 @@ class ColumnsTest extends TestCase
         $helper = new Helper\Columns();
 
         $col1 = clone $this->myCol;
-        $col1->addStyle(new Style\Color(Style\Color::$RED));
+        $col1->addStyle(new Style\Color(Style\Color::RED));
         $cols = [
             $col1,
         ];
@@ -112,7 +113,7 @@ class ColumnsTest extends TestCase
         $helper = new Helper\Columns();
 
         $col1 = clone $this->myCol;
-        $col1->addStyle(new Style\BackgroundColor(Style\BackgroundColor::$RED));
+        $col1->addStyle(new Style\BackgroundColor(Style\BackgroundColor::RED));
         $cols = [
             $col1,
         ];
@@ -123,10 +124,6 @@ class ColumnsTest extends TestCase
         $this->assertStringEndsWith('search: true,searchoptions: {"clearSearch":false}}]', $result);
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessageRegExp  /Not defined style: \"[a-zA-Z0-9_]+\"/
-     */
     public function testStyleException()
     {
         $styleMock = $this->getMockForAbstractClass(\ZfcDatagrid\Column\Style\AbstractStyle::class);
@@ -138,10 +135,10 @@ class ColumnsTest extends TestCase
             $col1,
         ];
 
-        $result = $helper($cols);
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessageMatches('/Not defined style: \"[a-zA-Z0-9_]+\"/');
 
-        $this->assertStringStartsWith('[{name:', $result);
-        $this->assertStringEndsWith('search: true}]', $result);
+        $helper($cols);
     }
 
     public function testStyleByValueEqual()
@@ -181,7 +178,7 @@ class ColumnsTest extends TestCase
         $result = $helper($cols);
 
         $this->assertStringStartsWith('[{name:', $result);
-        $this->assertContains('<span class="test-class">\' + cellvalue + \'</span>\';', $result);
+        $this->assertStringContainsString('<span class="test-class">\' + cellvalue + \'</span>\';', $result);
     }
 
     public function testStyleByValueNotEqual()
@@ -208,10 +205,6 @@ class ColumnsTest extends TestCase
         );
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Currently not supported filter operation: "=(%s)"
-     */
     public function testStyleByValueNotSupported()
     {
         $helper = new Helper\Columns();
@@ -226,13 +219,15 @@ class ColumnsTest extends TestCase
             $col1,
         ];
 
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Currently not supported filter operation: "=(%s)"');
         $result = $helper($cols);
     }
 
     public function testTranslate()
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Zend\ServiceManager\ServiceManager $sm */
-        $sm = $this->getMockBuilder(\Zend\ServiceManager\ServiceManager::class)
+        /** @var \PHPUnit_Framework_MockObject_MockObject|\Laminas\ServiceManager\ServiceManager $sm */
+        $sm = $this->getMockBuilder(\Laminas\ServiceManager\ServiceManager::class)
             ->setMethods(null)
             ->getMock();
 
@@ -249,8 +244,8 @@ class ColumnsTest extends TestCase
 
     public function testTranslateWithMockedTranslator()
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Zend\I18n\Translator\Translator $translator */
-        $translator = $this->getMockBuilder(\Zend\I18n\Translator\Translator::class)
+        /** @var \PHPUnit_Framework_MockObject_MockObject|\Laminas\I18n\Translator\Translator $translator */
+        $translator = $this->getMockBuilder(\Laminas\I18n\Translator\Translator::class)
             ->disableOriginalConstructor()
             ->setMethods(['translate'])
             ->getMock();

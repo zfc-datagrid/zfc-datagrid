@@ -1,11 +1,11 @@
 <?php
-namespace ZfcDatagrid\Renderer\ZendTable;
+namespace ZfcDatagrid\Renderer\LaminasTable;
 
-use Zend\Console\Adapter\AdapterInterface as ConsoleAdapter;
-use Zend\Console\Console;
-use Zend\Console\Request as ConsoleRequest;
-use Zend\Text\Table;
-use Zend\Text\Table\Table as TextTable;
+use Laminas\Console\Adapter\AdapterInterface as ConsoleAdapter;
+use Laminas\Console\Console;
+use Laminas\Console\Request as ConsoleRequest;
+use Laminas\Text\Table;
+use Laminas\Text\Table\Table as TextTable;
 use ZfcDatagrid\Column;
 use ZfcDataGrid\Column\Type;
 use ZfcDatagrid\Renderer\AbstractRenderer;
@@ -36,7 +36,7 @@ class Renderer extends AbstractRenderer
      */
     public function getName(): string
     {
-        return 'zendTable';
+        return 'laminasTable';
     }
 
     /**
@@ -64,7 +64,7 @@ class Renderer extends AbstractRenderer
     {
         $request = parent::getRequest();
         if (! $request instanceof ConsoleRequest) {
-            throw new \Exception('Request must be an instance of Zend\Console\Request for console rendering');
+            throw new \Exception('Request must be an instance of Laminas\Console\Request for console rendering');
         }
 
         return $request;
@@ -202,7 +202,7 @@ class Renderer extends AbstractRenderer
     }
 
     /**
-     * @return \Zend\Stdlib\ResponseInterface
+     * @return \Laminas\Stdlib\ResponseInterface
      */
     public function execute()
     {

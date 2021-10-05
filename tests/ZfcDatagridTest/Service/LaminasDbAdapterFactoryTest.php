@@ -2,13 +2,13 @@
 namespace ZfcDatagridTest\Service;
 
 use PHPUnit\Framework\TestCase;
-use Zend\ServiceManager\ServiceManager;
-use ZfcDatagrid\Service\ZendDbAdapterFactory;
+use Laminas\ServiceManager\ServiceManager;
+use ZfcDatagrid\Service\LaminasDbAdapterFactory;
 
 /**
- * @covers \ZfcDatagrid\Service\ZendDbAdapterFactory
+ * @covers \ZfcDatagrid\Service\LaminasDbAdapterFactory
  */
-class ZendDbAdapterFactoryTest extends TestCase
+class LaminasDbAdapterFactoryTest extends TestCase
 {
     private $config = [
         'zfcDatagrid_dbAdapter' => [
@@ -22,9 +22,9 @@ class ZendDbAdapterFactoryTest extends TestCase
         $sm = new ServiceManager();
         $sm->setService('config', $this->config);
 
-        $factory = new ZendDbAdapterFactory();
+        $factory = new LaminasDbAdapterFactory();
         $grid    = $factory->__invoke($sm, 'zfcDatagrid_dbAdapter');
 
-        $this->assertInstanceOf(\Zend\Db\Adapter\Adapter::class, $grid);
+        $this->assertInstanceOf(\Laminas\Db\Adapter\Adapter::class, $grid);
     }
 }

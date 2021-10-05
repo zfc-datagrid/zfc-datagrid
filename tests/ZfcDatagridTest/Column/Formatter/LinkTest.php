@@ -2,9 +2,9 @@
 namespace ZfcDatagridTest\Column\Formatter;
 
 use PHPUnit\Framework\TestCase;
-use Zend\Router\Http\HttpRouterFactory;
-use Zend\Router\Http\Segment;
-use Zend\Router\RoutePluginManagerFactory;
+use Laminas\Router\Http\HttpRouterFactory;
+use Laminas\Router\Http\Segment;
+use Laminas\Router\RoutePluginManagerFactory;
 use ZfcDatagrid\Column\Formatter;
 use ZfcDatagridTest\Util\ServiceManagerFactory;
 

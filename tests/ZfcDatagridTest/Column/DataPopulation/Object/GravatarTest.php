@@ -1,6 +1,7 @@
 <?php
 namespace ZfcDatagridTest\Column\DataPopulation\Object;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use ZfcDatagrid\Column\DataPopulation\Object\Gravatar;
 
@@ -25,13 +26,11 @@ class GravatarTest extends TestCase
         );
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testException()
     {
         $gravatar = new Gravatar();
 
+        $this->expectException(InvalidArgumentException::class);
         $gravatar->setParameterFromColumn('invalidPara', 'someValue');
     }
 }

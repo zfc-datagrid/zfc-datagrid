@@ -1,8 +1,9 @@
 <?php
 namespace ZfcDatagridTest\Renderer\BootstrapTable;
 
+use Exception;
 use PHPUnit\Framework\TestCase;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 use ZfcDatagrid\Renderer\BootstrapTable;
 use ZfcDatagridTest\Util\TestBase;
 
@@ -36,17 +37,13 @@ class RendererTest extends TestBase
         $this->assertTrue($renderer->isHtml());
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Request must be an instance of Zend\Http\PhpEnvironment\Request for HTML rendering
-     */
     public function testGetRequestException()
     {
-        $request = $this->getMockBuilder(\Zend\Console\Request::class)
+        $request = $this->getMockBuilder(\Laminas\Console\Request::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $mvcEvent = $this->getMockBuilder(\Zend\Mvc\MvcEvent::class)
+        $mvcEvent = $this->getMockBuilder(\Laminas\Mvc\MvcEvent::class)
             ->disableOriginalConstructor()
             ->getMock();
         $mvcEvent->expects($this->any())
@@ -56,16 +53,18 @@ class RendererTest extends TestBase
         $renderer = new BootstrapTable\Renderer();
         $renderer->setMvcEvent($mvcEvent);
 
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Request must be an instance of Laminas\Http\PhpEnvironment\Request for HTML rendering');
         $renderer->getRequest();
     }
 
     public function testGetRequest()
     {
-        $request = $this->getMockBuilder(\Zend\Http\PhpEnvironment\Request::class)
+        $request = $this->getMockBuilder(\Laminas\Http\PhpEnvironment\Request::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $mvcEvent = $this->getMockBuilder(\Zend\Mvc\MvcEvent::class)
+        $mvcEvent = $this->getMockBuilder(\Laminas\Mvc\MvcEvent::class)
             ->disableOriginalConstructor()
             ->getMock();
 

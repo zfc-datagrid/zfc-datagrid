@@ -1,8 +1,8 @@
 <?php
 namespace ZfcDatagrid\Renderer\BootstrapTable;
 
-use Zend\Http\PhpEnvironment\Request as HttpRequest;
-use Zend\View\Model\ViewModel;
+use Laminas\Http\PhpEnvironment\Request as HttpRequest;
+use Laminas\View\Model\ViewModel;
 use ZfcDatagrid\Datagrid;
 use ZfcDatagrid\Renderer\AbstractRenderer;
 use function explode;
@@ -45,7 +45,7 @@ class Renderer extends AbstractRenderer
         $request = parent::getRequest();
         if (! $request instanceof HttpRequest) {
             throw new \Exception(
-                'Request must be an instance of Zend\Http\PhpEnvironment\Request for HTML rendering'
+                'Request must be an instance of Laminas\Http\PhpEnvironment\Request for HTML rendering'
             );
         }
 

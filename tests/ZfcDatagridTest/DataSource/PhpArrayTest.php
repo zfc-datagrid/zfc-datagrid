@@ -1,6 +1,7 @@
 <?php
 namespace ZfcDatagridTest\DataSource;
 
+use TypeError;
 use ZfcDatagrid\DataSource\PhpArray;
 use ZfcDatagrid\Filter;
 
@@ -17,7 +18,7 @@ class PhpArrayTest extends DataSourceTestCase
      */
     private $source;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -30,15 +31,13 @@ class PhpArrayTest extends DataSourceTestCase
         $this->source = $source;
     }
 
-    /**
-     * @expectedException \TypeError
-     */
     public function testConstruct()
     {
         $source = clone $this->source;
 
         $this->assertEquals($this->data, $source->getData());
 
+        $this->expectException(TypeError::class);
         $source = new PhpArray(null);
     }
 
@@ -48,7 +47,7 @@ class PhpArrayTest extends DataSourceTestCase
 
         $source->execute();
 
-        $this->assertInstanceOf(\Zend\Paginator\Adapter\ArrayAdapter::class, $source->getPaginatorAdapter());
+        $this->assertInstanceOf(\Laminas\Paginator\Adapter\ArrayAdapter::class, $source->getPaginatorAdapter());
     }
 
     public function testFilter()

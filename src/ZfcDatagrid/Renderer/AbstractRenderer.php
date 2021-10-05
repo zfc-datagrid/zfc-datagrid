@@ -2,12 +2,11 @@
 namespace ZfcDatagrid\Renderer;
 
 use InvalidArgumentException;
-use Zend\Cache;
-use Zend\I18n\Translator\TranslatorInterface;
-use Zend\Mvc\MvcEvent;
-use Zend\Paginator\Paginator;
-use Zend\View\Model\ViewModel;
-use Zend\Stdlib\RequestInterface;
+use Laminas\Cache;
+use Laminas\I18n\Translator\TranslatorInterface;
+use Laminas\Mvc\MvcEvent;
+use Laminas\Paginator\Paginator;
+use Laminas\View\Model\ViewModel;
 use ZfcDatagrid\Datagrid;
 use ZfcDatagrid\Filter;
 use function implode;
@@ -396,7 +395,11 @@ abstract class AbstractRenderer implements RendererInterface
     }
 
     /**
+<<<<<<< HEAD
      * @return RequestInterface
+=======
+     * @return \Laminas\Stdlib\RequestInterface
+>>>>>>> upstream/develop
      */
     public function getRequest()
     {
