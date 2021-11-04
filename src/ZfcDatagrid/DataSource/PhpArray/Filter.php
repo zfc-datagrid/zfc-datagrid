@@ -44,7 +44,7 @@ class Filter
             $filter = $this->getFilter();
             $col    = $filter->getColumn();
 
-            $value = $row[$col->getUniqueId()];
+            $value = (string) $row[$col->getUniqueId()];
             $value = $col->getType()->getFilterValue($value);
 
             if ($filter->getOperator() == DatagridFilter::BETWEEN) {
