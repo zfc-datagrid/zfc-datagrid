@@ -441,4 +441,16 @@ class FilterTest extends TestCase
             'myCol' => '15',
         ]);
     }
+
+    public function testDefaultOperatorWithNullValue()
+    {
+        $filter = new Filter();
+        $filter->setFromColumn($this->column, 'test');
+
+        $filterArray = new FilterArray($filter);
+
+        $this->assertFalse($filterArray->applyFilter([
+            'myCol' => null,
+        ]));
+    }
 }
