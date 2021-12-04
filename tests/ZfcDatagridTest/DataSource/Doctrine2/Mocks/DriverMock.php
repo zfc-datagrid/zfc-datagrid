@@ -1,6 +1,12 @@
 <?php
 namespace ZfcDatagridTest\DataSource\Doctrine2\Mocks;
 
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Driver\API\ExceptionConverter;
+use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Doctrine\DBAL\Schema\AbstractSchemaManager;
+use Doctrine\DBAL\Schema\MySQLSchemaManager;
+
 /**
  * Mock class for Driver.
  *
@@ -40,16 +46,18 @@ class DriverMock implements \Doctrine\DBAL\Driver
         return $this->platformMock;
     }
 
-    /**
-     * @ERROR!!!
-     */
-    public function getSchemaManager(\Doctrine\DBAL\Connection $conn)
+    public function getSchemaManager(Connection $conn, AbstractPlatform $platform)
     {
         if (null == $this->schemaManagerMock) {
-            return new SchemaManagerMock($conn);
+            return new MySQLSchemaManager($conn, $platform);
         } else {
             return $this->schemaManagerMock;
         }
+    }
+
+    public function getExceptionConverter(): ExceptionConverter
+    {
+        return new \Doctrine\DBAL\Driver\API\MySQL\ExceptionConverter();
     }
 
     /* MOCK API */

@@ -74,13 +74,15 @@ class ConnectionMock extends \Doctrine\DBAL\Connection
     /**
      * @ERROR!!!
      */
-    public function executeUpdate($query, array $params = [], array $types = [])
+    public function executeUpdate(string $query, array $params = [], array $types = []): int
     {
         $this->executeUpdates[] = [
             'query'  => $query,
             'params' => $params,
             'types'  => $types,
         ];
+
+        return 1;
     }
 
     /**

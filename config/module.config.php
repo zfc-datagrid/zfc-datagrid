@@ -43,16 +43,19 @@ return [
 
         // The cache is used to save the filter + sort and other things for exporting
         'cache' => [
-
             'adapter' => [
                 'name'    => Storage\Adapter\Filesystem::class,
             ],
-            'plugins' => [
-                'exception_handler' => [
-                    'throw_exceptions' => false,
+            'plugins'   => [
+                [
+                    'name'=> 'exception_handler',
+                    'options' => [
+                        'throw_exceptions' => false,
+                    ],
                 ],
-
-                'Serializer',
+                [
+                    'name'=> 'serializer',
+                ],
             ],
         ],
 
