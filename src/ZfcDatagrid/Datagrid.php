@@ -167,11 +167,6 @@ class Datagrid
      */
     public function init(): self
     {
-        if (null === $this->getCache()) {
-            $options = $this->getOptions();
-            $this->setCache(Cache\StorageFactory::factory($options['cache']));
-        }
-
         $this->isInit = true;
 
         return $this;

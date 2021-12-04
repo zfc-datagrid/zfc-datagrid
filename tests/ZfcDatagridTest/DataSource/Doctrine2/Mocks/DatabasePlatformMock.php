@@ -150,4 +150,11 @@ class DatabasePlatformMock extends \Doctrine\DBAL\Platforms\AbstractPlatform
     {
         throw DBALException::notSupported(__METHOD__);
     }
+
+    public function getCurrentDatabaseExpression(): string
+    {
+        return 'MOCK';
+    }
+
+
 }

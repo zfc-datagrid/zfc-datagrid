@@ -2,6 +2,8 @@
 namespace ZfcDatagridTest\Service;
 
 use InvalidArgumentException;
+use Laminas\Cache\Service\StorageAdapterFactory;
+use Laminas\Cache\Service\StorageAdapterFactoryInterface;
 use PHPUnit\Framework\TestCase;
 use Laminas\Router\RouteStackInterface;
 use Laminas\ServiceManager\ServiceManager;
@@ -39,6 +41,8 @@ class DatagridFactoryTest extends TestCase
 
     private $router;
 
+    private $storageAdapterFactory;
+
     public function setUp(): void
     {
         $mvcEventMock = $this->getMockBuilder(\Laminas\Mvc\MvcEvent::class)
@@ -55,6 +59,9 @@ class DatagridFactoryTest extends TestCase
             ->getMock();
 
         $this->router = $this->getMockBuilder(RouteStackInterface::class)
+            ->getMock();
+
+        $this->storageAdapterFactory = $this->getMockBuilder(StorageAdapterFactoryInterface::class)
             ->getMock();
     }
 
@@ -77,6 +84,7 @@ class DatagridFactoryTest extends TestCase
         $sm->setService('application', $this->applicationMock);
         $sm->setService('zfcDatagrid.renderer.bootstrapTable', $this->rendererServiceMock);
         $sm->setService('Router', $this->router);
+        $sm->setService('Laminas\Cache\Service\StorageAdapterFactoryInterface', $this->storageAdapterFactory);
 
         $factory = new DatagridFactory();
         $grid    = $factory->__invoke($sm, \ZfcDatagrid\Datagrid::class);
@@ -96,6 +104,7 @@ class DatagridFactoryTest extends TestCase
         $sm->setService('zfcDatagrid.renderer.bootstrapTable', $this->rendererServiceMock);
         $sm->setService('translator', $translatorMock);
         $sm->setService('Router', $this->router);
+        $sm->setService('Laminas\Cache\Service\StorageAdapterFactoryInterface', $this->storageAdapterFactory);
 
         $factory = new DatagridFactory();
         $grid    = $factory->__invoke($sm, \ZfcDatagrid\Datagrid::class);
@@ -116,6 +125,7 @@ class DatagridFactoryTest extends TestCase
         $sm->setService('zfcDatagrid.renderer.bootstrapTable', $this->rendererServiceMock);
         $sm->setService('translator', $mvcTranslatorMock);
         $sm->setService('Router', $this->router);
+        $sm->setService('Laminas\Cache\Service\StorageAdapterFactoryInterface', $this->storageAdapterFactory);
 
         $factory = new DatagridFactory();
         $grid    = $factory->__invoke($sm, \ZfcDatagrid\Datagrid::class);
