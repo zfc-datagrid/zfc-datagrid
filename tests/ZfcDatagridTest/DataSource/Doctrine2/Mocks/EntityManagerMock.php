@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /*
  *  $Id$
  *
@@ -21,19 +24,23 @@
 
 namespace ZfcDatagridTest\DataSource\Doctrine2\Mocks;
 
+use Doctrine\Common\EventManager;
+use Doctrine\ORM\Configuration;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Proxy\ProxyFactory;
+use Doctrine\ORM\UnitOfWork;
+
+use function is_null;
+
 /**
  * Special EntityManager mock used for testing purposes.
  */
-class EntityManagerMock extends \Doctrine\ORM\EntityManager
+class EntityManagerMock extends EntityManager
 {
-    /**
-     * @var \Doctrine\ORM\UnitOfWork|null
-     */
+    /** @var UnitOfWork|null */
     private $uowMock;
 
-    /**
-     * @var \Doctrine\ORM\Proxy\ProxyFactory|null
-     */
+    /** @var ProxyFactory|null */
     private $proxyFactoryMock;
 
     /**
@@ -41,7 +48,7 @@ class EntityManagerMock extends \Doctrine\ORM\EntityManager
      */
     public function getUnitOfWork()
     {
-        return isset($this->uowMock) ? $this->uowMock : parent::getUnitOfWork();
+        return $this->uowMock ?? parent::getUnitOfWork();
     }
 
     /* Mock API */
@@ -49,8 +56,7 @@ class EntityManagerMock extends \Doctrine\ORM\EntityManager
     /**
      * Sets a (mock) UnitOfWork that will be returned when getUnitOfWork() is called.
      *
-     * @param \Doctrine\ORM\UnitOfWork $uow
-     *
+     * @param UnitOfWork $uow
      * @return void
      */
     public function setUnitOfWork($uow)
@@ -59,8 +65,7 @@ class EntityManagerMock extends \Doctrine\ORM\EntityManager
     }
 
     /**
-     * @param \Doctrine\ORM\Proxy\ProxyFactory $proxyFactory
-     *
+     * @param ProxyFactory $proxyFactory
      * @return void
      */
     public function setProxyFactory($proxyFactory)
@@ -69,11 +74,11 @@ class EntityManagerMock extends \Doctrine\ORM\EntityManager
     }
 
     /**
-     * @return \Doctrine\ORM\Proxy\ProxyFactory
+     * @return ProxyFactory
      */
     public function getProxyFactory()
     {
-        return isset($this->proxyFactoryMock) ? $this->proxyFactoryMock : parent::getProxyFactory();
+        return $this->proxyFactoryMock ?? parent::getProxyFactory();
     }
 
     /**
@@ -83,18 +88,17 @@ class EntityManagerMock extends \Doctrine\ORM\EntityManager
      */
     public static function create(
         $conn,
-        \Doctrine\ORM\Configuration $config = null,
-        \Doctrine\Common\EventManager $eventManager = null
+        ?Configuration $config = null,
+        ?EventManager $eventManager = null
     ) {
-
         if (is_null($config)) {
-            $config = new \Doctrine\ORM\Configuration();
+            $config = new Configuration();
             $config->setProxyDir(__DIR__ . '/../Proxies');
             $config->setProxyNamespace('Doctrine\Tests\Proxies');
             $config->setMetadataDriverImpl($config->newDefaultAnnotationDriver([], true));
         }
         if (is_null($eventManager)) {
-            $eventManager = new \Doctrine\Common\EventManager();
+            $eventManager = new EventManager();
         }
 
         return new EntityManagerMock($conn, $config, $eventManager);

@@ -1,10 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ZfcDatagridTest\Column\DataPopulation;
 
 use Exception;
 use ZfcDatagrid\Column\DataPopulation\StaticValue;
 use ZfcDatagridTest\Util\TestBase;
+
+use function rand;
 
 class StaticValueTest extends TestBase
 {
@@ -18,12 +22,12 @@ class StaticValueTest extends TestBase
 
     public function testConstructWithParam(): void
     {
-        $value = rand(99, 1547);
+        $value                          = rand(99, 1547);
         $this->mockedConstructorArgList = [
             $value,
         ];
 
-        $this->assertSame((string)$value, $this->getProperty('value'));
+        $this->assertSame((string) $value, $this->getProperty('value'));
     }
 
     public function testValue(): void
@@ -33,8 +37,8 @@ class StaticValueTest extends TestBase
 
         $this->getMethod('setValue')->invokeArgs($this->getClass(), [$value]);
 
-        $this->assertSame((string)$value, $this->getMethod('getValue')->invoke($this->getClass()));
-        $this->assertSame((string)$value, $this->getProperty('value'));
+        $this->assertSame((string) $value, $this->getMethod('getValue')->invoke($this->getClass()));
+        $this->assertSame((string) $value, $this->getProperty('value'));
     }
 
     public function testSetObjectParameterException(): void

@@ -1,16 +1,21 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagridTest\DataSource;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\EntityManager;
 use TypeError;
 use ZfcDatagrid\Column;
 use ZfcDatagrid\DataSource\Doctrine2Collection;
 use ZfcDatagridTest\DataSource\Doctrine2\Assets\Entity\Category;
 use ZfcDatagridTest\Util\TestBase;
 
+use const PHP_VERSION_ID;
+
 /**
  * @group DataSource
- *
  * @covers \ZfcDatagrid\DataSource\Doctrine2Collection
  */
 class Doctrine2CollectionTest extends TestBase
@@ -69,7 +74,7 @@ class Doctrine2CollectionTest extends TestBase
 
     public function testEntityManager()
     {
-        $em = $this->getMockBuilder(\Doctrine\ORM\EntityManager::class)
+        $em = $this->getMockBuilder(EntityManager::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -79,5 +84,4 @@ class Doctrine2CollectionTest extends TestBase
         $source->setEntityManager($em);
         $this->assertSame($em, $source->getEntityManager());
     }
-
 }

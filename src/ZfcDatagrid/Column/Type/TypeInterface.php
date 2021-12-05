@@ -1,27 +1,26 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagrid\Column\Type;
+
+use Exception;
 
 interface TypeInterface
 {
     /**
      * Get the type name.
-     *
-     * @return string
      */
     public function getTypeName(): string;
 
     /**
      * the default filter operation.
-     *
-     * @return string
      */
     public function getFilterDefaultOperation(): string;
 
     /**
-     * @param string $operator
-     *
      * @return $this
-     * @throws \Exception
+     * @throws Exception
      */
     public function setFilterDefaultOperation(string $operator): self;
 }

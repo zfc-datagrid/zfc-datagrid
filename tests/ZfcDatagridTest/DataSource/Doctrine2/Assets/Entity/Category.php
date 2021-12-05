@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagridTest\DataSource\Doctrine2\Assets\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -16,9 +19,7 @@ class Category
      */
     protected $id;
 
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     */
+    /** @ORM\Column(type="string", nullable=true) */
     protected $name;
 
     /**

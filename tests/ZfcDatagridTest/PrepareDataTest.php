@@ -1,11 +1,19 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagridTest;
 
-use PHPUnit\Framework\TestCase;
+use Laminas\I18n\Translator\Translator;
 use Laminas\Router\Http\HttpRouterFactory;
 use Laminas\Router\Http\Segment;
 use Laminas\Router\RoutePluginManagerFactory;
+use PHPUnit\Framework\TestCase;
+use ZfcDatagrid\Column\AbstractColumn;
 use ZfcDatagrid\Column\DataPopulation\DataObject;
+use ZfcDatagrid\Column\DataPopulation\Object\Gravatar;
+use ZfcDatagrid\Column\ExternalData;
+use ZfcDatagrid\Column\Formatter\Link;
 use ZfcDatagrid\Column\Type;
 use ZfcDatagrid\PrepareData;
 use ZfcDatagridTest\Util\ServiceManagerFactory;
@@ -15,49 +23,34 @@ use ZfcDatagridTest\Util\ServiceManagerFactory;
  */
 class PrepareDataTest extends TestCase
 {
-    /**
-     *
-     * @var array
-     */
+    /** @var array */
     private $data;
 
-    /**
-     *
-     * @var \ZfcDatagrid\Column\AbstractColumn
-     */
+    /** @var AbstractColumn */
     private $colId;
 
-    /**
-     *
-     * @var \ZfcDatagrid\Column\AbstractColumn
-     */
+    /** @var AbstractColumn */
     private $col1;
 
-    /**
-     *
-     * @var \ZfcDatagrid\Column\AbstractColumn
-     */
+    /** @var AbstractColumn */
     private $col2;
 
-    /**
-     *
-     * @var \ZfcDatagrid\Column\AbstractColumn
-     */
+    /** @var AbstractColumn */
     private $col3;
 
     public function setUp(): void
     {
-        $this->colId = $this->getMockForAbstractClass(\ZfcDatagrid\Column\AbstractColumn::class);
+        $this->colId = $this->getMockForAbstractClass(AbstractColumn::class);
         $this->colId->setUniqueId('id');
         $this->colId->setIdentity(true);
 
-        $this->col1 = $this->getMockForAbstractClass(\ZfcDatagrid\Column\AbstractColumn::class);
+        $this->col1 = $this->getMockForAbstractClass(AbstractColumn::class);
         $this->col1->setUniqueId('col1');
 
-        $this->col2 = $this->getMockForAbstractClass(\ZfcDatagrid\Column\AbstractColumn::class);
+        $this->col2 = $this->getMockForAbstractClass(AbstractColumn::class);
         $this->col2->setUniqueId('col2');
 
-        $this->col3 = $this->getMockForAbstractClass(\ZfcDatagrid\Column\AbstractColumn::class);
+        $this->col3 = $this->getMockForAbstractClass(AbstractColumn::class);
         $this->col3->setUniqueId('col3');
         $this->col3->setType(new Type\PhpArray());
 
@@ -140,7 +133,7 @@ class PrepareDataTest extends TestCase
             $this->col1,
         ]);
 
-        $translator = $this->getMockBuilder(\Laminas\I18n\Translator\Translator::class)
+        $translator = $this->getMockBuilder(Translator::class)
             ->getMock();
 
         $prepare->setTranslator($translator);
@@ -293,7 +286,7 @@ class PrepareDataTest extends TestCase
             $this->col3,
         ]);
 
-        $translator = $this->getMockBuilder(\Laminas\I18n\Translator\Translator::class)
+        $translator = $this->getMockBuilder(Translator::class)
             ->getMock();
         $translator->expects(self::any())
             ->method('translate')
@@ -344,7 +337,7 @@ class PrepareDataTest extends TestCase
             $col3,
         ]);
 
-        $translator = $this->getMockBuilder(\Laminas\I18n\Translator\Translator::class)
+        $translator = $this->getMockBuilder(Translator::class)
             ->getMock();
         $translator->expects(self::any())
             ->method('translate')
@@ -369,12 +362,12 @@ class PrepareDataTest extends TestCase
         $data[0]['col3'] = [
             'Tag 1', // replaced
             'Tag 2', // translated
-                ];
+        ];
 
         $data[1]['col3'] = [
             'tag3',
             'Tag 1', // translated
-                ];
+        ];
 
         $data[2]['col3'] = [
             'Tag 2', // replaced
@@ -388,7 +381,7 @@ class PrepareDataTest extends TestCase
     {
         $data = $this->data;
 
-        $mock = $this->getMockBuilder(\ZfcDatagrid\Column\DataPopulation\Object\Gravatar::class)
+        $mock = $this->getMockBuilder(Gravatar::class)
             ->getMock();
         $mock->expects(self::any())
             ->method('toString')
@@ -398,7 +391,7 @@ class PrepareDataTest extends TestCase
         $object->setObject($mock);
         $object->addObjectParameterColumn('email', $this->col1);
 
-        $col = $this->getMockBuilder(\ZfcDatagrid\Column\ExternalData::class)
+        $col = $this->getMockBuilder(ExternalData::class)
             ->getMock();
         $col->expects(self::any())
             ->method('getUniqueId')
@@ -435,7 +428,7 @@ class PrepareDataTest extends TestCase
         $data = $this->data;
 
         $col1 = clone $this->col1;
-        $col1->addFormatter(new \ZfcDatagrid\Column\Formatter\Link());
+        $col1->addFormatter(new Link());
         $prepare = new PrepareData($data, [
             $this->colId,
             $col1,
@@ -492,7 +485,7 @@ class PrepareDataTest extends TestCase
         $data = $this->data;
 
         $col1      = clone $this->col1;
-        $formatter = new \ZfcDatagrid\Column\Formatter\Link();
+        $formatter = new Link();
         $formatter->setRoute('myTestRoute');
         $formatter->setRouteParams(['bar' => 'xyz']);
         $col1->addFormatter($formatter);

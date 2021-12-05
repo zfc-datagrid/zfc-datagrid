@@ -1,8 +1,12 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagridTest\Column\Action;
 
 use Exception;
 use InvalidArgumentException;
+use ZfcDatagrid\Column\AbstractColumn;
 use ZfcDatagrid\Column\Action\Button;
 use ZfcDatagridTest\Util\TestBase;
 
@@ -14,7 +18,7 @@ class ButtonTest extends TestBase
 {
     /** @var string */
     protected $className = Button::class;
-    
+
     public function testConstruct()
     {
         $button = new Button();
@@ -38,13 +42,13 @@ class ButtonTest extends TestBase
 
     public function testColumnLabelAndToHtml()
     {
-        $col = $this->getMockForAbstractClass(\ZfcDatagrid\Column\AbstractColumn::class);
+        $col = $this->getMockForAbstractClass(AbstractColumn::class);
         $col->setUniqueId('myCol');
 
         $button = new Button();
 
         $button->setLabel($col);
-        $this->assertInstanceOf(\ZfcDatagrid\Column\AbstractColumn::class, $button->getLabel());
+        $this->assertInstanceOf(AbstractColumn::class, $button->getLabel());
 
         $html = '<a href="#" class="btn btn-default">Blubb</a>';
         $this->assertEquals($html, $button->toHtml(['myCol' => 'Blubb']));

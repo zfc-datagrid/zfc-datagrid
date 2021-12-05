@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * This is just a proxy to detect if we can use the "fast" Pagination
  * or if we use the "safe" variant by Doctrine2.
@@ -26,17 +29,11 @@ class Paginator implements AdapterInterface
     /** @var ZfcDatagridPaginator|Doctrine2Paginator|null */
     protected $paginator;
 
-    /**
-     * @param QueryBuilder $qb
-     */
     public function __construct(QueryBuilder $qb)
     {
         $this->qb = $qb;
     }
 
-    /**
-     * @return QueryBuilder
-     */
     public function getQueryBuilder(): QueryBuilder
     {
         return $this->qb;
@@ -47,7 +44,6 @@ class Paginator implements AdapterInterface
      *
      * @param int $offset
      * @param int $itemCountPerPage
-     *
      * @return array
      */
     public function getItems($offset, $itemCountPerPage): array
@@ -66,8 +62,6 @@ class Paginator implements AdapterInterface
 
     /**
      * Returns the total number of rows in the result set.
-     *
-     * @return int
      */
     public function count(): int
     {
@@ -76,8 +70,6 @@ class Paginator implements AdapterInterface
 
     /**
      * Test which pagination solution to use.
-     *
-     * @return bool
      */
     protected function useCustomPaginator(): bool
     {

@@ -1,10 +1,14 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagrid\DataSource;
 
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Laminas\Hydrator\DoctrineObject as DoctrineHydrator;
+use Doctrine\ORM\EntityManagerInterface;
 use ZfcDatagrid\Column;
+use ZfcDatagrid\Column\Select;
 use ZfcDatagrid\DataSource\PhpArray as SourceArray;
 
 class Doctrine2Collection extends AbstractDataSource
@@ -17,25 +21,18 @@ class Doctrine2Collection extends AbstractDataSource
 
     /**
      * Data source.
-     *
-     * @param Collection $data
      */
     public function __construct(Collection $data)
     {
         $this->data = $data;
     }
 
-    /**
-     * @return Collection
-     */
     public function getData(): Collection
     {
         return $this->data;
     }
 
     /**
-     * @param EntityManagerInterface $em
-     *
      * @return $this
      */
     public function setEntityManager(EntityManagerInterface $em): self
@@ -45,9 +42,6 @@ class Doctrine2Collection extends AbstractDataSource
         return $this;
     }
 
-    /**
-     * @return EntityManagerInterface|null
-     */
     public function getEntityManager(): ?EntityManagerInterface
     {
         return $this->em;
@@ -63,7 +57,7 @@ class Doctrine2Collection extends AbstractDataSource
 
             $rowExtracted = [];
             foreach ($this->getColumns() as $col) {
-                /* @var $col \ZfcDatagrid\Column\Select */
+                /** @var Select $col */
                 if (! $col instanceof Column\Select) {
                     continue;
                 }

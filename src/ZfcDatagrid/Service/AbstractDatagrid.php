@@ -1,21 +1,23 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagrid\Service;
 
 use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
+use Laminas\Mvc\Application;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use ZfcDatagrid\Datagrid;
 
 abstract class AbstractDatagrid extends Datagrid implements FactoryInterface
 {
     /**
-     * @param ContainerInterface $container
      * @param string             $requestedName
      * @param array|null         $options
-     *
      * @return $this
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $config = $container->get('config');
 
@@ -23,7 +25,7 @@ abstract class AbstractDatagrid extends Datagrid implements FactoryInterface
             throw new InvalidArgumentException('Config key "ZfcDatagrid" is missing');
         }
 
-        /* @var $application \Laminas\Mvc\Application */
+        /** @var Application $application */
         $application = $container->get('application');
 
         $this->setOptions($config['ZfcDatagrid']);

@@ -1,8 +1,12 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagridTest\Column;
 
 use PHPUnit\Framework\TestCase;
 use ZfcDatagrid\Column;
+use ZfcDatagrid\Column\Action\Button;
 
 /**
  * @group Column
@@ -27,14 +31,14 @@ class ActionTest extends TestCase
 
         $this->assertCount(0, $column->getActions());
 
-        $action = $this->getMockBuilder(\ZfcDatagrid\Column\Action\Button::class)->getMock();
+        $action = $this->getMockBuilder(Button::class)->getMock();
         $column->addAction($action);
 
         $this->assertCount(1, $column->getActions());
 
-        $action2 = $this->getMockBuilder(\ZfcDatagrid\Column\Action\Button::class)->getMock();
+        $action2 = $this->getMockBuilder(Button::class)->getMock();
         $column->addAction($action2);
-        $action3 = $this->getMockBuilder(\ZfcDatagrid\Column\Action\Button::class)->getMock();
+        $action3 = $this->getMockBuilder(Button::class)->getMock();
         $column->addAction($action3);
 
         $this->assertCount(3, $column->getActions());
@@ -43,8 +47,8 @@ class ActionTest extends TestCase
         $this->assertCount(2, $column->getActions());
 
         $actions = [
-            $this->getMockBuilder(\ZfcDatagrid\Column\Action\Button::class)->getMock(),
-            $this->getMockBuilder(\ZfcDatagrid\Column\Action\Button::class)->getMock(),
+            $this->getMockBuilder(Button::class)->getMock(),
+            $this->getMockBuilder(Button::class)->getMock(),
         ];
         $column->setActions($actions);
         $this->assertEquals($actions, $column->getActions());

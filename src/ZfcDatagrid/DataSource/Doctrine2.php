@@ -1,11 +1,18 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagrid\DataSource;
 
 use Doctrine\ORM;
 use Doctrine\ORM\Query\Expr;
+use Exception;
 use ZfcDatagrid\Column;
+use ZfcDatagrid\Column\AbstractColumn;
+use ZfcDatagrid\Column\Select;
 use ZfcDatagrid\Column\Type;
 use ZfcDatagrid\DataSource\Doctrine2\Paginator as PaginatorAdapter;
+use ZfcDatagrid\Filter;
 
 class Doctrine2 extends AbstractDataSource
 {
@@ -14,24 +21,19 @@ class Doctrine2 extends AbstractDataSource
 
     /**
      * Data source.
-     *
-     * @param ORM\QueryBuilder $data
      */
     public function __construct(ORM\QueryBuilder $data)
     {
         $this->qb = $data;
     }
 
-    /**
-     * @return ORM\QueryBuilder
-     */
     public function getData(): ORM\QueryBuilder
     {
         return $this->qb;
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function execute()
     {
@@ -65,14 +67,14 @@ class Doctrine2 extends AbstractDataSource
             $qb->resetDQLPart('orderBy');
 
             foreach ($this->getSortConditions() as $key => $sortCondition) {
-                /* @var $col \ZfcDatagrid\Column\AbstractColumn */
+                /** @var AbstractColumn $col */
                 $col = $sortCondition['column'];
 
                 if (! $col instanceof Column\Select) {
-                    throw new \Exception('This column cannot be sorted: ' . $col->getUniqueId());
+                    throw new Exception('This column cannot be sorted: ' . $col->getUniqueId());
                 }
 
-                /* @var $col \ZfcDatagrid\Column\Select */
+                /** @var Select $col */
                 $colString = $col->getSelectPart1();
                 if ($col->getSelectPart2() != '') {
                     $colString .= '.' . $col->getSelectPart2();
@@ -92,7 +94,7 @@ class Doctrine2 extends AbstractDataSource
          */
         $filterColumn = new Doctrine2\Filter($qb);
         foreach ($this->getFilters() as $filter) {
-            /* @var $filter \ZfcDatagrid\Filter */
+            /** @var Filter $filter */
             if ($filter->isColumnFilter() === true) {
                 $filterColumn->applyFilter($filter);
             }

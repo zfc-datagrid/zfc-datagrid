@@ -1,8 +1,11 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagrid\Column\Type;
 
-use function is_array;
 use function explode;
+use function is_array;
 
 class PhpArray extends AbstractType
 {
@@ -13,9 +16,6 @@ class PhpArray extends AbstractType
      */
     protected $separator = '';
 
-    /**
-     * @param string $separator
-     */
     public function __construct(string $separator = ',')
     {
         $this->setSeparator($separator);
@@ -23,8 +23,6 @@ class PhpArray extends AbstractType
 
     /**
      * Set separator of the string to be used to explode the array.
-     *
-     * @param string $separator
      *
      * @return $this
      */
@@ -45,9 +43,6 @@ class PhpArray extends AbstractType
         return $this->separator;
     }
 
-    /**
-     * @return string
-     */
     public function getTypeName(): string
     {
         return 'array';
@@ -57,7 +52,6 @@ class PhpArray extends AbstractType
      * Convert a value into an array.
      *
      * @param mixed $value
-     *
      * @return mixed
      */
     public function getUserValue($value)

@@ -1,24 +1,23 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagridTest\DataSource\Doctrine2\Mocks;
+
+use Doctrine\DBAL\Platforms\AbstractPlatform;
 
 /**
  * Mock class for DatabasePlatform.
  */
-class DatabasePlatformMock extends \Doctrine\DBAL\Platforms\AbstractPlatform
+class DatabasePlatformMock extends AbstractPlatform
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $sequenceNextValSql = "";
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $prefersIdentityColumns = true;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $prefersSequences = false;
 
     /**
@@ -100,7 +99,6 @@ class DatabasePlatformMock extends \Doctrine\DBAL\Platforms\AbstractPlatform
 
     /**
      * @param bool $bool
-     *
      * @return void
      */
     public function setPrefersIdentityColumns($bool)
@@ -110,7 +108,6 @@ class DatabasePlatformMock extends \Doctrine\DBAL\Platforms\AbstractPlatform
 
     /**
      * @param bool $bool
-     *
      * @return void
      */
     public function setPrefersSequences($bool)
@@ -120,7 +117,6 @@ class DatabasePlatformMock extends \Doctrine\DBAL\Platforms\AbstractPlatform
 
     /**
      * @param string $sql
-     *
      * @return void
      */
     public function setSequenceNextValSql($sql)
@@ -155,6 +151,4 @@ class DatabasePlatformMock extends \Doctrine\DBAL\Platforms\AbstractPlatform
     {
         return 'MOCK';
     }
-
-
 }

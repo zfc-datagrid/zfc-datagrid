@@ -1,7 +1,11 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagridTest\Column\Formatter;
 
 use PHPUnit\Framework\TestCase;
+use ZfcDatagrid\Column\AbstractColumn;
 use ZfcDatagrid\Column\Formatter;
 
 /**
@@ -22,7 +26,7 @@ class EmailTest extends TestCase
 
     public function testGetFormattedValue()
     {
-        $col = $this->getMockForAbstractClass(\ZfcDatagrid\Column\AbstractColumn::class);
+        $col = $this->getMockForAbstractClass(AbstractColumn::class);
         $col->setUniqueId('myCol');
 
         $formatter = new Formatter\Email();

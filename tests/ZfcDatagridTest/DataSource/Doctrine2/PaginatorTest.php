@@ -1,11 +1,17 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagridTest\DataSource\Doctrine2;
 
+use ArrayIterator;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
 use ZfcDatagrid\DataSource\Doctrine2\Paginator;
 use ZfcDatagrid\DataSource\Doctrine2\PaginatorFast;
 use ZfcDatagridTest\Util\TestBase;
+
+use function rand;
 
 /**
  * @group DataSource
@@ -41,7 +47,6 @@ class PaginatorTest extends TestBase
     /**
      * @param $having
      * @param $distinct
-     * @param bool $expected
      * @dataProvider providerUseCustomPaginator
      */
     public function testUseCustomPaginator($having, $distinct, bool $expected): void
@@ -53,7 +58,7 @@ class PaginatorTest extends TestBase
         $queryBuilder->expects($this->once())
             ->method('getDQLParts')
             ->willReturn([
-                'having' => $having,
+                'having'   => $having,
                 'distinct' => $distinct,
             ]);
 
@@ -69,7 +74,7 @@ class PaginatorTest extends TestBase
             ->getMock();
 
         $this->mockedConstructorArgList = [$queryBuilder];
-        $this->mockedMethodList = ['useCustomPaginator'];
+        $this->mockedMethodList         = ['useCustomPaginator'];
 
         $class = $this->getClass();
         $class->expects($this->once())
@@ -87,7 +92,7 @@ class PaginatorTest extends TestBase
             ->getMock();
 
         $this->mockedConstructorArgList = [$queryBuilder];
-        $this->mockedMethodList = ['useCustomPaginator'];
+        $this->mockedMethodList         = ['useCustomPaginator'];
 
         $class = $this->getClass();
         $class->expects($this->once())
@@ -104,7 +109,7 @@ class PaginatorTest extends TestBase
             ->disableOriginalConstructor()
             ->setMethods(['count'])
             ->getMock();
-        $count = rand(1, 999);
+        $count     = rand(1, 999);
 
         $paginator->expects($this->once())
             ->method('count')
@@ -116,12 +121,12 @@ class PaginatorTest extends TestBase
 
     public function testGetItems(): void
     {
-        $paginator = $this->getMockBuilder(PaginatorFast::class)
+        $paginator        = $this->getMockBuilder(PaginatorFast::class)
             ->disableOriginalConstructor()
             ->setMethods(['getItems'])
             ->getMock();
-        $items = ['list'];
-        $offset = 10;
+        $items            = ['list'];
+        $offset           = 10;
         $itemCountPerPage = 10;
 
         $paginator->expects($this->once())
@@ -146,7 +151,7 @@ class PaginatorTest extends TestBase
 
         $paginator->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator());
+            ->willReturn(new ArrayIterator());
 
         $this->mockedConstructorArgList = [$queryBuilder];
         $this->setProperty('paginator', $paginator);

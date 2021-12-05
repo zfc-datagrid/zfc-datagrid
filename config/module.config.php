@@ -1,16 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
+use Laminas\Cache\Storage;
+use Laminas\ServiceManager\Factory\InvokableFactory;
 use ZfcDatagrid\Datagrid;
 use ZfcDatagrid\Renderer;
 use ZfcDatagrid\Service;
-use Laminas\Cache\Storage;
-use Laminas\ServiceManager\Factory\InvokableFactory;
 
 return [
-    'ZfcDatagrid' => [
-
+    'ZfcDatagrid'     => [
         'settings' => [
-
             'default' => [
                 // If no specific rendere given, use this renderes for HTTP / console
                 'renderer' => [
@@ -18,11 +18,9 @@ return [
                     'console' => 'laminasTable',
                 ],
             ],
-
-            'export' => [
+            'export'  => [
                 // Export is enabled?
                 'enabled' => true,
-
                 'formats' => [],
                 // type => Displayname (Toolbar - you can use here HTML too...)
                 // 'printHtml' => 'Print',
@@ -42,43 +40,37 @@ return [
         ],
 
         // The cache is used to save the filter + sort and other things for exporting
-        'cache' => [
+        'cache'    => [
             'adapter' => [
-                'name'    => Storage\Adapter\Filesystem::class,
+                'name' => Storage\Adapter\Filesystem::class,
             ],
-            'plugins'   => [
+            'plugins' => [
                 [
-                    'name'=> 'exception_handler',
+                    'name'    => 'exception_handler',
                     'options' => [
                         'throw_exceptions' => false,
                     ],
                 ],
                 [
-                    'name'=> 'serializer',
+                    'name' => 'serializer',
                 ],
             ],
         ],
-
         'renderer' => [
-
             'bootstrapTable' => [
                 'parameterNames' => [
                     // Internal => bootstrapTable
                     'currentPage'    => 'currentPage',
                     'sortColumns'    => 'sortByColumns',
                     'sortDirections' => 'sortDirections',
-
-                    'massIds' => 'ids',
-
-                    'method' => 'POST',
+                    'massIds'        => 'ids',
+                    'method'         => 'POST',
                 ],
-
-                'daterange' => [
+                'daterange'      => [
                     'enabled' => false,
                 ],
             ],
-
-            'jqGrid' => [
+            'jqGrid'         => [
                 'parameterNames' => [
                     // Internal => jqGrid
                     'currentPage'    => 'currentPage',
@@ -86,28 +78,22 @@ return [
                     'sortColumns'    => 'sortByColumns',
                     'sortDirections' => 'sortDirections',
                     'isSearch'       => 'isSearch',
-
-                    'massIds' => 'ids',
-
-                    'method' => 'POST',
+                    'massIds'        => 'ids',
+                    'method'         => 'POST',
                 ],
             ],
-
-            'laminasTable' => [
+            'laminasTable'   => [
                 'parameterNames' => [
                     // Internal => LaminasTable (console)
                     'currentPage'    => 'page',
                     'itemsPerPage'   => 'items',
                     'sortColumns'    => 'sortBys',
                     'sortDirections' => 'sortDirs',
-
-                    'filterColumns' => 'filterBys',
-                    'filterValues'  => 'filterValues',
+                    'filterColumns'  => 'filterBys',
+                    'filterValues'   => 'filterValues',
                 ],
             ],
-
-            'PHPExcel' => [
-
+            'PHPExcel'       => [
                 'papersize' => 'A4',
 
                 // landscape / portrait (we preferr landscape, because datagrids are often wide)
@@ -118,47 +104,37 @@ return [
 
                 // If you only want to export data, set this to false
                 'displayTitle' => false,
-
                 'rowTitle'     => 1,
                 'startRowData' => 1,
             ],
-
-            'TCPDF' => [
-
+            'TCPDF'          => [
                 'papersize' => 'A4',
 
                 // landscape / portrait (we preferr landscape, because datagrids are often wide)
                 'orientation' => 'landscape',
-
-                'margins' => [
+                'margins'     => [
                     'header' => 5,
                     'footer' => 10,
-
                     'top'    => 20,
                     'bottom' => 11,
                     'left'   => 10,
                     'right'  => 10,
                 ],
-
-                'icon' => [
+                'icon'        => [
                     // milimeter...
                     'size' => 16,
                 ],
-
-                'header' => [
+                'header'      => [
                     // define your logo here, please be aware of the relative path...
                     'logo'      => '',
                     'logoWidth' => 35,
                 ],
-
-                'style' => [
-
+                'style'       => [
                     'header' => [
-                        'font' => 'helvetica',
-                        'size' => 11,
-                        'height' => 7,
-
-                        'color' => [
+                        'font'             => 'helvetica',
+                        'size'             => 11,
+                        'height'           => 7,
+                        'color'            => [
                             0,
                             0,
                             0,
@@ -169,14 +145,12 @@ return [
                             200,
                         ],
                     ],
-
-                    'data' => [
-                        'font' => 'helvetica',
-                        'size' => 11,
-                        'padding' => 4,
-                        'contentPadding' => 2,
-
-                        'color' => [
+                    'data'   => [
+                        'font'             => 'helvetica',
+                        'size'             => 11,
+                        'padding'          => 4,
+                        'contentPadding'   => 2,
+                        'color'            => [
                             0,
                             0,
                             0,
@@ -189,44 +163,38 @@ return [
                     ],
                 ],
             ],
-
-            'csv' => [
+            'csv'            => [
                 // draw a header with all column labels?
                 'header'    => true,
                 'delimiter' => ',',
                 'enclosure' => '"',
             ],
-        ]
-        ,
+        ],
 
         // General parameters
         'generalParameterNames' => [
             'rendererType' => 'rendererType',
         ],
     ],
-
     'service_manager' => [
-
         'factories' => [
-            Datagrid::class => Service\DatagridFactory::class,
-
+            Datagrid::class         => Service\DatagridFactory::class,
             'zfcDatagrid_dbAdapter' => Service\LaminasDbAdapterFactory::class,
 
             // HTML renderer
             Renderer\BootstrapTable\Renderer::class => InvokableFactory::class,
-            Renderer\JqGrid\Renderer::class => InvokableFactory::class,
+            Renderer\JqGrid\Renderer::class         => InvokableFactory::class,
 
             // CLI renderer
             Renderer\LaminasTable\Renderer::class => InvokableFactory::class,
 
             // Export renderer
             Renderer\PrintHtml\Renderer::class => InvokableFactory::class,
-            Renderer\PHPExcel\Renderer::class => InvokableFactory::class,
-            Renderer\TCPDF\Renderer::class => InvokableFactory::class,
-            Renderer\Csv\Renderer::class => InvokableFactory::class,
+            Renderer\PHPExcel\Renderer::class  => InvokableFactory::class,
+            Renderer\TCPDF\Renderer::class     => InvokableFactory::class,
+            Renderer\Csv\Renderer::class       => InvokableFactory::class,
         ],
-
-        'aliases' => [
+        'aliases'   => [
             'zfcDatagrid' => Datagrid::class,
 
             // HTML renderer
@@ -243,42 +211,37 @@ return [
             'zfcDatagrid.renderer.csv'       => Renderer\Csv\Renderer::class,
         ],
     ],
-
-    'view_helpers' => [
-        'aliases' => [
+    'view_helpers'    => [
+        'aliases'   => [
             'bootstrapTableRow' => Renderer\BootstrapTable\View\Helper\TableRow::class,
             'jqgridColumns'     => Renderer\JqGrid\View\Helper\Columns::class,
         ],
         'factories' => [
-            Renderer\BootstrapTable\View\Helper\TableRow::class =>
-                Renderer\BootstrapTable\View\Helper\TableRowFactory::class,
-            Renderer\JqGrid\View\Helper\Columns::class =>
-                Renderer\JqGrid\View\Helper\ColumnsFactory::class,
+            Renderer\BootstrapTable\View\Helper\TableRow::class
+                => Renderer\BootstrapTable\View\Helper\TableRowFactory::class,
+            Renderer\JqGrid\View\Helper\Columns::class
+                => Renderer\JqGrid\View\Helper\ColumnsFactory::class,
         ],
     ],
-
-    'view_manager' => [
-
-        'strategies' => [
+    'view_manager'    => [
+        'strategies'          => [
             'ViewJsonStrategy',
         ],
-
-        'template_map' => [
-            'zfc-datagrid/renderer/bootstrapTable/layout' =>
-                __DIR__ . '/../view/zfc-datagrid/renderer/bootstrapTable/layout.phtml',
+        'template_map'        => [
+            'zfc-datagrid/renderer/bootstrapTable/layout'
+                => __DIR__ . '/../view/zfc-datagrid/renderer/bootstrapTable/layout.phtml',
             /**
              * for BS4, you have to set this layout
             'zfc-datagrid/renderer/bootstrapTable/layout' =>
                 './vendor/zfc-datagrid/zfc-datagrid/view/zfc-datagrid/renderer/bootstrap4Table/layout.phtml',
              */
-            'zfc-datagrid/renderer/printHtml/layout'      =>
-                __DIR__ . '/../view/zfc-datagrid/renderer/printHtml/layout.phtml',
-            'zfc-datagrid/renderer/printHtml/table'       =>
-                __DIR__ . '/../view/zfc-datagrid/renderer/printHtml/table.phtml',
-            'zfc-datagrid/renderer/jqGrid/layout'         =>
-                __DIR__ . '/../view/zfc-datagrid/renderer/jqGrid/layout.phtml',
+            'zfc-datagrid/renderer/printHtml/layout'
+                => __DIR__ . '/../view/zfc-datagrid/renderer/printHtml/layout.phtml',
+            'zfc-datagrid/renderer/printHtml/table'
+                => __DIR__ . '/../view/zfc-datagrid/renderer/printHtml/table.phtml',
+            'zfc-datagrid/renderer/jqGrid/layout'
+                => __DIR__ . '/../view/zfc-datagrid/renderer/jqGrid/layout.phtml',
         ],
-
         'template_path_stack' => [
             'ZfcDatagrid' => __DIR__ . '/../view',
         ],

@@ -1,9 +1,17 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagridTest\DataSource\Doctrine2;
 
+use Doctrine\ORM\Query\Expr\Andx;
+use Doctrine\ORM\Query\Expr\Comparison;
+use Doctrine\ORM\Query\Expr\Orx;
+use Doctrine\ORM\Query\Parameter;
 use Doctrine\ORM\QueryBuilder;
 use InvalidArgumentException;
 use ZfcDatagrid\DataSource\Doctrine2\Filter as FilterDoctrine2;
+use ZfcDatagrid\Filter;
 
 /**
  * @group DataSource
@@ -11,10 +19,7 @@ use ZfcDatagrid\DataSource\Doctrine2\Filter as FilterDoctrine2;
  */
 class FilterTest extends AbstractDoctrine2Test
 {
-    /**
-     *
-     * @var FilterDoctrine2
-     */
+    /** @var FilterDoctrine2 */
     private $filterDoctrine2;
 
     public function setUp(): void
@@ -27,63 +32,58 @@ class FilterTest extends AbstractDoctrine2Test
 
     public function testBasic()
     {
-        $this->assertInstanceOf(\Doctrine\ORM\QueryBuilder::class, $this->filterDoctrine2->getQueryBuilder());
+        $this->assertInstanceOf(QueryBuilder::class, $this->filterDoctrine2->getQueryBuilder());
 
         // Test two filters
-        $filter = new \ZfcDatagrid\Filter();
+        $filter = new Filter();
         $filter->setFromColumn($this->colVolumne, '~myValue,123');
 
-        $filter2 = new \ZfcDatagrid\Filter();
+        $filter2 = new Filter();
         $filter2->setFromColumn($this->colEdition, '~456');
 
         $filterDoctrine2 = clone $this->filterDoctrine2;
         $filterDoctrine2->applyFilter($filter);
         $filterDoctrine2->applyFilter($filter2);
 
-        /* @var $where \Doctrine\ORM\Query\Expr\Andx */
+        /** @var Andx $where */
         $where = $filterDoctrine2->getQueryBuilder()->getDQLPart('where');
 
         $this->assertEquals(2, $where->count());
-        $this->assertInstanceOf(\Doctrine\ORM\Query\Expr\Andx::class, $where);
+        $this->assertInstanceOf(Andx::class, $where);
 
         $whereParts = $where->getParts();
 
-        /* @var $wherePart1 \Doctrine\ORM\Query\Expr\Orx */
+        /** @var Orx $wherePart1 */
         $wherePart1 = $whereParts[0];
 
         $this->assertEquals(2, $wherePart1->count());
-        $this->assertInstanceOf(\Doctrine\ORM\Query\Expr\Orx::class, $wherePart1);
+        $this->assertInstanceOf(Orx::class, $wherePart1);
 
-        /* @var $wherePart2 \Doctrine\ORM\Query\Expr\Orx */
+        /** @var Orx $wherePart2 */
         $wherePart2 = $whereParts[1];
 
         $this->assertEquals(1, $wherePart2->count());
-        $this->assertInstanceOf(\Doctrine\ORM\Query\Expr\Orx::class, $wherePart2);
+        $this->assertInstanceOf(Orx::class, $wherePart2);
     }
 
     /**
-     *
-     * @param  QueryBuilder                          $qb
      * @param  number                                $part
-     * @return \Doctrine\ORM\Query\Expr\Comparison[]
+     * @return Comparison[]
      */
     private function getWhereParts(QueryBuilder $qb, $part = 0)
     {
-        /* @var $where \Doctrine\ORM\Query\Expr\Andx */
+        /** @var Andx $where */
         $where = $qb->getDQLPart('where');
 
         $whereParts = $where->getParts();
 
-        $this->assertInstanceOf(\Doctrine\ORM\Query\Expr\Orx::class, $whereParts[$part]);
+        $this->assertInstanceOf(Orx::class, $whereParts[$part]);
 
         return $whereParts[$part]->getParts();
     }
 
     /**
-     *
-     * @param FilterDoctrine2 $filter
-     *
-     * @return \Doctrine\ORM\Query\Parameter[]
+     * @return Parameter[]
      */
     private function getParameters(FilterDoctrine2 $filter)
     {
@@ -92,7 +92,7 @@ class FilterTest extends AbstractDoctrine2Test
 
     public function testLike()
     {
-        $filter = new \ZfcDatagrid\Filter();
+        $filter = new Filter();
         $filter->setFromColumn($this->colVolumne, '~myV\'alue,123');
 
         $filterDoctrine2 = clone $this->filterDoctrine2;
@@ -114,7 +114,7 @@ class FilterTest extends AbstractDoctrine2Test
 
     public function testLikeLeft()
     {
-        $filter = new \ZfcDatagrid\Filter();
+        $filter = new Filter();
         $filter->setFromColumn($this->colVolumne, '~%123');
 
         $filterDoctrine2 = clone $this->filterDoctrine2;
@@ -131,7 +131,7 @@ class FilterTest extends AbstractDoctrine2Test
 
     public function testLikeRight()
     {
-        $filter = new \ZfcDatagrid\Filter();
+        $filter = new Filter();
         $filter->setFromColumn($this->colVolumne, '~123%');
 
         $filterDoctrine2 = clone $this->filterDoctrine2;
@@ -148,7 +148,7 @@ class FilterTest extends AbstractDoctrine2Test
 
     public function testNotLike()
     {
-        $filter = new \ZfcDatagrid\Filter();
+        $filter = new Filter();
         $filter->setFromColumn($this->colVolumne, '!~123');
 
         $filterDoctrine2 = clone $this->filterDoctrine2;
@@ -165,7 +165,7 @@ class FilterTest extends AbstractDoctrine2Test
 
     public function testNotLikeLeft()
     {
-        $filter = new \ZfcDatagrid\Filter();
+        $filter = new Filter();
         $filter->setFromColumn($this->colVolumne, '!~%123');
 
         $filterDoctrine2 = clone $this->filterDoctrine2;
@@ -182,7 +182,7 @@ class FilterTest extends AbstractDoctrine2Test
 
     public function testNotLikeRight()
     {
-        $filter = new \ZfcDatagrid\Filter();
+        $filter = new Filter();
         $filter->setFromColumn($this->colVolumne, '!~123%');
 
         $filterDoctrine2 = clone $this->filterDoctrine2;
@@ -199,7 +199,7 @@ class FilterTest extends AbstractDoctrine2Test
 
     public function testEqual()
     {
-        $filter = new \ZfcDatagrid\Filter();
+        $filter = new Filter();
         $filter->setFromColumn($this->colVolumne, '=123');
 
         $filterDoctrine2 = clone $this->filterDoctrine2;
@@ -216,7 +216,7 @@ class FilterTest extends AbstractDoctrine2Test
 
     public function testNotEqual()
     {
-        $filter = new \ZfcDatagrid\Filter();
+        $filter = new Filter();
         $filter->setFromColumn($this->colVolumne, '!=a String');
 
         $filterDoctrine2 = clone $this->filterDoctrine2;
@@ -233,7 +233,7 @@ class FilterTest extends AbstractDoctrine2Test
 
     public function testGreaterEqual()
     {
-        $filter = new \ZfcDatagrid\Filter();
+        $filter = new Filter();
         $filter->setFromColumn($this->colVolumne, '>=123');
 
         $filterDoctrine2 = clone $this->filterDoctrine2;
@@ -250,7 +250,7 @@ class FilterTest extends AbstractDoctrine2Test
 
     public function testGreater()
     {
-        $filter = new \ZfcDatagrid\Filter();
+        $filter = new Filter();
         $filter->setFromColumn($this->colVolumne, '>123');
 
         $filterDoctrine2 = clone $this->filterDoctrine2;
@@ -267,7 +267,7 @@ class FilterTest extends AbstractDoctrine2Test
 
     public function testLessEqual()
     {
-        $filter = new \ZfcDatagrid\Filter();
+        $filter = new Filter();
         $filter->setFromColumn($this->colVolumne, '<=string');
 
         $filterDoctrine2 = clone $this->filterDoctrine2;
@@ -284,7 +284,7 @@ class FilterTest extends AbstractDoctrine2Test
 
     public function testLess()
     {
-        $filter = new \ZfcDatagrid\Filter();
+        $filter = new Filter();
         $filter->setFromColumn($this->colVolumne, '<123');
 
         $filterDoctrine2 = clone $this->filterDoctrine2;
@@ -301,7 +301,7 @@ class FilterTest extends AbstractDoctrine2Test
 
     public function testBetween()
     {
-        $filter = new \ZfcDatagrid\Filter();
+        $filter = new Filter();
         $filter->setFromColumn($this->colVolumne, '789 <> 123');
 
         $filterDoctrine2 = clone $this->filterDoctrine2;
@@ -317,7 +317,7 @@ class FilterTest extends AbstractDoctrine2Test
 
     public function testException()
     {
-        $filter = $this->getMockBuilder(\ZfcDatagrid\Filter::class)
+        $filter = $this->getMockBuilder(Filter::class)
             ->getMock();
         $filter->expects(self::any())
             ->method('getColumn')
@@ -325,7 +325,7 @@ class FilterTest extends AbstractDoctrine2Test
         $filter->expects(self::any())
             ->method('getValues')
             ->will($this->returnValue([
-            1,
+                1,
             ]));
         $filter->expects(self::any())
             ->method('getOperator')

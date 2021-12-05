@@ -1,9 +1,14 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagridTest\Column\DataPopulation\Object;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use ZfcDatagrid\Column\DataPopulation\Object\Gravatar;
+
+use function md5;
 
 /**
  * @group Column

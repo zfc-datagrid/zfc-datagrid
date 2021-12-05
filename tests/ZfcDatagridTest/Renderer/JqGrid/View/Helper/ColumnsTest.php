@@ -1,9 +1,19 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagridTest\Renderer\JqGrid\View\Helper;
 
 use Exception;
+use Laminas\I18n\Translator\Translator;
+use Laminas\ServiceManager\ServiceManager;
+use Laminas\View\HelperPluginManager;
 use PHPUnit\Framework\TestCase;
+use PHPUnit_Framework_MockObject_MockObject;
+use ReflectionClass;
+use ZfcDatagrid\Column\AbstractColumn;
 use ZfcDatagrid\Column\Style;
+use ZfcDatagrid\Column\Style\AbstractStyle;
 use ZfcDatagrid\Filter;
 use ZfcDatagrid\Renderer\JqGrid\View\Helper;
 
@@ -13,22 +23,19 @@ use ZfcDatagrid\Renderer\JqGrid\View\Helper;
  */
 class ColumnsTest extends TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Laminas\View\HelperPluginManager */
+    /** @var PHPUnit_Framework_MockObject_MockObject|HelperPluginManager */
     private $sm;
 
-    /**
-     *
-     * @var \ZfcDatagrid\Column\AbstractColumn
-     */
+    /** @var AbstractColumn */
     private $myCol;
 
     public function setUp(): void
     {
-        $this->sm = $this->getMockBuilder(\Laminas\View\HelperPluginManager::class)
+        $this->sm = $this->getMockBuilder(HelperPluginManager::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $myCol = $this->getMockForAbstractClass(\ZfcDatagrid\Column\AbstractColumn::class);
+        $myCol = $this->getMockForAbstractClass(AbstractColumn::class);
         $myCol->setUniqueId('myCol');
 
         $this->myCol = $myCol;
@@ -62,8 +69,8 @@ class ColumnsTest extends TestCase
 
         $this->assertStringStartsWith('[{name:', $result);
         $this->assertStringEndsWith(
-            '<span style="font-weight: bold;">\' + cellvalue + \'</span>\'; ' .
-            'return cellvalue; },searchoptions: {"clearSearch":false}}]',
+            '<span style="font-weight: bold;">\' + cellvalue + \'</span>\'; '
+            . 'return cellvalue; },searchoptions: {"clearSearch":false}}]',
             $result
         );
     }
@@ -82,8 +89,8 @@ class ColumnsTest extends TestCase
 
         $this->assertStringStartsWith('[{name:', $result);
         $this->assertStringEndsWith(
-            '<span style="font-style: italic;">\' + cellvalue + \'</span>\'; ' .
-            'return cellvalue; },searchoptions: {"clearSearch":false}}]',
+            '<span style="font-style: italic;">\' + cellvalue + \'</span>\'; '
+            . 'return cellvalue; },searchoptions: {"clearSearch":false}}]',
             $result
         );
     }
@@ -102,8 +109,8 @@ class ColumnsTest extends TestCase
 
         $this->assertStringStartsWith('[{name:', $result);
         $this->assertStringEndsWith(
-            '<span style="color: #ff0000;">\' + cellvalue + \'</span>\'; ' .
-            'return cellvalue; },searchoptions: {"clearSearch":false}}]',
+            '<span style="color: #ff0000;">\' + cellvalue + \'</span>\'; '
+            . 'return cellvalue; },searchoptions: {"clearSearch":false}}]',
             $result
         );
     }
@@ -126,7 +133,7 @@ class ColumnsTest extends TestCase
 
     public function testStyleException()
     {
-        $styleMock = $this->getMockForAbstractClass(\ZfcDatagrid\Column\Style\AbstractStyle::class);
+        $styleMock = $this->getMockForAbstractClass(AbstractStyle::class);
         $helper    = new Helper\Columns();
 
         $col1 = clone $this->myCol;
@@ -159,8 +166,8 @@ class ColumnsTest extends TestCase
 
         $this->assertStringStartsWith('[{name:', $result);
         $this->assertStringEndsWith(
-            'if (rowObject.myCol == \'123\') {cellvalue = \'<span style="font-weight: bold;">' .
-            '\' + cellvalue + \'</span>\';} return cellvalue; },searchoptions: {"clearSearch":false}}]',
+            'if (rowObject.myCol == \'123\') {cellvalue = \'<span style="font-weight: bold;">'
+            . '\' + cellvalue + \'</span>\';} return cellvalue; },searchoptions: {"clearSearch":false}}]',
             $result
         );
     }
@@ -199,8 +206,8 @@ class ColumnsTest extends TestCase
 
         $this->assertStringStartsWith('[{name:', $result);
         $this->assertStringEndsWith(
-            'if (rowObject.myCol != \'123\') {cellvalue = \'<span style="font-weight: bold;">' .
-            '\' + cellvalue + \'</span>\';} return cellvalue; },searchoptions: {"clearSearch":false}}]',
+            'if (rowObject.myCol != \'123\') {cellvalue = \'<span style="font-weight: bold;">'
+            . '\' + cellvalue + \'</span>\';} return cellvalue; },searchoptions: {"clearSearch":false}}]',
             $result
         );
     }
@@ -226,14 +233,14 @@ class ColumnsTest extends TestCase
 
     public function testTranslate()
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Laminas\ServiceManager\ServiceManager $sm */
-        $sm = $this->getMockBuilder(\Laminas\ServiceManager\ServiceManager::class)
+        /** @var PHPUnit_Framework_MockObject_MockObject|ServiceManager $sm */
+        $sm = $this->getMockBuilder(ServiceManager::class)
             ->setMethods(null)
             ->getMock();
 
         $helper = new Helper\Columns();
 
-        $reflection = new \ReflectionClass($helper);
+        $reflection = new ReflectionClass($helper);
         $method     = $reflection->getMethod('translate');
         $method->setAccessible(true);
 
@@ -244,8 +251,8 @@ class ColumnsTest extends TestCase
 
     public function testTranslateWithMockedTranslator()
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Laminas\I18n\Translator\Translator $translator */
-        $translator = $this->getMockBuilder(\Laminas\I18n\Translator\Translator::class)
+        /** @var PHPUnit_Framework_MockObject_MockObject|Translator $translator */
+        $translator = $this->getMockBuilder(Translator::class)
             ->disableOriginalConstructor()
             ->setMethods(['translate'])
             ->getMock();
@@ -259,7 +266,7 @@ class ColumnsTest extends TestCase
         $helper = new Helper\Columns();
         $helper->setTranslator($translator);
 
-        $reflection = new \ReflectionClass($helper);
+        $reflection = new ReflectionClass($helper);
         $method     = $reflection->getMethod('translate');
         $method->setAccessible(true);
 

@@ -1,51 +1,50 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagrid\Renderer\JqGrid;
 
+use Exception;
 use Laminas\Http\PhpEnvironment\Request as HttpRequest;
 use Laminas\View\Model\JsonModel;
+use Laminas\View\Model\ViewModel;
 use ZfcDatagrid\Column;
+use ZfcDatagrid\Column\AbstractColumn;
+use ZfcDatagrid\Column\Action;
+use ZfcDatagrid\Column\Action\AbstractAction;
+use ZfcDatagrid\Filter;
 use ZfcDatagrid\Renderer\AbstractRenderer;
-use function explode;
+
 use function count;
-use function strtoupper;
+use function explode;
 use function implode;
+use function strtoupper;
 
 class Renderer extends AbstractRenderer
 {
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return 'jqGrid';
     }
 
-    /**
-     * @return bool
-     */
     public function isHtml(): bool
     {
         return true;
     }
 
-    /**
-     * @return bool
-     */
     public function isExport(): bool
     {
         return false;
     }
 
     /**
-     * @return HttpRequest
-     *
-     * @throws \Exception
+     * @throws Exception
      */
     public function getRequest(): HttpRequest
     {
         $request = parent::getRequest();
         if (! $request instanceof HttpRequest) {
-            throw new \Exception(
+            throw new Exception(
                 'Request must be an instance of Laminas\Http\PhpEnvironment\Request for HTML rendering'
             );
         }
@@ -58,11 +57,11 @@ class Renderer extends AbstractRenderer
      *
      * @return array
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function getSortConditions(): array
     {
-        if (!empty($this->sortConditions)) {
+        if (! empty($this->sortConditions)) {
             return $this->sortConditions;
         }
 
@@ -86,7 +85,7 @@ class Renderer extends AbstractRenderer
             $sortDirections = explode(',', $sortDirections);
 
             if (count($sortColumns) !== count($sortDirections)) {
-                throw new \Exception('Count missmatch order columns/direction');
+                throw new Exception('Count missmatch order columns/direction');
             }
 
             foreach ($sortColumns as $key => $sortColumn) {
@@ -97,7 +96,7 @@ class Renderer extends AbstractRenderer
                 }
 
                 foreach ($this->getColumns() as $column) {
-                    /* @var $column \ZfcDatagrid\Column\AbstractColumn */
+                    /** @var AbstractColumn $column */
                     if ($column->getUniqueId() == $sortColumn) {
                         $sortConditions[] = [
                             'sortDirection' => $sortDirection,
@@ -122,12 +121,11 @@ class Renderer extends AbstractRenderer
 
     /**
      * @return array
-     *
-     * @throws \Exception
+     * @throws Exception
      */
     public function getFilters(): array
     {
-        if (!empty($this->filters)) {
+        if (! empty($this->filters)) {
             // set from cache! (for export)
             return $this->filters;
         }
@@ -142,11 +140,11 @@ class Renderer extends AbstractRenderer
         if ('true' == $isSearch) {
             // User filtering
             foreach ($this->getColumns() as $column) {
-                /* @var $column \ZfcDatagrid\Column\AbstractColumn */
+                /** @var AbstractColumn $column */
                 if ($request->getPost($column->getUniqueId(), $request->getQuery($column->getUniqueId())) != '') {
                     $value = $request->getPost($column->getUniqueId(), $request->getQuery($column->getUniqueId()));
 
-                    $filter = new \ZfcDatagrid\Filter();
+                    $filter = new Filter();
                     $filter->setFromColumn($column, $value);
 
                     $filters[] = $filter;
@@ -167,8 +165,7 @@ class Renderer extends AbstractRenderer
     }
 
     /**
-     * @return int
-     * @throws \Exception
+     * @throws Exception
      */
     public function getCurrentPageNumber(): int
     {
@@ -190,13 +187,14 @@ class Renderer extends AbstractRenderer
     }
 
     /**
-     * @return null|JsonModel|\Laminas\View\Model\ViewModel
-     * @throws \Exception
+     * @return null|JsonModel|ViewModel
+     * @throws Exception
      */
     public function execute()
     {
         $request = $this->getRequest();
-        if ($request->isXmlHttpRequest() === true &&
+        if (
+            $request->isXmlHttpRequest() === true &&
             $request->getPost('nd', $request->getQuery('nd')) != ''
         ) {
             // AJAX Request...load only data...
@@ -210,7 +208,7 @@ class Renderer extends AbstractRenderer
             $columnsRowClickDisabled = [];
             $columns                 = $viewModel->getVariable('columns');
             foreach ($columns as $column) {
-                /* @var $column \ZfcDatagrid\Column\AbstractColumn */
+                /** @var AbstractColumn $column */
 
                 if ($column->isRowClickEnabled() !== true) {
                     $columnsRowClickDisabled[] = $column->getUniqueId();
@@ -235,12 +233,12 @@ class Renderer extends AbstractRenderer
                 if ($column instanceof Column\Select) {
                     // $row[$column->getUniqueId()] = nl2br($row[$column->getUniqueId()], true);
                 } elseif ($column instanceof Column\Action) {
-                    /* @var $column \ZfcDatagrid\Column\Action */
+                    /** @var Action $column */
 
                     if ($column->getActions()) {
                         $actions = [];
                         foreach ($column->getActions() as $action) {
-                            /* @var $action \ZfcDatagrid\Column\Action\AbstractAction */
+                            /** @var AbstractAction $action */
                             if ($action->isDisplayed($row) === true) {
                                 $action->setTitle($this->translate($action->getTitle()));
                                 $actions[] = $action->toHtml($row);

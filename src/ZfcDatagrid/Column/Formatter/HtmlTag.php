@@ -1,13 +1,17 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagrid\Column\Formatter;
 
 use Laminas\Router\RouteStackInterface;
 use ZfcDatagrid\Column\AbstractColumn;
+
 use function implode;
-use function strpos;
+use function rawurlencode;
 use function sprintf;
 use function str_replace;
-use function rawurlencode;
+use function strpos;
 
 class HtmlTag extends AbstractFormatter implements RouterInterface
 {
@@ -38,8 +42,6 @@ class HtmlTag extends AbstractFormatter implements RouterInterface
     public $router;
 
     /**
-     * @param RouteStackInterface $router
-     *
      * @return $this
      */
     public function setRouter(RouteStackInterface $router): RouterInterface
@@ -49,17 +51,12 @@ class HtmlTag extends AbstractFormatter implements RouterInterface
         return $this;
     }
 
-    /**
-     * @return null|RouteStackInterface
-     */
     public function getRouter(): ?RouteStackInterface
     {
         return $this->router;
     }
 
     /**
-     * @param string $name
-     *
      * @return $this
      */
     public function setName(string $name): self
@@ -69,9 +66,6 @@ class HtmlTag extends AbstractFormatter implements RouterInterface
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
@@ -79,9 +73,6 @@ class HtmlTag extends AbstractFormatter implements RouterInterface
 
     /**
      * Set a HTML attributes.
-     *
-     * @param string $name
-     * @param string $value
      *
      * @return $this
      */
@@ -94,10 +85,6 @@ class HtmlTag extends AbstractFormatter implements RouterInterface
 
     /**
      * Get a HTML attribute.
-     *
-     * @param string $name
-     *
-     * @return string
      */
     public function getAttribute(string $name): string
     {
@@ -106,8 +93,6 @@ class HtmlTag extends AbstractFormatter implements RouterInterface
 
     /**
      * Removes an HTML attribute.
-     *
-     * @param string $name
      *
      * @return $this
      */
@@ -131,8 +116,6 @@ class HtmlTag extends AbstractFormatter implements RouterInterface
     /**
      * Set the link.
      *
-     * @param string $href
-     *
      * @return $this
      */
     public function setLink(string $href): self
@@ -142,17 +125,12 @@ class HtmlTag extends AbstractFormatter implements RouterInterface
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getLink(): string
     {
         return $this->getAttribute('href');
     }
 
     /**
-     * @param string $route
-     *
      * @return $this
      */
     public function setRoute(string $route): self
@@ -162,9 +140,6 @@ class HtmlTag extends AbstractFormatter implements RouterInterface
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getRoute(): string
     {
         return $this->route;
@@ -172,7 +147,6 @@ class HtmlTag extends AbstractFormatter implements RouterInterface
 
     /**
      * @param array $params
-     *
      * @return $this
      */
     public function setRouteParams(array $params): self
@@ -194,8 +168,6 @@ class HtmlTag extends AbstractFormatter implements RouterInterface
      * Get the column row value placeholder
      * $fmt->setLink('/myLink/something/'.$fmt->getColumnValuePlaceholder($myCol));.
      *
-     * @param AbstractColumn $col
-     *
      * @return string
      */
     public function getColumnValuePlaceholder(AbstractColumn $col)
@@ -215,19 +187,12 @@ class HtmlTag extends AbstractFormatter implements RouterInterface
 
     /**
      * Returns the rowId placeholder.
-     *
-     * @return string
      */
     public function getRowIdPlaceholder(): string
     {
         return self::ROW_ID_PLACEHOLDER;
     }
 
-    /**
-     * @param AbstractColumn $col
-     *
-     * @return string
-     */
     public function getFormattedValue(AbstractColumn $col): string
     {
         $row = $this->getRowData();
@@ -243,10 +208,6 @@ class HtmlTag extends AbstractFormatter implements RouterInterface
 
     /**
      * Get the string version of the attributes.
-     *
-     * @param AbstractColumn $col
-     *
-     * @return string
      */
     protected function getAttributesString(AbstractColumn $col): string
     {
@@ -271,10 +232,6 @@ class HtmlTag extends AbstractFormatter implements RouterInterface
 
     /**
      * This is needed public for rowClickAction...
-     *
-     * @param AbstractColumn $col
-     *
-     * @return string
      */
     protected function getLinkReplaced(AbstractColumn $col): string
     {

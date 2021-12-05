@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagrid\DataSource;
 
 use Laminas\Paginator\Adapter\AdapterInterface as PaginatorAdapterInterface;
@@ -27,7 +30,6 @@ abstract class AbstractDataSource implements DataSourceInterface
      * Set the columns.
      *
      * @param Column\AbstractColumn[] $columns
-     *
      * @return $this
      */
     public function setColumns(array $columns): DataSourceInterface
@@ -48,9 +50,6 @@ abstract class AbstractDataSource implements DataSourceInterface
     /**
      * Set sort conditions.
      *
-     * @param Column\AbstractColumn $column
-     * @param string                $sortDirection
-     *
      * @return $this
      */
     public function addSortCondition(Column\AbstractColumn $column, string $sortDirection = 'ASC'): DataSourceInterface
@@ -65,7 +64,6 @@ abstract class AbstractDataSource implements DataSourceInterface
 
     /**
      * @param array $sortConditions
-     *
      * @return $this
      */
     public function setSortConditions(array $sortConditions): self
@@ -86,8 +84,6 @@ abstract class AbstractDataSource implements DataSourceInterface
     /**
      * Add a filter rule.
      *
-     * @param Filter $filter
-     *
      * @return $this
      */
     public function addFilter(Filter $filter): DataSourceInterface
@@ -99,7 +95,6 @@ abstract class AbstractDataSource implements DataSourceInterface
 
     /**
      * @param Filter[] $filters
-     *
      * @return $this
      */
     public function setFilters(array $filters): self
@@ -118,8 +113,6 @@ abstract class AbstractDataSource implements DataSourceInterface
     }
 
     /**
-     * @param PaginatorAdapterInterface|null $paginator
-     *
      * @return $this
      */
     public function setPaginatorAdapter(?PaginatorAdapterInterface $paginator): self
@@ -129,9 +122,6 @@ abstract class AbstractDataSource implements DataSourceInterface
         return $this;
     }
 
-    /**
-     * @return PaginatorAdapterInterface
-     */
     public function getPaginatorAdapter(): ?PaginatorAdapterInterface
     {
         return $this->paginatorAdapter;

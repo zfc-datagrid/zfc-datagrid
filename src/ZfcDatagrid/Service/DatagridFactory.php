@@ -1,22 +1,23 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagrid\Service;
 
-use InvalidArgumentException;
 use Interop\Container\ContainerInterface;
+use InvalidArgumentException;
 use Laminas\Cache\Service\StorageAdapterFactoryInterface;
+use Laminas\Mvc\Application;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use ZfcDatagrid\Datagrid;
 
 class DatagridFactory implements FactoryInterface
 {
     /**
-     * @param ContainerInterface $container
      * @param string             $requestedName
      * @param array|null         $options
-     *
-     * @return Datagrid
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Datagrid
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): Datagrid
     {
         $config = $container->get('config');
 
@@ -24,14 +25,13 @@ class DatagridFactory implements FactoryInterface
             throw new InvalidArgumentException('Config key "ZfcDatagrid" is missing');
         }
 
-        /* @var $application \Laminas\Mvc\Application */
+        /** @var Application $application */
         $application = $container->get('application');
 
         $grid = new Datagrid();
         $grid->setOptions($config['ZfcDatagrid']);
         $grid->setMvcEvent($application->getMvcEvent());
         $grid->setRouter($container->get('Router'));
-
 
         /** @var StorageAdapterFactoryInterface $storageFactory */
         $storageFactory = $container->get(StorageAdapterFactoryInterface::class);

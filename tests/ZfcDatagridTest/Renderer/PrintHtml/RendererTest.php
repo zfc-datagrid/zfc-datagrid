@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagridTest\Renderer\PrintHtml;
 
 use Laminas\View\Model\ViewModel;
@@ -40,7 +43,7 @@ class RendererTest extends TestBase
         $this->mockedMethodList = [
             'getViewModel',
         ];
-        $viewModel = $this->getMockBuilder(ViewModel::class)
+        $viewModel              = $this->getMockBuilder(ViewModel::class)
             ->getMock();
 
         $viewModel->expects($this->once())

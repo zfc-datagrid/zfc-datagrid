@@ -1,9 +1,13 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagrid\Column\Formatter;
 
 use ZfcDatagrid\Column\AbstractColumn;
-use function is_array;
+
 use function implode;
+use function is_array;
 use function sprintf;
 
 class Image extends AbstractFormatter
@@ -25,9 +29,6 @@ class Image extends AbstractFormatter
     protected $linkAttributes = [];
 
     /**
-     * @param string $name
-     * @param string $value
-     *
      * @return $this
      */
     public function setAttribute(string $name, string $value): self
@@ -46,9 +47,6 @@ class Image extends AbstractFormatter
     }
 
     /**
-     * @param string $name
-     * @param string $value
-     *
      * @return $this
      */
     public function setLinkAttribute(string $name, string $value): self
@@ -68,8 +66,6 @@ class Image extends AbstractFormatter
 
     /**
      * Get the prefix.
-     *
-     * @return string
      */
     public function getPrefix(): string
     {
@@ -78,8 +74,6 @@ class Image extends AbstractFormatter
 
     /**
      * Set the prefix of the image path and the prefix of the link.
-     *
-     * @param string $prefix
      *
      * @return $this
      */
@@ -90,14 +84,10 @@ class Image extends AbstractFormatter
         return $this;
     }
 
-    /**
-     * @param AbstractColumn $column
-     * @return string
-     */
     public function getFormattedValue(AbstractColumn $column): string
     {
-        $row    = $this->getRowData();
-        $value  = $row[$column->getUniqueId()] ?? '';
+        $row   = $this->getRowData();
+        $value = $row[$column->getUniqueId()] ?? '';
 
         if ($value == '') {
             return '';
@@ -106,7 +96,7 @@ class Image extends AbstractFormatter
         $prefix = $this->getPrefix();
 
         if (is_array($value)) {
-            $thumb = $value[0];
+            $thumb    = $value[0];
             $original = $value[1] ?? $thumb;
         } else {
             $thumb    = $value;

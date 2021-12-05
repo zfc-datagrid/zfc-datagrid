@@ -1,8 +1,13 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagridTest\Column\DataPopulation;
 
 use PHPUnit\Framework\TestCase;
+use ZfcDatagrid\Column\AbstractColumn;
 use ZfcDatagrid\Column\DataPopulation\DataObject;
+use ZfcDatagrid\Column\DataPopulation\Object\Gravatar;
 
 /**
  * @group Column
@@ -12,7 +17,7 @@ class DataObjectTest extends TestCase
 {
     public function testObject()
     {
-        $mock = $this->getMockBuilder(\ZfcDatagrid\Column\DataPopulation\Object\Gravatar::class)->getMock();
+        $mock = $this->getMockBuilder(Gravatar::class)->getMock();
         $mock->expects(self::any())
             ->method('toString')
             ->will($this->returnValue('myReturn'));
@@ -27,8 +32,8 @@ class DataObjectTest extends TestCase
 
     public function testParameters()
     {
-        $column = $this->getMockForAbstractClass(\ZfcDatagrid\Column\AbstractColumn::class);
-        $mock   = $this->getMockBuilder(\ZfcDatagrid\Column\DataPopulation\Object\Gravatar::class)->getMock();
+        $column = $this->getMockForAbstractClass(AbstractColumn::class);
+        $mock   = $this->getMockBuilder(Gravatar::class)->getMock();
         $mock->expects(self::any())
         ->method('toString')
         ->will($this->returnValue('myReturn'));

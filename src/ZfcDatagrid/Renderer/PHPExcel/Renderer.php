@@ -1,19 +1,28 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * Output as an excel file.
  */
 
 namespace ZfcDatagrid\Renderer\PHPExcel;
 
+use DateTime;
+use DateTimeZone;
+use Exception;
 use Laminas\Http\Headers;
 use Laminas\Http\Response\Stream as ResponseStream;
+use Laminas\View\Model\ViewModel;
 use PhpOffice\PhpSpreadsheet\Cell;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Style;
 use PhpOffice\PhpSpreadsheet\Worksheet;
 use PhpOffice\PhpSpreadsheet\Writer;
 use ZfcDatagrid\Column;
 use ZfcDatagrid\Renderer\AbstractExport;
+
 use function array_merge;
 use function date;
 use function filesize;
@@ -23,34 +32,27 @@ use function implode;
 use function is_array;
 use function is_scalar;
 
+use const PHP_EOL;
+
 class Renderer extends AbstractExport
 {
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return 'PHPExcel';
     }
 
-    /**
-     * @return bool
-     */
     public function isExport(): bool
     {
         return true;
     }
 
-    /**
-     * @return bool
-     */
     public function isHtml(): bool
     {
         return false;
     }
 
     /**
-     * @return ResponseStream|\Laminas\View\Model\ViewModel
+     * @return ResponseStream|ViewModel
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
      */
@@ -91,7 +93,7 @@ class Renderer extends AbstractExport
         $xColumn = 1;
         $yRow    = $optionsRenderer['startRowData'];
         foreach ($this->getColumnsToExport() as $col) {
-            /* @var $column Column\AbstractColumn */
+            /** @var Column\AbstractColumn $column */
             $sheet->setCellValueByColumnAndRow($xColumn, $yRow, $this->translate($col->getLabel()));
 
             $sheet->getColumnDimension(Cell\Coordinate::stringFromColumnIndex($xColumn))->setWidth($col->getWidth());
@@ -106,14 +108,14 @@ class Renderer extends AbstractExport
         foreach ($this->getData() as $row) {
             $xColumn = 1;
             foreach ($this->getColumnsToExport() as $col) {
-                /* @var $col Column\AbstractColumn */
+                /** @var Column\AbstractColumn $col */
 
                 $value = $row[$col->getUniqueId()];
                 if (is_array($value)) {
                     $value = implode(PHP_EOL, $value);
                 }
 
-                /* @var $column Column\AbstractColumn */
+                /** @var Column\AbstractColumn $column */
                 $currentColumn = Cell\Coordinate::stringFromColumnIndex($xColumn);
                 $cell          = $sheet->getCell($currentColumn . $yRow);
 
@@ -123,20 +125,20 @@ class Renderer extends AbstractExport
                         break;
 
                     case Column\Type\DateTime::class:
-                        /* @var $dateType Column\Type\DateTime */
+                        /** @var Column\Type\DateTime $dateType */
                         $dateType = $col->getType();
 
-                        if (! $value instanceof \DateTime && is_scalar($value)) {
-                            $value = \DateTime::createFromFormat($dateType->getSourceDateTimeFormat(), $value);
-                            if ($value instanceof \DateTime) {
-                                $value->setTimezone(new \DateTimeZone($dateType->getSourceTimezone()));
+                        if (! $value instanceof DateTime && is_scalar($value)) {
+                            $value = DateTime::createFromFormat($dateType->getSourceDateTimeFormat(), $value);
+                            if ($value instanceof DateTime) {
+                                $value->setTimezone(new DateTimeZone($dateType->getSourceTimezone()));
                             }
                         }
 
-                        if ($value instanceof \DateTime) {
+                        if ($value instanceof DateTime) {
                             // only apply this if we have a date object (else leave it blank)
-                            $value->setTimezone(new \DateTimeZone($dateType->getOutputTimezone()));
-                            $cell->setValue(\PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel($value));
+                            $value->setTimezone(new DateTimeZone($dateType->getOutputTimezone()));
+                            $cell->setValue(Date::PHPToExcel($value));
 
                             if ($dateType->getOutputPattern()) {
                                 $outputPattern = $dateType->getOutputPattern();
@@ -163,7 +165,7 @@ class Renderer extends AbstractExport
                  */
                 $styles = array_merge($this->getRowStyles(), $col->getStyles());
                 foreach ($styles as $style) {
-                    /* @var $style Column\Style\AbstractStyle */
+                    /** @var Column\Style\AbstractStyle $style */
                     if ($style->isApply($row) === true) {
                         switch (get_class($style)) {
                             case Column\Style\Bold::class:
@@ -229,7 +231,7 @@ class Renderer extends AbstractExport
                                 break;
 
                             default:
-                                throw new \Exception('Not defined yet: "' . get_class($style) . '"');
+                                throw new Exception('Not defined yet: "' . get_class($style) . '"');
                         }
                     }
                 }
@@ -260,20 +262,19 @@ class Renderer extends AbstractExport
 
         // highlight header line
         $style = [
-            'font' => [
+            'font'    => [
                 'bold' => true,
             ],
-
             'borders' => [
                 'allBorders' => [
                     'borderStyle' => Style\Border::BORDER_MEDIUM,
-                    'color' => [
+                    'color'       => [
                         'argb' => Style\Color::COLOR_BLACK,
                     ],
                 ],
             ],
-            'fill' => [
-                'fillType'       => Style\Fill::FILL_SOLID,
+            'fill'    => [
+                'fillType'   => Style\Fill::FILL_SOLID,
                 'startColor' => [
                     'argb' => Style\Color::COLOR_YELLOW,
                 ],
@@ -310,7 +311,7 @@ class Renderer extends AbstractExport
 
         $headers = new Headers();
         $headers->addHeaders([
-            'Content-Type' => [
+            'Content-Type'        => [
                 'application/force-download',
                 'application/octet-stream',
                 'application/download',
@@ -330,7 +331,6 @@ class Renderer extends AbstractExport
     /**
      * Calculates the column width, based on the papersize and orientation.
      *
-     * @param Worksheet\Worksheet $sheet
      * @param array               $columns
      */
     protected function calculateColumnWidth(Worksheet\Worksheet $sheet, array $columns)
@@ -349,15 +349,13 @@ class Renderer extends AbstractExport
 
         $factor = $paperWidth / 100;
         foreach ($columns as $column) {
-            /* @var $column Column\AbstractColumn */
+            /** @var Column\AbstractColumn $column */
             $column->setWidth($column->getWidth() * $factor);
         }
     }
 
     /**
      * Set the printing options.
-     *
-     * @param Spreadsheet $phpExcel
      */
     protected function setPrinting(Spreadsheet $phpExcel)
     {
@@ -373,7 +371,7 @@ class Renderer extends AbstractExport
         $papersize   = $optionsRenderer['papersize'];
         $orientation = $optionsRenderer['orientation'];
         foreach ($phpExcel->getAllSheets() as $sheet) {
-            /* @var $sheet Worksheet\Worksheet */
+            /** @var Worksheet\Worksheet $sheet */
             if ('landscape' == $orientation) {
                 $sheet->getPageSetup()->setOrientation(Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
             } else {
@@ -410,9 +408,6 @@ class Renderer extends AbstractExport
         $phpExcel->setActiveSheetIndex(0);
     }
 
-    /**
-     * @param Worksheet\Worksheet $sheet
-     */
     protected function setHeaderFooter(Worksheet\Worksheet $sheet)
     {
         $textRight = $this->translate('Page') . ' &P / &N';

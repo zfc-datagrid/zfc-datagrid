@@ -1,7 +1,12 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagridTest\Renderer\JqGrid;
 
 use Exception;
+use Laminas\Console\Request;
+use Laminas\Mvc\MvcEvent;
 use PHPUnit\Framework\TestCase;
 use ZfcDatagrid\Renderer\JqGrid;
 
@@ -47,11 +52,11 @@ class RendererTest extends TestCase
 
     public function testGetRequestException()
     {
-        $request = $this->getMockBuilder(\Laminas\Console\Request::class)
+        $request = $this->getMockBuilder(Request::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $mvcEvent = $this->getMockBuilder(\Laminas\Mvc\MvcEvent::class)
+        $mvcEvent = $this->getMockBuilder(MvcEvent::class)
             ->disableOriginalConstructor()
             ->getMock();
         $mvcEvent->expects(self::any())
@@ -73,7 +78,7 @@ class RendererTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $mvcEvent = $this->getMockBuilder(\Laminas\Mvc\MvcEvent::class)
+        $mvcEvent = $this->getMockBuilder(MvcEvent::class)
             ->disableOriginalConstructor()
             ->getMock();
         $mvcEvent->expects(self::any())

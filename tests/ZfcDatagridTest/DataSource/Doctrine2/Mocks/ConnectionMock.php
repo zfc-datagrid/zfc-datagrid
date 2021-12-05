@@ -1,49 +1,42 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagridTest\DataSource\Doctrine2\Mocks;
+
+use Doctrine\Common\EventManager;
+use Doctrine\DBAL\Configuration;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Driver;
+use Doctrine\DBAL\Platforms\AbstractPlatform;
+
+use function is_string;
 
 /**
  * Mock class for Connection.
- *
- * @copyright https://github.com/doctrine/doctrine2/blob/master/tests/Doctrine/Tests/Mocks/ConnectionMock.php
  */
-class ConnectionMock extends \Doctrine\DBAL\Connection
+class ConnectionMock extends Connection
 {
-    /**
-     *
-     * @var mixed
-     */
+    /** @var mixed */
     private $fetchOneResult;
 
-    /**
-     *
-     * @var DatabasePlatformMock
-     */
+    /** @var DatabasePlatformMock */
     private $platformMock;
 
-    /**
-     *
-     * @var int
-     */
+    /** @var int */
     private $lastInsertId = 0;
 
-    /**
-     *
-     * @var array
-     */
+    /** @var array */
     private $inserts = [];
 
-    /**
-     *
-     * @var array
-     */
+    /** @var array */
     private $executeUpdates = [];
 
     /**
-     *
      * @param array                              $params
-     * @param \Doctrine\DBAL\Driver              $driver
-     * @param \Doctrine\DBAL\Configuration|null  $config
-     * @param \Doctrine\Common\EventManager|null $eventManager
+     * @param Driver $driver
+     * @param Configuration|null $config
+     * @param EventManager|null $eventManager
      */
     public function __construct(array $params, $driver, $config = null, $eventManager = null)
     {
@@ -116,9 +109,7 @@ class ConnectionMock extends \Doctrine\DBAL\Connection
     /* Mock API */
 
     /**
-     *
      * @param mixed $fetchOneResult
-     *
      * @return void
      */
     public function setFetchOneResult($fetchOneResult)
@@ -127,9 +118,7 @@ class ConnectionMock extends \Doctrine\DBAL\Connection
     }
 
     /**
-     *
-     * @param \Doctrine\DBAL\Platforms\AbstractPlatform $platform
-     *
+     * @param AbstractPlatform $platform
      * @return void
      */
     public function setDatabasePlatform($platform)
@@ -138,9 +127,7 @@ class ConnectionMock extends \Doctrine\DBAL\Connection
     }
 
     /**
-     *
      * @param int $id
-     *
      * @return void
      */
     public function setLastInsertId($id)
@@ -149,7 +136,6 @@ class ConnectionMock extends \Doctrine\DBAL\Connection
     }
 
     /**
-     *
      * @return array
      */
     public function getInserts()
@@ -158,7 +144,6 @@ class ConnectionMock extends \Doctrine\DBAL\Connection
     }
 
     /**
-     *
      * @return array
      */
     public function getExecuteUpdates()
@@ -167,7 +152,6 @@ class ConnectionMock extends \Doctrine\DBAL\Connection
     }
 
     /**
-     *
      * @return void
      */
     public function reset()

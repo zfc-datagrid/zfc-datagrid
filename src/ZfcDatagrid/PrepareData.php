@@ -1,13 +1,20 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagrid;
 
+use Exception;
 use Laminas\I18n\Translator\TranslatorInterface;
 use Laminas\Router\RouteStackInterface;
-use function is_array;
+use ZfcDatagrid\Column\AbstractColumn;
+use ZfcDatagrid\Column\ExternalData;
+
 use function array_walk_recursive;
+use function implode;
+use function is_array;
 use function is_object;
 use function trim;
-use function implode;
 
 class PrepareData
 {
@@ -26,7 +33,7 @@ class PrepareData
     /** @var TranslatorInterface|null */
     private $translator;
 
-    /** @var \Laminas\Router\RouteStackInterface */
+    /** @var RouteStackInterface */
     private $router;
 
     /**
@@ -41,7 +48,6 @@ class PrepareData
 
     /**
      * @param array $columns
-     *
      * @return $this
      */
     public function setColumns(array $columns): self
@@ -61,7 +67,6 @@ class PrepareData
 
     /**
      * @param array $data
-     *
      * @return $this
      */
     public function setData(array $data): self
@@ -72,8 +77,6 @@ class PrepareData
     }
 
     /**
-     * @param bool $raw
-     *
      * @return array
      */
     public function getData(bool $raw = false): array
@@ -88,8 +91,6 @@ class PrepareData
     }
 
     /**
-     * @param string $name
-     *
      * @return $this
      */
     public function setRendererName(?string $name = null): self
@@ -99,17 +100,12 @@ class PrepareData
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getRendererName(): ?string
     {
         return $this->rendererName;
     }
 
     /**
-     * @param TranslatorInterface $translator
-     *
      * @return $this
      */
     public function setTranslator(TranslatorInterface $translator): self
@@ -119,17 +115,12 @@ class PrepareData
         return $this;
     }
 
-    /**
-     * @return TranslatorInterface
-     */
     public function getTranslator(): ?TranslatorInterface
     {
         return $this->translator;
     }
 
     /**
-     * @param RouteStackInterface $router
-     *
      * @return $this
      */
     public function setRouter(RouteStackInterface $router): self
@@ -139,9 +130,6 @@ class PrepareData
         return $this;
     }
 
-    /**
-     * @return RouteStackInterface
-     */
     public function getRouter(): ?RouteStackInterface
     {
         return $this->router;
@@ -150,9 +138,7 @@ class PrepareData
     /**
      * Return true if preparing executed, false if already done!
      *
-     * @throws \Exception
-     *
-     * @return bool
+     * @throws Exception
      */
     public function prepare(): bool
     {
@@ -168,7 +154,7 @@ class PrepareData
             $ids = [];
 
             foreach ($this->getColumns() as $col) {
-                /* @var $col \ZfcDatagrid\Column\AbstractColumn */
+                /** @var AbstractColumn $col */
 
                 if (isset($row[$col->getUniqueId()]) && $col->isIdentity() === true) {
                     $ids[] = $row[$col->getUniqueId()];
@@ -178,7 +164,7 @@ class PrepareData
                  * Maybe the data come not from another DataSource?
                  */
                 if ($col instanceof Column\ExternalData) {
-                    /* @var $col \ZfcDatagrid\Column\ExternalData */
+                    /** @var ExternalData $col */
                     // @todo improve the interface...
                     $dataPopulation = $col->getDataPopulation();
 
@@ -259,7 +245,8 @@ class PrepareData
                  */
                 if ($col->hasFormatters() === true) {
                     foreach ($col->getFormatters() as $formatter) {
-                        if ($formatter instanceof Column\Formatter\RouterInterface
+                        if (
+                            $formatter instanceof Column\Formatter\RouterInterface
                             && $this->getRouter() instanceof RouteStackInterface
                         ) {
                             /** @var Column\Formatter\RouterInterface */
@@ -274,7 +261,7 @@ class PrepareData
             }
 
             // Concat all identity columns
-            if (!empty($ids)) {
+            if (! empty($ids)) {
                 $data[$key]['idConcated'] = implode('~', $ids);
             }
         }

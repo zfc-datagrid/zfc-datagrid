@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagridTest\Column;
 
 use Exception;
@@ -6,6 +9,7 @@ use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use ZfcDatagrid\Column;
 use ZfcDatagrid\Column\DataPopulation;
+use ZfcDatagrid\Column\DataPopulation\DataObject;
 
 /**
  * @group Column
@@ -42,7 +46,7 @@ class ExternalDataTest extends TestCase
         $col->setDataPopulation($object);
 
         $this->assertEquals(true, $col->hasDataPopulation());
-        $this->assertInstanceOf(\ZfcDatagrid\Column\DataPopulation\DataObject::class, $col->getDataPopulation());
+        $this->assertInstanceOf(DataObject::class, $col->getDataPopulation());
     }
 
     public function testException()

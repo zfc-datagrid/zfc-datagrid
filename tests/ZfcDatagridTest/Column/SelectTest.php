@@ -1,8 +1,13 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagridTest\Column;
 
 use Exception;
+use Laminas\Db\Sql\Expression;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 use ZfcDatagrid\Column;
 
 /**
@@ -39,7 +44,7 @@ class SelectTest extends TestCase
 
     public function testObject()
     {
-        $expr = new \Laminas\Db\Sql\Expression('Something...');
+        $expr = new Expression('Something...');
         $col  = new Column\Select($expr, 'myAlias');
 
         $this->assertEquals($expr, $col->getSelectPart1());
@@ -48,18 +53,18 @@ class SelectTest extends TestCase
 
     public function testException()
     {
-        $expr = new \Laminas\Db\Sql\Expression('Something...');
+        $expr = new Expression('Something...');
 
         $this->expectException(Exception::class);
-        $col  = new Column\Select($expr);
+        $col = new Column\Select($expr);
     }
 
     public function testExceptionNotString()
     {
-        $expr = new \Laminas\Db\Sql\Expression('Something...');
+        $expr = new Expression('Something...');
 
         $this->expectException(Exception::class);
-        $col  = new Column\Select($expr, new \stdClass());
+        $col = new Column\Select($expr, new stdClass());
     }
 
     public function testGetFilterSelectExpression()

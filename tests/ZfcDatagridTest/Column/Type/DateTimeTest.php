@@ -1,11 +1,18 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagridTest\Column\Type;
 
+use DateTime;
 use IntlDateFormatter;
 use Locale;
 use PHPUnit\Framework\TestCase;
 use ZfcDatagrid\Column\Type;
 use ZfcDatagrid\Filter;
+
+use function date_default_timezone_get;
+use function extension_loaded;
 
 /**
  * @group Column
@@ -13,16 +20,10 @@ use ZfcDatagrid\Filter;
  */
 class DateTimeTest extends TestCase
 {
-    /**
-     *
-     * @var Type\DateTime
-     */
+    /** @var Type\DateTime */
     private $datetimeAT;
 
-    /**
-     *
-     * @var Type\DateTime
-     */
+    /** @var Type\DateTime */
     private $datetimeEN;
 
     public function setUp(): void
@@ -170,7 +171,7 @@ class DateTimeTest extends TestCase
 
         $this->assertEquals(
             '10.01.2013',
-            $type->getUserValue(new \DateTime('2013-01-10 12:00:00')),
+            $type->getUserValue(new DateTime('2013-01-10 12:00:00')),
             'Compare DateTime'
         );
         $this->assertEquals(

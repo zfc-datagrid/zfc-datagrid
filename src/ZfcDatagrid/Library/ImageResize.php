@@ -1,15 +1,13 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagrid\Library;
 
 class ImageResize
 {
     /**
      * Calculate the width / height, respecting the ratio.
-     *
-     * @param float $width
-     * @param float $height
-     * @param float $maxWidth
-     * @param float $maxHeight
      *
      * @return array
      */

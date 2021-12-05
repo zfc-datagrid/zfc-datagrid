@@ -1,21 +1,21 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagridTest\DataSource;
 
+use Laminas\Paginator\Adapter\ArrayAdapter;
 use TypeError;
 use ZfcDatagrid\DataSource\PhpArray;
 use ZfcDatagrid\Filter;
 
 /**
  * @group DataSource
- *
  * @covers \ZfcDatagrid\DataSource\PhpArray
  */
 class PhpArrayTest extends DataSourceTestCase
 {
-    /**
-     *
-     * @var PhpArray
-     */
+    /** @var PhpArray */
     private $source;
 
     public function setUp(): void
@@ -47,7 +47,7 @@ class PhpArrayTest extends DataSourceTestCase
 
         $source->execute();
 
-        $this->assertInstanceOf(\Laminas\Paginator\Adapter\ArrayAdapter::class, $source->getPaginatorAdapter());
+        $this->assertInstanceOf(ArrayAdapter::class, $source->getPaginatorAdapter());
     }
 
     public function testFilter()

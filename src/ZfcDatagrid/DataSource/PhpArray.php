@@ -1,14 +1,27 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagrid\DataSource;
 
+use InvalidArgumentException;
 use Laminas\Paginator\Adapter\ArrayAdapter as PaginatorAdapter;
 use ZfcDatagrid\Column;
+use ZfcDatagrid\Filter;
+
 use function array_filter;
-use function in_array;
-use function get_class;
-use function end;
-use function count;
 use function call_user_func_array;
+use function count;
+use function end;
+use function get_class;
+use function in_array;
+
+use const SORT_ASC;
+use const SORT_DESC;
+use const SORT_FLAG_CASE;
+use const SORT_NATURAL;
+use const SORT_NUMERIC;
+use const SORT_REGULAR;
 
 class PhpArray extends AbstractDataSource
 {
@@ -47,7 +60,7 @@ class PhpArray extends AbstractDataSource
          * @see http://php.net/manual/de/function.array-multisort.php
          * @see example number 3
          */
-        if (!empty($this->getSortConditions())) {
+        if (! empty($this->getSortConditions())) {
             $data = $this->sortArrayMultiple($data, $this->getSortConditions());
         }
 
@@ -55,7 +68,7 @@ class PhpArray extends AbstractDataSource
          * Step 2) Apply filters
          */
         foreach ($this->getFilters() as $filter) {
-            /* @var $filter \ZfcDatagrid\Filter */
+            /** @var Filter $filter */
             if ($filter->isColumnFilter() === true) {
                 $data = array_filter($data, [
                     new PhpArray\Filter($filter),
@@ -99,7 +112,6 @@ class PhpArray extends AbstractDataSource
 
     /**
      * @param array $sortCondition
-     *
      * @return array
      */
     private function getSortArrayParameter($sortCondition)
@@ -123,7 +135,7 @@ class PhpArray extends AbstractDataSource
                 break;
 
             case Column\Type\PhpString::class:
-                $string = SORT_NATURAL | SORT_FLAG_CASE;
+                $string      = SORT_NATURAL | SORT_FLAG_CASE;
                 $sortArray[] = $string;
                 break;
 
@@ -138,8 +150,6 @@ class PhpArray extends AbstractDataSource
 
     /**
      * @see http://php.net/manual/de/function.array-multisort.php Example in comments: array_orderby()
-     *
-     * @author jimpoz at jimpoz dot com
      *
      * @return array
      */
@@ -182,9 +192,7 @@ class PhpArray extends AbstractDataSource
      *
      * @param array $data
      * @param array $sortArguments
-     *
-     * @throws \InvalidArgumentException
-     *
+     * @throws InvalidArgumentException
      * @return array|false
      */
     private function applyMultiSort(array $data, array $sortArguments)
@@ -193,7 +201,7 @@ class PhpArray extends AbstractDataSource
         foreach ($sortArguments as $values) {
             $remain = count($values) % 3;
             if ($remain != 0) {
-                throw new \InvalidArgumentException(
+                throw new InvalidArgumentException(
                     'The parameter count for each sortArgument has to be three. Given count of: ' . count($values)
                 );
             }

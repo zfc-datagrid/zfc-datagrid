@@ -1,10 +1,22 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagridTest\Renderer\LaminasTable;
 
 use Exception;
+use Laminas\Console\Adapter\AbstractAdapter;
+use Laminas\Console\Adapter\AdapterInterface;
+use Laminas\Console\Request;
+use Laminas\Mvc\MvcEvent;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
+use ZfcDatagrid\Column\AbstractColumn;
+use ZfcDatagrid\Column\Action;
 use ZfcDatagrid\Renderer\LaminasTable;
+use ZfcDatagrid\Renderer\LaminasTable\Renderer;
+
+use function array_sum;
 
 /**
  * @group Renderer
@@ -27,35 +39,26 @@ class RendererTest extends TestCase
 
     private $consoleWidth = 77;
 
-    /**
-     *
-     * @var \Laminas\Http\PhpEnvironment\Request
-     */
+    /** @var \Laminas\Http\PhpEnvironment\Request */
     private $requestMock;
 
-    /**
-     *
-     * @var \Laminas\Mvc\MvcEvent
-     */
+    /** @var MvcEvent */
     private $mvcEventMock;
 
-    /**
-     *
-     * @var \ZfcDatagrid\Column\AbstractColumn
-     */
+    /** @var AbstractColumn */
     private $colMock;
 
     public function setUp(): void
     {
-        $this->requestMock  = $this->getMockBuilder(\Laminas\Console\Request::class)
+        $this->requestMock = $this->getMockBuilder(Request::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->mvcEventMock = $this->getMockBuilder(\Laminas\Mvc\MvcEvent::class)
+        $this->mvcEventMock = $this->getMockBuilder(MvcEvent::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->colMock = $this->getMockForAbstractClass(\ZfcDatagrid\Column\AbstractColumn::class);
+        $this->colMock = $this->getMockForAbstractClass(AbstractColumn::class);
     }
 
     public function testGetName()
@@ -117,9 +120,9 @@ class RendererTest extends TestCase
     {
         $renderer = new LaminasTable\Renderer();
 
-        $this->assertInstanceOf(\Laminas\Console\Adapter\AdapterInterface::class, $renderer->getConsoleAdapter());
+        $this->assertInstanceOf(AdapterInterface::class, $renderer->getConsoleAdapter());
 
-        $adapter = $this->getMockForAbstractClass(\Laminas\Console\Adapter\AbstractAdapter::class);
+        $adapter = $this->getMockForAbstractClass(AbstractAdapter::class);
 
         $this->assertNotSame($adapter, $renderer->getConsoleAdapter());
         $renderer->setConsoleAdapter($adapter);
@@ -318,17 +321,17 @@ class RendererTest extends TestCase
 
     public function testGetColumnsToDisplay()
     {
-        $reflection = new ReflectionClass(\ZfcDatagrid\Renderer\LaminasTable\Renderer::class);
+        $reflection = new ReflectionClass(Renderer::class);
         $method     = $reflection->getMethod('getColumnsToDisplay');
         $method->setAccessible(true);
 
-        $col1 = $this->getMockForAbstractClass(\ZfcDatagrid\Column\AbstractColumn::class);
+        $col1 = $this->getMockForAbstractClass(AbstractColumn::class);
         $col1->setWidth(30);
 
-        $col2 = $this->getMockForAbstractClass(\ZfcDatagrid\Column\AbstractColumn::class);
+        $col2 = $this->getMockForAbstractClass(AbstractColumn::class);
         $col2->setWidth(20);
 
-        $col3 = $this->getMockBuilder(\ZfcDatagrid\Column\Action::class)
+        $col3 = $this->getMockBuilder(Action::class)
             ->disableOriginalConstructor()
             ->getMock();
         $col3->setWidth(20);
@@ -363,17 +366,17 @@ class RendererTest extends TestCase
 
     public function testGetColumnWidthsSmaller()
     {
-        $reflection = new ReflectionClass(\ZfcDatagrid\Renderer\LaminasTable\Renderer::class);
+        $reflection = new ReflectionClass(Renderer::class);
         $method     = $reflection->getMethod('getColumnWidths');
         $method->setAccessible(true);
 
-        $col1 = $this->getMockForAbstractClass(\ZfcDatagrid\Column\AbstractColumn::class);
+        $col1 = $this->getMockForAbstractClass(AbstractColumn::class);
         $col1->setWidth(30);
 
-        $col2 = $this->getMockForAbstractClass(\ZfcDatagrid\Column\AbstractColumn::class);
+        $col2 = $this->getMockForAbstractClass(AbstractColumn::class);
         $col2->setWidth(20);
 
-        $consoleAdapter = $this->getMockForAbstractClass(\Laminas\Console\Adapter\AbstractAdapter::class);
+        $consoleAdapter = $this->getMockForAbstractClass(AbstractAdapter::class);
         $renderer       = new LaminasTable\Renderer();
         $renderer->setConsoleAdapter($consoleAdapter);
         $renderer->setColumns([
@@ -392,17 +395,17 @@ class RendererTest extends TestCase
 
     public function testGetColumnWidthsLarger()
     {
-        $reflection = new ReflectionClass(\ZfcDatagrid\Renderer\LaminasTable\Renderer::class);
+        $reflection = new ReflectionClass(Renderer::class);
         $method     = $reflection->getMethod('getColumnWidths');
         $method->setAccessible(true);
 
-        $col1 = $this->getMockForAbstractClass(\ZfcDatagrid\Column\AbstractColumn::class);
+        $col1 = $this->getMockForAbstractClass(AbstractColumn::class);
         $col1->setWidth(60);
 
-        $col2 = $this->getMockForAbstractClass(\ZfcDatagrid\Column\AbstractColumn::class);
+        $col2 = $this->getMockForAbstractClass(AbstractColumn::class);
         $col2->setWidth(40);
 
-        $consoleAdapter = $this->getMockForAbstractClass(\Laminas\Console\Adapter\AbstractAdapter::class);
+        $consoleAdapter = $this->getMockForAbstractClass(AbstractAdapter::class);
         $renderer       = new LaminasTable\Renderer();
         $renderer->setConsoleAdapter($consoleAdapter);
         $renderer->setColumns([
@@ -421,17 +424,17 @@ class RendererTest extends TestCase
 
     public function testGetColumnWidthsRoundNecessary()
     {
-        $reflection = new ReflectionClass(\ZfcDatagrid\Renderer\LaminasTable\Renderer::class);
+        $reflection = new ReflectionClass(Renderer::class);
         $method     = $reflection->getMethod('getColumnWidths');
         $method->setAccessible(true);
 
-        $col1 = $this->getMockForAbstractClass(\ZfcDatagrid\Column\AbstractColumn::class);
+        $col1 = $this->getMockForAbstractClass(AbstractColumn::class);
         $col1->setWidth(72);
 
-        $col2 = $this->getMockForAbstractClass(\ZfcDatagrid\Column\AbstractColumn::class);
+        $col2 = $this->getMockForAbstractClass(AbstractColumn::class);
         $col2->setWidth(5);
 
-        $consoleAdapter = $this->getMockForAbstractClass(\Laminas\Console\Adapter\AbstractAdapter::class);
+        $consoleAdapter = $this->getMockForAbstractClass(AbstractAdapter::class);
         $renderer       = new LaminasTable\Renderer();
         $renderer->setConsoleAdapter($consoleAdapter);
         $renderer->setColumns([

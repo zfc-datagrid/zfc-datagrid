@@ -1,12 +1,19 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagridTest\Service;
 
 use InvalidArgumentException;
-use Laminas\Cache\Service\StorageAdapterFactory;
 use Laminas\Cache\Service\StorageAdapterFactoryInterface;
-use PHPUnit\Framework\TestCase;
+use Laminas\I18n\Translator\Translator;
+use Laminas\Mvc\Application;
+use Laminas\Mvc\MvcEvent;
 use Laminas\Router\RouteStackInterface;
 use Laminas\ServiceManager\ServiceManager;
+use PHPUnit\Framework\TestCase;
+use ZfcDatagrid\Datagrid;
+use ZfcDatagrid\Renderer\BootstrapTable\Renderer;
 use ZfcDatagrid\Service\DatagridFactory;
 
 /**
@@ -17,7 +24,7 @@ class DatagridFactoryTest extends TestCase
     /** @var array */
     private $config = [
         'ZfcDatagrid' => [
-            'cache' => [
+            'cache'                 => [
                 'adapter' => [
                     'name' => 'Filesystem',
                 ],
@@ -25,7 +32,7 @@ class DatagridFactoryTest extends TestCase
             'generalParameterNames' => [
                 'rendererType' => null,
             ],
-            'settings' => [
+            'settings'              => [
                 'default' => [
                     'renderer' => [
                         'http' => 'bootstrapTable',
@@ -45,17 +52,17 @@ class DatagridFactoryTest extends TestCase
 
     public function setUp(): void
     {
-        $mvcEventMock = $this->getMockBuilder(\Laminas\Mvc\MvcEvent::class)
+        $mvcEventMock = $this->getMockBuilder(MvcEvent::class)
             ->getMock();
 
-        $this->applicationMock = $this->getMockBuilder(\Laminas\Mvc\Application::class)
+        $this->applicationMock = $this->getMockBuilder(Application::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->applicationMock->expects(self::any())
             ->method('getMvcEvent')
             ->will($this->returnValue($mvcEventMock));
 
-        $this->rendererServiceMock = $this->getMockBuilder(\ZfcDatagrid\Renderer\BootstrapTable\Renderer::class)
+        $this->rendererServiceMock = $this->getMockBuilder(Renderer::class)
             ->getMock();
 
         $this->router = $this->getMockBuilder(RouteStackInterface::class)
@@ -74,7 +81,7 @@ class DatagridFactoryTest extends TestCase
         $this->expectExceptionMessage('Config key "ZfcDatagrid" is missing');
 
         $factory = new DatagridFactory();
-        $grid    = $factory->__invoke($sm, \ZfcDatagrid\Datagrid::class);
+        $grid    = $factory->__invoke($sm, Datagrid::class);
     }
 
     public function testCanCreateService()
@@ -84,17 +91,17 @@ class DatagridFactoryTest extends TestCase
         $sm->setService('application', $this->applicationMock);
         $sm->setService('zfcDatagrid.renderer.bootstrapTable', $this->rendererServiceMock);
         $sm->setService('Router', $this->router);
-        $sm->setService('Laminas\Cache\Service\StorageAdapterFactoryInterface', $this->storageAdapterFactory);
+        $sm->setService(StorageAdapterFactoryInterface::class, $this->storageAdapterFactory);
 
         $factory = new DatagridFactory();
-        $grid    = $factory->__invoke($sm, \ZfcDatagrid\Datagrid::class);
+        $grid    = $factory->__invoke($sm, Datagrid::class);
 
-        $this->assertInstanceOf(\ZfcDatagrid\Datagrid::class, $grid);
+        $this->assertInstanceOf(Datagrid::class, $grid);
     }
 
     public function testCanCreateServiceWithTranslator()
     {
-        $translatorMock = $this->getMockBuilder(\Laminas\I18n\Translator\Translator::class)
+        $translatorMock = $this->getMockBuilder(Translator::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -104,18 +111,18 @@ class DatagridFactoryTest extends TestCase
         $sm->setService('zfcDatagrid.renderer.bootstrapTable', $this->rendererServiceMock);
         $sm->setService('translator', $translatorMock);
         $sm->setService('Router', $this->router);
-        $sm->setService('Laminas\Cache\Service\StorageAdapterFactoryInterface', $this->storageAdapterFactory);
+        $sm->setService(StorageAdapterFactoryInterface::class, $this->storageAdapterFactory);
 
         $factory = new DatagridFactory();
-        $grid    = $factory->__invoke($sm, \ZfcDatagrid\Datagrid::class);
+        $grid    = $factory->__invoke($sm, Datagrid::class);
 
-        $this->assertInstanceOf(\ZfcDatagrid\Datagrid::class, $grid);
+        $this->assertInstanceOf(Datagrid::class, $grid);
         $this->assertEquals($translatorMock, $grid->getTranslator());
     }
 
     public function testCanCreateServiceWithMvcTranslator()
     {
-        $mvcTranslatorMock = $this->getMockBuilder(\Laminas\I18n\Translator\Translator::class)
+        $mvcTranslatorMock = $this->getMockBuilder(Translator::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -125,12 +132,12 @@ class DatagridFactoryTest extends TestCase
         $sm->setService('zfcDatagrid.renderer.bootstrapTable', $this->rendererServiceMock);
         $sm->setService('translator', $mvcTranslatorMock);
         $sm->setService('Router', $this->router);
-        $sm->setService('Laminas\Cache\Service\StorageAdapterFactoryInterface', $this->storageAdapterFactory);
+        $sm->setService(StorageAdapterFactoryInterface::class, $this->storageAdapterFactory);
 
         $factory = new DatagridFactory();
-        $grid    = $factory->__invoke($sm, \ZfcDatagrid\Datagrid::class);
+        $grid    = $factory->__invoke($sm, Datagrid::class);
 
-        $this->assertInstanceOf(\ZfcDatagrid\Datagrid::class, $grid);
+        $this->assertInstanceOf(Datagrid::class, $grid);
         $this->assertEquals($mvcTranslatorMock, $grid->getTranslator());
     }
 }

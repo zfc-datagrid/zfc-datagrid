@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagrid\Column\DataPopulation;
 
 use Exception;
@@ -17,8 +20,6 @@ class StaticValue implements DataPopulationInterface
     }
 
     /**
-     * @param null|string $value
-     *
      * @return $this
      */
     public function setValue(?string $value): self
@@ -28,19 +29,13 @@ class StaticValue implements DataPopulationInterface
         return $this;
     }
 
-    /**
-     * @return null|string
-     */
     public function getValue(): ?string
     {
         return $this->value;
     }
 
     /**
-     * @param string $name
      * @param mixed $value
-     *
-     * @return DataPopulationInterface
      * @throws Exception
      */
     public function setObjectParameter(string $name, $value): DataPopulationInterface
@@ -56,11 +51,8 @@ class StaticValue implements DataPopulationInterface
         return [];
     }
 
-    /**
-     * @return string
-     */
     public function toString(): string
     {
-        return (string)$this->getValue();
+        return (string) $this->getValue();
     }
 }

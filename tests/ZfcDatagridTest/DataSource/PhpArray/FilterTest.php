@@ -1,8 +1,12 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagridTest\DataSource\PhpArray;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use ZfcDatagrid\Column\AbstractColumn;
 use ZfcDatagrid\DataSource\PhpArray\Filter as FilterArray;
 use ZfcDatagrid\Filter;
 
@@ -12,33 +16,30 @@ use ZfcDatagrid\Filter;
  */
 class FilterTest extends TestCase
 {
-    /**
-     *
-     * @var \ZfcDatagrid\Column\AbstractColumn
-     */
+    /** @var AbstractColumn */
     private $column;
 
     public function setUp(): void
     {
-        $this->column = $this->getMockForAbstractClass(\ZfcDatagrid\Column\AbstractColumn::class);
+        $this->column = $this->getMockForAbstractClass(AbstractColumn::class);
         $this->column->setUniqueId('myCol');
     }
 
     public function testConstruct()
     {
-        /* @var $filter \ZfcDatagrid\Filter */
-        $filter = $this->getMockBuilder(\ZfcDatagrid\Filter::class)
+        /** @var Filter $filter */
+        $filter = $this->getMockBuilder(Filter::class)
             ->getMock();
         $filter->setFromColumn($this->column, 'myValue,123');
 
         $filterArray = new FilterArray($filter);
 
-        $this->assertInstanceOf(\ZfcDatagrid\Filter::class, $filterArray->getFilter());
+        $this->assertInstanceOf(Filter::class, $filterArray->getFilter());
     }
 
     public function testLike()
     {
-        $filter = new \ZfcDatagrid\Filter();
+        $filter = new Filter();
         $filter->setFromColumn($this->column, '~myValue,123');
         $this->assertEquals(Filter::LIKE, $filter->getOperator());
 
@@ -61,7 +62,7 @@ class FilterTest extends TestCase
 
     public function testLikeLeft()
     {
-        $filter = new \ZfcDatagrid\Filter();
+        $filter = new Filter();
         $filter->setFromColumn($this->column, '~%myValue,123');
 
         $filterArray = new FilterArray($filter);
@@ -91,7 +92,7 @@ class FilterTest extends TestCase
 
     public function testLikeRight()
     {
-        $filter = new \ZfcDatagrid\Filter();
+        $filter = new Filter();
         $filter->setFromColumn($this->column, '~myValue,123%');
 
         $filterArray = new FilterArray($filter);
@@ -127,7 +128,7 @@ class FilterTest extends TestCase
      */
     public function testNotLike()
     {
-        $filter = new \ZfcDatagrid\Filter();
+        $filter = new Filter();
         $filter->setFromColumn($this->column, '!~myValue,123');
 
         $filterArray = new FilterArray($filter);
@@ -149,7 +150,7 @@ class FilterTest extends TestCase
 
     public function testNotLikeLeft()
     {
-        $filter = new \ZfcDatagrid\Filter();
+        $filter = new Filter();
         $filter->setFromColumn($this->column, '!~%myValue,123');
 
         $filterArray = new FilterArray($filter);
@@ -179,7 +180,7 @@ class FilterTest extends TestCase
 
     public function testNotLikeRight()
     {
-        $filter = new \ZfcDatagrid\Filter();
+        $filter = new Filter();
         $filter->setFromColumn($this->column, '!~myValue,123%');
 
         $filterArray = new FilterArray($filter);
@@ -212,7 +213,7 @@ class FilterTest extends TestCase
 
     public function testEqual()
     {
-        $filter = new \ZfcDatagrid\Filter();
+        $filter = new Filter();
         $filter->setFromColumn($this->column, '=myValue,123');
 
         $filterArray = new FilterArray($filter);
@@ -234,7 +235,7 @@ class FilterTest extends TestCase
 
     public function testNotEqual()
     {
-        $filter = new \ZfcDatagrid\Filter();
+        $filter = new Filter();
         $filter->setFromColumn($this->column, '!=myValue,123');
 
         $filterArray = new FilterArray($filter);
@@ -256,7 +257,7 @@ class FilterTest extends TestCase
 
     public function testGreaterEqual()
     {
-        $filter = new \ZfcDatagrid\Filter();
+        $filter = new Filter();
         $filter->setFromColumn($this->column, '>=myValue,123');
 
         $filterArray = new FilterArray($filter);
@@ -280,7 +281,7 @@ class FilterTest extends TestCase
 
     public function testGreater()
     {
-        $filter = new \ZfcDatagrid\Filter();
+        $filter = new Filter();
         $filter->setFromColumn($this->column, '>myValue,123');
 
         $filterArray = new FilterArray($filter);
@@ -304,7 +305,7 @@ class FilterTest extends TestCase
 
     public function testLessEqual()
     {
-        $filter = new \ZfcDatagrid\Filter();
+        $filter = new Filter();
         $filter->setFromColumn($this->column, '<=123');
 
         $filterArray = new FilterArray($filter);
@@ -332,7 +333,7 @@ class FilterTest extends TestCase
 
     public function testLess()
     {
-        $filter = new \ZfcDatagrid\Filter();
+        $filter = new Filter();
         $filter->setFromColumn($this->column, '<123');
 
         $filterArray = new FilterArray($filter);
@@ -356,7 +357,7 @@ class FilterTest extends TestCase
 
     public function testIN()
     {
-        $filter = new \ZfcDatagrid\Filter();
+        $filter = new Filter();
         $filter->setFromColumn($this->column, '=(myValue,123)');
 
         $filterArray = new FilterArray($filter);
@@ -375,7 +376,7 @@ class FilterTest extends TestCase
 
     public function testNotIN()
     {
-        $filter = new \ZfcDatagrid\Filter();
+        $filter = new Filter();
         $filter->setFromColumn($this->column, '!=(myValue,123)');
 
         $filterArray = new FilterArray($filter);
@@ -394,7 +395,7 @@ class FilterTest extends TestCase
 
     public function testBetween()
     {
-        $filter = new \ZfcDatagrid\Filter();
+        $filter = new Filter();
         $filter->setFromColumn($this->column, '15 <> 30');
         $this->assertEquals(Filter::BETWEEN, $filter->getOperator());
 
@@ -420,7 +421,7 @@ class FilterTest extends TestCase
 
     public function testException()
     {
-        $filter = $this->getMockBuilder(\ZfcDatagrid\Filter::class)
+        $filter = $this->getMockBuilder(Filter::class)
             ->getMock();
         $filter->expects(self::any())
             ->method('getColumn')
@@ -428,7 +429,7 @@ class FilterTest extends TestCase
         $filter->expects(self::any())
             ->method('getValues')
             ->will($this->returnValue([
-            1,
+                1,
             ]));
         $filter->expects(self::any())
             ->method('getOperator')

@@ -1,17 +1,17 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagrid\Column;
+
+use Exception;
+use InvalidArgumentException;
 
 class ExternalData extends AbstractColumn
 {
-    /**
-     * @var DataPopulation\DataPopulationInterface
-     */
+    /** @var DataPopulation\DataPopulationInterface */
     protected $dataPopulation;
 
-    /**
-     * ExternalData constructor.
-     * @param string $uniqueId
-     */
     public function __construct(string $uniqueId = 'external')
     {
         $this->setUniqueId($uniqueId);
@@ -21,16 +21,13 @@ class ExternalData extends AbstractColumn
     }
 
     /**
-     * @param DataPopulation\DataPopulationInterface $dataPopulation
-     *
-     * @throws \Exception
-     *
+     * @throws Exception
      * @return $this
      */
     public function setDataPopulation(DataPopulation\DataPopulationInterface $dataPopulation): self
     {
         if ($dataPopulation instanceof DataPopulation\DataObject && $dataPopulation->getObject() === null) {
-            throw new \Exception('object is missing in DataPopulation\DataObject!');
+            throw new Exception('object is missing in DataPopulation\DataObject!');
         }
 
         $this->dataPopulation = $dataPopulation;
@@ -39,22 +36,17 @@ class ExternalData extends AbstractColumn
     }
 
     /**
-     * @return DataPopulation\DataPopulationInterface
-     *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function getDataPopulation(): DataPopulation\DataPopulationInterface
     {
         if (null === $this->dataPopulation) {
-            throw new \InvalidArgumentException('no data population set for Column\ExternalData');
+            throw new InvalidArgumentException('no data population set for Column\ExternalData');
         }
 
         return $this->dataPopulation;
     }
 
-    /**
-     * @return bool
-     */
     public function hasDataPopulation(): bool
     {
         return null !== $this->dataPopulation;

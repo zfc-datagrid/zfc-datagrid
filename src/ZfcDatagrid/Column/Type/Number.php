@@ -1,12 +1,17 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagrid\Column\Type;
 
+use Exception;
 use Locale;
 use NumberFormatter;
 use ZfcDatagrid\Filter;
+
 use function strlen;
-use function substr;
 use function strpos;
+use function substr;
 
 class Number extends AbstractType
 {
@@ -47,9 +52,6 @@ class Number extends AbstractType
     protected $pattern;
 
     /**
-     * Number constructor.
-     * @param int $formatStyle
-     * @param int $formatType
      * @param null $locale
      */
     public function __construct(
@@ -62,17 +64,12 @@ class Number extends AbstractType
         $this->setLocale($locale);
     }
 
-    /**
-     * @return string
-     */
     public function getTypeName(): string
     {
         return 'number';
     }
 
     /**
-     * @param int $style
-     *
      * @return $this
      */
     public function setFormatStyle(int $style = NumberFormatter::DECIMAL): self
@@ -82,17 +79,12 @@ class Number extends AbstractType
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getFormatStyle(): int
     {
         return $this->formatStyle;
     }
 
     /**
-     * @param int $type
-     *
      * @return $this
      */
     public function setFormatType(int $type = NumberFormatter::TYPE_DEFAULT): self
@@ -102,17 +94,12 @@ class Number extends AbstractType
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getFormatType(): int
     {
         return $this->formatType;
     }
 
     /**
-     * @param null|string $locale
-     *
      * @return $this
      */
     public function setLocale(?string $locale = null): self
@@ -122,9 +109,6 @@ class Number extends AbstractType
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getLocale(): string
     {
         if (null === $this->locale) {
@@ -138,9 +122,6 @@ class Number extends AbstractType
      * Set an attribute.
      *
      * @link http://www.php.net/manual/en/numberformatter.setattribute.php
-     *
-     * @param int $attr
-     * @param int $value
      *
      * @return $this
      */
@@ -163,8 +144,6 @@ class Number extends AbstractType
     }
 
     /**
-     * @param string $string
-     *
      * @return $this
      */
     public function setSuffix(string $string = ''): self
@@ -174,17 +153,12 @@ class Number extends AbstractType
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getSuffix(): string
     {
         return $this->suffix;
     }
 
     /**
-     * @param string $string
-     *
      * @return $this
      */
     public function setPrefix(string $string = ''): self
@@ -194,17 +168,12 @@ class Number extends AbstractType
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getPrefix(): string
     {
         return $this->prefix;
     }
 
     /**
-     * @param null|string $pattern
-     *
      * @return $this
      */
     public function setPattern(?string $pattern): self
@@ -214,17 +183,11 @@ class Number extends AbstractType
         return $this;
     }
 
-    /**
-     * @return null|string
-     */
     public function getPattern(): ?string
     {
         return $this->pattern;
     }
 
-    /**
-     * @return NumberFormatter
-     */
     protected function getFormatter(): NumberFormatter
     {
         $formatter = new NumberFormatter($this->getLocale(), $this->getFormatStyle());
@@ -238,11 +201,6 @@ class Number extends AbstractType
         return $formatter;
     }
 
-    /**
-     * @param string $val
-     *
-     * @return string
-     */
     public function getFilterValue(string $val): string
     {
         $formatter = $this->getFormatter();
@@ -256,7 +214,7 @@ class Number extends AbstractType
 
         try {
             $formattedValue = $formatter->parse($val);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return $val;
         }
 
@@ -271,14 +229,13 @@ class Number extends AbstractType
      * Convert the value from the source to the value, which the user will see.
      *
      * @param mixed $val
-     *
      * @return mixed
      */
     public function getUserValue($val)
     {
         $formatter = $this->getFormatter();
 
-        $formattedValue = $formatter->format((float)$val, $this->getFormatType());
+        $formattedValue = $formatter->format((float) $val, $this->getFormatType());
 
         return $this->getPrefix() . $formattedValue . $this->getSuffix();
     }

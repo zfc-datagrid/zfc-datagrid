@@ -1,50 +1,46 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagrid\Renderer\BootstrapTable;
 
+use Exception;
 use Laminas\Http\PhpEnvironment\Request as HttpRequest;
 use Laminas\View\Model\ViewModel;
+use ZfcDatagrid\Column\AbstractColumn;
 use ZfcDatagrid\Datagrid;
+use ZfcDatagrid\Filter;
 use ZfcDatagrid\Renderer\AbstractRenderer;
-use function explode;
+
 use function count;
+use function explode;
 use function strtoupper;
 
 class Renderer extends AbstractRenderer
 {
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return 'bootstrapTable';
     }
 
-    /**
-     * @return bool
-     */
     public function isExport(): bool
     {
         return false;
     }
 
-    /**
-     * @return bool
-     */
     public function isHtml(): bool
     {
         return true;
     }
 
     /**
-     * @return HttpRequest
-     *
-     * @throws \Exception
+     * @throws Exception
      */
     public function getRequest(): HttpRequest
     {
         $request = parent::getRequest();
         if (! $request instanceof HttpRequest) {
-            throw new \Exception(
+            throw new Exception(
                 'Request must be an instance of Laminas\Http\PhpEnvironment\Request for HTML rendering'
             );
         }
@@ -57,11 +53,11 @@ class Renderer extends AbstractRenderer
      *
      * @return array
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function getSortConditions(): array
     {
-        if (!empty($this->sortConditions)) {
+        if (! empty($this->sortConditions)) {
             // set from cache! (for export)
             return $this->sortConditions;
         }
@@ -85,7 +81,7 @@ class Renderer extends AbstractRenderer
             $sortDirections = explode(',', $sortDirections);
 
             if (count($sortColumns) !== count($sortDirections)) {
-                throw new \Exception('Count missmatch order columns/direction');
+                throw new Exception('Count missmatch order columns/direction');
             }
 
             foreach ($sortColumns as $key => $sortColumn) {
@@ -96,7 +92,7 @@ class Renderer extends AbstractRenderer
                 }
 
                 foreach ($this->getColumns() as $column) {
-                    /* @var $column \ZfcDatagrid\Column\AbstractColumn */
+                    /** @var AbstractColumn $column */
                     if ($column->getUniqueId() == $sortColumn) {
                         $sortConditions[] = [
                             'sortDirection' => $sortDirection,
@@ -120,28 +116,29 @@ class Renderer extends AbstractRenderer
     }
 
     /**
-     * @todo Make parameter config
-     *
      * @see \ZfcDatagrid\Renderer\AbstractRenderer::getFilters()
+     *
+     * @todo Make parameter config
      */
     public function getFilters(): array
     {
-        if (!empty($this->filters)) {
+        if (! empty($this->filters)) {
             return $this->filters;
         }
 
-        $request = $this->getRequest();
+        $request        = $this->getRequest();
         $toolbarFilters = $request->getPost('toolbarFilters', $request->getQuery('toolbarFilters'));
-        $filters = [];
-        if (($request->isPost() === true || $request->isGet() === true) &&
+        $filters        = [];
+        if (
+            ($request->isPost() === true || $request->isGet() === true) &&
             null !== $toolbarFilters
         ) {
             foreach ($toolbarFilters as $uniqueId => $value) {
                 if ($value != '') {
                     foreach ($this->getColumns() as $column) {
-                        /* @var $column \ZfcDatagrid\Column\AbstractColumn */
+                        /** @var AbstractColumn $column */
                         if ($column->getUniqueId() == $uniqueId) {
-                            $filter = new \ZfcDatagrid\Filter();
+                            $filter = new Filter();
                             $filter->setFromColumn($column, $value);
 
                             $filters[] = $filter;
@@ -164,9 +161,7 @@ class Renderer extends AbstractRenderer
     }
 
     /**
-     * @return int
-     *
-     * @throws \Exception
+     * @throws Exception
      */
     public function getCurrentPageNumber(): int
     {
@@ -184,9 +179,6 @@ class Renderer extends AbstractRenderer
         return (int) $this->currentPageNumber;
     }
 
-    /**
-     * @param Datagrid $grid
-     */
     public function prepareViewModel(Datagrid $grid)
     {
         parent::prepareViewModel($grid);
@@ -206,9 +198,6 @@ class Renderer extends AbstractRenderer
         }
     }
 
-    /**
-     * @return ViewModel
-     */
     public function execute(): ViewModel
     {
         $viewModel = $this->getViewModel();

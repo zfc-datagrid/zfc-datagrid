@@ -1,22 +1,29 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagridTest;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use PHPUnit_Framework_MockObject_MockObject;
+use ZfcDatagrid\Column\AbstractColumn;
 use ZfcDatagrid\Column\Type\Number;
 use ZfcDatagrid\Filter;
+
+use function is_array;
 
 /**
  * @covers \ZfcDatagrid\Filter
  */
 class FilterTest extends TestCase
 {
-    /** @var \ZfcDatagrid\Column\AbstractColumn|\PHPUnit_Framework_MockObject_MockObject  */
+    /** @var AbstractColumn|PHPUnit_Framework_MockObject_MockObject  */
     private $column;
 
     public function setUp(): void
     {
-        $this->column = $this->getMockForAbstractClass(\ZfcDatagrid\Column\AbstractColumn::class);
+        $this->column = $this->getMockForAbstractClass(AbstractColumn::class);
     }
 
     public function tearDown(): void

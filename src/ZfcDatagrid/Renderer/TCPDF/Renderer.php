@@ -1,37 +1,43 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * Output as a PDF file.
  */
 
 namespace ZfcDatagrid\Renderer\TCPDF;
 
-use TCPDF;
+use Exception;
 use Laminas\Http\Headers;
 use Laminas\Http\Response\Stream as ResponseStream;
+use TCPDF;
+use ZfcDatagrid\Column\AbstractColumn;
 use ZfcDatagrid\Column\Style;
 use ZfcDatagrid\Column\Type;
+use ZfcDatagrid\Column\Type\Image;
 use ZfcDatagrid\Library\ImageResize;
 use ZfcDatagrid\Renderer\AbstractExport;
-use function fopen;
-use function filesize;
+
+use function array_merge;
+use function array_shift;
 use function date;
+use function file_get_contents;
+use function filesize;
+use function fopen;
 use function get_class;
+use function getimagesizefromstring;
 use function implode;
+use function is_array;
 use function str_replace;
 use function strip_tags;
-use function file_get_contents;
-use function is_array;
-use function getimagesizefromstring;
-use function array_merge;
 use function trigger_error;
-use function array_shift;
 
+use const PHP_EOL;
 
 class Renderer extends AbstractExport
 {
-    /**
-     * @var string[]
-     */
+    /** @var string[] */
     protected $allowedColumnTypes = [
         Type\DateTime::class,
         Type\Image::class,
@@ -49,25 +55,16 @@ class Renderer extends AbstractExport
     /** @var array */
     private $columnsPositionX = [];
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return 'TCPDF';
     }
 
-    /**
-     * @return bool
-     */
     public function isExport(): bool
     {
         return true;
     }
 
-    /**
-     * @return bool
-     */
     public function isHtml(): bool
     {
         return false;
@@ -103,7 +100,7 @@ class Renderer extends AbstractExport
         /*
          * Write data
          */
-        $pageHeight = $pdf->getPageHeight();
+        $pageHeight  = $pdf->getPageHeight();
         $pageHeight -= 10;
 
         foreach ($this->getData() as $row) {
@@ -127,9 +124,6 @@ class Renderer extends AbstractExport
         }
     }
 
-    /**
-     * @return ResponseStream
-     */
     protected function saveAndSend(): ResponseStream
     {
         $pdf = $this->getPdf();
@@ -146,7 +140,7 @@ class Renderer extends AbstractExport
 
         $headers = new Headers();
         $headers->addHeaders([
-            'Content-Type' => [
+            'Content-Type'        => [
                 'application/force-download',
                 'application/octet-stream',
                 'application/download',
@@ -195,9 +189,6 @@ class Renderer extends AbstractExport
         $this->pdf = $pdf;
     }
 
-    /**
-     * @return TCPDF
-     */
     public function getPdf(): TCPDF
     {
         if (null === $this->pdf) {
@@ -220,19 +211,18 @@ class Renderer extends AbstractExport
         $pdf     = $this->getPdf();
         $margins = $pdf->getMargins();
 
-        $paperWidth = $this->getPaperWidth();
-        $paperWidth -= ($margins['left'] + $margins['right']);
+        $paperWidth  = $this->getPaperWidth();
+        $paperWidth -= $margins['left'] + $margins['right'];
 
         $factor = $paperWidth / 100;
         foreach ($cols as $col) {
-            /* @var $col \ZfcDatagrid\Column\AbstractColumn */
+            /** @var AbstractColumn $col */
             $col->setWidth($col->getWidth() * $factor);
         }
     }
 
     /**
      * @param array $row
-     * @return float
      */
     protected function getRowHeight(array $row): float
     {
@@ -248,7 +238,7 @@ class Renderer extends AbstractExport
 
         $rowHeight = $size + $padding;
         foreach ($this->getColumnsToExport() as $col) {
-            /* @var $col \ZfcDatagrid\Column\AbstractColumn */
+            /** @var AbstractColumn $col */
 
             switch (get_class($col->getType())) {
                 case Type\Image::class:
@@ -294,7 +284,7 @@ class Renderer extends AbstractExport
         $currentPage = $pdf->getPage();
         $y           = $pdf->GetY();
         foreach ($this->getColumnsToExport() as $col) {
-            /* @var $col \ZfcDatagrid\Column\AbstractColumn */
+            /** @var AbstractColumn $col */
             $x = $pdf->GetX();
             $pdf->setPage($currentPage);
 
@@ -311,8 +301,7 @@ class Renderer extends AbstractExport
 
     /**
      * @param array $row
-     * @param float $rowHeight
-     * @throws \Exception
+     * @throws Exception
      */
     protected function printTableRow(array $row, float $rowHeight)
     {
@@ -321,13 +310,13 @@ class Renderer extends AbstractExport
         $currentPage = $pdf->getPage();
         $y           = $pdf->GetY();
         foreach ($this->getColumnsToExport() as $col) {
-            /* @var $col \ZfcDatagrid\Column\AbstractColumn */
+            /** @var AbstractColumn $col */
 
             $pdf->setPage($currentPage);
             $x = $this->columnsPositionX[$col->getUniqueId()];
 
             switch (get_class($col->getType())) {
-                case 'ZfcDatagrid\Column\Type\Image':
+                case Image::class:
                     $text = '';
 
                     $link = K_BLANK_IMAGE;
@@ -345,7 +334,7 @@ class Renderer extends AbstractExport
                             // resizing properly to width + height (and keeping the ratio)
                             $file = file_get_contents($link);
                             if ($file !== false) {
-                                list($width, $height) = $this->calcImageSize(
+                                [$width, $height] = $this->calcImageSize(
                                     $file,
                                     $col->getWidth() - 2,
                                     $rowHeight - 2
@@ -360,7 +349,7 @@ class Renderer extends AbstractExport
                             $pdf->Image($link, $x + 1, $y + 1, 0, $resizeHeight, '', '', 'L', true);
                             // @codingStandardsIgnoreEnd
                         }
-                    } catch (\Exception $e) {
+                    } catch (Exception $e) {
                         // if tcpdf couldnt find a image, continue and log it
                         trigger_error($e->getMessage());
                     }
@@ -385,7 +374,7 @@ class Renderer extends AbstractExport
 
             $styles = array_merge($this->getRowStyles(), $col->getStyles());
             foreach ($styles as $style) {
-                /* @var $style Style\AbstractStyle */
+                /** @var Style\AbstractStyle $style */
                 if ($style->isApply($row) === true) {
                     switch (get_class($style)) {
                         case Style\Bold::class:
@@ -435,7 +424,7 @@ class Renderer extends AbstractExport
                             break;
 
                         default:
-                            throw new \Exception('Not defined yet: "' . get_class($style) . '"');
+                            throw new Exception('Not defined yet: "' . get_class($style) . '"');
                     }
                 }
             }
@@ -448,21 +437,19 @@ class Renderer extends AbstractExport
     }
 
     /**
-     * @param string $imageData
      * @param number $maxWidth
      * @param number $maxHeight
-     *
      * @return array
      */
     protected function calcImageSize(string $imageData, float $maxWidth, float $maxHeight): array
     {
         $pdf = $this->getPdf();
 
-        list($width, $height) = getimagesizefromstring($imageData);
-        $width                = $pdf->pixelsToUnits($width);
-        $height               = $pdf->pixelsToUnits($height);
+        [$width, $height] = getimagesizefromstring($imageData);
+        $width            = $pdf->pixelsToUnits($width);
+        $height           = $pdf->pixelsToUnits($height);
 
-        list($newWidth, $newHeight) = ImageResize::getCalculatedSize($width, $height, $maxWidth, $maxHeight);
+        [$newWidth, $newHeight] = ImageResize::getCalculatedSize($width, $height, $maxWidth, $maxHeight);
 
         return [
             $newWidth,
@@ -540,17 +527,11 @@ class Renderer extends AbstractExport
         $pdf->SetFillColor($rgb['red'], $rgb['green'], $rgb['blue']);
     }
 
-    /**
-     * @param string $alignment
-     */
     public function setTextAlignment(string $alignment)
     {
         $this->alignment = $alignment;
     }
 
-    /**
-     * @return string
-     */
     public function getTextAlignment(): string
     {
         return $this->alignment;

@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagridTest\Renderer\Csv;
 
 use PHPUnit\Framework\TestCase;

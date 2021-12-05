@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagrid\Column\Action;
 
 use Exception;
@@ -10,9 +13,6 @@ class Button extends AbstractAction
     /** @var string|AbstractColumn */
     protected $label = '';
 
-    /**
-     * Button constructor.
-     */
     public function __construct()
     {
         parent::__construct();
@@ -23,7 +23,6 @@ class Button extends AbstractAction
 
     /**
      * @param string|AbstractColumn $name
-     *
      * @return $this
      */
     public function setLabel($name): self
@@ -42,8 +41,6 @@ class Button extends AbstractAction
     }
 
     /**
-     * @return string
-     *
      * @throws Exception
      */
     protected function getHtmlType(): string
@@ -53,8 +50,6 @@ class Button extends AbstractAction
 
     /**
      * @param array $row
-     *
-     * @return string
      */
     public function toHtml(array $row): string
     {

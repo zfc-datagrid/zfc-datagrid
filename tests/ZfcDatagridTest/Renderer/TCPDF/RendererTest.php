@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagridTest\Renderer\TCPDF;
 
 use PHPUnit\Framework\TestCase;
