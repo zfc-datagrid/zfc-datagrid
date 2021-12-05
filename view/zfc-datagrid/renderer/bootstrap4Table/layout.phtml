@@ -53,29 +53,33 @@ if($this->rowClickAction !== null){
         <thead>
             <tr style="background-color: #EEE">
                 <?php
-                if($hasMassActions === true){
+                if ($hasMassActions === true) {
                     echo '<th><input type="checkbox" onclick="' . $this->gridId . '_toggleCheckboxes(this);" /></th>';
                 }
 
-                foreach($this->columns as $col){
+                foreach ($this->columns as $col) {
                     /* @var $col \ZfcDatagrid\Column\AbstractColumn */
                     $classes = [];
                     $styles = [];
 
+                    if ($col->isHide() === true) {
+                        continue;
+                    }
+
                     $id = $col->getUniqueId();
 
                     $label = '';
-                    if($col->getLabel() != ''){
+                    if ($col->getLabel() != '') {
                         $label = $this->translate($col->getLabel());
                     }
 
                     $width = $col->getWidth();
-                    if($width != ''){
+                    if ($width != '') {
                         $styles[] = 'width: '.$this->escapehtmlattr($width).'%';
                     }
 
 
-                    if($col->isHidden() === true){
+                    if ($col->isHidden() === true) {
                         $classes[] = 'hidden';
                     }
                     if($col->getType() instanceof Type\Number){
@@ -133,6 +137,9 @@ if($this->rowClickAction !== null){
                     }
                     foreach($this->columns as $col){
                         /* @var $col \ZfcDatagrid\Column\AbstractColumn */
+                        if ($col->isHide() === true) {
+                            continue;
+                        }
 
                         $classes = [];
                         if($col->isHidden() === true){

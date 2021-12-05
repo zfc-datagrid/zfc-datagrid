@@ -109,6 +109,10 @@ class TableRow extends AbstractHelper
 
         foreach ($cols as $col) {
             /* @var $col Column\AbstractColumn */
+            if (true === $col->isHide()) {
+                continue;
+            }
+
             $value = $row[$col->getUniqueId()];
 
             $cssStyles = [];

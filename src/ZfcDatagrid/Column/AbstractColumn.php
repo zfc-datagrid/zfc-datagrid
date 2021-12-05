@@ -28,6 +28,9 @@ abstract class AbstractColumn
     protected $isHidden = false;
 
     /** @var bool */
+    protected $isHide = false;
+
+    /** @var bool */
     protected $isIdentity = false;
 
     /** @var bool */
@@ -176,6 +179,24 @@ abstract class AbstractColumn
     public function isHidden(): bool
     {
         return $this->isHidden;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isHide(): bool
+    {
+        return $this->isHide;
+    }
+
+    /**
+     * @param bool $isHide
+     * @return $this
+     */
+    public function setHide(bool $hide): self
+    {
+        $this->isHide = $hide;
+        return $this;
     }
 
     /**
