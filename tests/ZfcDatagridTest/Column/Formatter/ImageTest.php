@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagridTest\Column\Formatter;
 
 use ZfcDatagrid\Column\AbstractColumn;
@@ -73,7 +76,7 @@ class ImageTest extends TestBase
         $this->mockedMethodList = [
             'getRowData',
         ];
-        $class = $this->getClass();
+        $class                  = $this->getClass();
         $class->expects($this->exactly(1))
             ->method('getRowData')
             ->willReturn(['id' => '']);
@@ -92,7 +95,7 @@ class ImageTest extends TestBase
             'getLinkAttributes',
             'getAttributes',
         ];
-        $class = $this->getClass();
+        $class                  = $this->getClass();
         $class->expects($this->exactly(1))
             ->method('getRowData')
             ->willReturn(['id' => 'foobar']);
@@ -118,7 +121,7 @@ class ImageTest extends TestBase
         $this->mockedMethodList = [
             'getRowData',
         ];
-        $class = $this->getClass();
+        $class                  = $this->getClass();
         $class->expects($this->exactly(1))
             ->method('getRowData')
             ->willReturn(['id' => ['value', 'original']]);

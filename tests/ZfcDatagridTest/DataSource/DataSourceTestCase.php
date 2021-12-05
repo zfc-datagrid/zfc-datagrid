@@ -1,33 +1,25 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagridTest\DataSource;
 
 use PHPUnit\Framework\TestCase;
 use ZfcDatagrid\Column;
+use ZfcDatagrid\Column\AbstractColumn;
 
 class DataSourceTestCase extends TestCase
 {
-    /**
-     *
-     * @var array
-     */
+    /** @var array */
     protected $data;
 
-    /**
-     *
-     * @var \ZfcDatagrid\Column\AbstractColumn
-     */
+    /** @var AbstractColumn */
     protected $colVolumne;
 
-    /**
-     *
-     * @var \ZfcDatagrid\Column\AbstractColumn
-     */
+    /** @var AbstractColumn */
     protected $colEdition;
 
-    /**
-     *
-     * @var \ZfcDatagrid\Column\AbstractColumn
-     */
+    /** @var AbstractColumn */
     protected $colUserDisplayName;
 
     public function setUp(): void

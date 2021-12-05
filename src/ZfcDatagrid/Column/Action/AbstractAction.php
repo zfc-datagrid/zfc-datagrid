@@ -1,11 +1,16 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagrid\Column\Action;
 
+use InvalidArgumentException;
 use ZfcDatagrid\Column;
 use ZfcDatagrid\Filter;
-use function strpos;
-use function str_replace;
+
 use function implode;
+use function str_replace;
+use function strpos;
 
 abstract class AbstractAction
 {
@@ -29,9 +34,6 @@ abstract class AbstractAction
     /** @var array */
     protected $showOnValues = [];
 
-    /**
-     * AbstractAction constructor.
-     */
     public function __construct()
     {
         $this->setLink('#');
@@ -39,8 +41,6 @@ abstract class AbstractAction
 
     /**
      * Set the link.
-     *
-     * @param string $href
      *
      * @return $this
      */
@@ -51,17 +51,12 @@ abstract class AbstractAction
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getLink(): string
     {
         return $this->getAttribute('href');
     }
 
     /**
-     * @param string $route
-     *
      * @return $this
      */
     public function setRoute(string $route): self
@@ -71,9 +66,6 @@ abstract class AbstractAction
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getRoute(): string
     {
         return $this->route;
@@ -81,7 +73,6 @@ abstract class AbstractAction
 
     /**
      * @param array $params
-     *
      * @return $this
      */
     public function setRouteParams(array $params)
@@ -103,8 +94,6 @@ abstract class AbstractAction
      * This is needed public for rowClickAction...
      *
      * @param array $row
-     *
-     * @return string
      */
     public function getLinkReplaced(array $row): string
     {
@@ -125,10 +114,6 @@ abstract class AbstractAction
     /**
      * Get the column row value placeholder
      * $action->setLink('/myLink/something/id/'.$action->getRowIdPlaceholder().'/something/'.$action->getColumnRowPlaceholder($myCol));.
-     *
-     * @param Column\AbstractColumn $col
-     *
-     * @return string
      */
     public function getColumnValuePlaceholder(Column\AbstractColumn $col): string
     {
@@ -149,8 +134,6 @@ abstract class AbstractAction
      * Returns the rowId placeholder
      * Can be used e.g.
      * $action->setLink('/myLink/something/id/'.$action->getRowIdPlaceholder());.
-     *
-     * @return string
      */
     public function getRowIdPlaceholder(): string
     {
@@ -159,9 +142,6 @@ abstract class AbstractAction
 
     /**
      * Set a HTML attributes.
-     *
-     * @param string $name
-     * @param string $value
      *
      * @return $this
      */
@@ -175,8 +155,6 @@ abstract class AbstractAction
     /**
      * Get a HTML attribute.
      *
-     * @param string $name
-     *
      * @return string
      */
     public function getAttribute(string $name)
@@ -186,8 +164,6 @@ abstract class AbstractAction
 
     /**
      * Removes an HTML attribute.
-     *
-     * @param string $name
      *
      * @return $this
      */
@@ -212,8 +188,6 @@ abstract class AbstractAction
      * Get the string version of the attributes.
      *
      * @param array $row
-     *
-     * @return string
      */
     protected function getAttributesString(array $row): string
     {
@@ -231,8 +205,6 @@ abstract class AbstractAction
     /**
      * Set the title attribute.
      *
-     * @param string $name
-     *
      * @return $this
      */
     public function setTitle(string $name): self
@@ -244,8 +216,6 @@ abstract class AbstractAction
 
     /**
      * Get the title attribute.
-     *
-     * @return string
      */
     public function getTitle(): string
     {
@@ -254,8 +224,6 @@ abstract class AbstractAction
 
     /**
      * Add a css class.
-     *
-     * @param string $className
      *
      * @return $this
      */
@@ -275,14 +243,12 @@ abstract class AbstractAction
     /**
      * Display the values with AND or OR (if multiple showOnValues are defined).
      *
-     * @param string $operator
-     *
      * @return $this
      */
     public function setShowOnValueOperator(string $operator = 'OR'): self
     {
         if ($operator != 'AND' && $operator != 'OR') {
-            throw new \InvalidArgumentException('not allowed operator: "' . $operator . '" (AND / OR is allowed)');
+            throw new InvalidArgumentException('not allowed operator: "' . $operator . '" (AND / OR is allowed)');
         }
 
         $this->showOnValueOperator = (string) $operator;
@@ -293,8 +259,6 @@ abstract class AbstractAction
     /**
      * Get the show on value operator, e.g.
      * OR, AND.
-     *
-     * @return string
      */
     public function getShowOnValueOperator(): string
     {
@@ -304,10 +268,7 @@ abstract class AbstractAction
     /**
      * Show this action only on the values defined.
      *
-     * @param Column\AbstractColumn        $col
      * @param Column\AbstractColumn|string $value
-     * @param string                       $comparison
-     *
      * @return $this
      */
     public function addShowOnValue(Column\AbstractColumn $col, $value = null, string $comparison = Filter::EQUAL): self
@@ -329,20 +290,15 @@ abstract class AbstractAction
         return $this->showOnValues;
     }
 
-    /**
-     * @return bool
-     */
     public function hasShowOnValues(): bool
     {
-        return !empty($this->showOnValues);
+        return ! empty($this->showOnValues);
     }
 
     /**
      * Display this action on this row?
      *
      * @param array $row
-     *
-     * @return bool
      */
     public function isDisplayed(array $row): bool
     {
@@ -376,15 +332,11 @@ abstract class AbstractAction
 
     /**
      * Get the HTML from the type.
-     *
-     * @return string
      */
     abstract protected function getHtmlType(): string;
 
     /**
      * @param array $row
-     *
-     * @return string
      */
     public function toHtml(array $row): string
     {

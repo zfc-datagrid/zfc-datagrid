@@ -1,14 +1,29 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagridTest\DataSource\LaminasSelect;
 
 use InvalidArgumentException;
-use PHPUnit\Framework\TestCase;
 use Laminas\Db\Adapter\Adapter;
+use Laminas\Db\Adapter\Driver\ConnectionInterface;
+use Laminas\Db\Adapter\Driver\DriverInterface;
+use Laminas\Db\Adapter\Driver\StatementInterface;
+use Laminas\Db\Adapter\Platform\PlatformInterface;
+use Laminas\Db\Sql\Predicate\Between;
+use Laminas\Db\Sql\Predicate\Expression;
+use Laminas\Db\Sql\Predicate\Like;
 use Laminas\Db\Sql\Predicate\Operator;
+use Laminas\Db\Sql\Predicate\PredicateSet;
 use Laminas\Db\Sql\Select;
 use Laminas\Db\Sql\Sql;
+use Laminas\Db\Sql\Where;
+use PHPUnit\Framework\TestCase;
 use ZfcDatagrid\Column;
 use ZfcDatagrid\DataSource\LaminasSelect\Filter as FilterSelect;
+use ZfcDatagrid\Filter;
+
+use function count;
 
 /**
  * @group DataSource
@@ -16,22 +31,13 @@ use ZfcDatagrid\DataSource\LaminasSelect\Filter as FilterSelect;
  */
 class FilterTest extends TestCase
 {
-    /**
-     *
-     * @var Column\AbstractColumn
-     */
+    /** @var Column\AbstractColumn */
     private $column;
 
-    /**
-     *
-     * @var Column\AbstractColumn
-     */
+    /** @var Column\AbstractColumn */
     private $column2;
 
-    /**
-     *
-     * @var FilterSelect
-     */
+    /** @var FilterSelect */
     private $filterSelect;
 
     public function setUp(): void
@@ -54,9 +60,9 @@ class FilterTest extends TestCase
         $this->column2->setUniqueId('myCol2');
         $this->column2->setSelect('myCol2');
 
-        $this->mockDriver     = $this->getMockBuilder(\Laminas\Db\Adapter\Driver\DriverInterface::class)
+        $this->mockDriver     = $this->getMockBuilder(DriverInterface::class)
             ->getMock();
-        $this->mockConnection = $this->getMockBuilder(\Laminas\Db\Adapter\Driver\ConnectionInterface::class)
+        $this->mockConnection = $this->getMockBuilder(ConnectionInterface::class)
             ->getMock();
         $this->mockDriver->expects(self::any())
             ->method('checkEnvironment')
@@ -64,9 +70,9 @@ class FilterTest extends TestCase
         $this->mockDriver->expects(self::any())
             ->method('getConnection')
             ->will($this->returnValue($this->mockConnection));
-        $this->mockPlatform  = $this->getMockBuilder(\Laminas\Db\Adapter\Platform\PlatformInterface::class)
+        $this->mockPlatform  = $this->getMockBuilder(PlatformInterface::class)
             ->getMock();
-        $this->mockStatement = $this->getMockBuilder(\Laminas\Db\Adapter\Driver\StatementInterface::class)
+        $this->mockStatement = $this->getMockBuilder(StatementInterface::class)
             ->getMock();
         $this->mockDriver->expects(self::any())
             ->method('createStatement')
@@ -87,14 +93,14 @@ class FilterTest extends TestCase
 
     public function testBasic()
     {
-        $this->assertInstanceOf(\Laminas\Db\Sql\Select::class, $this->filterSelect->getSelect());
-        $this->assertInstanceOf(\Laminas\Db\Sql\Sql::class, $this->filterSelect->getSql());
+        $this->assertInstanceOf(Select::class, $this->filterSelect->getSelect());
+        $this->assertInstanceOf(Sql::class, $this->filterSelect->getSql());
 
         // Test two filters
-        $filter = new \ZfcDatagrid\Filter();
+        $filter = new Filter();
         $filter->setFromColumn($this->column, '~myValue,123');
 
-        $filter2 = new \ZfcDatagrid\Filter();
+        $filter2 = new Filter();
         $filter2->setFromColumn($this->column2, '~myValue,123');
 
         $filterSelect = clone $this->filterSelect;
@@ -102,7 +108,7 @@ class FilterTest extends TestCase
         $filterSelect->applyFilter($filter2);
 
         $select = $filterSelect->getSelect();
-        /* @var $where \Laminas\Db\Sql\Where */
+        /** @var Where $where */
         $where = $select->getRawState('where');
 
         $predicates = $where->getPredicates();
@@ -110,15 +116,13 @@ class FilterTest extends TestCase
     }
 
     /**
-     *
      * @param unknown $predicates
      * @param number  $part
-     *
-     * @return \Laminas\Db\Sql\Predicate\Expression
+     * @return Expression
      */
     private function getWherePart($predicates, $part = 0)
     {
-        /* @var $predicateSet \Laminas\Db\Sql\Predicate\PredicateSet */
+        /** @var PredicateSet $predicateSet */
         $predicateSet = $predicates[0][1];
 
         $pred      = $predicateSet->getPredicates();
@@ -130,80 +134,80 @@ class FilterTest extends TestCase
 
     public function testLike()
     {
-        $filter = new \ZfcDatagrid\Filter();
+        $filter = new Filter();
         $filter->setFromColumn($this->column, '~myValue,123');
 
         $filterSelect = clone $this->filterSelect;
         $filterSelect->applyFilter($filter);
 
         $select = $filterSelect->getSelect();
-        /* @var $where \Laminas\Db\Sql\Where */
+        /** @var Where $where */
         $where = $select->getRawState('where');
 
         $predicates = $where->getPredicates();
         $this->assertEquals(1, count($predicates));
 
         $like = $this->getWherePart($predicates, 0);
-        $this->assertInstanceOf(\Laminas\Db\Sql\Predicate\Like::class, $like);
+        $this->assertInstanceOf(Like::class, $like);
         $this->assertEquals('%myValue%', $like->getLike());
 
         $like = $this->getWherePart($predicates, 1);
-        $this->assertInstanceOf(\Laminas\Db\Sql\Predicate\Like::class, $like);
+        $this->assertInstanceOf(Like::class, $like);
         $this->assertEquals('%123%', $like->getLike());
     }
 
     public function testLikeLeft()
     {
-        $filter = new \ZfcDatagrid\Filter();
+        $filter = new Filter();
         $filter->setFromColumn($this->column, '~%myValue,123');
 
         $filterSelect = clone $this->filterSelect;
         $filterSelect->applyFilter($filter);
 
         $select = $filterSelect->getSelect();
-        /* @var $where \Laminas\Db\Sql\Where */
+        /** @var Where $where */
         $where = $select->getRawState('where');
 
         $predicates = $where->getPredicates();
 
         $like = $this->getWherePart($predicates, 0);
-        $this->assertInstanceOf(\Laminas\Db\Sql\Predicate\Like::class, $like);
+        $this->assertInstanceOf(Like::class, $like);
         $this->assertEquals('%myValue', $like->getLike());
 
         $like = $this->getWherePart($predicates, 1);
-        $this->assertInstanceOf(\Laminas\Db\Sql\Predicate\Like::class, $like);
+        $this->assertInstanceOf(Like::class, $like);
         $this->assertEquals('%123', $like->getLike());
     }
 
     public function testLikeRight()
     {
-        $filter = new \ZfcDatagrid\Filter();
+        $filter = new Filter();
         $filter->setFromColumn($this->column, '~myValue%');
 
         $filterSelect = clone $this->filterSelect;
         $filterSelect->applyFilter($filter);
 
         $select = $filterSelect->getSelect();
-        /* @var $where \Laminas\Db\Sql\Where */
+        /** @var Where $where */
         $where = $select->getRawState('where');
 
         $predicates = $where->getPredicates();
 
         $like = $this->getWherePart($predicates, 0);
-        $this->assertInstanceOf(\Laminas\Db\Sql\Predicate\Like::class, $like);
+        $this->assertInstanceOf(Like::class, $like);
         $this->assertEquals('myValue%', $like->getLike());
     }
 
     public function testNotLike()
     {
-        $filter = new \ZfcDatagrid\Filter();
+        $filter = new Filter();
         $filter->setFromColumn($this->column, '!~myValue');
 
         $filterSelect = clone $this->filterSelect;
         $filterSelect->applyFilter($filter);
 
         $select = $filterSelect->getSelect();
-        /* @var $where \Laminas\Db\Sql\Where */
+        /** @var Where $where */
         $where = $select->getRawState('where');
 
         $predicates = $where->getPredicates();
@@ -211,21 +215,21 @@ class FilterTest extends TestCase
         $notLike    = $this->getWherePart($predicates, 0);
         $parameters = $notLike->getParameters();
 
-        $this->assertInstanceOf(\Laminas\Db\Sql\Predicate\Expression::class, $notLike);
+        $this->assertInstanceOf(Expression::class, $notLike);
         $this->assertEquals('NOT LIKE ?', $notLike->getExpression());
         $this->assertEquals('%myValue%', $parameters[0]);
     }
 
     public function testNotLikeLeft()
     {
-        $filter = new \ZfcDatagrid\Filter();
+        $filter = new Filter();
         $filter->setFromColumn($this->column, '!~%myValue');
 
         $filterSelect = clone $this->filterSelect;
         $filterSelect->applyFilter($filter);
 
         $select = $filterSelect->getSelect();
-        /* @var $where \Laminas\Db\Sql\Where */
+        /** @var Where $where */
         $where = $select->getRawState('where');
 
         $predicates = $where->getPredicates();
@@ -233,21 +237,21 @@ class FilterTest extends TestCase
         $notLike    = $this->getWherePart($predicates, 0);
         $parameters = $notLike->getParameters();
 
-        $this->assertInstanceOf(\Laminas\Db\Sql\Predicate\Expression::class, $notLike);
+        $this->assertInstanceOf(Expression::class, $notLike);
         $this->assertEquals('NOT LIKE ?', $notLike->getExpression());
         $this->assertEquals('%myValue', $parameters[0]);
     }
 
     public function testNotLikeRight()
     {
-        $filter = new \ZfcDatagrid\Filter();
+        $filter = new Filter();
         $filter->setFromColumn($this->column, '!~myValue%');
 
         $filterSelect = clone $this->filterSelect;
         $filterSelect->applyFilter($filter);
 
         $select = $filterSelect->getSelect();
-        /* @var $where \Laminas\Db\Sql\Where */
+        /** @var Where $where */
         $where = $select->getRawState('where');
 
         $predicates = $where->getPredicates();
@@ -255,28 +259,28 @@ class FilterTest extends TestCase
         $notLike    = $this->getWherePart($predicates, 0);
         $parameters = $notLike->getParameters();
 
-        $this->assertInstanceOf(\Laminas\Db\Sql\Predicate\Expression::class, $notLike);
+        $this->assertInstanceOf(Expression::class, $notLike);
         $this->assertEquals('NOT LIKE ?', $notLike->getExpression());
         $this->assertEquals('myValue%', $parameters[0]);
     }
 
     public function testEqual()
     {
-        $filter = new \ZfcDatagrid\Filter();
+        $filter = new Filter();
         $filter->setFromColumn($this->column, '=myValue');
 
         $filterSelect = clone $this->filterSelect;
         $filterSelect->applyFilter($filter);
 
         $select = $filterSelect->getSelect();
-        /* @var $where \Laminas\Db\Sql\Where */
+        /** @var Where $where */
         $where = $select->getRawState('where');
 
         $predicates = $where->getPredicates();
 
         $operator = $this->getWherePart($predicates, 0);
 
-        $this->assertInstanceOf(\Laminas\Db\Sql\Predicate\Operator::class, $operator);
+        $this->assertInstanceOf(Operator::class, $operator);
         $this->assertEquals(Operator::OP_EQ, $operator->getOperator());
         $this->assertEquals('myCol', $operator->getLeft());
         $this->assertEquals('myValue', $operator->getRight());
@@ -284,21 +288,21 @@ class FilterTest extends TestCase
 
     public function testNotEqual()
     {
-        $filter = new \ZfcDatagrid\Filter();
+        $filter = new Filter();
         $filter->setFromColumn($this->column, '!=myValue');
 
         $filterSelect = clone $this->filterSelect;
         $filterSelect->applyFilter($filter);
 
         $select = $filterSelect->getSelect();
-        /* @var $where \Laminas\Db\Sql\Where */
+        /** @var Where $where */
         $where = $select->getRawState('where');
 
         $predicates = $where->getPredicates();
 
         $operator = $this->getWherePart($predicates, 0);
 
-        $this->assertInstanceOf(\Laminas\Db\Sql\Predicate\Operator::class, $operator);
+        $this->assertInstanceOf(Operator::class, $operator);
         $this->assertEquals(Operator::OP_NE, $operator->getOperator());
         $this->assertEquals('myCol', $operator->getLeft());
         $this->assertEquals('myValue', $operator->getRight());
@@ -306,21 +310,21 @@ class FilterTest extends TestCase
 
     public function testGreaterEqual()
     {
-        $filter = new \ZfcDatagrid\Filter();
+        $filter = new Filter();
         $filter->setFromColumn($this->column, '>=myValue');
 
         $filterSelect = clone $this->filterSelect;
         $filterSelect->applyFilter($filter);
 
         $select = $filterSelect->getSelect();
-        /* @var $where \Laminas\Db\Sql\Where */
+        /** @var Where $where */
         $where = $select->getRawState('where');
 
         $predicates = $where->getPredicates();
 
         $operator = $this->getWherePart($predicates, 0);
 
-        $this->assertInstanceOf(\Laminas\Db\Sql\Predicate\Operator::class, $operator);
+        $this->assertInstanceOf(Operator::class, $operator);
         $this->assertEquals(Operator::OP_GTE, $operator->getOperator());
         $this->assertEquals('myCol', $operator->getLeft());
         $this->assertEquals('myValue', $operator->getRight());
@@ -328,21 +332,21 @@ class FilterTest extends TestCase
 
     public function testGreater()
     {
-        $filter = new \ZfcDatagrid\Filter();
+        $filter = new Filter();
         $filter->setFromColumn($this->column, '>myValue');
 
         $filterSelect = clone $this->filterSelect;
         $filterSelect->applyFilter($filter);
 
         $select = $filterSelect->getSelect();
-        /* @var $where \Laminas\Db\Sql\Where */
+        /** @var Where $where */
         $where = $select->getRawState('where');
 
         $predicates = $where->getPredicates();
 
         $operator = $this->getWherePart($predicates, 0);
 
-        $this->assertInstanceOf(\Laminas\Db\Sql\Predicate\Operator::class, $operator);
+        $this->assertInstanceOf(Operator::class, $operator);
         $this->assertEquals(Operator::OP_GT, $operator->getOperator());
         $this->assertEquals('myCol', $operator->getLeft());
         $this->assertEquals('myValue', $operator->getRight());
@@ -350,21 +354,21 @@ class FilterTest extends TestCase
 
     public function testLessEqual()
     {
-        $filter = new \ZfcDatagrid\Filter();
+        $filter = new Filter();
         $filter->setFromColumn($this->column, '<=myValue');
 
         $filterSelect = clone $this->filterSelect;
         $filterSelect->applyFilter($filter);
 
         $select = $filterSelect->getSelect();
-        /* @var $where \Laminas\Db\Sql\Where */
+        /** @var Where $where */
         $where = $select->getRawState('where');
 
         $predicates = $where->getPredicates();
 
         $operator = $this->getWherePart($predicates, 0);
 
-        $this->assertInstanceOf(\Laminas\Db\Sql\Predicate\Operator::class, $operator);
+        $this->assertInstanceOf(Operator::class, $operator);
         $this->assertEquals(Operator::OP_LTE, $operator->getOperator());
         $this->assertEquals('myCol', $operator->getLeft());
         $this->assertEquals('myValue', $operator->getRight());
@@ -372,21 +376,21 @@ class FilterTest extends TestCase
 
     public function testLess()
     {
-        $filter = new \ZfcDatagrid\Filter();
+        $filter = new Filter();
         $filter->setFromColumn($this->column, '<myValue');
 
         $filterSelect = clone $this->filterSelect;
         $filterSelect->applyFilter($filter);
 
         $select = $filterSelect->getSelect();
-        /* @var $where \Laminas\Db\Sql\Where */
+        /** @var Where $where */
         $where = $select->getRawState('where');
 
         $predicates = $where->getPredicates();
 
         $operator = $this->getWherePart($predicates, 0);
 
-        $this->assertInstanceOf(\Laminas\Db\Sql\Predicate\Operator::class, $operator);
+        $this->assertInstanceOf(Operator::class, $operator);
         $this->assertEquals(Operator::OP_LT, $operator->getOperator());
         $this->assertEquals('myCol', $operator->getLeft());
         $this->assertEquals('myValue', $operator->getRight());
@@ -394,21 +398,21 @@ class FilterTest extends TestCase
 
     public function testBetween()
     {
-        $filter = new \ZfcDatagrid\Filter();
+        $filter = new Filter();
         $filter->setFromColumn($this->column, '3 <> myValue');
 
         $filterSelect = clone $this->filterSelect;
         $filterSelect->applyFilter($filter);
 
         $select = $filterSelect->getSelect();
-        /* @var $where \Laminas\Db\Sql\Where */
+        /** @var Where $where */
         $where = $select->getRawState('where');
 
         $predicates = $where->getPredicates();
 
         $operator = $this->getWherePart($predicates, 0);
 
-        $this->assertInstanceOf(\Laminas\Db\Sql\Predicate\Between::class, $operator);
+        $this->assertInstanceOf(Between::class, $operator);
         $this->assertEquals('myCol', $operator->getIdentifier());
         $this->assertEquals('3', $operator->getMinValue());
         $this->assertEquals('myValue', $operator->getMaxValue());
@@ -416,7 +420,7 @@ class FilterTest extends TestCase
 
     public function testException()
     {
-        $filter = $this->getMockBuilder(\ZfcDatagrid\Filter::class)
+        $filter = $this->getMockBuilder(Filter::class)
             ->getMock();
         $filter->expects(self::any())
             ->method('getColumn')
@@ -424,7 +428,7 @@ class FilterTest extends TestCase
         $filter->expects(self::any())
             ->method('getValues')
             ->will($this->returnValue([
-            1,
+                1,
             ]));
         $filter->expects(self::any())
             ->method('getOperator')

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ZfcDatagridTest\Column\Style;
 
 use ZfcDatagrid\Column\Style;

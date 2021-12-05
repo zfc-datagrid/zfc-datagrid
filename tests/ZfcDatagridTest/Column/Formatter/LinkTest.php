@@ -1,10 +1,14 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagridTest\Column\Formatter;
 
-use PHPUnit\Framework\TestCase;
 use Laminas\Router\Http\HttpRouterFactory;
 use Laminas\Router\Http\Segment;
 use Laminas\Router\RoutePluginManagerFactory;
+use PHPUnit\Framework\TestCase;
+use ZfcDatagrid\Column\AbstractColumn;
 use ZfcDatagrid\Column\Formatter;
 use ZfcDatagridTest\Util\ServiceManagerFactory;
 
@@ -58,7 +62,7 @@ class LinkTest extends TestCase
     public function testRouteToLinkConversion()
     {
         // Setup a mock column
-        $col = $this->getMockForAbstractClass(\ZfcDatagrid\Column\AbstractColumn::class);
+        $col = $this->getMockForAbstractClass(AbstractColumn::class);
         $col->setUniqueId('myCol');
 
         // Setup the formatter
@@ -73,7 +77,7 @@ class LinkTest extends TestCase
 
     public function testGetFormattedValue()
     {
-        $col = $this->getMockForAbstractClass(\ZfcDatagrid\Column\AbstractColumn::class);
+        $col = $this->getMockForAbstractClass(AbstractColumn::class);
         $col->setUniqueId('myCol');
 
         $formatter = new Formatter\Link();

@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagrid\Column\Action;
 
 use InvalidArgumentException;
@@ -15,8 +18,6 @@ class Icon extends AbstractAction
      * Set the icon class (CSS)
      * - used for HTML if provided, overwise the iconLink is used.
      *
-     * @param string $name
-     *
      * @return $this
      */
     public function setIconClass(string $name): self
@@ -26,17 +27,11 @@ class Icon extends AbstractAction
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getIconClass(): string
     {
         return $this->iconClass;
     }
 
-    /**
-     * @return bool
-     */
     public function hasIconClass(): bool
     {
         return '' !== $this->getIconClass();
@@ -44,8 +39,6 @@ class Icon extends AbstractAction
 
     /**
      * Set the icon link (is used, if no icon class is provided).
-     *
-     * @param string $httpLink
      *
      * @return $this
      */
@@ -58,25 +51,17 @@ class Icon extends AbstractAction
 
     /**
      * Get the icon link.
-     *
-     * @return string
      */
     public function getIconLink(): string
     {
         return $this->iconLink;
     }
 
-    /**
-     * @return bool
-     */
     public function hasIconLink(): bool
     {
         return '' !== $this->getIconLink();
     }
 
-    /**
-     * @return string
-     */
     protected function getHtmlType(): string
     {
         if (true === $this->hasIconClass()) {

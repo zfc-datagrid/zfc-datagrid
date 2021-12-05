@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagrid\Renderer;
 
 use Laminas\Http\Response;
@@ -18,15 +21,11 @@ interface RendererInterface
 
     /**
      * Return the name of the renderer.
-     *
-     * @return string
      */
     public function getName(): string;
 
     /**
      * Determine if the renderer is for export.
-     *
-     * @return bool
      */
     public function isExport(): bool;
 
@@ -34,8 +33,6 @@ interface RendererInterface
      * Determin if the renderer is HTML
      * It can be export + html -> f.x.
      * printing for HTML.
-     *
-     * @return bool
      */
     public function isHtml(): bool;
 

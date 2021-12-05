@@ -1,16 +1,23 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagrid;
 
 use InvalidArgumentException;
-use function substr;
-use function trim;
+
+use function count;
 use function explode;
 use function is_array;
-use function min;
 use function max;
+use function min;
+use function print_r;
+use function sprintf;
 use function stripos;
 use function strlen;
-use function count;
+use function strpos;
+use function substr;
+use function trim;
 
 class Filter
 {
@@ -101,9 +108,6 @@ class Filter
     /**
      * Apply a filter based on a column.
      *
-     * @param Column\AbstractColumn $column
-     * @param string $inputFilterValue
-     *
      * @return $this
      */
     public function setFromColumn(Column\AbstractColumn $column, string $inputFilterValue): self
@@ -121,7 +125,6 @@ class Filter
      *
      * @see https://github.com/zfdatagrid/grid/blob/master/library/Bvb/Grid.php#L1438
      *
-     * @param string $inputFilterValue
      * @param mixed  $defaultOperator
      *
      * @return $this
@@ -148,12 +151,14 @@ class Filter
             if (substr($value, -1) == ')') {
                 $value = substr($value, 0, -1);
             }
-        } elseif (substr($inputFilterValue, 0, 2) == '!=' ||
+        } elseif (
+            substr($inputFilterValue, 0, 2) == '!=' ||
             substr($inputFilterValue, 0, 2) == '<>'
         ) {
             $operator = self::NOT_EQUAL;
             $value    = substr($inputFilterValue, 2);
-        } elseif (substr($inputFilterValue, 0, 2) == '!~' ||
+        } elseif (
+            substr($inputFilterValue, 0, 2) == '!~' ||
             substr($inputFilterValue, 0, 1) == '!'
         ) {
             // NOT LIKE or NOT EQUAL
@@ -163,7 +168,8 @@ class Filter
                 $value = trim(substr($inputFilterValue, 1));
             }
 
-            if (substr($inputFilterValue, 0, 2) == '!~' ||
+            if (
+                substr($inputFilterValue, 0, 2) == '!~' ||
                 (
                     substr($value, 0, 1) == '%' ||
                     substr($value, -1) == '%' ||
@@ -172,7 +178,8 @@ class Filter
                 )
             ) {
                 // NOT LIKE
-                if ((substr($value, 0, 1) == '*' && substr($value, -1) == '*') ||
+                if (
+                    (substr($value, 0, 1) == '*' && substr($value, -1) == '*') ||
                     (substr($value, 0, 1) == '%' && substr($value, -1) == '%')
                 ) {
                     $operator = self::NOT_LIKE;
@@ -191,7 +198,8 @@ class Filter
                 // NOT EQUAL
                 $operator = self::NOT_EQUAL;
             }
-        } elseif (substr($inputFilterValue, 0, 1) == '~' ||
+        } elseif (
+            substr($inputFilterValue, 0, 1) == '~' ||
             substr($inputFilterValue, 0, 1) == '%' ||
             substr($inputFilterValue, -1) == '%' ||
             substr($inputFilterValue, 0, 1) == '*' ||
@@ -203,7 +211,8 @@ class Filter
             }
             $value = trim($value);
 
-            if ((substr($value, 0, 1) == '*' && substr($value, -1) == '*') ||
+            if (
+                (substr($value, 0, 1) == '*' && substr($value, -1) == '*') ||
                 (substr($value, 0, 1) == '%' && substr($value, -1) == '%')
             ) {
                 $operator = self::LIKE;
@@ -289,8 +298,6 @@ class Filter
 
     /**
      * Is this a column filter.
-     *
-     * @return bool
      */
     public function isColumnFilter(): bool
     {
@@ -299,8 +306,6 @@ class Filter
 
     /**
      * Only needed for column filter.
-     *
-     * @return Column\AbstractColumn|null
      */
     public function getColumn(): ?Column\AbstractColumn
     {
@@ -315,9 +320,6 @@ class Filter
         return $this->value;
     }
 
-    /**
-     * @return string
-     */
     public function getOperator(): string
     {
         return $this->operator;
@@ -325,8 +327,6 @@ class Filter
 
     /**
      * Get the value displayed to the user.
-     *
-     * @return string
      */
     public function getDisplayColumnValue(): string
     {
@@ -340,13 +340,10 @@ class Filter
      *                              rowValue
      * @param mixed  $expectedValue
      *                              filterValue
-     * @param string $operator
-     *
-     * @return bool
      */
     public static function isApply($currentValue, $expectedValue, string $operator = self::EQUAL): bool
     {
-        list($currentValue, $expectedValue) = self::convertValues($currentValue, $expectedValue, $operator);
+        [$currentValue, $expectedValue] = self::convertValues($currentValue, $expectedValue, $operator);
 
         switch ($operator) {
             case self::LIKE:
@@ -421,7 +418,7 @@ class Filter
                         return true;
                     }
                 } else {
-                    throw new InvalidArgumentException(sprintf('Between needs exactly an array of two expected values. Give: "%s"',print_r($expectedValue, true)));
+                    throw new InvalidArgumentException(sprintf('Between needs exactly an array of two expected values. Give: "%s"', print_r($expectedValue, true)));
                 }
                 break;
 
@@ -435,8 +432,6 @@ class Filter
     /**
      * @param mixed $currentValue
      * @param mixed $expectedValue
-     * @param string $operator
-     *
      * @return string[]
      */
     private static function convertValues($currentValue, $expectedValue, string $operator = self::EQUAL): array

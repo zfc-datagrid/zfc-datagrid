@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagrid\Column;
 
 /**
@@ -12,9 +15,6 @@ class Action extends AbstractColumn
     /** @var Action\AbstractAction[] */
     private $actions = [];
 
-    /**
-     * @param string $uniqueId
-     */
     public function __construct(string $uniqueId = 'action')
     {
         $this->setUniqueId($uniqueId);
@@ -27,8 +27,6 @@ class Action extends AbstractColumn
     }
 
     /**
-     * @param Action\AbstractAction $action
-     *
      * @return $this
      */
     public function addAction(Action\AbstractAction $action): self
@@ -48,7 +46,6 @@ class Action extends AbstractColumn
 
     /**
      * @param array|Action\AbstractAction[] $actions
-     *
      * @return $this
      */
     public function setActions(array $actions): self
@@ -60,8 +57,6 @@ class Action extends AbstractColumn
 
     /**
      * @param int $key
-     *
-     * @return Action\AbstractAction|null
      */
     public function getAction($key): ?Action\AbstractAction
     {
@@ -70,7 +65,6 @@ class Action extends AbstractColumn
 
     /**
      * @param int $key
-     *
      * @return $this
      */
     public function removeAction($key = null): self

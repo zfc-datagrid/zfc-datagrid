@@ -1,7 +1,13 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagridTest\Column\Type;
 
+use Exception;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use ZfcDatagrid\Column\Type\AbstractType;
 // use ZfcDatagrid\Column\Type;
 use ZfcDatagrid\Filter;
 
@@ -11,19 +17,16 @@ use ZfcDatagrid\Filter;
  */
 class AbstractTypeTest extends TestCase
 {
-    /**
-     *
-     * @var \ZfcDatagrid\Column\Type\AbstractType
-     */
+    /** @var AbstractType */
     private $type;
 
     public function setUp(): void
     {
-        $this->type = $this->getMockForAbstractClass(\ZfcDatagrid\Column\Type\AbstractType::class);
+        $this->type = $this->getMockForAbstractClass(AbstractType::class);
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function testFilterDefaultOperationException(): void
     {
@@ -31,7 +34,7 @@ class AbstractTypeTest extends TestCase
         $this->assertEquals(Filter::LIKE, $this->type->getFilterDefaultOperation());
 
         // Set incorrect value.
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->type->setFilterDefaultOperation('invalid');
     }
 

@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagrid\Column\Type;
 
 use DateTime as PhpDateTime;
@@ -6,6 +9,7 @@ use DateTimeZone;
 use IntlDateFormatter;
 use Locale;
 use ZfcDatagrid\Filter;
+
 use function date_default_timezone_get;
 
 class DateTime extends AbstractType
@@ -46,9 +50,7 @@ class DateTime extends AbstractType
      */
     protected $outputTimezone;
 
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     protected $outputPattern;
 
     /**
@@ -76,9 +78,6 @@ class DateTime extends AbstractType
         $this->setOutputTimezone($outputTimezone);
     }
 
-    /**
-     * @return string
-     */
     public function getTypeName(): string
     {
         return 'dateTime';
@@ -86,8 +85,6 @@ class DateTime extends AbstractType
 
     /**
      * Set Daterange Filter enabled true/false.
-     *
-     * @param bool $val
      *
      * @return $this
      */
@@ -107,8 +104,6 @@ class DateTime extends AbstractType
     }
 
     /**
-     * @param string $format
-     *
      * @return $this
      */
     public function setSourceDateTimeFormat(string $format = 'Y-m-d H:i:s'): self
@@ -118,17 +113,12 @@ class DateTime extends AbstractType
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getSourceDateTimeFormat(): string
     {
         return $this->sourceDateTimeFormat;
     }
 
     /**
-     * @param int $dateType
-     *
      * @return $this
      */
     public function setOutputDateType(int $dateType = IntlDateFormatter::MEDIUM): self
@@ -138,17 +128,12 @@ class DateTime extends AbstractType
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getOutputDateType(): int
     {
         return $this->outputDateType;
     }
 
     /**
-     * @param int $timeType
-     *
      * @return $this
      */
     public function setOutputTimeType(int $timeType = IntlDateFormatter::NONE): self
@@ -158,17 +143,12 @@ class DateTime extends AbstractType
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getOutputTimeType(): int
     {
         return $this->outputTimeType;
     }
 
     /**
-     * @param null|string $locale
-     *
      * @return $this
      */
     public function setLocale(?string $locale = null): self
@@ -178,9 +158,6 @@ class DateTime extends AbstractType
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getLocale(): string
     {
         if (null === $this->locale) {
@@ -191,8 +168,6 @@ class DateTime extends AbstractType
     }
 
     /**
-     * @param string $timezone
-     *
      * @return $this
      */
     public function setSourceTimezone(string $timezone = 'UTC'): self
@@ -202,17 +177,12 @@ class DateTime extends AbstractType
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getSourceTimezone(): string
     {
         return $this->sourceTimezone;
     }
 
     /**
-     * @param null|string $timezone
-     *
      * @return $this
      */
     public function setOutputTimezone(?string $timezone = null): self
@@ -222,9 +192,6 @@ class DateTime extends AbstractType
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getOutputTimezone(): string
     {
         if (null === $this->outputTimezone) {
@@ -237,8 +204,6 @@ class DateTime extends AbstractType
     /**
      * ATTENTION: IntlDateTimeFormatter FORMAT!
      *
-     * @param string $pattern
-     *
      * @return $this
      */
     public function setOutputPattern(?string $pattern = null): self
@@ -248,19 +213,11 @@ class DateTime extends AbstractType
         return $this;
     }
 
-    /**
-     * @return null|string
-     */
     public function getOutputPattern(): ?string
     {
         return $this->outputPattern;
     }
 
-    /**
-     * @param string $val
-     *
-     * @return string
-     */
     public function getFilterValue(string $val): string
     {
         $formatter = new IntlDateFormatter(
@@ -284,7 +241,6 @@ class DateTime extends AbstractType
      * Convert the value from the source to the value, which the user will see in the column.
      *
      * @param mixed $val
-     *
      * @return mixed
      */
     public function getUserValue($val)

@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagrid\Column;
 
 use ZfcDatagrid\Column\Formatter\AbstractFormatter;
@@ -65,14 +68,10 @@ abstract class AbstractColumn
 
     protected $rendererParameter = [];
 
-    /**
-     * @var AbstractFormatter[]
-     */
+    /** @var AbstractFormatter[] */
     protected $formatters = [];
 
     /**
-     * @param string $name
-     *
      * @return $this
      */
     public function setLabel(string $name): self
@@ -84,8 +83,6 @@ abstract class AbstractColumn
 
     /**
      * Get the label.
-     *
-     * @return string
      */
     public function getLabel(): string
     {
@@ -94,7 +91,6 @@ abstract class AbstractColumn
 
     /**
      * @param $id
-     *
      * @return $this
      */
     public function setUniqueId($id): self
@@ -112,16 +108,12 @@ abstract class AbstractColumn
         return $this->uniqueId;
     }
 
-    /**
-     * @return int|null
-     */
     public function getPosition(): ?int
     {
         return $this->position;
     }
 
     /**
-     * @param int|null $position
      * @return $this
      */
     public function setPosition(?int $position): self
@@ -136,8 +128,6 @@ abstract class AbstractColumn
      * It will be calculated to 100% dependend on what is displayed
      * If it's a different output mode like Excel it's dependend on the papersize/orientation.
      *
-     * @param float $percent
-     *
      * @return $this
      */
     public function setWidth(float $percent): self
@@ -149,8 +139,6 @@ abstract class AbstractColumn
 
     /**
      * Get the width.
-     *
-     * @return float
      */
     public function getWidth(): float
     {
@@ -159,8 +147,6 @@ abstract class AbstractColumn
 
     /**
      * Hide or show the column.
-     *
-     * @param bool $mode
      *
      * @return $this
      */
@@ -173,17 +159,12 @@ abstract class AbstractColumn
 
     /**
      * Is this column hidden?
-     *
-     * @return bool
      */
     public function isHidden(): bool
     {
         return $this->isHidden;
     }
 
-    /**
-     * @return bool
-     */
     public function isHide(): bool
     {
         return $this->isHide;
@@ -202,8 +183,6 @@ abstract class AbstractColumn
     /**
      * Set this column as primaryKey column.
      *
-     * @param bool $mode
-     *
      * @return $this
      */
     public function setIdentity(bool $mode = true): self
@@ -218,8 +197,6 @@ abstract class AbstractColumn
 
     /**
      * Is this a primaryKey column?
-     *
-     * @return bool
      */
     public function isIdentity(): bool
     {
@@ -228,8 +205,6 @@ abstract class AbstractColumn
 
     /**
      * Set the column type.
-     *
-     * @param Type\AbstractType $type
      *
      * @return $this
      */
@@ -245,9 +220,6 @@ abstract class AbstractColumn
         return $this;
     }
 
-    /**
-     * @return Type\AbstractType
-     */
     public function getType(): Type\AbstractType
     {
         if (null === $this->type) {
@@ -261,7 +233,6 @@ abstract class AbstractColumn
      * Set styles.
      *
      * @param Style\AbstractStyle[] $styles
-     *
      * @return $this
      */
     public function setStyles(array $styles): self
@@ -276,8 +247,6 @@ abstract class AbstractColumn
     }
 
     /**
-     * @param Style\AbstractStyle $style
-     *
      * @return $this
      */
     public function addStyle(Style\AbstractStyle $style): self
@@ -295,18 +264,13 @@ abstract class AbstractColumn
         return $this->styles;
     }
 
-    /**
-     * @return bool
-     */
     public function hasStyles(): bool
     {
-        return !empty($this->styles);
+        return ! empty($this->styles);
     }
 
     /**
      * Is the user allowed to do sort on this column?
-     *
-     * @param bool $mode
      *
      * @return $this
      */
@@ -319,8 +283,6 @@ abstract class AbstractColumn
 
     /**
      * Is user sort enabled?
-     *
-     * @return bool
      */
     public function isUserSortEnabled(): bool
     {
@@ -330,9 +292,6 @@ abstract class AbstractColumn
     /**
      * The data will get sorted by this column (by default)
      * If will be changed by the user per request (POST,GET....).
-     *
-     * @param int    $priority
-     * @param string $direction
      *
      * @return $this
      */
@@ -358,18 +317,14 @@ abstract class AbstractColumn
 
     /**
      * Does this column has sort defaults?
-     *
-     * @return bool
      */
     public function hasSortDefault(): bool
     {
-        return !empty($this->sortDefault);
+        return ! empty($this->sortDefault);
     }
 
     /**
      * Set that the data is getting sorted by this columns.
-     *
-     * @param string $direction
      *
      * @return $this
      */
@@ -380,25 +335,17 @@ abstract class AbstractColumn
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isSortActive(): bool
     {
         return null !== $this->sortActive;
     }
 
-    /**
-     * @return string
-     */
     public function getSortActiveDirection(): ?string
     {
         return $this->sortActive;
     }
 
     /**
-     * @param bool $mode
-     *
      * @return $this
      */
     public function setUserFilterDisabled(bool $mode = true): self
@@ -416,8 +363,6 @@ abstract class AbstractColumn
      *
      * OPERATORS are ALLOWED (like for the user)
      *
-     * @param string $value
-     *
      * @return $this
      */
     public function setFilterDefaultValue(string $value): self
@@ -429,25 +374,17 @@ abstract class AbstractColumn
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getFilterDefaultValue(): ?string
     {
         return $this->filterDefaultValue;
     }
 
-    /**
-     * @return bool
-     */
     public function hasFilterDefaultValue(): bool
     {
         return $this->filterDefaultValue != '';
     }
 
     /**
-     * @param string $operation
-     *
      * @return $this
      */
     public function setFilterDefaultOperation(string $operation = Filter::LIKE): self
@@ -457,9 +394,6 @@ abstract class AbstractColumn
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getFilterDefaultOperation(): string
     {
         if ($this->filterDefaultOperation != '') {
@@ -471,11 +405,9 @@ abstract class AbstractColumn
 
     /**
      * @param array $options
-     * @param bool  $noSelect
-     *
      * @return $this
      */
-    public function  setFilterSelectOptions(array $options = null, bool $noSelect = true): self
+    public function setFilterSelectOptions(?array $options = null, bool $noSelect = true): self
     {
         // This work also with options with integer based array index such as
         // array(0 => 'zero', 1 => 'once', 2 => 'double', 3 => 'triple'....)
@@ -498,17 +430,13 @@ abstract class AbstractColumn
         return $this->filterSelectOptions;
     }
 
-    /**
-     * @return bool
-     */
     public function hasFilterSelectOptions(): bool
     {
-        return !empty($this->filterSelectOptions);
+        return ! empty($this->filterSelectOptions);
     }
 
     /**
      * @param mixed $value
-     *
      * @return $this
      */
     public function setFilterActive(string $value = ''): self
@@ -519,25 +447,16 @@ abstract class AbstractColumn
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isFilterActive(): bool
     {
         return $this->filterActive;
     }
 
-    /**
-     * @return string
-     */
     public function getFilterActiveValue(): string
     {
         return $this->filterActiveValue;
     }
 
-    /**
-     * @return bool
-     */
     public function isUserFilterEnabled(): bool
     {
         return (bool) $this->userFilterEnabled;
@@ -545,8 +464,6 @@ abstract class AbstractColumn
 
     /**
      * Enable data translation.
-     *
-     * @param bool $mode
      *
      * @return $this
      */
@@ -559,8 +476,6 @@ abstract class AbstractColumn
 
     /**
      * Is data translation enabled?
-     *
-     * @return bool
      */
     public function isTranslationEnabled(): bool
     {
@@ -571,8 +486,6 @@ abstract class AbstractColumn
      * Replace the column values with the applied values.
      *
      * @param array $values
-     * @param bool  $notReplacedGetEmpty
-     *
      * @return $this
      */
     public function setReplaceValues(array $values, bool $notReplacedGetEmpty = true): self
@@ -586,9 +499,6 @@ abstract class AbstractColumn
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function hasReplaceValues(): bool
     {
         return $this->replaceValues ? true : false;
@@ -602,9 +512,6 @@ abstract class AbstractColumn
         return $this->replaceValues;
     }
 
-    /**
-     * @return bool
-     */
     public function notReplacedGetEmpty(): bool
     {
         return $this->notReplacedGetEmpty;
@@ -613,10 +520,7 @@ abstract class AbstractColumn
     /**
      * Set parameter for a specific renderer (currently only supported for jqGrid).
      *
-     * @param string $name
      * @param mixed  $value
-     * @param string $rendererType
-     *
      * @return $this
      */
     public function setRendererParameter(string $name, $value, string $rendererType = 'jqGrid'): self
@@ -634,8 +538,6 @@ abstract class AbstractColumn
     }
 
     /**
-     * @param string $rendererName
-     *
      * @return array
      */
     public function getRendererParameters(string $rendererName = 'jqGrid')
@@ -651,7 +553,6 @@ abstract class AbstractColumn
      * Set a template formatter and overwrite other formatter.
      *
      * @param AbstractFormatter[] $formatters
-     *
      * @return $this
      */
     public function setFormatters(array $formatters): self
@@ -663,8 +564,6 @@ abstract class AbstractColumn
 
     /**
      * add a template formatter in the list.
-     *
-     * @param AbstractFormatter $formatter
      *
      * @return $this
      */
@@ -685,17 +584,12 @@ abstract class AbstractColumn
         return $this->formatters;
     }
 
-    /**
-     * @return bool
-     */
     public function hasFormatters(): bool
     {
-        return !empty($this->formatters);
+        return ! empty($this->formatters);
     }
 
     /**
-     * @param bool $mode
-     *
      * @return $this
      */
     public function setRowClickDisabled(bool $mode = true): self
@@ -705,9 +599,6 @@ abstract class AbstractColumn
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isRowClickEnabled(): bool
     {
         return $this->rowClickEnabled;

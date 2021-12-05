@@ -1,19 +1,25 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * Methods which can be used in (all) export renderer.
  */
 
 namespace ZfcDatagrid\Renderer;
 
+use Exception;
 use ZfcDatagrid\Column;
-use function in_array;
-use function get_class;
-use function substr;
-use function floor;
+use ZfcDatagrid\Column\AbstractColumn;
+
 use function date;
+use function floor;
+use function get_class;
 use function implode;
-use function str_replace;
+use function in_array;
 use function preg_replace;
+use function str_replace;
+use function substr;
 
 abstract class AbstractExport extends AbstractRenderer
 {
@@ -32,20 +38,20 @@ abstract class AbstractExport extends AbstractRenderer
      * Decide which columns we want to display.
      *
      * @return Column\AbstractColumn[]
-     *
-     * @throws \Exception
+     * @throws Exception
      */
     protected function getColumnsToExport(): array
     {
-        if (!empty($this->columnsToExport)) {
+        if (! empty($this->columnsToExport)) {
             return $this->columnsToExport;
         }
 
         $columnsToExport = [];
         foreach ($this->getColumns() as $column) {
-            /* @var $column \ZfcDatagrid\Column\AbstractColumn */
+            /** @var AbstractColumn $column */
 
-            if (! $column instanceof Column\Action &&
+            if (
+                ! $column instanceof Column\Action &&
                 $column->isHidden() === false &&
                 in_array(get_class($column->getType()), $this->allowedColumnTypes)
             ) {
@@ -53,7 +59,7 @@ abstract class AbstractExport extends AbstractRenderer
             }
         }
         if (empty($columnsToExport)) {
-            throw new \Exception('No columns to export available');
+            throw new Exception('No columns to export available');
         }
 
         $this->columnsToExport = $columnsToExport;
@@ -64,9 +70,7 @@ abstract class AbstractExport extends AbstractRenderer
     /**
      * Get the paper width in MM (milimeter).
      *
-     * @return float
-     *
-     * @throws \Exception
+     * @throws Exception
      */
     protected function getPaperWidth(): float
     {
@@ -76,7 +80,7 @@ abstract class AbstractExport extends AbstractRenderer
         $orientation = $optionsRenderer['orientation'];
 
         if (substr($papersize, 0, 1) != 'A') {
-            throw new \Exception('Currently only "A" paper formats are supported!');
+            throw new Exception('Currently only "A" paper formats are supported!');
         }
 
         // calc from A0 to selected
@@ -99,8 +103,6 @@ abstract class AbstractExport extends AbstractRenderer
     /**
      * Get a valid filename to save
      * (WITHOUT the extension!).
-     *
-     * @return string
      */
     protected function getFilename(): string
     {

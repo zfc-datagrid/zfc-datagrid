@@ -1,11 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ZfcDatagridTest\Column\Formatter;
 
 use Laminas\Router\RouteStackInterface;
+use PHPUnit_Framework_MockObject_MockObject;
 use ZfcDatagrid\Column\AbstractColumn;
 use ZfcDatagrid\Column\Formatter;
 use ZfcDatagridTest\Util\TestBase;
+
+use function time;
 
 class HtmlTagTest extends TestBase
 {
@@ -139,7 +144,7 @@ class HtmlTagTest extends TestBase
         /** @var Formatter\HtmlTag $htmlTag */
         $htmlTag = $this->getClass();
 
-        $attribute = (string)time();
+        $attribute = (string) time();
         $htmlTag->setAttribute('stuff', $attribute);
         $this->assertSame(['stuff' => $attribute], $this->getProperty('attributes'));
     }
@@ -189,7 +194,7 @@ class HtmlTagTest extends TestBase
         /** @var Formatter\HtmlTag $htmlTag */
         $htmlTag = $this->getClass();
 
-        $attribute = (string)time();
+        $attribute = (string) time();
         $htmlTag->setAttribute('stuff', $attribute);
         $this->assertSame('', $htmlTag->getAttribute('foobarrr'));
         $this->assertSame($attribute, $htmlTag->getAttribute('stuff'));
@@ -200,7 +205,7 @@ class HtmlTagTest extends TestBase
         /** @var Formatter\HtmlTag $htmlTag */
         $htmlTag = $this->getClass();
 
-        $attribute = (string)time();
+        $attribute = (string) time();
         $htmlTag->setAttribute('stuff', $attribute);
         $this->assertSame(['stuff' => $attribute], $htmlTag->getAttributes());
     }
@@ -217,8 +222,8 @@ class HtmlTagTest extends TestBase
 
     public function testGetAttributesString()
     {
-        /** @var RouteStackInterface|\PHPUnit_Framework_MockObject_MockObject $router */
-        $router = $this->getMockForAbstractClass(
+        /** @var RouteStackInterface|PHPUnit_Framework_MockObject_MockObject $router */
+        $router      = $this->getMockForAbstractClass(
             RouteStackInterface::class,
             [],
             'RouteStackInterface',
@@ -227,7 +232,7 @@ class HtmlTagTest extends TestBase
             true,
             ['assemble']
         );
-        $route = 'foobar';
+        $route       = 'foobar';
         $routeParams = [];
 
         /** @var AbstractColumn $col */
@@ -273,7 +278,7 @@ class HtmlTagTest extends TestBase
         $htmlTag = $this->getClass();
         $htmlTag->setRowData(
             [
-                'id' => 'foobar',
+                'id'         => 'foobar',
                 'idConcated' => 'idConcated',
             ]
         );

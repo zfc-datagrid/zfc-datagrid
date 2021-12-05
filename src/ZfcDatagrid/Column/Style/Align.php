@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagrid\Column\Style;
 
 class Align extends AbstractStyle
@@ -23,9 +26,7 @@ class Align extends AbstractStyle
      */
     const JUSTIFY = 'justify';
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $alignment;
 
     /**
@@ -41,8 +42,6 @@ class Align extends AbstractStyle
     }
 
     /**
-     * @param string $alignment
-     *
      * @return $this
      */
     public function setAlignment(string $alignment): self
@@ -52,9 +51,6 @@ class Align extends AbstractStyle
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getAlignment(): string
     {
         return $this->alignment;

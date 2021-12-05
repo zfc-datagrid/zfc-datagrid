@@ -1,8 +1,12 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagridTest\Service;
 
-use PHPUnit\Framework\TestCase;
+use Laminas\Db\Adapter\Adapter;
 use Laminas\ServiceManager\ServiceManager;
+use PHPUnit\Framework\TestCase;
 use ZfcDatagrid\Service\LaminasDbAdapterFactory;
 
 /**
@@ -25,6 +29,6 @@ class LaminasDbAdapterFactoryTest extends TestCase
         $factory = new LaminasDbAdapterFactory();
         $grid    = $factory->__invoke($sm, 'zfcDatagrid_dbAdapter');
 
-        $this->assertInstanceOf(\Laminas\Db\Adapter\Adapter::class, $grid);
+        $this->assertInstanceOf(Adapter::class, $grid);
     }
 }

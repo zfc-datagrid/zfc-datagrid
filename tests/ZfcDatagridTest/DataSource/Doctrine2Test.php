@@ -1,8 +1,15 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagridTest\DataSource;
 
+use Doctrine\ORM\Query\Expr\Andx;
+use Doctrine\ORM\QueryBuilder;
+use stdClass;
 use TypeError;
 use ZfcDatagrid\DataSource\Doctrine2;
+use ZfcDatagrid\DataSource\Doctrine2\Paginator;
 use ZfcDatagrid\Filter;
 use ZfcDatagridTest\DataSource\Doctrine2\AbstractDoctrine2Test;
 
@@ -12,10 +19,7 @@ use ZfcDatagridTest\DataSource\Doctrine2\AbstractDoctrine2Test;
  */
 class Doctrine2Test extends AbstractDoctrine2Test
 {
-    /**
-     *
-     * @var Doctrine2
-     */
+    /** @var Doctrine2 */
     protected $source;
 
     protected $qb;
@@ -38,11 +42,11 @@ class Doctrine2Test extends AbstractDoctrine2Test
     {
         $source = clone $this->source;
 
-        $this->assertInstanceOf(\Doctrine\ORM\QueryBuilder::class, $source->getData());
+        $this->assertInstanceOf(QueryBuilder::class, $source->getData());
         $this->assertSame($this->qb, $source->getData());
 
         $this->expectException(TypeError::class);
-        $source = new Doctrine2(new \stdClass('something'));
+        $source = new Doctrine2(new stdClass('something'));
     }
 
     public function testExecute()
@@ -53,7 +57,7 @@ class Doctrine2Test extends AbstractDoctrine2Test
         $source->addSortCondition($this->colEdition, 'DESC');
         $source->execute();
 
-        $this->assertInstanceOf(\ZfcDatagrid\DataSource\Doctrine2\Paginator::class, $source->getPaginatorAdapter());
+        $this->assertInstanceOf(Paginator::class, $source->getPaginatorAdapter());
     }
 
     public function testFilter()
@@ -72,7 +76,7 @@ class Doctrine2Test extends AbstractDoctrine2Test
         $source->addFilter($filter);
         $source->execute();
 
-        $this->assertInstanceOf(\Doctrine\ORM\Query\Expr\Andx::class, $source->getData()
+        $this->assertInstanceOf(Andx::class, $source->getData()
             ->getDQLPart('where'));
     }
 }

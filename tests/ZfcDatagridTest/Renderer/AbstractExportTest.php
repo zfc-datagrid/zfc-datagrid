@@ -1,9 +1,17 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagridTest\Renderer;
 
 use Exception;
 use PHPUnit\Framework\TestCase;
+use PHPUnit_Framework_MockObject_MockObject;
 use ReflectionClass;
+use ZfcDatagrid\Renderer\AbstractExport;
+
+use function date;
+use function get_class;
 
 /**
  * @group Renderer
@@ -11,15 +19,12 @@ use ReflectionClass;
  */
 class AbstractExportTest extends TestCase
 {
-    /**
-     *
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
+    /** @var PHPUnit_Framework_MockObject_MockObject */
     private $exportMock;
 
     public function setUp(): void
     {
-        $this->exportMock = $this->getMockForAbstractClass(\ZfcDatagrid\Renderer\AbstractExport::class);
+        $this->exportMock = $this->getMockForAbstractClass(AbstractExport::class);
     }
 
     public function testFilename()

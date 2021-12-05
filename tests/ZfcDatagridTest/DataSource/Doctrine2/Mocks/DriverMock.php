@@ -1,29 +1,24 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagridTest\DataSource\Doctrine2\Mocks;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Driver;
 use Doctrine\DBAL\Driver\API\ExceptionConverter;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use Doctrine\DBAL\Schema\MySQLSchemaManager;
 
 /**
  * Mock class for Driver.
- *
- * @copyright https://github.com/doctrine/doctrine2/blob/master/tests/Doctrine/Tests/Mocks/DriverMock.php
  */
-class DriverMock implements \Doctrine\DBAL\Driver
+class DriverMock implements Driver
 {
-    /**
-     *
-     * @var \Doctrine\DBAL\Platforms\AbstractPlatform null
-     */
+    /** @var AbstractPlatform null */
     private $platformMock;
 
-    /**
-     *
-     * @var \Doctrine\DBAL\Schema\AbstractSchemaManager null
-     */
+    /** @var AbstractSchemaManager null */
     private $schemaManagerMock;
 
     /**
@@ -63,23 +58,17 @@ class DriverMock implements \Doctrine\DBAL\Driver
     /* MOCK API */
 
     /**
-     *
-     * @param \Doctrine\DBAL\Platforms\AbstractPlatform $platform
-     *
      * @return void
      */
-    public function setDatabasePlatform(\Doctrine\DBAL\Platforms\AbstractPlatform $platform)
+    public function setDatabasePlatform(AbstractPlatform $platform)
     {
         $this->platformMock = $platform;
     }
 
     /**
-     *
-     * @param \Doctrine\DBAL\Schema\AbstractSchemaManager $sm
-     *
      * @return void
      */
-    public function setSchemaManager(\Doctrine\DBAL\Schema\AbstractSchemaManager $sm)
+    public function setSchemaManager(AbstractSchemaManager $sm)
     {
         $this->schemaManagerMock = $sm;
     }
@@ -95,7 +84,7 @@ class DriverMock implements \Doctrine\DBAL\Driver
     /**
      * @ERROR!!!
      */
-    public function getDatabase(\Doctrine\DBAL\Connection $conn)
+    public function getDatabase(Connection $conn)
     {
         return;
     }

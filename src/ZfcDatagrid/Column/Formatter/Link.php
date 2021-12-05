@@ -1,17 +1,16 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagrid\Column\Formatter;
 
 class Link extends HtmlTag
 {
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $attributes = [
         'href' => '',
     ];
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $name = 'a';
 }

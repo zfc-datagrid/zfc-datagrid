@@ -1,11 +1,17 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagridTest\Column\Type;
 
+use Exception;
 use Locale;
 use NumberFormatter;
 use ZfcDatagrid\Column\Type;
 use ZfcDatagrid\Filter;
 use ZfcDatagridTest\Util\TestBase;
+
+use function extension_loaded;
 
 /**
  * @group Column
@@ -132,17 +138,17 @@ class NumberTest extends TestBase
 
     public function testFilterValueException(): void
     {
-        $formatter = $this->getMockBuilder(\NumberFormatter::class)
+        $formatter = $this->getMockBuilder(NumberFormatter::class)
             ->setMethods(['parse'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $formatter->expects($this->once())
             ->method('parse')
-            ->willThrowException(new \Exception('test parse exception'));
+            ->willThrowException(new Exception('test parse exception'));
 
         $this->mockedMethodList = ['getFormatter'];
-        $class = $this->getClass();
+        $class                  = $this->getClass();
         $class->expects($this->once())
             ->method('getFormatter')
             ->willReturn($formatter);
@@ -183,7 +189,7 @@ class NumberTest extends TestBase
     public function testPattern(): void
     {
         $type = $this->numberFormatterEN;
-        
+
         $this->assertNull($type->getPattern());
 
         $type->setPattern('foobar');
@@ -196,10 +202,12 @@ class NumberTest extends TestBase
     public function testGetFormatter(): void
     {
         $this->setProperty('pattern', 'pattern');
-        $this->setProperty('attributes', [[
-            'attribute' => 5,
-            'value'     => 3,
-        ]]);
+        $this->setProperty('attributes', [
+            [
+                'attribute' => 5,
+                'value'     => 3,
+            ],
+        ]);
         $actual = $this->getMethod('getFormatter')->invoke($this->getClass());
 
         $this->assertSame('pattern000', $actual->getPattern());

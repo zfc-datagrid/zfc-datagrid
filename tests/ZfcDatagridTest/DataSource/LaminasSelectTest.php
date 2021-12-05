@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagridTest\DataSource;
 
 /**
@@ -10,8 +13,13 @@ namespace ZfcDatagridTest\DataSource;
 use Exception;
 use InvalidArgumentException;
 use Laminas\Db\Adapter\Adapter;
+use Laminas\Db\Adapter\Driver\ConnectionInterface;
+use Laminas\Db\Adapter\Driver\DriverInterface;
+use Laminas\Db\Adapter\Driver\StatementInterface;
+use Laminas\Db\Adapter\Platform\PlatformInterface;
 use Laminas\Db\Sql\Select;
 use Laminas\Db\Sql\Sql;
+use Laminas\Paginator\Adapter\DbSelect;
 use TypeError;
 use ZfcDatagrid\Column;
 use ZfcDatagrid\DataSource\LaminasSelect;
@@ -23,10 +31,7 @@ use ZfcDatagrid\Filter;
  */
 class LaminasSelectTest extends DataSourceTestCase
 {
-    /**
-     *
-     * @var Adapter
-     */
+    /** @var Adapter */
     protected $adapter;
 
     /**
@@ -34,32 +39,29 @@ class LaminasSelectTest extends DataSourceTestCase
      *
      * @var Sql
      */
-    protected $sql = null;
+    protected $sql;
 
-    /**
-     *
-     * @var LaminasSelect
-     */
+    /** @var LaminasSelect */
     protected $source;
 
     public function setUp(): void
     {
         parent::setUp();
 
-        $this->mockDriver     = $this->getMockBuilder(\Laminas\Db\Adapter\Driver\DriverInterface::class)->getMock();
-        $this->mockConnection = $this->getMockBuilder(\Laminas\Db\Adapter\Driver\ConnectionInterface::class)->getMock();
+        $this->mockDriver     = $this->getMockBuilder(DriverInterface::class)->getMock();
+        $this->mockConnection = $this->getMockBuilder(ConnectionInterface::class)->getMock();
         $this->mockDriver->expects(self::any())
             ->method('checkEnvironment')
             ->will($this->returnValue(true));
         $this->mockDriver->expects(self::any())
             ->method('getConnection')
             ->will($this->returnValue($this->mockConnection));
-        $this->mockPlatform = $this->getMockBuilder(\Laminas\Db\Adapter\Platform\PlatformInterface::class)->getMock();
+        $this->mockPlatform = $this->getMockBuilder(PlatformInterface::class)->getMock();
         $this->mockPlatform->expects(self::any())
             ->method('getIdentifierSeparator')
             ->will($this->returnValue('.'));
 
-        $this->mockStatement = $this->getMockBuilder(\Laminas\Db\Adapter\Driver\StatementInterface::class)->getMock();
+        $this->mockStatement = $this->getMockBuilder(StatementInterface::class)->getMock();
         $this->mockDriver->expects(self::any())
             ->method('createStatement')
             ->will($this->returnValue($this->mockStatement));
@@ -80,11 +82,11 @@ class LaminasSelectTest extends DataSourceTestCase
 
     public function testConstruct()
     {
-        $select = $this->getMockBuilder(\Laminas\Db\Sql\Select::class)->getMock();
+        $select = $this->getMockBuilder(Select::class)->getMock();
 
         $source = new LaminasSelect($select);
 
-        $this->assertInstanceOf(\Laminas\Db\Sql\Select::class, $source->getData());
+        $this->assertInstanceOf(Select::class, $source->getData());
         $this->assertEquals($select, $source->getData());
 
         $this->expectException(TypeError::class);
@@ -93,7 +95,7 @@ class LaminasSelectTest extends DataSourceTestCase
 
     public function testExecuteException()
     {
-        $select = $this->getMockBuilder(\Laminas\Db\Sql\Select::class)->getMock();
+        $select = $this->getMockBuilder(Select::class)->getMock();
 
         $source = new LaminasSelect($select);
 
@@ -106,11 +108,11 @@ class LaminasSelectTest extends DataSourceTestCase
     {
         $source = clone $this->source;
 
-        $this->assertInstanceOf(\Laminas\Db\Sql\Sql::class, $source->getAdapter());
+        $this->assertInstanceOf(Sql::class, $source->getAdapter());
         $this->assertEquals($this->sql, $source->getAdapter());
 
         $source->setAdapter($this->adapter);
-        $this->assertInstanceOf(\Laminas\Db\Sql\Sql::class, $source->getAdapter());
+        $this->assertInstanceOf(Sql::class, $source->getAdapter());
 
         $this->expectException(InvalidArgumentException::class);
         $source->setAdapter('something');
@@ -124,7 +126,7 @@ class LaminasSelectTest extends DataSourceTestCase
         $source->addSortCondition($this->colEdition, 'DESC');
         $source->execute();
 
-        $this->assertInstanceOf(\Laminas\Paginator\Adapter\DbSelect::class, $source->getPaginatorAdapter());
+        $this->assertInstanceOf(DbSelect::class, $source->getPaginatorAdapter());
     }
 
     public function testJoinTable()

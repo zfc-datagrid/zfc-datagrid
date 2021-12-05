@@ -1,18 +1,15 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagridTest\Util;
 
 use Laminas\Mvc\Service\ServiceListenerFactory;
 use Laminas\ServiceManager\ServiceManager;
 
-/**
- * Class ServiceManagerFactory
- * @package ZfcDatagridTest\Util
- */
 class ServiceManagerFactory
 {
-    /**
-     * @var array
-     */
+    /** @var array */
     protected static $config = [];
 
     /**
@@ -24,12 +21,12 @@ class ServiceManagerFactory
     }
 
     /**
-     * @return \Laminas\ServiceManager\ServiceManager
+     * @return ServiceManager
      */
     public static function getServiceManager()
     {
         $serviceManager = new ServiceManager(
-            isset(static::$config['service_manager']) ? static::$config['service_manager'] : []
+            static::$config['service_manager'] ?? []
         );
         $serviceManager->setService('Applicationconfig', static::$config);
         $serviceManager->setFactory('ServiceListener', ServiceListenerFactory::class);

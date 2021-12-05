@@ -1,7 +1,13 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagrid\Column\DataPopulation\Object;
 
+use Exception;
+use InvalidArgumentException;
 use ZfcDatagrid\Column\DataPopulation\ObjectAwareInterface;
+
 use function md5;
 
 class Gravatar implements ObjectAwareInterface
@@ -10,10 +16,8 @@ class Gravatar implements ObjectAwareInterface
     protected $email = '';
 
     /**
-     * @param string $name
      * @param mixed  $value
-     *
-     * @throws \Exception
+     * @throws Exception
      */
     private function setParameter(string $name, $value)
     {
@@ -23,7 +27,7 @@ class Gravatar implements ObjectAwareInterface
                 break;
 
             default:
-                throw new \InvalidArgumentException('Not allowed parameter: ' . $name);
+                throw new InvalidArgumentException('Not allowed parameter: ' . $name);
         }
     }
 

@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagrid\Renderer\PrintHtml;
 
 use Laminas\View\Model\ViewModel;
@@ -6,32 +9,23 @@ use ZfcDatagrid\Renderer\AbstractRenderer;
 
 class Renderer extends AbstractRenderer
 {
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return 'printHtml';
     }
 
-    /**
-     * @return bool
-     */
     public function isExport(): bool
     {
         return true;
     }
 
-    /**
-     * @return bool
-     */
     public function isHtml(): bool
     {
         return true;
     }
 
     /**
-     * @return \Laminas\View\Model\ViewModel
+     * @return ViewModel
      */
     public function execute()
     {

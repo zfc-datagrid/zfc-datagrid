@@ -1,26 +1,22 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagrid\DataSource\PhpArray;
 
+use Exception;
 use ZfcDatagrid\Filter as DatagridFilter;
 
 class Filter
 {
-    /**
-     * @var DatagridFilter
-     */
+    /** @var DatagridFilter */
     private $filter;
 
-    /**
-     * @param DatagridFilter $filter
-     */
     public function __construct(DatagridFilter $filter)
     {
         $this->filter = $filter;
     }
 
-    /**
-     * @return DatagridFilter
-     */
     public function getFilter(): DatagridFilter
     {
         return $this->filter;
@@ -30,10 +26,7 @@ class Filter
      * Does the value get filtered?
      *
      * @param array $row
-     *
-     * @throws \Exception
-     *
-     * @return bool
+     * @throws Exception
      */
     public function applyFilter(array $row): bool
     {
@@ -49,9 +42,7 @@ class Filter
 
             if ($filter->getOperator() == DatagridFilter::BETWEEN) {
                 //BETWEEN have to be tested in one call
-                $isApply = DatagridFilter::isApply($value, $this->getFilter()->getValues(), $filter->getOperator());
-
-                return $isApply;
+                return DatagridFilter::isApply($value, $this->getFilter()->getValues(), $filter->getOperator());
             } else {
                 $isApply = DatagridFilter::isApply($value, $filterValue, $filter->getOperator());
             }

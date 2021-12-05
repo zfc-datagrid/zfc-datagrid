@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagridTest\DataSource\Doctrine2;
 
 use Doctrine\ORM\AbstractQuery;
@@ -108,8 +111,8 @@ class PaginatorFastTest extends TestBase
             ->method('getResult')
             ->willReturn([
                 [
-                    'uniqueParts' => 12
-                ]
+                    'uniqueParts' => 12,
+                ],
             ]);
 
         $queryBuilder->setParameters([]);
@@ -118,7 +121,8 @@ class PaginatorFastTest extends TestBase
             ->method('getDQLParts')
             ->willReturn([
                 'groupBy' => [
-                    'test', 'group_foo'
+                    'test',
+                    'group_foo',
                 ],
             ]);
 
@@ -217,12 +221,14 @@ class PaginatorFastTest extends TestBase
             ->method('getDQLParts')
             ->willReturn([
                 'groupBy' => [],
-                'from' => [ new class() {
-                    public function getAlias(): string
-                    {
-                        return 'as';
-                    }
-                }],
+                'from'    => [
+                    new class () {
+                        public function getAlias(): string
+                        {
+                            return 'as';
+                        }
+                    },
+                ],
             ]);
 
         $queryBuilder->expects($this->once())

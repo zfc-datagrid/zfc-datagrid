@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * Image type.
  */
@@ -15,9 +18,6 @@ class Image extends AbstractType
     /** @var float */
     protected $resizeHeight = 20.5;
 
-    /**
-     * @return string
-     */
     public function getTypeName(): string
     {
         return 'image';
@@ -25,8 +25,6 @@ class Image extends AbstractType
 
     /**
      * Set the resize type for TCPDF export.
-     *
-     * @param string $type
      *
      * @throws InvalidArgumentException
      * @return $this
@@ -42,17 +40,12 @@ class Image extends AbstractType
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getResizeType(): string
     {
         return $this->resizeType;
     }
 
     /**
-     * @param float $height
-     *
      * @return $this
      */
     public function setResizeHeight(float $height): self
@@ -62,9 +55,6 @@ class Image extends AbstractType
         return $this;
     }
 
-    /**
-     * @return float
-     */
     public function getResizeHeight(): float
     {
         return $this->resizeHeight;

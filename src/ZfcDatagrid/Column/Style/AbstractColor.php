@@ -1,9 +1,12 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagrid\Column\Style;
 
-use function is_array;
 use function count;
 use function dechex;
+use function is_array;
 use function strlen;
 
 /**
@@ -62,7 +65,7 @@ class AbstractColor extends AbstractStyle
     public function __construct($redOrStaticOrArray, int $green = 0, int $blue = 0)
     {
         if (is_array($redOrStaticOrArray) && count($redOrStaticOrArray) === 3) {
-            list($red, $green, $blue) = $redOrStaticOrArray;
+            [$red, $green, $blue] = $redOrStaticOrArray;
         } else {
             $red = $redOrStaticOrArray;
         }
@@ -78,7 +81,6 @@ class AbstractColor extends AbstractStyle
      * @param int $red 0-255
      * @param int $green 0-255
      * @param int $blue 0-255
-     *
      * @return $this
      */
     public function setRgb(int $red, int $green, int $blue): self
@@ -91,8 +93,6 @@ class AbstractColor extends AbstractStyle
     }
 
     /**
-     * @param int $red
-     *
      * @return $this
      */
     public function setRed(int $red): self
@@ -102,17 +102,12 @@ class AbstractColor extends AbstractStyle
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getRed(): int
     {
         return $this->red;
     }
 
     /**
-     * @param int $green
-     *
      * @return $this
      */
     public function setGreen(int $green): self
@@ -122,17 +117,12 @@ class AbstractColor extends AbstractStyle
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getGreen(): int
     {
         return $this->green;
     }
 
     /**
-     * @param int $blue
-     *
      * @return $this
      */
     public function setBlue(int $blue): self
@@ -142,9 +132,6 @@ class AbstractColor extends AbstractStyle
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getBlue(): int
     {
         return $this->blue;
@@ -164,8 +151,6 @@ class AbstractColor extends AbstractStyle
 
     /**
      * Convert RGB dec to hex as a string.
-     *
-     * @return string
      */
     public function getRgbHexString(): string
     {

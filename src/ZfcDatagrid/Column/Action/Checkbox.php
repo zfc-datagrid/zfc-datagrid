@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagrid\Column\Action;
 
 use function sprintf;
@@ -11,11 +14,6 @@ class Checkbox extends AbstractAction
     /** @var string */
     protected $name = 'rowSelections';
 
-    /**
-     * Checkbox constructor.
-     *
-     * @param string $name
-     */
     public function __construct(string $name = 'rowSelections')
     {
         parent::__construct();
@@ -24,7 +22,7 @@ class Checkbox extends AbstractAction
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function toHtml(array $row): string
     {
@@ -39,9 +37,6 @@ class Checkbox extends AbstractAction
         );
     }
 
-    /**
-     * @return string
-     */
     protected function getHtmlType(): string
     {
         return '';

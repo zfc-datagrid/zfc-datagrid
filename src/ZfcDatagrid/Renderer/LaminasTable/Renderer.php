@@ -1,24 +1,31 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagrid\Renderer\LaminasTable;
 
+use Exception;
 use Laminas\Console\Adapter\AdapterInterface as ConsoleAdapter;
 use Laminas\Console\Console;
 use Laminas\Console\Request as ConsoleRequest;
+use Laminas\Stdlib\ResponseInterface;
 use Laminas\Text\Table;
 use Laminas\Text\Table\Table as TextTable;
 use ZfcDatagrid\Column;
+use ZfcDatagrid\Column\AbstractColumn;
 use ZfcDataGrid\Column\Type;
 use ZfcDatagrid\Renderer\AbstractRenderer;
-use function explode;
-use function strtoupper;
-use function count;
-use function function_exists;
-use function mb_strtoupper;
-use function is_array;
-use function implode;
-use function sprintf;
-use function floor;
+
 use function array_sum;
+use function count;
+use function explode;
+use function floor;
+use function function_exists;
+use function implode;
+use function is_array;
+use function mb_strtoupper;
+use function sprintf;
+use function strtoupper;
 
 /**
  * For CLI.
@@ -31,48 +38,35 @@ class Renderer extends AbstractRenderer
     /** @var Column\AbstractColumn[] */
     private $columnsToDisplay = [];
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return 'laminasTable';
     }
 
-    /**
-     * @return bool
-     */
     public function isExport(): bool
     {
         return false;
     }
 
-    /**
-     * @return bool
-     */
     public function isHtml(): bool
     {
         return false;
     }
 
     /**
-     * @return ConsoleRequest
-     *
-     * @throws \Exception
+     * @throws Exception
      */
     public function getRequest(): ConsoleRequest
     {
         $request = parent::getRequest();
         if (! $request instanceof ConsoleRequest) {
-            throw new \Exception('Request must be an instance of Laminas\Console\Request for console rendering');
+            throw new Exception('Request must be an instance of Laminas\Console\Request for console rendering');
         }
 
         return $request;
     }
 
     /**
-     * @param ConsoleAdapter $adapter
-     *
      * @return $this
      */
     public function setConsoleAdapter(ConsoleAdapter $adapter): self
@@ -82,9 +76,6 @@ class Renderer extends AbstractRenderer
         return $this;
     }
 
-    /**
-     * @return ConsoleAdapter
-     */
     public function getConsoleAdapter(): ConsoleAdapter
     {
         if (null === $this->consoleAdapter) {
@@ -96,12 +87,11 @@ class Renderer extends AbstractRenderer
 
     /**
      * @todo enable parameters from console
-     *
      * @return array
      */
     public function getSortConditions(): array
     {
-        if (!empty($this->sortConditions)) {
+        if (! empty($this->sortConditions)) {
             return $this->sortConditions;
         }
 
@@ -130,7 +120,7 @@ class Renderer extends AbstractRenderer
                 }
 
                 foreach ($this->getColumns() as $column) {
-                    /* @var $column \ZfcDatagrid\Column\AbstractColumn */
+                    /** @var AbstractColumn $column */
                     if ($column->getUniqueId() == $sortColumn) {
                         $sortConditions[] = [
                             'sortDirection' => $sortDirection,
@@ -155,7 +145,6 @@ class Renderer extends AbstractRenderer
 
     /**
      * @todo enable parameters from console
-     *
      * @return array
      */
     public function getFilters(): array
@@ -165,8 +154,6 @@ class Renderer extends AbstractRenderer
 
     /**
      * Should be implemented for each renderer itself (just default).
-     *
-     * @return int
      */
     public function getCurrentPageNumber(): int
     {
@@ -183,10 +170,7 @@ class Renderer extends AbstractRenderer
 
     /**
      * @param int $defaultItems
-     *
-     * @return int
-     *
-     * @throws \Exception
+     * @throws Exception
      */
     public function getItemsPerPage($defaultItems = 25): int
     {
@@ -202,7 +186,7 @@ class Renderer extends AbstractRenderer
     }
 
     /**
-     * @return \Laminas\Stdlib\ResponseInterface
+     * @return ResponseInterface
      */
     public function execute()
     {
@@ -214,9 +198,6 @@ class Renderer extends AbstractRenderer
         return $response;
     }
 
-    /**
-     * @return TextTable
-     */
     private function getTable(): TextTable
     {
         $paginator = $this->getPaginator();
@@ -286,7 +267,7 @@ class Renderer extends AbstractRenderer
          */
         $tableRow = new Table\Row();
 
-        $footer = $this->translate('Page') . ' ';
+        $footer  = $this->translate('Page') . ' ';
         $footer .= sprintf('%s %s %s', $paginator->getCurrentPageNumber(), $this->translate('of'), $paginator->count());
 
         $footer .= ' / ';
@@ -314,25 +295,24 @@ class Renderer extends AbstractRenderer
      * Decide which columns we want to display.
      *
      * @return Column\AbstractColumn[]
-     *
-     * @throws \Exception
+     * @throws Exception
      */
     private function getColumnsToDisplay(): array
     {
-        if (!empty($this->columnsToDisplay)) {
+        if (! empty($this->columnsToDisplay)) {
             return $this->columnsToDisplay;
         }
 
         $columnsToDisplay = [];
         foreach ($this->getColumns() as $column) {
-            /* @var $column \ZfcDatagrid\Column\AbstractColumn */
+            /** @var AbstractColumn $column */
 
             if (! $column instanceof Column\Action && $column->isHidden() === false && $column->isHide() === false) {
                 $columnsToDisplay[] = $column;
             }
         }
         if (empty($columnsToDisplay)) {
-            throw new \Exception('No columns to display available');
+            throw new Exception('No columns to display available');
         }
 
         $this->columnsToDisplay = $columnsToDisplay;
@@ -356,7 +336,7 @@ class Renderer extends AbstractRenderer
 
         $colWidths = [];
         foreach ($cols as $col) {
-            /* @var $column \ZfcDatagrid\Column\AbstractColumn */
+            /** @var AbstractColumn $column */
             $width = $col->getWidth() * $onePercent;
             $width = (int) floor($width);
 

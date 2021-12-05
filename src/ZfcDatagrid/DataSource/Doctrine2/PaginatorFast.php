@@ -1,11 +1,15 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagrid\DataSource\Doctrine2;
 
 use Doctrine\ORM\QueryBuilder;
 use Laminas\Paginator\Adapter\AdapterInterface;
+
+use function array_unique;
 use function count;
 use function implode;
-use function array_unique;
 
 class PaginatorFast implements AdapterInterface
 {
@@ -19,16 +23,13 @@ class PaginatorFast implements AdapterInterface
      */
     protected $rowCount;
 
-    /**
-     * @param QueryBuilder $qb
-     */
     public function __construct(QueryBuilder $qb)
     {
         $this->qb = $qb;
     }
 
     /**
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getQueryBuilder()
     {
@@ -40,7 +41,6 @@ class PaginatorFast implements AdapterInterface
      *
      * @param int $offset
      * @param int $itemCountPerPage
-     *
      * @return array
      */
     public function getItems($offset, $itemCountPerPage)
@@ -78,8 +78,8 @@ class PaginatorFast implements AdapterInterface
         $qb->setFirstResult(null)
             ->setMaxResults(null)
             ->resetDQLParts([
-            'orderBy',
-            'select',
+                'orderBy',
+                'select',
             ]);
 
         if (count($groupParts) > 1) {

@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagridTest\Library;
 
 use PHPUnit\Framework\TestCase;
@@ -24,8 +27,8 @@ class ImageResizeTest extends TestCase
         $maxWidth  = 20;
         $maxHeight = 10;
 
-        $resize                     = new ImageResize();
-        list($newWidth, $newHeight) = $resize->getCalculatedSize($width, $height, $maxWidth, $maxHeight);
+        $resize                 = new ImageResize();
+        [$newWidth, $newHeight] = $resize->getCalculatedSize($width, $height, $maxWidth, $maxHeight);
 
         $this->assertEquals(20, $newWidth);
         $this->assertEquals(10, $newHeight);
@@ -45,8 +48,8 @@ class ImageResizeTest extends TestCase
         $maxWidth  = 18;
         $maxHeight = 10;
 
-        $resize                     = new ImageResize();
-        list($newWidth, $newHeight) = $resize->getCalculatedSize($width, $height, $maxWidth, $maxHeight);
+        $resize                 = new ImageResize();
+        [$newWidth, $newHeight] = $resize->getCalculatedSize($width, $height, $maxWidth, $maxHeight);
 
         $this->assertEquals(18, $newWidth);
         $this->assertEquals(9, $newHeight);
@@ -66,8 +69,8 @@ class ImageResizeTest extends TestCase
         $maxWidth  = 20;
         $maxHeight = 8;
 
-        $resize                     = new ImageResize();
-        list($newWidth, $newHeight) = $resize->getCalculatedSize($width, $height, $maxWidth, $maxHeight);
+        $resize                 = new ImageResize();
+        [$newWidth, $newHeight] = $resize->getCalculatedSize($width, $height, $maxWidth, $maxHeight);
 
         $this->assertEquals(16, $newWidth);
         $this->assertEquals(8, $newHeight);
@@ -87,8 +90,8 @@ class ImageResizeTest extends TestCase
         $maxWidth  = 20;
         $maxHeight = 10;
 
-        $resize                     = new ImageResize();
-        list($newWidth, $newHeight) = $resize->getCalculatedSize($width, $height, $maxWidth, $maxHeight);
+        $resize                 = new ImageResize();
+        [$newWidth, $newHeight] = $resize->getCalculatedSize($width, $height, $maxWidth, $maxHeight);
 
         $this->assertEquals(5, $newWidth);
         $this->assertEquals(10, $newHeight);
@@ -108,8 +111,8 @@ class ImageResizeTest extends TestCase
         $maxWidth  = 20;
         $maxHeight = 10;
 
-        $resize                     = new ImageResize();
-        list($newWidth, $newHeight) = $resize->getCalculatedSize($width, $height, $maxWidth, $maxHeight);
+        $resize                 = new ImageResize();
+        [$newWidth, $newHeight] = $resize->getCalculatedSize($width, $height, $maxWidth, $maxHeight);
 
         $this->assertEquals(20, $newWidth);
         $this->assertEquals(8, $newHeight);
@@ -129,8 +132,8 @@ class ImageResizeTest extends TestCase
         $maxWidth  = 30;
         $maxHeight = 12;
 
-        $resize                     = new ImageResize();
-        list($newWidth, $newHeight) = $resize->getCalculatedSize($width, $height, $maxWidth, $maxHeight);
+        $resize                 = new ImageResize();
+        [$newWidth, $newHeight] = $resize->getCalculatedSize($width, $height, $maxWidth, $maxHeight);
 
         $this->assertEquals(20, $newWidth);
         $this->assertEquals(12, $newHeight);
@@ -150,8 +153,8 @@ class ImageResizeTest extends TestCase
         $maxWidth  = 15;
         $maxHeight = 10;
 
-        $resize                     = new ImageResize();
-        list($newWidth, $newHeight) = $resize->getCalculatedSize($width, $height, $maxWidth, $maxHeight);
+        $resize                 = new ImageResize();
+        [$newWidth, $newHeight] = $resize->getCalculatedSize($width, $height, $maxWidth, $maxHeight);
 
         $this->assertEquals(15, $newWidth);
         $this->assertEquals(10, $newHeight);
@@ -171,8 +174,8 @@ class ImageResizeTest extends TestCase
         $maxWidth  = 15;
         $maxHeight = 10;
 
-        $resize                     = new ImageResize();
-        list($newWidth, $newHeight) = $resize->getCalculatedSize($width, $height, $maxWidth, $maxHeight);
+        $resize                 = new ImageResize();
+        [$newWidth, $newHeight] = $resize->getCalculatedSize($width, $height, $maxWidth, $maxHeight);
 
         $this->assertEquals(15, $newWidth);
         $this->assertEquals(5, $newHeight);
@@ -192,8 +195,8 @@ class ImageResizeTest extends TestCase
         $maxWidth  = 15;
         $maxHeight = 10;
 
-        $resize                     = new ImageResize();
-        list($newWidth, $newHeight) = $resize->getCalculatedSize($width, $height, $maxWidth, $maxHeight);
+        $resize                 = new ImageResize();
+        [$newWidth, $newHeight] = $resize->getCalculatedSize($width, $height, $maxWidth, $maxHeight);
 
         $this->assertEquals(5, $newWidth);
         $this->assertEquals(10, $newHeight);

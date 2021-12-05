@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * Render datagrid as CSV.
  */
@@ -10,36 +13,28 @@ use Laminas\Http\Response\Stream as ResponseStream;
 use Laminas\View\Model\ViewModel;
 use ZfcDatagrid\Column\Type;
 use ZfcDatagrid\Renderer\AbstractExport;
-use function date;
-use function fopen;
-use function fprintf;
+
 use function chr;
-use function fputcsv;
-use function implode;
+use function date;
 use function fclose;
 use function filesize;
+use function fopen;
+use function fprintf;
+use function fputcsv;
+use function implode;
 
 class Renderer extends AbstractExport
 {
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return 'csv';
     }
 
-    /**
-     * @return bool
-     */
     public function isExport(): bool
     {
         return true;
     }
 
-    /**
-     * @return bool
-     */
     public function isHtml(): bool
     {
         return false;
@@ -107,7 +102,7 @@ class Renderer extends AbstractExport
 
         $headers = new Headers();
         $headers->addHeaders([
-            'Content-Type' => [
+            'Content-Type'        => [
                 'application/force-download',
                 'application/octet-stream',
                 'application/download',

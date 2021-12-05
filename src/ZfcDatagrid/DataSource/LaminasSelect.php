@@ -1,10 +1,19 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagrid\DataSource;
 
+use Exception;
+use InvalidArgumentException;
+use Laminas\Db\Adapter\Adapter;
 use Laminas\Db\Sql;
 use Laminas\Db\Sql\Expression;
 use Laminas\Paginator\Adapter\DbSelect as PaginatorAdapter;
 use ZfcDatagrid\Column;
+use ZfcDatagrid\Column\AbstractColumn;
+use ZfcDatagrid\Filter;
+
 use function sprintf;
 
 class LaminasSelect extends AbstractDataSource
@@ -17,17 +26,12 @@ class LaminasSelect extends AbstractDataSource
 
     /**
      * Data source.
-     *
-     * @param Sql\Select $data
      */
     public function __construct(Sql\Select $data)
     {
         $this->select = $data;
     }
 
-    /**
-     * @return Sql\Select
-     */
     public function getData(): Sql\Select
     {
         return $this->select;
@@ -35,35 +39,31 @@ class LaminasSelect extends AbstractDataSource
 
     /**
      * @param $adapterOrSqlObject
-     *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function setAdapter($adapterOrSqlObject)
     {
         if ($adapterOrSqlObject instanceof Sql\Sql) {
             $this->sqlObject = $adapterOrSqlObject;
-        } elseif ($adapterOrSqlObject instanceof \Laminas\Db\Adapter\Adapter) {
+        } elseif ($adapterOrSqlObject instanceof Adapter) {
             $this->sqlObject = new Sql\Sql($adapterOrSqlObject);
         } else {
-            throw new \InvalidArgumentException('Object of "Laminas\Db\Sql\Sql" or "Laminas\Db\Adapter\Adapter" needed.');
+            throw new InvalidArgumentException('Object of "Laminas\Db\Sql\Sql" or "Laminas\Db\Adapter\Adapter" needed.');
         }
     }
 
-    /**
-     * @return Sql\Sql
-     */
     public function getAdapter(): ?Sql\Sql
     {
         return $this->sqlObject;
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function execute()
     {
         if ($this->getAdapter() === null || ! $this->getAdapter() instanceof \Laminas\Db\Sql\Sql) {
-            throw new \Exception('Object "Laminas\Db\Sql\Sql" is missing, please call setAdapter() first!');
+            throw new Exception('Object "Laminas\Db\Sql\Sql" is missing, please call setAdapter() first!');
         }
 
         $platform = $this->getAdapter()
@@ -111,7 +111,7 @@ class LaminasSelect extends AbstractDataSource
             $select->reset(Sql\Select::ORDER);
 
             foreach ($this->getSortConditions() as $sortCondition) {
-                /** @var \ZfcDataGrid\Column\AbstractColumn $col */
+                /** @var AbstractColumn $col */
                 $col = $sortCondition['column'];
                 $select->order($col->getUniqueId() . ' ' . $sortCondition['sortDirection']);
             }
@@ -122,7 +122,7 @@ class LaminasSelect extends AbstractDataSource
          */
         $filterColumn = new LaminasSelect\Filter($this->getAdapter(), $select);
         foreach ($this->getFilters() as $filter) {
-            /* @var $filter \ZfcDatagrid\Filter */
+            /** @var Filter $filter */
             if ($filter->isColumnFilter() === true) {
                 $filterColumn->applyFilter($filter);
             }

@@ -1,6 +1,10 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagrid\Column\Style;
 
+use InvalidArgumentException;
 use ZfcDatagrid\Column\AbstractColumn;
 use ZfcDatagrid\Filter;
 
@@ -15,14 +19,12 @@ abstract class AbstractStyle
     /**
      * Display the values with AND or OR (if multiple showOnValues are defined).
      *
-     * @param string $operator
-     *
      * @return $this
      */
     public function setByValueOperator(string $operator = 'OR'): self
     {
         if ($operator != 'AND' && $operator != 'OR') {
-            throw new \InvalidArgumentException('not allowed operator: "' . $operator . '" (AND / OR is allowed)');
+            throw new InvalidArgumentException('not allowed operator: "' . $operator . '" (AND / OR is allowed)');
         }
 
         $this->byValueOperator = $operator;
@@ -33,8 +35,6 @@ abstract class AbstractStyle
     /**
      * Get the show on value operator, e.g.
      * OR, AND.
-     *
-     * @return string
      */
     public function getByValueOperator(): string
     {
@@ -44,10 +44,8 @@ abstract class AbstractStyle
     /**
      * Set the style value based and not general.
      *
-     * @param AbstractColumn $column
      * @param mixed          $value
      * @param string         $operator
-     *
      * @return $this
      */
     public function addByValue(AbstractColumn $column, $value, $operator = Filter::EQUAL): self
@@ -69,18 +67,13 @@ abstract class AbstractStyle
         return $this->byValues;
     }
 
-    /**
-     * @return bool
-     */
     public function hasByValues(): bool
     {
-        return !empty($this->byValues);
+        return ! empty($this->byValues);
     }
 
     /**
      * @param array $row
-     *
-     * @return bool
      */
     public function isApply(array $row): bool
     {

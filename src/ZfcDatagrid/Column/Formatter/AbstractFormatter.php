@@ -1,7 +1,11 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagrid\Column\Formatter;
 
 use ZfcDatagrid\Column\AbstractColumn;
+
 use function in_array;
 
 abstract class AbstractFormatter
@@ -17,7 +21,6 @@ abstract class AbstractFormatter
 
     /**
      * @param array $data
-     *
      * @return $this
      */
     public function setRowData(array $data): self
@@ -36,8 +39,6 @@ abstract class AbstractFormatter
     }
 
     /**
-     * @param string $name
-     *
      * @return $this
      */
     public function setRendererName(?string $name = null): self
@@ -57,7 +58,6 @@ abstract class AbstractFormatter
 
     /**
      * @param array $validRenderers
-     *
      * @return $this
      */
     public function setValidRendererNames(array $validRenderers): self
@@ -75,19 +75,11 @@ abstract class AbstractFormatter
         return $this->validRenderers;
     }
 
-    /**
-     * @return bool
-     */
     public function isApply(): bool
     {
         return in_array($this->getRendererName(), $this->validRenderers);
     }
 
-    /**
-     * @param AbstractColumn $column
-     *
-     * @return string
-     */
     public function format(AbstractColumn $column): string
     {
         $data = $this->getRowData();
@@ -95,10 +87,5 @@ abstract class AbstractFormatter
         return true === $this->isApply() ? $this->getFormattedValue($column) : $data[$column->getUniqueId()];
     }
 
-    /**
-     * @param AbstractColumn $column
-     *
-     * @return string
-     */
     abstract public function getFormattedValue(AbstractColumn $column): string;
 }

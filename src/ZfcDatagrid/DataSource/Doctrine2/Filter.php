@@ -1,40 +1,36 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagrid\DataSource\Doctrine2;
 
 use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\QueryBuilder;
+use Exception;
+use InvalidArgumentException;
 use ZfcDatagrid\Column;
 use ZfcDatagrid\Filter as DatagridFilter;
+
 use function sprintf;
 use function str_replace;
 
 class Filter
 {
-    /**
-     * @var QueryBuilder
-     */
+    /** @var QueryBuilder */
     private $qb;
 
-    /**
-     * @param QueryBuilder $qb
-     */
     public function __construct(QueryBuilder $qb)
     {
         $this->qb = $qb;
     }
 
-    /**
-     * @return QueryBuilder
-     */
     public function getQueryBuilder(): QueryBuilder
     {
         return $this->qb;
     }
 
     /**
-     * @param DatagridFilter $filter
-     *
-     * @throws \Exception
+     * @throws Exception
      * @return $this
      */
     public function applyFilter(DatagridFilter $filter): self
@@ -44,7 +40,7 @@ class Filter
 
         $col = $filter->getColumn();
         if (! $col instanceof Column\Select) {
-            throw new \Exception('This column cannot be filtered: ' . $col->getUniqueId());
+            throw new Exception('This column cannot be filtered: ' . $col->getUniqueId());
         }
 
         $colString = $col->getSelectPart1();
@@ -132,7 +128,7 @@ class Filter
                     break 2;
 
                 default:
-                    throw new \InvalidArgumentException('This operator is currently not supported: '.$filter->getOperator());
+                    throw new InvalidArgumentException('This operator is currently not supported: ' . $filter->getOperator());
                     break;
             }
         }

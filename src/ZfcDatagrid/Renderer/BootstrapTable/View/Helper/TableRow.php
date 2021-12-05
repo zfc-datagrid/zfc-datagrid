@@ -1,14 +1,20 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagrid\Renderer\BootstrapTable\View\Helper;
 
+use Exception;
+use InvalidArgumentException;
 use Laminas\I18n\Translator\TranslatorInterface;
 use Laminas\View\Helper\AbstractHelper;
 use ZfcDatagrid\Column;
 use ZfcDatagrid\Column\Action\AbstractAction;
-use function implode;
-use function get_class;
-use function print_r;
+
 use function array_merge;
+use function get_class;
+use function implode;
+use function print_r;
 
 /**
  * View Helper.
@@ -19,8 +25,6 @@ class TableRow extends AbstractHelper
     private $translator;
 
     /**
-     * @param null|TranslatorInterface $translator
-     *
      * @return self
      */
     public function setTranslator(?TranslatorInterface $translator)
@@ -30,11 +34,6 @@ class TableRow extends AbstractHelper
         return $this;
     }
 
-    /**
-     * @param string $message
-     *
-     * @return string
-     */
     private function translate(string $message): string
     {
         if (null === $this->translator) {
@@ -46,9 +45,6 @@ class TableRow extends AbstractHelper
 
     /**
      * @param array $row
-     * @param bool  $open
-     *
-     * @return string
      */
     private function getTr(array $row, bool $open = true): string
     {
@@ -64,10 +60,7 @@ class TableRow extends AbstractHelper
     }
 
     /**
-     * @param string $dataValue
      * @param array $attributes
-     *
-     * @return string
      */
     private function getTd(string $dataValue, array $attributes = []): string
     {
@@ -86,18 +79,13 @@ class TableRow extends AbstractHelper
     /**
      * @param array          $row
      * @param array          $cols
-     * @param AbstractAction $rowClickAction
      * @param array          $rowStyles
-     * @param bool           $hasMassActions
-     *
-     * @throws \Exception
-     *
-     * @return string
+     * @throws Exception
      */
     public function __invoke(
         array $row,
         array $cols,
-        AbstractAction $rowClickAction = null,
+        ?AbstractAction $rowClickAction = null,
         array $rowStyles = [],
         bool $hasMassActions = false
     ): string {
@@ -108,7 +96,7 @@ class TableRow extends AbstractHelper
         }
 
         foreach ($cols as $col) {
-            /* @var $col Column\AbstractColumn */
+            /** @var Column\AbstractColumn $col */
             if (true === $col->isHide()) {
                 continue;
             }
@@ -134,7 +122,7 @@ class TableRow extends AbstractHelper
 
             $styles = array_merge($rowStyles, $col->getStyles());
             foreach ($styles as $style) {
-                /* @var $style Column\Style\AbstractStyle */
+                /** @var Column\Style\AbstractStyle $style */
                 if ($style->isApply($row) === true) {
                     switch (get_class($style)) {
                         case Column\Style\Bold::class:
@@ -170,17 +158,17 @@ class TableRow extends AbstractHelper
                             break;
 
                         default:
-                            throw new \InvalidArgumentException('Not defined style: "' . get_class($style) . '"');
+                            throw new InvalidArgumentException('Not defined style: "' . get_class($style) . '"');
                             break;
                     }
                 }
             }
 
             if ($col instanceof Column\Action) {
-                /* @var $col Column\Action */
+                /** @var Column\Action $col */
                 $actions = [];
                 foreach ($col->getActions() as $action) {
-                    /* @var $action Column\Action\AbstractAction */
+                    /** @var Column\Action\AbstractAction $action */
                     if ($action->isDisplayed($row) === true) {
                         $action->setTitle($this->translate($action->getTitle()));
 
@@ -196,7 +184,8 @@ class TableRow extends AbstractHelper
             }
 
             // "rowClick" action
-            if ($col instanceof Column\Select
+            if (
+                $col instanceof Column\Select
                 && $rowClickAction instanceof AbstractAction
                 && $col->isRowClickEnabled()
             ) {

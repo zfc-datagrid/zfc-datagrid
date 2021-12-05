@@ -1,7 +1,12 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagrid\Column\Formatter;
 
 use ZfcDatagrid\Column\AbstractColumn;
+
+use function count;
 use function sprintf;
 
 class FileSize extends AbstractFormatter
@@ -26,9 +31,6 @@ class FileSize extends AbstractFormatter
         'Y',
     ];
 
-    /**
-     * @return bool
-     */
     public function isApply(): bool
     {
         return true;
@@ -42,7 +44,7 @@ class FileSize extends AbstractFormatter
     public function getFormattedValue(AbstractColumn $column): string
     {
         $row   = $this->getRowData();
-        $value = (string)$row[$column->getUniqueId()];
+        $value = (string) $row[$column->getUniqueId()];
 
         if ('' == $value) {
             return $value;
@@ -50,7 +52,7 @@ class FileSize extends AbstractFormatter
 
         $index = 0;
         while ($value >= 1024 && $index < count(self::PREFIXES)) {
-            $value = $value / 1024;
+            $value /= 1024;
             ++$index;
         }
 

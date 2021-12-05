@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagrid\Column\Formatter;
 
 use ZfcDatagrid\Column\AbstractColumn;
@@ -11,11 +14,6 @@ class Email extends AbstractFormatter
         'bootstrapTable',
     ];
 
-    /**
-     * @param AbstractColumn $column
-     *
-     * @return string
-     */
     public function getFormattedValue(AbstractColumn $column): string
     {
         $row = $this->getRowData();

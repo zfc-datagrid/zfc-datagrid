@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagridTest\Column\Type;
 
 use PHPUnit\Framework\TestCase;

@@ -1,58 +1,47 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagrid\DataSource\LaminasSelect;
 
+use Exception;
+use InvalidArgumentException;
 use Laminas\Db\Sql\Predicate\PredicateSet;
 use Laminas\Db\Sql\Select;
 use Laminas\Db\Sql\Sql;
 use Laminas\Db\Sql\Where;
 use ZfcDatagrid\Column;
 use ZfcDatagrid\Filter as DatagridFilter;
+
 use function sprintf;
 
 class Filter
 {
-    /**
-     * @var Sql
-     */
+    /** @var Sql */
     private $sql;
 
-    /**
-     * @var Select
-     */
+    /** @var Select */
     private $select;
 
-    /**
-     * Filter constructor.
-     * @param Sql $sql
-     * @param Select $select
-     */
     public function __construct(Sql $sql, Select $select)
     {
         $this->sql    = $sql;
         $this->select = $select;
     }
 
-    /**
-     * @return Sql
-     */
     public function getSql(): Sql
     {
         return $this->sql;
     }
 
-    /**
-     * @return Select
-     */
     public function getSelect(): Select
     {
         return $this->select;
     }
 
     /**
-     * @param DatagridFilter $filter
-     *
      * @return $this
-     * @throws \Exception
+     * @throws Exception
      */
     public function applyFilter(DatagridFilter $filter): self
     {
@@ -65,7 +54,7 @@ class Filter
 
         $col = $filter->getColumn();
         if (! $col instanceof Column\Select) {
-            throw new \Exception('This column cannot be filtered: ' . $col->getUniqueId());
+            throw new Exception('This column cannot be filtered: ' . $col->getUniqueId());
         }
 
         $colString = $col->getSelectPart1();
@@ -141,7 +130,7 @@ class Filter
                     break 2;
 
                 default:
-                    throw new \InvalidArgumentException(
+                    throw new InvalidArgumentException(
                         'This operator is currently not supported: ' . $filter->getOperator()
                     );
                     break;

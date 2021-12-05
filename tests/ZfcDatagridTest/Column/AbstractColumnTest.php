@@ -1,11 +1,27 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagridTest\Column;
 
 use PHPUnit\Framework\TestCase;
+use ZfcDatagrid\Column\AbstractColumn;
 use ZfcDatagrid\Column\Formatter;
+use ZfcDatagrid\Column\Formatter\AbstractFormatter;
+use ZfcDatagrid\Column\Formatter\Image;
+use ZfcDatagrid\Column\Formatter\Link;
 use ZfcDatagrid\Column\Style;
+use ZfcDatagrid\Column\Style\AbstractStyle;
+use ZfcDatagrid\Column\Style\Bold;
 use ZfcDatagrid\Column\Type;
+use ZfcDatagrid\Column\Type\AbstractType;
+use ZfcDatagrid\Column\Type\PhpArray;
+use ZfcDatagrid\Column\Type\PhpString;
 use ZfcDatagrid\Filter;
+
+use function array_pop;
+use function count;
+use function is_array;
 
 /**
  * @group Column
@@ -15,14 +31,14 @@ class AbstractColumnTest extends TestCase
 {
     public function testGeneral()
     {
-        /* @var $col \ZfcDatagrid\Column\AbstractColumn */
-        $col = $this->getMockForAbstractClass(\ZfcDatagrid\Column\AbstractColumn::class);
+        /** @var AbstractColumn $col */
+        $col = $this->getMockForAbstractClass(AbstractColumn::class);
 
         $this->assertEquals(5, $col->getWidth());
         $this->assertEquals(false, $col->isHidden());
         $this->assertEquals(false, $col->isIdentity());
-        $this->assertInstanceOf(\ZfcDatagrid\Column\Type\AbstractType::class, $col->getType());
-        $this->assertInstanceOf(\ZfcDatagrid\Column\Type\PhpString::class, $col->getType());
+        $this->assertInstanceOf(AbstractType::class, $col->getType());
+        $this->assertInstanceOf(PhpString::class, $col->getType());
 
         $this->assertEquals(false, $col->isTranslationEnabled());
 
@@ -50,8 +66,8 @@ class AbstractColumnTest extends TestCase
 
     public function testStyle()
     {
-        /* @var $col \ZfcDatagrid\Column\AbstractColumn */
-        $col = $this->getMockForAbstractClass(\ZfcDatagrid\Column\AbstractColumn::class);
+        /** @var AbstractColumn $col */
+        $col = $this->getMockForAbstractClass(AbstractColumn::class);
 
         $this->assertEquals([], $col->getStyles());
         $this->assertEquals(false, $col->hasStyles());
@@ -62,37 +78,37 @@ class AbstractColumnTest extends TestCase
 
         $style = $col->getStyles();
         $style = array_pop($style);
-        $this->assertInstanceOf(\ZfcDatagrid\Column\Style\Bold::class, $style);
-        $this->assertInstanceOf(\ZfcDatagrid\Column\Style\AbstractStyle::class, $style);
+        $this->assertInstanceOf(Bold::class, $style);
+        $this->assertInstanceOf(AbstractStyle::class, $style);
 
         $col->setStyles([new Style\Bold()]);
         $style = $col->getStyles();
         $style = array_pop($style);
-        $this->assertInstanceOf(\ZfcDatagrid\Column\Style\Bold::class, $style);
+        $this->assertInstanceOf(Bold::class, $style);
     }
 
     public function testType()
     {
-        /* @var $col \ZfcDatagrid\Column\AbstractColumn */
-        $col = $this->getMockForAbstractClass(\ZfcDatagrid\Column\AbstractColumn::class);
+        /** @var AbstractColumn $col */
+        $col = $this->getMockForAbstractClass(AbstractColumn::class);
 
         // DEFAULT
-        $this->assertInstanceOf(\ZfcDatagrid\Column\Type\PhpString::class, $col->getType());
+        $this->assertInstanceOf(PhpString::class, $col->getType());
 
         $col->setType(new Type\PhpArray());
-        $this->assertInstanceOf(\ZfcDatagrid\Column\Type\AbstractType::class, $col->getType());
-        $this->assertInstanceOf(\ZfcDatagrid\Column\Type\PhpArray::class, $col->getType());
+        $this->assertInstanceOf(AbstractType::class, $col->getType());
+        $this->assertInstanceOf(PhpArray::class, $col->getType());
 
         $this->assertCount(0, $col->getFormatters());
         $col->setType(new Type\Image());
         $this->assertCount(1, $col->getFormatters());
-        $this->assertInstanceOf(\ZfcDatagrid\Column\Formatter\Image::class, $col->getFormatters()[0]);
+        $this->assertInstanceOf(Image::class, $col->getFormatters()[0]);
     }
 
     public function testSort()
     {
-        /* @var $col \ZfcDatagrid\Column\AbstractColumn */
-        $col = $this->getMockForAbstractClass(\ZfcDatagrid\Column\AbstractColumn::class);
+        /** @var AbstractColumn $col */
+        $col = $this->getMockForAbstractClass(AbstractColumn::class);
 
         $this->assertEquals(true, $col->isUserSortEnabled());
         $this->assertEquals(false, $col->hasSortDefault());
@@ -123,8 +139,8 @@ class AbstractColumnTest extends TestCase
 
     public function testFilter()
     {
-        /* @var $col \ZfcDatagrid\Column\AbstractColumn */
-        $col = $this->getMockForAbstractClass(\ZfcDatagrid\Column\AbstractColumn::class);
+        /** @var AbstractColumn $col */
+        $col = $this->getMockForAbstractClass(AbstractColumn::class);
 
         $this->assertEquals(true, $col->isUserFilterEnabled());
 
@@ -176,8 +192,8 @@ class AbstractColumnTest extends TestCase
 
     public function testSetGet()
     {
-        /* @var $col \ZfcDatagrid\Column\AbstractColumn */
-        $col = $this->getMockForAbstractClass(\ZfcDatagrid\Column\AbstractColumn::class);
+        /** @var AbstractColumn $col */
+        $col = $this->getMockForAbstractClass(AbstractColumn::class);
 
         $col->setTranslationEnabled(true);
         $this->assertEquals(true, $col->isTranslationEnabled());
@@ -221,8 +237,8 @@ class AbstractColumnTest extends TestCase
 
     public function testFormatters()
     {
-        /* @var $col \ZfcDatagrid\Column\AbstractColumn */
-        $col = $this->getMockForAbstractClass(\ZfcDatagrid\Column\AbstractColumn::class);
+        /** @var AbstractColumn $col */
+        $col = $this->getMockForAbstractClass(AbstractColumn::class);
 
         // DEFAULT
         $this->assertCount(0, $col->getFormatters());
@@ -232,8 +248,8 @@ class AbstractColumnTest extends TestCase
 
         $this->assertTrue($col->hasFormatters());
         $this->assertEquals(1, count($col->getFormatters()));
-        $this->assertInstanceOf(\ZfcDatagrid\Column\Formatter\AbstractFormatter::class, $col->getFormatters()[0]);
-        $this->assertInstanceOf(\ZfcDatagrid\Column\Formatter\Link::class, $col->getFormatters()[0]);
+        $this->assertInstanceOf(AbstractFormatter::class, $col->getFormatters()[0]);
+        $this->assertInstanceOf(Link::class, $col->getFormatters()[0]);
 
         $col->addFormatter(new Formatter\Link());
         $this->assertEquals(2, count($col->getFormatters()));
@@ -244,8 +260,8 @@ class AbstractColumnTest extends TestCase
 
     public function testFormattersAdd()
     {
-        /* @var $col \ZfcDatagrid\Column\AbstractColumn */
-        $col = $this->getMockForAbstractClass(\ZfcDatagrid\Column\AbstractColumn::class);
+        /** @var AbstractColumn $col */
+        $col = $this->getMockForAbstractClass(AbstractColumn::class);
 
         $col->addFormatter(new Formatter\Link());
 
@@ -256,8 +272,8 @@ class AbstractColumnTest extends TestCase
 
     public function testRowClick()
     {
-        /* @var $col \ZfcDatagrid\Column\AbstractColumn */
-        $col = $this->getMockForAbstractClass(\ZfcDatagrid\Column\AbstractColumn::class);
+        /** @var AbstractColumn $col */
+        $col = $this->getMockForAbstractClass(AbstractColumn::class);
 
         $this->assertTrue($col->isRowClickEnabled());
 
@@ -270,8 +286,8 @@ class AbstractColumnTest extends TestCase
 
     public function testPosition(): void
     {
-        /* @var $col \ZfcDatagrid\Column\AbstractColumn */
-        $col = $this->getMockForAbstractClass(\ZfcDatagrid\Column\AbstractColumn::class);
+        /** @var AbstractColumn $col */
+        $col = $this->getMockForAbstractClass(AbstractColumn::class);
         $this->assertNull($col->getPosition());
         $col->setPosition(null);
         $col->setPosition(1);

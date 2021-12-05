@@ -1,8 +1,13 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagrid\Column;
 
-use function is_string;
+use Exception;
+
 use function is_object;
+use function is_string;
 
 class Select extends AbstractColumn
 {
@@ -10,7 +15,7 @@ class Select extends AbstractColumn
     protected $selectPart1 = '';
 
     /** @var string|object|null */
-    protected $selectPart2 = null;
+    protected $selectPart2;
 
     /**
      * Specific column function filter e.g.
@@ -31,13 +36,12 @@ class Select extends AbstractColumn
      *
      * @param string|object $columnOrIndexOrObject
      * @param string|null   $tableOrAliasOrUniqueId
-     *
-     * @throws \Exception
+     * @throws Exception
      */
     public function __construct($columnOrIndexOrObject, $tableOrAliasOrUniqueId = null)
     {
         if ($tableOrAliasOrUniqueId !== null && ! is_string($tableOrAliasOrUniqueId)) {
-            throw new \Exception('Variable $tableOrAliasOrUniqueId must be null or a string');
+            throw new Exception('Variable $tableOrAliasOrUniqueId must be null or a string');
         }
 
         if (is_string($columnOrIndexOrObject) && $tableOrAliasOrUniqueId !== null) {
@@ -46,21 +50,21 @@ class Select extends AbstractColumn
         } elseif (is_string($columnOrIndexOrObject)) {
             $this->setUniqueId($columnOrIndexOrObject);
             $this->setSelect($columnOrIndexOrObject);
-        } elseif (is_object($columnOrIndexOrObject) &&
+        } elseif (
+            is_object($columnOrIndexOrObject) &&
             null !== $tableOrAliasOrUniqueId &&
             is_string($tableOrAliasOrUniqueId)
         ) {
             $this->setUniqueId($tableOrAliasOrUniqueId);
             $this->setSelect($columnOrIndexOrObject);
         } else {
-            throw new \Exception('Column was not initiated correctly, please read the __construct docblock!');
+            throw new Exception('Column was not initiated correctly, please read the __construct docblock!');
         }
     }
 
     /**
      * @params string|object|null $part1
      * @params string|object|null $part2
-     *
      * @return $this
      */
     public function setSelect($part1, $part2 = null): self
@@ -88,8 +92,6 @@ class Select extends AbstractColumn
     }
 
     /**
-     * @param string|null $filterSelectExpression
-     *
      * @return $this
      */
     public function setFilterSelectExpression(?string $filterSelectExpression): self
@@ -99,17 +101,11 @@ class Select extends AbstractColumn
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getFilterSelectExpression(): ?string
     {
         return $this->filterSelectExpression;
     }
 
-    /**
-     * @return bool
-     */
     public function hasFilterSelectExpression(): bool
     {
         return null !== $this->filterSelectExpression;

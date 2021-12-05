@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagridTest\Renderer\PHPExcel;
 
 use PHPUnit\Framework\TestCase;

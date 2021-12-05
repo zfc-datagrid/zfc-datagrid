@@ -1,13 +1,21 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagridTest\Renderer\BootstrapTable\View\Helper;
 
 use InvalidArgumentException;
+use Laminas\ServiceManager\ServiceManager;
 use PHPUnit\Framework\TestCase;
 use ZfcDatagrid\Column;
+use ZfcDatagrid\Column\AbstractColumn;
 use ZfcDatagrid\Column\Style;
 use ZfcDatagrid\Column\Style\AbstractColor;
+use ZfcDatagrid\Column\Style\AbstractStyle;
 use ZfcDatagrid\Column\Type;
 use ZfcDatagrid\Renderer\BootstrapTable\View\Helper\TableRow;
+
+use function extension_loaded;
 
 /**
  * @group Renderer
@@ -24,20 +32,17 @@ class TableRowTest extends TestCase
         'myCol'      => 'First value',
     ];
 
-    /**
-     *
-     * @var \ZfcDatagrid\Column\AbstractColumn
-     */
+    /** @var AbstractColumn */
     private $myCol;
 
     public function setUp(): void
     {
-        $myCol = $this->getMockForAbstractClass(\ZfcDatagrid\Column\AbstractColumn::class);
+        $myCol = $this->getMockForAbstractClass(AbstractColumn::class);
         $myCol->setUniqueId('myCol');
 
         $this->myCol = $myCol;
 
-        $this->serviceLocator = $this->getMockBuilder(\Laminas\ServiceManager\ServiceManager::class)
+        $this->serviceLocator = $this->getMockBuilder(ServiceManager::class)
             ->getMock();
     }
 
@@ -159,7 +164,7 @@ class TableRowTest extends TestCase
         $this->assertStringContainsString('<td class="test-class"', $html);
 
         // exception
-        $style = $this->getMockForAbstractClass(\ZfcDatagrid\Column\Style\AbstractStyle::class);
+        $style = $this->getMockForAbstractClass(AbstractStyle::class);
 
         $myCol = clone $this->myCol;
         $myCol->addStyle($style);

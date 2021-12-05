@@ -1,8 +1,12 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagridTest\Renderer\BootstrapTable;
 
 use Exception;
-use PHPUnit\Framework\TestCase;
+use Laminas\Console\Request;
+use Laminas\Mvc\MvcEvent;
 use Laminas\View\Model\ViewModel;
 use ZfcDatagrid\Renderer\BootstrapTable;
 use ZfcDatagridTest\Util\TestBase;
@@ -39,11 +43,11 @@ class RendererTest extends TestBase
 
     public function testGetRequestException()
     {
-        $request = $this->getMockBuilder(\Laminas\Console\Request::class)
+        $request = $this->getMockBuilder(Request::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $mvcEvent = $this->getMockBuilder(\Laminas\Mvc\MvcEvent::class)
+        $mvcEvent = $this->getMockBuilder(MvcEvent::class)
             ->disableOriginalConstructor()
             ->getMock();
         $mvcEvent->expects(self::any())
@@ -64,7 +68,7 @@ class RendererTest extends TestBase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $mvcEvent = $this->getMockBuilder(\Laminas\Mvc\MvcEvent::class)
+        $mvcEvent = $this->getMockBuilder(MvcEvent::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -83,7 +87,7 @@ class RendererTest extends TestBase
         $this->mockedMethodList = [
             'getViewModel',
         ];
-        $viewModel = $this->getMockBuilder(ViewModel::class)
+        $viewModel              = $this->getMockBuilder(ViewModel::class)
             ->getMock();
 
         $viewModel->expects($this->once())

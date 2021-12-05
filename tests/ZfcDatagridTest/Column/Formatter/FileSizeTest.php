@@ -1,7 +1,11 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ZfcDatagridTest\Column\Formatter;
 
 use PHPUnit\Framework\TestCase;
+use ZfcDatagrid\Column\AbstractColumn;
 use ZfcDatagrid\Column\Formatter;
 
 /**
@@ -24,7 +28,7 @@ class FileSizeTest extends TestCase
 
     public function testGetFormattedValue()
     {
-        $col = $this->getMockForAbstractClass(\ZfcDatagrid\Column\AbstractColumn::class);
+        $col = $this->getMockForAbstractClass(AbstractColumn::class);
         $col->setUniqueId('myCol');
 
         $formatter = new Formatter\FileSize();
@@ -65,7 +69,7 @@ class FileSizeTest extends TestCase
         $this->assertEquals('1.00 MB', $formatter->getFormattedValue($col));
 
         $formatter->setRowData([
-        'myCol' => 1073741824,
+            'myCol' => 1073741824,
         ]);
         $this->assertEquals('1.00 GB', $formatter->getFormattedValue($col));
     }
