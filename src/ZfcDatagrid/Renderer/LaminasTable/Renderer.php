@@ -327,7 +327,7 @@ class Renderer extends AbstractRenderer
         foreach ($this->getColumns() as $column) {
             /* @var $column \ZfcDatagrid\Column\AbstractColumn */
 
-            if (! $column instanceof Column\Action && $column->isHidden() === false) {
+            if (! $column instanceof Column\Action && $column->isHidden() === false && $column->isHide() === false) {
                 $columnsToDisplay[] = $column;
             }
         }

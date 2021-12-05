@@ -62,6 +62,10 @@ if($this->rowClickAction !== null){
                     $classes = [];
                     $styles = [];
 
+                    if ($col->isHide() === true) {
+                        continue;
+                    }
+
                     $id = $col->getUniqueId();
 
                     $label = '';
@@ -126,17 +130,20 @@ if($this->rowClickAction !== null){
             </tr>
 
             <!-- User filters -->
-            <?php if($this->isUserFilterEnabled === true):?>
+            <?php if ($this->isUserFilterEnabled === true) :?>
                 <tr style="background-color: #EEE">
                     <?php
-                    if($hasMassActions === true){
+                    if ($hasMassActions === true) {
                         echo '<td></td>';
                     }
-                    foreach($this->columns as $col){
+                    foreach ($this->columns as $col) {
                         /* @var $col \ZfcDatagrid\Column\AbstractColumn */
+                        if ($col->isHide() === true) {
+                            continue;
+                        }
 
                         $classes = [];
-                        if($col->isHidden() === true){
+                        if ($col->isHidden() === true) {
                             $classes[] = 'hidden';
                         }
 
