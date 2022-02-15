@@ -114,11 +114,11 @@ if($this->rowClickAction !== null){
                         <?php endif; ?>
 
                         <?php
-                        if($col->isSortActive() === true){
-                            if($col->getSortActiveDirection() === 'ASC'):?>
-                                <i class="icon-chevron-down glyphicon glyphicon-chevron-down"></i>
+                        if ($col->isSortActive() === true){
+                            if ($col->getSortActiveDirection() === 'ASC'):?>
+                                <i class="fas fa-chevron-down"></i>
                             <?php else: ?>
-                                <i class="icon-chevron-up glyphicon glyphicon-chevron-up"></i>
+                                <i class="fas fa-chevron-up"></i>
                             <?php endif;
                         }
                         ?>
