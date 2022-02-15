@@ -10,6 +10,9 @@ class Button extends AbstractAction
     /** @var string|AbstractColumn */
     protected $label = '';
 
+    /** @var string */
+    protected $icon = '';
+
     /**
      * Button constructor.
      */
@@ -43,6 +46,24 @@ class Button extends AbstractAction
 
     /**
      * @return string
+     */
+    public function getIcon(): string
+    {
+        return $this->icon;
+    }
+
+    /**
+     * @param string $icon
+     * @return Button
+     */
+    public function setIcon(string $icon): self
+    {
+        $this->icon = $icon;
+        return $this;
+    }
+
+    /**
+     * @return string
      *
      * @throws Exception
      */
@@ -69,6 +90,16 @@ class Button extends AbstractAction
             $label = $row[$label->getUniqueId()];
         }
 
-        return '<a ' . $this->getAttributesString($row) . '>' . $label . '</a>';
+        $icon = $this->getIcon();
+        if ($icon !== '') {
+            $icon = '<i class="' . $icon . '"></i> ';
+        }
+
+        return sprintf(
+            '<a %s>%s%s</a>',
+            $this->getAttributesString($row),
+            $icon,
+            $label
+        );
     }
 }
