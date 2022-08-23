@@ -218,10 +218,16 @@ abstract class AbstractAction
     protected function getAttributesString(array $row): string
     {
         $attributes = [];
+
         foreach ($this->getAttributes() as $attrKey => $attrValue) {
             if ('href' === $attrKey) {
                 $attrValue = $this->getLinkReplaced($row);
+            } else {
+                foreach ($this->getLinkColumnPlaceholders() as $col) {
+                    $attrValue = str_replace(':' . $col->getUniqueId() . ':', $row[$col->getUniqueId()], $attrValue);
+                }
             }
+
             $attributes[] = $attrKey . '="' . $attrValue . '"';
         }
 
