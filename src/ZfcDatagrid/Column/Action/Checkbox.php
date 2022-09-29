@@ -1,6 +1,7 @@
 <?php
 namespace ZfcDatagrid\Column\Action;
 
+use Laminas\I18n\Translator\TranslatorInterface;
 use function sprintf;
 
 /**
@@ -26,7 +27,7 @@ class Checkbox extends AbstractAction
     /**
      * @inheritdoc
      */
-    public function toHtml(array $row): string
+    public function toHtml(array $row, ?TranslatorInterface $translator): string
     {
         $this->removeAttribute('name');
         $this->removeAttribute('value');

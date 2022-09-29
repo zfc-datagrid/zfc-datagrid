@@ -3,6 +3,7 @@ namespace ZfcDatagrid\Column\Action;
 
 use Exception;
 use InvalidArgumentException;
+use Laminas\I18n\Translator\TranslatorInterface;
 use ZfcDatagrid\Column\AbstractColumn;
 
 class Button extends AbstractAction
@@ -77,7 +78,7 @@ class Button extends AbstractAction
      *
      * @return string
      */
-    public function toHtml(array $row): string
+    public function toHtml(array $row, ?TranslatorInterface $translator): string
     {
         if ('' === $this->getLabel()) {
             throw new InvalidArgumentException(
@@ -88,6 +89,8 @@ class Button extends AbstractAction
         $label = $this->getLabel();
         if ($label instanceof AbstractColumn) {
             $label = $row[$label->getUniqueId()];
+        } elseif ($translator !== null) {
+            $label = $translator->translate($label);
         }
 
         $icon = $this->getIcon();

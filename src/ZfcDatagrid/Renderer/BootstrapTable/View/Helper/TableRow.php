@@ -115,6 +115,42 @@ class TableRow extends AbstractHelper
 
             $value = $row[$col->getUniqueId()];
 
+            /*
+             * Replace
+             */
+            if ($col->hasReplaceValues() === true) {
+                $replaceValues = $col->getReplaceValues();
+
+                if (is_array($value)) {
+                    foreach ($value as &$valueEntry) {
+                        if (isset($replaceValues[$valueEntry])) {
+                            $valueEntry = $replaceValues[$valueEntry];
+                        } elseif ($col->notReplacedGetEmpty() === true) {
+                            $valueEntry = '';
+                        }
+                    }
+                } else {
+                    if (isset($replaceValues[$value])) {
+                        $value = $replaceValues[$value];
+                    } elseif ($col->notReplacedGetEmpty() === true) {
+                        $value = '';
+                    }
+                }
+            }
+
+            if ($col->isTranslationEnabled() === true) {
+                if (is_array($value)) {
+                    foreach ($value as &$valueEntry) {
+                        if (is_array($valueEntry)) {
+                            continue;
+                        }
+                        $valueEntry = $this->translate($valueEntry);
+                    }
+                } else {
+                    $value = $this->translate($value);
+                }
+            }
+
             $cssStyles = [];
             $classes   = [];
 
@@ -188,7 +224,7 @@ class TableRow extends AbstractHelper
                             $action->setLink($this->view->url($action->getRoute(), $action->getRouteParams()));
                         }
 
-                        $actions[] = $action->toHtml($row);
+                        $actions[] = $action->toHtml($row, $this->translator);
                     }
                 }
 

@@ -196,29 +196,6 @@ class PrepareData
                 }
 
                 /*
-                 * Replace
-                 */
-                if ($col->hasReplaceValues() === true) {
-                    $replaceValues = $col->getReplaceValues();
-
-                    if (is_array($row[$col->getUniqueId()])) {
-                        foreach ($row[$col->getUniqueId()] as &$value) {
-                            if (isset($replaceValues[$value])) {
-                                $value = $replaceValues[$value];
-                            } elseif ($col->notReplacedGetEmpty() === true) {
-                                $value = '';
-                            }
-                        }
-                    } else {
-                        if (isset($replaceValues[$row[$col->getUniqueId()]])) {
-                            $row[$col->getUniqueId()] = $replaceValues[$row[$col->getUniqueId()]];
-                        } elseif ($col->notReplacedGetEmpty() === true) {
-                            $row[$col->getUniqueId()] = '';
-                        }
-                    }
-                }
-
-                /*
                  * Type converting
                  */
                 if ($this->getRendererName() != 'PHPExcel') {

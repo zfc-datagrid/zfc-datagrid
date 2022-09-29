@@ -1,6 +1,7 @@
 <?php
 namespace ZfcDatagrid\Column\Action;
 
+use Laminas\I18n\Translator\TranslatorInterface;
 use ZfcDatagrid\Column;
 use ZfcDatagrid\Filter;
 use function strpos;
@@ -387,12 +388,7 @@ abstract class AbstractAction
      */
     abstract protected function getHtmlType(): string;
 
-    /**
-     * @param array $row
-     *
-     * @return string
-     */
-    public function toHtml(array $row): string
+    public function toHtml(array $row, ?TranslatorInterface $translator): string
     {
         return '<a ' . $this->getAttributesString($row) . '>' . $this->getHtmlType() . '</a>';
     }
