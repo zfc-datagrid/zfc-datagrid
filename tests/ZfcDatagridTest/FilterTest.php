@@ -632,6 +632,43 @@ class FilterTest extends TestCase
         ], Filter::BETWEEN));
     }
 
+    public function testIsApplyIn()
+    {
+        $filter = new Filter();
+
+        $this->assertTrue($filter->isApply(123, [123], Filter::IN));
+        $this->assertTrue($filter->isApply('123.5', [123.5], Filter::IN));
+        $this->assertTrue($filter->isApply('myString', ['myString'], Filter::IN));
+        $this->assertTrue($filter->isApply('150', [150], Filter::IN));
+        $this->assertTrue($filter->isApply(149, [149], Filter::IN));
+
+        $this->assertFalse($filter->isApply('235235', [150], Filter::IN));
+        $this->assertFalse($filter->isApply(213, [149], Filter::IN));
+    }
+
+    public function testIsApplyNotIn()
+    {
+        $filter = new Filter();
+
+        $this->assertTrue($filter->isApply(123, [100], Filter::NOT_IN));
+        $this->assertTrue($filter->isApply('123.5', [100], Filter::NOT_IN));
+        $this->assertTrue($filter->isApply('nyString', ['myString'], Filter::NOT_IN));
+        $this->assertTrue($filter->isApply(149, [150], Filter::NOT_IN));
+
+        $this->assertFalse($filter->isApply('150', [150], Filter::NOT_IN));
+    }
+
+    public function testIsApplyBitmaskAnd()
+    {
+        $filter = new Filter();
+
+        $this->assertTrue($filter->isApply(1, 0b1, Filter::BITMASK_AND));
+        $this->assertTrue($filter->isApply(3, 0b1, Filter::BITMASK_AND));
+        $this->assertTrue($filter->isApply(2, 0b10, Filter::BITMASK_AND));
+
+        $this->assertFalse($filter->isApply(2, 0b1, Filter::BITMASK_AND));
+    }
+
     public function testIsApplyBetweenInvalidArgumentException()
     {
         $filter = new Filter();

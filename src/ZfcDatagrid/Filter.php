@@ -63,6 +63,9 @@ class Filter
 
     const BETWEEN = '%s <> %s';
 
+    // OK
+    const BITMASK_AND = '=& %s';
+
     /**
      * List of all available operations
      *
@@ -396,12 +399,16 @@ class Filter
                 break;
 
             case self::EQUAL:
-            case self::IN:
                 return $currentValue == $expectedValue;
 
             case self::NOT_EQUAL:
-            case self::NOT_IN:
                 return $currentValue != $expectedValue;
+
+            case self::IN:
+                return is_array($expectedValue) ? in_array($currentValue, $expectedValue) : $currentValue == $expectedValue;
+
+            case self::NOT_IN:
+                return is_array($expectedValue) ? !in_array($currentValue, $expectedValue) : $currentValue != $expectedValue;
 
             case self::GREATER_EQUAL:
                 return $currentValue >= $expectedValue;
@@ -424,6 +431,9 @@ class Filter
                     throw new InvalidArgumentException(sprintf('Between needs exactly an array of two expected values. Give: "%s"',print_r($expectedValue, true)));
                 }
                 break;
+
+            case self::BITMASK_AND:
+                return $currentValue & $expectedValue;
 
             default:
                 throw new InvalidArgumentException('currently not implemented filter type: "' . $operator . '"');
