@@ -216,9 +216,6 @@ return [
             Renderer\BootstrapTable\Renderer::class => InvokableFactory::class,
             Renderer\JqGrid\Renderer::class => InvokableFactory::class,
 
-            // CLI renderer
-            Renderer\LaminasTable\Renderer::class => InvokableFactory::class,
-
             // Export renderer
             Renderer\PrintHtml\Renderer::class => InvokableFactory::class,
             Renderer\PHPExcel\Renderer::class => InvokableFactory::class,
@@ -232,9 +229,6 @@ return [
             // HTML renderer
             'zfcDatagrid.renderer.bootstrapTable' => Renderer\BootstrapTable\Renderer::class,
             'zfcDatagrid.renderer.jqgrid'         => Renderer\JqGrid\Renderer::class,
-
-            // CLI renderer
-            'zfcDatagrid.renderer.laminasTable' => Renderer\LaminasTable\Renderer::class,
 
             // Export renderer
             'zfcDatagrid.renderer.printHtml' => Renderer\PrintHtml\Renderer::class,
