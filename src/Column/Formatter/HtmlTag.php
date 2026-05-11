@@ -1,7 +1,7 @@
 <?php
 namespace ZfcDatagrid\Column\Formatter;
 
-use Laminas\Router\RouteStackInterface;
+use Mezzio\Router\RouterInterface as RouterInterfaceMezzio;
 use ZfcDatagrid\Column\AbstractColumn;
 use function implode;
 use function strpos;
@@ -34,15 +34,15 @@ class HtmlTag extends AbstractFormatter implements RouterInterface
     /** @var array */
     protected $routeParams = [];
 
-    /** @var RouteStackInterface */
+    /** @var RouterInterfaceMezzio */
     public $router;
 
     /**
-     * @param RouteStackInterface $router
+     * @param RouterInterfaceMezzio $router
      *
      * @return $this
      */
-    public function setRouter(RouteStackInterface $router): RouterInterface
+    public function setRouter(RouterInterfaceMezzio $router): self
     {
         $this->router = $router;
 
@@ -50,9 +50,9 @@ class HtmlTag extends AbstractFormatter implements RouterInterface
     }
 
     /**
-     * @return null|RouteStackInterface
+     * @return null|RouterInterfaceMezzio
      */
-    public function getRouter(): ?RouteStackInterface
+    public function getRouter(): ?RouterInterfaceMezzio
     {
         return $this->router;
     }
@@ -252,10 +252,10 @@ class HtmlTag extends AbstractFormatter implements RouterInterface
     {
         $attributes = [];
 
-        if ($this->getRoute() && $this->getRouter() instanceof RouteStackInterface) {
-            $this->setLink($this->getRouter()->assemble(
-                $this->getRouteParams(),
-                ['name' => $this->getRoute()]
+        if ($this->getRoute() && $this->getRouter() instanceof RouterInterfaceMezzio) {
+            $this->setLink($this->getRouter()->generateUri(
+                $this->getRoute(),
+                $this->getRouteParams()
             ));
         }
 

@@ -7,6 +7,8 @@ use Laminas\I18n\Translator\TranslatorInterface;
 use Laminas\Mvc\MvcEvent;
 use Laminas\Paginator\Paginator;
 use Laminas\View\Model\ViewModel;
+use Mezzio\Template\TemplateRendererInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use ZfcDatagrid\Datagrid;
 use ZfcDatagrid\Filter;
 use function implode;
@@ -48,9 +50,6 @@ abstract class AbstractRenderer implements RendererInterface
     /** @var array */
     protected $data = [];
 
-    /** @var MvcEvent|null */
-    protected $mvcEvent;
-
     /** @var ViewModel|null */
     protected $viewModel;
 
@@ -65,6 +64,10 @@ abstract class AbstractRenderer implements RendererInterface
 
     /** @var TranslatorInterface|null */
     protected $translator;
+
+    protected ?ServerRequestInterface $request;
+
+    protected TemplateRendererInterface $templateRenderer;
 
     /**
      * @param array $options
@@ -94,18 +97,6 @@ abstract class AbstractRenderer implements RendererInterface
         $options = $this->getOptions();
 
         return $options['renderer'][$this->getName()] ?? [];
-    }
-
-    /**
-     * @param ViewModel $viewModel
-     *
-     * @return $this
-     */
-    public function setViewModel(ViewModel $viewModel): self
-    {
-        $this->viewModel = $viewModel;
-
-        return $this;
     }
 
     /**
@@ -369,32 +360,15 @@ abstract class AbstractRenderer implements RendererInterface
         return $cacheData['filters'] ?? null;
     }
 
-    /**
-     * @param MvcEvent $mvcEvent
-     *
-     * @return $this
-     */
-    public function setMvcEvent(MvcEvent $mvcEvent): self
+    public function getRequest(): ?ServerRequestInterface
     {
-        $this->mvcEvent = $mvcEvent;
+        return $this->request;
+    }
 
+    public function setRequest(?ServerRequestInterface $request): self
+    {
+        $this->request = $request;
         return $this;
-    }
-
-    /**
-     * @return MvcEvent
-     */
-    public function getMvcEvent(): ?MvcEvent
-    {
-        return $this->mvcEvent;
-    }
-
-    /**
-     * @return \Laminas\Stdlib\RequestInterface
-     */
-    public function getRequest()
-    {
-        return $this->getMvcEvent()->getRequest();
     }
 
     /**
@@ -669,53 +643,43 @@ abstract class AbstractRenderer implements RendererInterface
         return $defaultItems;
     }
 
-    /**
-     * VERY UGLY DEPENDECY...
-     *
-     * @todo Refactor :-)
-     *
-     * @see \ZfcDatagrid\Renderer\RendererInterface::prepareViewModel()
-     */
-    public function prepareViewModel(Datagrid $grid)
+    public function prepareViewModel(Datagrid $grid): array
     {
-        $viewModel = $this->getViewModel();
-
-        $viewModel->setVariable('gridId', $grid->getId());
-        $viewModel->setVariable('title', $this->getTitle());
-        $viewModel->setVariable('parameters', $grid->getParameters());
-        $viewModel->setVariable('overwriteUrl', $grid->getUrl());
-
-        $viewModel->setVariable('templateToolbar', $this->getToolbarTemplate());
-        foreach ($this->getToolbarTemplateVariables() as $key => $value) {
-            $viewModel->setVariable($key, $value);
-        }
-        $viewModel->setVariable('rendererName', $this->getName());
-
         $options               = $this->getOptions();
         $generalParameterNames = $options['generalParameterNames'];
-        $viewModel->setVariable('generalParameterNames', $generalParameterNames);
 
-        $viewModel->setVariable('columns', $this->getColumns());
+        $optionsRenderer = $this->getOptionsRenderer();
 
-        $viewModel->setVariable('rowStyles', $grid->getRowStyles());
+        $data = [
+            'gridId' => $grid->getId(),
+            'title' => $grid->getTitle(),
+            'parameters' => $grid->getParameters(),
+            'overwriteUrl' => $grid->getUrl(),
+            'templateToolbar' => $this->getToolbarTemplate(),
+            'rendererName' => $this->getName(),
+            'generalParameterNames' => $generalParameterNames,
+            'columns' => $this->getColumns(),
+            'rowStyles' => $grid->getRowStyles(),
+            'paginator' => $this->getPaginator(),
+            'data' => $this->getData(),
+            'filters' => $this->getFilters(),
+            'rowClickAction' => $grid->getRowClickAction(),
+            'massActions' => $grid->getMassActions(),
+            'isUserFilterEnabled' => $grid->isUserFilterEnabled(),
+            'optionsRenderer' => $optionsRenderer,
+            'exportRenderers' => $grid->getExportRenderers()
+        ];
 
-        $viewModel->setVariable('paginator', $this->getPaginator());
-        $viewModel->setVariable('data', $this->getData());
-        $viewModel->setVariable('filters', $this->getFilters());
-
-        $viewModel->setVariable('rowClickAction', $grid->getRowClickAction());
-        $viewModel->setVariable('massActions', $grid->getMassActions());
-
-        $viewModel->setVariable('isUserFilterEnabled', $grid->isUserFilterEnabled());
+        foreach ($this->getToolbarTemplateVariables() as $key => $value) {
+            $data[$key] = $value;
+        }
 
         /*
          * renderer specific parameter names
          */
-        $optionsRenderer = $this->getOptionsRenderer();
-        $viewModel->setVariable('optionsRenderer', $optionsRenderer);
         if ($this->isExport() === false) {
             $parameterNames = $optionsRenderer['parameterNames'];
-            $viewModel->setVariable('parameterNames', $parameterNames);
+            $data['parameterNames'] = $parameterNames;
 
             $activeParameters                                 = [];
             $activeParameters[$parameterNames['currentPage']] = $this->getCurrentPageNumber();
@@ -730,10 +694,22 @@ abstract class AbstractRenderer implements RendererInterface
                 $activeParameters[$parameterNames['sortColumns']]    = implode(',', $sortColumns);
                 $activeParameters[$parameterNames['sortDirections']] = implode(',', $sortDirections);
             }
-            $viewModel->setVariable('activeParameters', $activeParameters);
+            $data['activeParameters'] = $activeParameters;
         }
 
-        $viewModel->setVariable('exportRenderers', $grid->getExportRenderers());
+        return $data;
+    }
+
+    public function getTemplateRenderer(): TemplateRendererInterface
+    {
+        return $this->templateRenderer;
+    }
+
+    public function setTemplateRenderer(TemplateRendererInterface $templateRenderer): self
+    {
+        $this->templateRenderer = $templateRenderer;
+
+        return $this;
     }
 
     /**
@@ -759,10 +735,5 @@ abstract class AbstractRenderer implements RendererInterface
      */
     abstract public function isHtml(): bool;
 
-    /**
-     * Execute all...
-     *
-     * @return ViewModel Response\Stream
-     */
-    abstract public function execute();
+    abstract public function execute(array $data): mixed;
 }

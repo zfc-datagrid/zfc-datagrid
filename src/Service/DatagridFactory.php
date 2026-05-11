@@ -3,8 +3,9 @@ namespace ZfcDatagrid\Service;
 
 use InvalidArgumentException;
 use Interop\Container\ContainerInterface;
-use Laminas\Cache\Service\StorageAdapterFactoryInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
+use Laminas\Translator\TranslatorInterface;
+use Mezzio\Router\RouterInterface;
 use ZfcDatagrid\Datagrid;
 
 class DatagridFactory implements FactoryInterface
@@ -24,16 +25,11 @@ class DatagridFactory implements FactoryInterface
             throw new InvalidArgumentException('Config key "ZfcDatagrid" is missing');
         }
 
-        /* @var $application \Laminas\Mvc\Application */
-        $application = $container->get('application');
-
         $grid = new Datagrid();
         $grid->setOptions($config['ZfcDatagrid']);
-        $grid->setMvcEvent($application->getMvcEvent());
-        $grid->setRouter($container->get('Router'));
+        $grid->setRouter($container->get(RouterInterface::class));
 
-
-        /** @var StorageAdapterFactoryInterface $storageFactory */
+/*
         $storageFactory = $container->get(StorageAdapterFactoryInterface::class);
 
         $cacheOptions = $config['ZfcDatagrid']['cache'];
@@ -43,9 +39,10 @@ class DatagridFactory implements FactoryInterface
             $cacheOptions['options'] ?? [],
             $cacheOptions['plugins'] ?? []
         ));
+*/
 
-        if (true === $container->has('translator')) {
-            $grid->setTranslator($container->get('translator'));
+        if (true === $container->has(TranslatorInterface::class)) {
+            $grid->setTranslator($container->get(TranslatorInterface::class));
         }
 
         $grid->setRendererService($container->get('zfcDatagrid.renderer.' . $grid->getRendererName()));

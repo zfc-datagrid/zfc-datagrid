@@ -23,11 +23,7 @@ abstract class AbstractDatagrid extends Datagrid implements FactoryInterface
             throw new InvalidArgumentException('Config key "ZfcDatagrid" is missing');
         }
 
-        /* @var $application \Laminas\Mvc\Application */
-        $application = $container->get('application');
-
         $this->setOptions($config['ZfcDatagrid']);
-        $this->setMvcEvent($application->getMvcEvent());
 
         if ($container->has('translator') === true) {
             $this->setTranslator($container->get('translator'));

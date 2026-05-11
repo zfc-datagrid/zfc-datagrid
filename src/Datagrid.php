@@ -7,16 +7,11 @@ use Doctrine\ORM\QueryBuilder;
 use Laminas\Cache;
 use Laminas\Console\Request as ConsoleRequest;
 use Laminas\Db\Sql\Select as LaminasSelect;
-use Laminas\Http\PhpEnvironment\Request as HttpRequest;
 use Laminas\I18n\Translator\TranslatorInterface;
-use Laminas\Mvc\MvcEvent;
 use Laminas\Paginator\Paginator;
-use Laminas\Router\RouteStackInterface;
 use Laminas\Session\Container as SessionContainer;
-use Laminas\Stdlib\RequestInterface;
-use Laminas\Stdlib\ResponseInterface;
-use Laminas\View\Model\JsonModel;
-use Laminas\View\Model\ViewModel;
+use Mezzio\Router\RouterInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use ZfcDatagrid\Column\Style;
 use ZfcDatagrid\DataSource\DataSourceInterface;
 use function md5;
@@ -52,8 +47,7 @@ class Datagrid
     /** @var string */
     protected $cacheId;
 
-    /** @var MvcEvent */
-    protected $mvcEvent;
+    protected ?ServerRequestInterface $request = null;
 
     /** @var array */
     protected $parameters = [];
@@ -61,13 +55,10 @@ class Datagrid
     /** @var string */
     protected $url = '';
 
-    /** @var RequestInterface */
-    protected $request;
-
     /**
      * View or Response.
      *
-     * @var \Laminas\Http\Response\Stream|\Laminas\View\Model\ViewModel
+     * @var \Psr\Http\Message\ResponseInterface
      */
     protected $response;
 
@@ -77,7 +68,7 @@ class Datagrid
     /** @var TranslatorInterface|null */
     protected $translator;
 
-    /** @var RouteStackInterface */
+    /** @var RouterInterface */
     protected $router;
 
     /** @var string */
@@ -132,9 +123,6 @@ class Datagrid
 
     /** @var array */
     protected $toolbarTemplateVariables = [];
-
-    /** @var ViewModel */
-    protected $viewModel;
 
     /** @var bool */
     protected $isInit = false;
@@ -317,33 +305,14 @@ class Datagrid
         return $this->cacheId;
     }
 
-    /**
-     * @param MvcEvent $mvcEvent
-     *
-     * @return $this
-     */
-    public function setMvcEvent(MvcEvent $mvcEvent)
-    {
-        $this->mvcEvent = $mvcEvent;
-        $this->request  = $mvcEvent->getRequest();
-
-        return $this;
-    }
-
-    /**
-     * @return MvcEvent|null
-     */
-    public function getMvcEvent(): ?MvcEvent
-    {
-        return $this->mvcEvent;
-    }
-
-    /**
-     * @return RequestInterface|null
-     */
-    public function getRequest(): ?RequestInterface
+    public function getRequest(): ?ServerRequestInterface
     {
         return $this->request;
+    }
+
+    public function setRequest(?ServerRequestInterface $request): void
+    {
+        $this->request = $request;
     }
 
     /**
@@ -377,11 +346,11 @@ class Datagrid
     }
 
     /**
-     * @param RouteStackInterface $router
+     * @param RouterInterface $router
      *
      * @return $this
      */
-    public function setRouter(RouteStackInterface $router): self
+    public function setRouter(RouterInterface $router): self
     {
         $this->router = $router;
 
@@ -389,9 +358,9 @@ class Datagrid
     }
 
     /**
-     * @return RouteStackInterface
+     * @return RouterInterface
      */
-    public function getRouter(): RouteStackInterface
+    public function getRouter(): RouterInterface
     {
         return $this->router;
     }
@@ -884,18 +853,12 @@ class Datagrid
         if ($this->forceRenderer !== null) {
             // A special renderer was given -> use is
             $rendererName = $this->forceRenderer;
-        } else {
-            // DEFAULT
-            if ($this->getRequest() instanceof ConsoleRequest) {
-                $rendererName = $options['settings']['default']['renderer']['console'];
-            } else {
-                $rendererName = $options['settings']['default']['renderer']['http'];
-            }
-        }
+        } elseif ($this->request) {
+            $rendererName = $options['settings']['default']['renderer']['http'];
+            $rendererName = $this->request->getQueryParams()[$parameterName] ?? $rendererName;
 
-        // From request
-        if ($this->getRequest() instanceof HttpRequest && $this->getRequest()->getQuery($parameterName) != '') {
-            $rendererName = $this->getRequest()->getQuery($parameterName);
+            //TODO console
+            //$rendererName = $this->request->getServerParams()[$options['settings']['default']['renderer']['console']] ?? $rendererName;
         }
 
         return $rendererName;
@@ -919,15 +882,14 @@ class Datagrid
                     );
                 }
                 $renderer->setOptions($this->getOptions());
-                $renderer->setMvcEvent($this->getMvcEvent());
                 if ($this->getToolbarTemplate() !== null) {
                     $renderer->setToolbarTemplate($this->getToolbarTemplate());
                 }
                 $renderer->setToolbarTemplateVariables($this->getToolbarTemplateVariables());
-                $renderer->setViewModel($this->getViewModel());
                 if ($this->hasTranslator()) {
                     $renderer->setTranslator($this->getTranslator());
                 }
+                $renderer->setRequest($this->getRequest());
                 $renderer->setTitle($this->getTitle());
                 $renderer->setColumns($this->getColumns());
                 $renderer->setRowStyles($this->getRowStyles());
@@ -1072,7 +1034,7 @@ class Datagrid
          * Step 3) Format the data - Translate - Replace - Date / time / datetime - Numbers - ...
          */
         $prepareData = new PrepareData($data, $this->getColumns());
-        if ($this->getRouter() instanceof RouteStackInterface) {
+        if ($this->getRouter() instanceof RouterInterface) {
             $prepareData->setRouter($this->getRouter());
         }
 
@@ -1103,9 +1065,9 @@ class Datagrid
         $renderer->setTitle($this->getTitle());
         $renderer->setPaginator($this->getPaginator());
         $renderer->setData($this->getPreparedData());
-        $renderer->prepareViewModel($this);
+        $data = $renderer->prepareViewModel($this);
 
-        $this->response = $renderer->execute();
+        $this->response = $renderer->execute($data);
 
         $this->isRendered = true;
     }
@@ -1192,42 +1154,7 @@ class Datagrid
     }
 
     /**
-     * Set a custom ViewModel...generally NOT necessary!
-     *
-     * @param ViewModel $viewModel
-     *
-     * @throws \Exception
-     *
-     * @return $this
-     */
-    public function setViewModel(ViewModel $viewModel): self
-    {
-        if (null !== $this->viewModel) {
-            throw new \Exception(
-                'A viewModel is already set. Did you already called ' .
-                '$grid->render() or $grid->getViewModel() before?'
-            );
-        }
-
-        $this->viewModel = $viewModel;
-
-        return $this;
-    }
-
-    /**
-     * @return ViewModel
-     */
-    public function getViewModel(): ViewModel
-    {
-        if (null === $this->viewModel) {
-            $this->viewModel = new ViewModel();
-        }
-
-        return $this->viewModel;
-    }
-
-    /**
-     * @return \Laminas\Stdlib\ResponseInterface|\Laminas\Http\Response\Stream|\Laminas\View\Model\ViewModel
+     * @return \Psr\Http\Message\ResponseInterface
      */
     public function getResponse()
     {
@@ -1236,18 +1163,6 @@ class Datagrid
         }
 
         return $this->response;
-    }
-
-    /**
-     * Is this a HTML "init" response?
-     * YES: loading the HTML for the grid
-     * NO: AJAX loading OR it's an export.
-     *
-     * @return bool
-     */
-    public function isHtmlInitReponse(): bool
-    {
-        return ! $this->getResponse() instanceof JsonModel && ! $this->getResponse() instanceof ResponseInterface;
     }
 
     /**

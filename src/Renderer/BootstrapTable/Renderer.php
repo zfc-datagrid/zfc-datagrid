@@ -1,8 +1,7 @@
 <?php
 namespace ZfcDatagrid\Renderer\BootstrapTable;
 
-use Laminas\Http\PhpEnvironment\Request as HttpRequest;
-use Laminas\View\Model\ViewModel;
+use Laminas\Diactoros\Response\HtmlResponse;
 use ZfcDatagrid\Datagrid;
 use ZfcDatagrid\Renderer\AbstractRenderer;
 use function explode;
@@ -36,23 +35,6 @@ class Renderer extends AbstractRenderer
     }
 
     /**
-     * @return HttpRequest
-     *
-     * @throws \Exception
-     */
-    public function getRequest(): HttpRequest
-    {
-        $request = parent::getRequest();
-        if (! $request instanceof HttpRequest) {
-            throw new \Exception(
-                'Request must be an instance of Laminas\Http\PhpEnvironment\Request for HTML rendering'
-            );
-        }
-
-        return $request;
-    }
-
-    /**
      * @see \ZfcDatagrid\Renderer\AbstractRenderer::getSortConditions()
      *
      * @return array
@@ -71,15 +53,13 @@ class Renderer extends AbstractRenderer
         $optionsRenderer = $this->getOptionsRenderer();
         $parameterNames  = $optionsRenderer['parameterNames'];
 
+        $parsedBody = $request->getParsedBody();
+        $queryParams = $request->getQueryParams();
+
         $sortConditions = [];
-        $sortColumns    = $request->getPost(
-            $parameterNames['sortColumns'],
-            $request->getQuery($parameterNames['sortColumns'])
-        );
-        $sortDirections = $request->getPost(
-            $parameterNames['sortDirections'],
-            $request->getQuery($parameterNames['sortDirections'])
-        );
+        $sortColumns = $parsedBody[$parameterNames['sortColumns']] ?? ($queryParams[$parameterNames['sortColumns']] ?? null);
+        $sortDirections = $parsedBody[$parameterNames['sortDirections']] ?? ($queryParams[$parameterNames['sortDirections']] ?? null);
+
         if ($sortColumns != '') {
             $sortColumns    = explode(',', $sortColumns);
             $sortDirections = explode(',', $sortDirections);
@@ -131,15 +111,19 @@ class Renderer extends AbstractRenderer
         }
 
         $request = $this->getRequest();
-        $toolbarFilters = $request->getPost('toolbarFilters', $request->getQuery('toolbarFilters'));
+
+        $parsedBody = $request->getParsedBody();
+        $queryParams = $request->getQueryParams();
+
+        $toolbarFilters = $parsedBody[$parameterNames['toolbarFilters']] ?? ($queryParams[$parameterNames['toolbarFilters']] ?? null);
+
         $filters = [];
-        if (($request->isPost() === true || $request->isGet() === true) &&
+        if ((in_array(strtoupper($request->getMethod()), ['POST', 'GET'])) &&
             null !== $toolbarFilters
         ) {
             foreach ($toolbarFilters as $uniqueId => $value) {
                 if ($value != '') {
                     foreach ($this->getColumns() as $column) {
-                        /* @var $column \ZfcDatagrid\Column\AbstractColumn */
                         if ($column->getUniqueId() == $uniqueId) {
                             $filter = new \ZfcDatagrid\Filter();
                             $filter->setFromColumn($column, $value);
@@ -174,12 +158,11 @@ class Renderer extends AbstractRenderer
         $parameterNames  = $optionsRenderer['parameterNames'];
 
         $request = $this->getRequest();
-        if ($request instanceof HttpRequest) {
-            $this->currentPageNumber = (int) $request->getPost(
-                $parameterNames['currentPage'],
-                $request->getQuery($parameterNames['currentPage'], 1)
-            );
-        }
+
+        $parsedBody = $request->getParsedBody();
+        $queryParams = $request->getQueryParams();
+
+        $this->currentPageNumber = (int)($parsedBody[$parameterNames['currentPage']] ?? ($queryParams[$parameterNames['currentPage']] ?? 1));
 
         return (int) $this->currentPageNumber;
     }
@@ -187,33 +170,27 @@ class Renderer extends AbstractRenderer
     /**
      * @param Datagrid $grid
      */
-    public function prepareViewModel(Datagrid $grid)
+    public function prepareViewModel(Datagrid $grid): array
     {
-        parent::prepareViewModel($grid);
+        $data = parent::prepareViewModel($grid);
 
         $options = $this->getOptionsRenderer();
-
-        $viewModel = $this->getViewModel();
 
         // Check if the datarange picker is enabled
         if (isset($options['daterange']['enabled']) && $options['daterange']['enabled'] === true) {
             $dateRangeParameters = $options['daterange']['options'];
 
-            $viewModel->setVariable('daterangeEnabled', true);
-            $viewModel->setVariable('daterangeParameters', $dateRangeParameters);
+            $data['daterangeEnabled'] = true;
+            $data['daterangeParameters'] = $dateRangeParameters;
         } else {
-            $viewModel->setVariable('daterangeEnabled', false);
+            $data['daterangeEnabled'] = false;
         }
+
+        return $data;
     }
 
-    /**
-     * @return ViewModel
-     */
-    public function execute(): ViewModel
+    public function execute(array $data): mixed
     {
-        $viewModel = $this->getViewModel();
-        $viewModel->setTemplate($this->getTemplate());
-
-        return $viewModel;
+        return new HtmlResponse($this->templateRenderer->render($this->getTemplate(), $data));
     }
 }

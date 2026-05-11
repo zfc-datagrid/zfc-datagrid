@@ -39,10 +39,5 @@ interface RendererInterface
      */
     public function isHtml(): bool;
 
-    /**
-     * Execute all...
-     *
-     * @return ViewModel|Response\Stream
-     */
-    public function execute();
+    public function execute(array $data): mixed;
 }
