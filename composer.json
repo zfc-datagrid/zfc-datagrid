@@ -60,6 +60,7 @@
 
     "extra": {
         "laminas": {
+            "config-provider": "ZfcDatagrid\\ConfigProvider",
             "module": "ZfcDatagrid"
         },
         "branch-alias": {
