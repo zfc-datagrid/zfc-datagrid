@@ -271,6 +271,9 @@ class ConfigProvider
             'paths' => [
                 'zfc-datagrid' => [__DIR__ . '/../view/zfc-datagrid'],
             ],
+            'map' => [
+                'zfc-datagrid/renderer/bootstrapTable/paginator' => __DIR__ . '/../view/zfc-datagrid/renderer/bootstrapTable/paginator.phtml',
+            ],
         ];
     }
 
@@ -286,6 +289,9 @@ class ConfigProvider
                     Renderer\BootstrapTable\View\Helper\TableRowFactory::class,
                 Renderer\JqGrid\View\Helper\Columns::class =>
                     Renderer\JqGrid\View\Helper\ColumnsFactory::class,
+            ],
+            'template_path_stack' => [
+                __DIR__ . '/../view',
             ],
         ];
     }

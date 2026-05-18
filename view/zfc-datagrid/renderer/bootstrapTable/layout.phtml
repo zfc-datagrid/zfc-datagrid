@@ -21,7 +21,7 @@ if(count($this->massActions) > 0){
     <?php $this->inlineScript()->captureEnd(); ?>
 <?php endif; ?>
 
-<form name="form_<?= $this->gridId; ?>" method="<?= $this->parameterNames['method']; ?>" action="<?= $this->url(null, [], [], true); ?>">
+<form name="form_<?= $this->gridId; ?>" method="<?= $this->parameterNames['method']; ?>" action="<?= $this->url(null, [], []); ?>">
 
     <input type="submit" style="width: 0; height: 0; margin: 0; padding: 0; border: 0;" name="hiddenSubmit" />
     <input type="hidden" name="<?= $this->parameterNames['sortColumns']; ?>" value="<?= $this->activeParameters[$this->parameterNames['sortColumns']]; ?>" />
@@ -104,8 +104,7 @@ if($this->rowClickAction !== null){
                                                 $this->parameterNames['sortDirections'] => $direction,
                                             ]
                                         )
-                                    ],
-                                    true
+                                    ]
                                 );?>
                             " onclick="<?= sprintf($orderOnclick, $col->getUniqueId(), $direction); ?>">
                                 <?= $this->escapeHtml($label); ?>
@@ -195,5 +194,5 @@ if($this->rowClickAction !== null){
     </table>
 </div>
 
-<?= $this->partial('zfc-datagrid/renderer/bootstrapTable/footer'); ?>
+<?= $this->partial('zfc-datagrid::renderer/bootstrapTable/footer'); ?>
 </form>

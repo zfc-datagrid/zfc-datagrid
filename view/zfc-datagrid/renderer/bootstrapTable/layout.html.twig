@@ -1,0 +1,164 @@
+{% extends '@layout/default.html.twig' %}
+
+{% block title %}Home{% endblock %}
+
+
+{% block content %}
+    {% if (daterangeEnabled) %}
+        {% do inlineScript().captureStart()  %}
+        $(function(){
+        $('input.daterange').daterangepicker(
+        {{ daterangeParameters|json_encode() }}
+        ).on('apply.daterangepicker', function(ev,picker){
+        this.form.submit();
+        });
+
+        });
+        {% do inlineScript().captureEnd() %}
+    {% endif %}
+
+<form name="form_{{ gridId }}" method="{{ parameterNames['method'] }}" action="{{ url(null, [], []) }}">
+
+    <input type="submit" style="width: 0; height: 0; margin: 0; padding: 0; border: 0;float: left" name="hiddenSubmit" />
+    <input type="hidden" name="{{ parameterNames['sortColumns'] }}" value="{{ activeParameters[parameterNames['sortColumns']] }}" />
+    <input type="hidden" name="{{ parameterNames['sortDirections'] }}" value="{{ activeParameters[parameterNames['sortDirections']] }}" />
+
+    {% for value, name in parameters %}
+        <input type="hidden" name="{{ name }}" value="{{ value }}" />
+    {% endfor %}
+
+    {#
+    {{ toolbar }}
+    #}
+
+{% set orderOnclick = 'document.forms[\'form_' ~ gridId ~ '\'].elements[\'' ~ parameterNames['sortColumns'] ~ '\'].value = \'%s\';' %}
+{% set orderOnclick = orderOnclick ~ 'document.forms[\'form_' ~ gridId ~ '\'].elements[\'' ~ parameterNames['sortDirections'] ~ '\'].value = \'%s\';' %}
+{% set orderOnclick = orderOnclick ~ 'document.forms[\'form_' ~ gridId ~ '\'].submit(); return false;' %}
+
+    {% set classes = ['table', 'table-striped', 'table-bordered'] %}
+    {% if rowClickAction !== null %}
+        {% set classes = classes|merge(['table-hover']) %}
+    {% endif %}
+
+    {{ partial(templateToolbar) }}
+
+    <div class="table-responsive">
+        <table class="{{ classes|join(' ') }}">
+            <thead>
+            <tr style="background-color: #EEE">
+                {% if massActions %}
+                    <th><input type="checkbox" onclick="{{ gridId  }}_toggleCheckboxes(this);" /></th>
+                {% endif %}
+
+                {% for col in columns %}
+                    {% if col.isHide() == false %}
+                        {% set classes = [] %}
+                        {% set styles = [] %}
+                        {% set label = '' %}
+
+                        {% if col.getLabel != '' %}
+                            {% set label = translate(col.getLabel()) %}
+                        {% endif %}
+                        {% set width = col.getWidth() %}
+                        {% if width !== '' %}
+
+                            {% set styles = styles|merge(['width: ' ~ escapehtmlattr(width) ~ '%']) %}
+                        {% endif %}
+
+                        {% if col.isHidden() %}
+                            {% set classes = classes|merge(['hidden']) %}
+                        {% endif %}
+
+                        <th id="{{ escapehtmlattr(col.getUniqueId()) }}" class="{{ classes|join(' ') }}" scope="col" style="{{ styles|join(';') }}">
+
+                            {% if col.isUserSortEnabled() %}
+                                {% if col.isSortActive() == true and col.getSortActiveDirection() == 'ASC' %}
+                                    {% set direction = 'DESC' %}
+                                {% else %}
+                                    {% set direction = 'ASC' %}
+                                {% endif %}
+
+                                {% set activeParametersMerge = activeParameters|merge({
+                                    (parameterNames['sortColumns']) : col.getUniqueId(),
+                                    (parameterNames['sortDirections']) : direction
+                                }) %}
+
+                                <a href="{{ url(null,
+                                    [],
+                                    {
+                                        'query' : activeParametersMerge
+                                    }
+                                ) }}
+                                " onclick="{{ orderOnclick|format(col.getUniqueId(), direction) }}">
+                                    {{ escapeHtml(label) }}
+                                </a>
+                            {% else %}
+                                {{ escapeHtml(label) }}
+                            {% endif %}
+
+                            {% if col.isUserSortEnabled() and col.isSortActive() %}
+                                {% if col.getSortActiveDirection() == 'ASC' %}
+                                    <i class="fas fa-chevron-up"></i>
+                                {% else %}
+                                    <i class="fas fa-chevron-down"></i>
+                                {% endif %}
+                            {% endif %}
+                        </th>
+                    {% endif %}
+                {% endfor %}
+            </tr>
+
+            <!-- User filters -->
+            {% if isUserFilterEnabled == true %}
+                <tr style="background-color: #EEE">
+                    {% if massActions %}
+                        <td></td>
+                    {% endif %}
+
+                    {% for col in columns %}
+                        {% if col.isHide() == false %}
+                            {% set classes = [] %}
+                            {% set htmlFilter = '' %}
+
+                            {% if col.isHidden() %}
+                                {% set classes = classes|merge(['hidden']) %}
+                            {% endif %}
+                            {% if col.isUserFilterEnabled() == true %}
+
+                                {% if col.hasFilterSelectOptions() == true %}
+
+                                    {% set htmlFilter = '<select name="toolbarFilters[%s]" style="width: 80%%" onchange="this.form.submit()" class="form-control" >'|format(col.getUniqueId) %}
+
+                                    {% for option, value in col.getFilterSelectOptions() %}
+                                        {% set htmlFilter = htmlFilter ~ ('<option value="%s" %s>%s</option>'|format(value, (col.getFilterActiveValue() == value ? 'selected="selected"' : ''), option)) %}
+                                    {% endfor %}
+                                    {% set htmlFilter = htmlFilter ~ '</select>' %}
+                                {% else %}
+
+                                    {% set htmlFilter = '<input type="text" name="toolbarFilters[%s]" style="width: 80%%" value="%s" class="form-control %s" />'|format(col.getUniqueId, col.getFilterActiveValue(), '') %}
+
+                                {% endif %}
+                            {% endif %}
+
+                            <td class="{{ classes|join(' ') }}">
+                                {{ htmlFilter|raw }}
+                            </td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+            {% endif %}
+            </thead><!-- END table header -->
+
+            <!-- Start table BODY -->
+            <tbody>
+            {% for row in data %}
+                {{ bootstrapTableRow(row, columns, rowClickAction, rowStyles, false) }}
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% include '@zfc-datagrid/renderer/bootstrapTable/footer.html.twig' %}
+</form>
+
+{% endblock %}

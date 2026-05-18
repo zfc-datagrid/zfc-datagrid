@@ -849,12 +849,12 @@ class Datagrid
     {
         $options       = $this->getOptions();
         $parameterName = $options['generalParameterNames']['rendererType'];
+        $rendererName = $options['settings']['default']['renderer']['http'];
 
         if ($this->forceRenderer !== null) {
             // A special renderer was given -> use is
             $rendererName = $this->forceRenderer;
         } elseif ($this->request) {
-            $rendererName = $options['settings']['default']['renderer']['http'];
             $rendererName = $this->request->getQueryParams()[$parameterName] ?? $rendererName;
 
             //TODO console
@@ -893,7 +893,9 @@ class Datagrid
                 $renderer->setTitle($this->getTitle());
                 $renderer->setColumns($this->getColumns());
                 $renderer->setRowStyles($this->getRowStyles());
-                $renderer->setCache($this->getCache());
+                if ($this->getCache()) {
+                    $renderer->setCache($this->getCache());
+                }
                 $renderer->setCacheId($this->getCacheId());
 
                 $this->renderer = $renderer;
@@ -1009,7 +1011,7 @@ class Datagrid
          * check if the export is enabled
          * Save cache
          */
-        if ($this->getOptions()['settings']['export']['enabled'] && $renderer->isExport() === false) {
+        if ($this->getOptions()['settings']['export']['enabled'] && $renderer->isExport() === false && $this->getCache()) {
             $cacheData = [
                 'sortConditions' => $renderer->getSortConditions(),
                 'filters'        => $renderer->getFilters(),

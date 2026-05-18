@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace ZfcDatagrid\Renderer\BootstrapTable;
 
-use Mezzio\LaminasView\LaminasViewRenderer;
+use Mezzio\Template\TemplateRendererInterface;
 use Psr\Container\ContainerInterface;
 
 class RendererFactory
@@ -11,7 +11,7 @@ class RendererFactory
     public function __invoke(ContainerInterface $container)
     {
         return (new Renderer())
-            ->setTemplateRenderer($container->get(LaminasViewRenderer::class));
+            ->setTemplateRenderer($container->get(TemplateRendererInterface::class));
     }
 
 }

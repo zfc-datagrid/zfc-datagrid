@@ -115,7 +115,7 @@ class Renderer extends AbstractRenderer
         $parsedBody = $request->getParsedBody();
         $queryParams = $request->getQueryParams();
 
-        $toolbarFilters = $parsedBody[$parameterNames['toolbarFilters']] ?? ($queryParams[$parameterNames['toolbarFilters']] ?? null);
+        $toolbarFilters = $parsedBody['toolbarFilters'] ?? ($queryParams['toolbarFilters'] ?? null);
 
         $filters = [];
         if ((in_array(strtoupper($request->getMethod()), ['POST', 'GET'])) &&

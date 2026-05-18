@@ -152,9 +152,9 @@ abstract class AbstractRenderer implements RendererInterface
         }
 
         if ('layout' === $type) {
-            return 'zfc-datagrid/renderer/' . $this->getName() . '/' . $type;
+            return 'zfc-datagrid::renderer/' . $this->getName() . '/' . $type;
         } elseif ('toolbar' === $type) {
-            return 'zfc-datagrid/toolbar/toolbar';
+            return 'zfc-datagrid::toolbar/toolbar';
         }
 
         throw new \Exception('Unknown type: "' . $type . '"');
